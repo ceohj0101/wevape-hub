@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>위베이프 시스템 허브</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%23FFC94A'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Arial,%20Helvetica,%20sans-serif'%20font-size='36'%20font-weight='900'%20fill='%23111C28'%20text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#f4f5f3;
+    --panel:#ffffff;
+    --ink:#1c2430;
+    --sub:#6b7480;
+    --line:#e4e6e9;
+    --teal:#177266;
+    --teal-bg:#e7f3f1;
+    --red:#c1554b;
+    --red-bg:#faeceb;
+    --gold:#c9930c;
+    --gold-bg:#fff3d6;
+    --brand-yellow:#ffc94a;
+    --blue:#33587e;
+    --blue-bg:#eaeff5;
+    --dark:#111c28;
+    --ok:#2f9e63;
+    --warn:#c99a2f;
+    --bad:#c1554b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Pretendard",sans-serif;
+    line-height:1.5;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 80px;}
+
+  header.top{background:var(--dark);color:#fff;padding:36px 20px 30px;}
+  header.top .inner{max-width:1180px;margin:0 auto;}
+  .eyebrow{
+    display:inline-block;font-size:11px;letter-spacing:.08em;font-weight:700;
+    color:#ffc94a;background:rgba(255,201,74,.14);border:1px solid rgba(255,201,74,.4);
+    border-radius:999px;padding:4px 12px;margin-bottom:14px;
+  }
+  h1{font-size:28px;margin:0 0 8px;font-weight:800;letter-spacing:-.01em;}
+  .lead{color:#b9c2cc;font-size:14.5px;margin:0;max-width:640px;}
+
+  .toprow{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+  .topbtns{display:flex;gap:8px;flex-wrap:wrap;}
+
+  .adminBtn, .addBtn{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;
+    border-radius:999px;padding:9px 16px;font-size:12.5px;font-weight:700;cursor:pointer;
+    white-space:nowrap;
+  }
+  .adminBtn.on{background:#ffc94a;border-color:#ffc94a;color:#111c28;}
+  .addBtn{background:#ffc94a;border-color:#ffc94a;color:#111c28;font-weight:800;}
+
+  .searchbar{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;}
+  #search{
+    flex:1;min-width:220px;padding:12px 16px;border-radius:10px;
+    border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font-size:14px;outline:none;
+  }
+  #search::placeholder{color:#8b96a3;}
+  #search:focus{border-color:#ffc94a;}
+
+  .stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center;}
+  .stat{
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;
+    padding:10px 16px;font-size:12px;color:#b9c2cc;white-space:nowrap;
+  }
+  .stat b{color:#fff;font-size:14px;}
+  .syncBadge{font-size:11.5px;padding:6px 12px;border-radius:999px;white-space:nowrap;cursor:pointer;user-select:none;}
+  .syncBadge:hover{filter:brightness(1.18);}
+  .syncBadge.on{background:rgba(47,158,99,.15);color:#7fd9a4;border:1px solid rgba(47,158,99,.4);}
+  .syncBadge.off{background:rgba(201,154,47,.15);color:#e7c479;border:1px solid rgba(201,154,47,.4);}
+
+
+  .section-title{font-size:16px;font-weight:800;margin:0 0 4px;}
+  .section-desc{color:var(--sub);font-size:13px;margin:0 0 16px;}
+
+  /* ---- 새 시스템 등록 폼 ---- */
+  .addPanel{
+    display:none;background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:20px;margin-bottom:34px;
+  }
+  .addPanel.show{display:block;}
+  .addPanel h3{margin:0 0 4px;font-size:15px;font-weight:800;}
+  .addPanel p.hint{margin:0 0 16px;font-size:12.5px;color:var(--sub);}
+  .addGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .addGrid .full{grid-column:1/-1;}
+  .addGrid label{font-size:12px;font-weight:700;color:var(--sub);display:block;margin-bottom:4px;}
+  .addGrid input, .addGrid textarea, .addGrid select{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:13.5px;font-family:inherit;
+  }
+  .addGrid textarea{min-height:56px;resize:vertical;}
+  label.checkRow{
+    display:flex;align-items:flex-start;gap:8px;font-size:13px;margin-top:6px;
+    cursor:pointer;line-height:1.4;font-weight:400;color:var(--ink);margin-bottom:0;
+  }
+  .checkRow input[type="checkbox"]{
+    width:16px;height:16px;flex:none;margin-top:2px;accent-color:var(--dark);
+  }
+  .checkRow span{flex:1;}
+  .contributorRows{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
+  .contributorRow{display:flex;gap:6px;}
+  .contributorRow .c-role{flex:0 0 96px;}
+  .contributorRow .c-name{flex:1;}
+  .contributorRow .c-remove{
+    flex-shrink:0;width:32px;background:#fbf3f2;border:1px solid var(--line);color:var(--bad);
+    border-radius:8px;cursor:pointer;font-size:13px;
+  }
+  .addContributorBtn{
+    background:none;border:1px dashed #c9ceb0;color:var(--sub);border-radius:8px;padding:6px 12px;
+    font-size:12px;font-weight:700;cursor:pointer;
+  }
+  .addContributorBtn:hover{background:#f5f4ee;color:var(--ink);}
+  .suggestBox{
+    margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;
+  }
+  .suggestPill{
+    display:inline-flex;align-items:center;gap:6px;background:var(--teal-bg);color:var(--teal);
+    border-radius:999px;padding:5px 12px;font-weight:700;
+  }
+  .suggestPill.unmatched{background:#f1eee5;color:#8a7a4a;}
+  .suggestChange{background:none;border:none;color:var(--sub);text-decoration:underline;cursor:pointer;font-size:12px;padding:0;}
+  .addActions{margin-top:16px;display:flex;justify-content:flex-end;gap:8px;}
+  .btn-primary{
+    background:var(--dark);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13.5px;font-weight:700;cursor:pointer;
+  }
+  .btn-secondary{
+    background:none;color:var(--sub);border:1px solid var(--line);border-radius:8px;padding:10px 16px;font-size:13.5px;font-weight:700;cursor:pointer;
+  }
+  .formMsg{font-size:12.5px;margin-top:10px;padding:8px 12px;border-radius:8px;display:none;}
+  .formMsg.ok{display:block;background:var(--teal-bg);color:var(--teal);}
+  .formMsg.warn{display:block;background:var(--gold-bg);color:var(--gold);}
+
+  .layer{margin-top:38px;}
+  .layer-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .layer-num{font-size:11px;font-weight:800;letter-spacing:.05em;padding:3px 10px;border-radius:999px;}
+  .layer-title{font-size:17px;font-weight:800;}
+  .layer-desc{color:var(--sub);font-size:13px;margin:2px 0 16px;}
+
+  .layer[data-layer="1"] .layer-num{background:var(--teal-bg);color:var(--teal);}
+  .layer[data-layer="2"] .layer-num{background:var(--red-bg);color:var(--red);}
+  .layer[data-layer="3"] .layer-num{background:var(--gold-bg);color:var(--gold);}
+  .layer[data-layer="4"] .layer-num{background:var(--blue-bg);color:var(--blue);}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;
+    display:flex;flex-direction:column;gap:10px;transition:box-shadow .15s ease, transform .15s ease;
+  }
+  .card:hover{box-shadow:0 6px 18px rgba(20,30,40,.08);transform:translateY(-1px);}
+
+  .dept-head{display:flex;align-items:center;gap:8px;justify-content:space-between;}
+  .dept-head-left{display:flex;align-items:center;gap:9px;}
+  .dept-icon{font-size:22px;line-height:1;flex-shrink:0;}
+  .dept-code{
+    font-size:10px;font-weight:800;letter-spacing:.03em;border-radius:6px;padding:1px 6px;
+    display:inline-block;margin-top:2px;
+  }
+  .layer[data-layer="1"] .dept-code{background:var(--teal-bg);color:var(--teal);}
+  .layer[data-layer="2"] .dept-code{background:var(--red-bg);color:var(--red);}
+  .layer[data-layer="3"] .dept-code{background:var(--gold-bg);color:var(--gold);}
+  .layer[data-layer="4"] .dept-code{background:var(--blue-bg);color:var(--blue);}
+
+  .dept-name{font-size:15px;font-weight:800;}
+  .dept-role{
+    font-size:11px;color:var(--sub);margin-top:-4px;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;cursor:default;
+  }
+
+  .status-pill{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--sub);}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:var(--ok);}
+  .status-dot.warn{background:var(--warn);}
+  .status-dot.bad{background:var(--bad);}
+  select.status-select{
+    font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 4px;color:var(--ink);background:#fff;
+  }
+
+  .links{display:flex;flex-direction:column;gap:10px;margin-top:2px;}
+  .link-block{display:flex;flex-direction:column;}
+  .link-item-wrap{
+    background:#fafafa;border:1px solid var(--line);border-radius:9px;overflow:hidden;
+    display:flex;align-items:stretch;
+  }
+  a.link-item{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;color:var(--ink);
+    padding:10px 11px;font-size:13.5px;font-weight:700;flex:1;min-width:0;
+  }
+  a.link-item:hover{background:#f1f2f0;}
+  a.link-item .arrow{color:var(--sub);font-weight:400;flex-shrink:0;}
+  a.link-item > span{overflow:hidden;text-overflow:ellipsis;}
+  .link-title-block{display:flex;flex-direction:column;gap:4px;overflow:hidden;min-width:0;}
+  .link-type-badge{
+    display:inline-flex;align-items:center;gap:3px;width:fit-content;max-width:100%;
+    font-size:10px;font-weight:800;border-radius:999px;padding:2px 8px;letter-spacing:.01em;white-space:nowrap;
+  }
+  .link-type-badge.type-sheet{background:#e6f4ea;color:#1e7e34;}
+  .link-type-badge.type-form{background:#f2e9fb;color:#7c3aed;}
+  .link-type-badge.type-doc{background:#e8f0fe;color:#1a56c4;}
+  .link-type-badge.type-slide{background:#fdece5;color:#c2410c;}
+  .link-type-badge.type-webapp{background:#eef0f5;color:#3a4a63;}
+  .link-type-badge.type-locked{background:#f3f2ee;color:#8a8272;border:1px dashed #cfc7b3;}
+  .link-title-text{font-size:15px;font-weight:800;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .link-meta{font-size:10.5px;color:var(--sub);font-weight:400;margin-top:1px;display:flex;gap:6px;flex-wrap:wrap;}
+  .dev-tag{background:#eef0ec;color:#5b6a5c;border-radius:5px;padding:1px 6px;font-weight:700;}
+  .revert-btn{
+    flex-shrink:0;width:32px;background:none;border:none;border-left:1px solid var(--line);
+    color:#c7ccd1;font-size:14px;cursor:pointer;
+  }
+  .revert-btn:hover{color:var(--bad);background:#fbf3f2;}
+  .owner-edit-btn{
+    flex-shrink:0;width:32px;background:none;border:none;border-left:1px solid var(--line);
+    color:#c7ccd1;font-size:13px;cursor:pointer;
+  }
+  .owner-edit-btn:hover{color:var(--ink);background:#f1f2f0;}
+  .link-item-wrap.locked{cursor:pointer;background:#f3f2ee;border-style:dashed;}
+  .link-item-wrap.locked:hover{background:#ece9e0;}
+  .locked-item{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:10px 11px;color:#8a8272;font-weight:700;font-size:13px;flex:1;min-width:0;
+  }
+  .locked-item > span{overflow:hidden;text-overflow:ellipsis;}
+  .locked-item .arrow{flex-shrink:0;}
+  .locked-item .link-title-text{color:#8a8272;}
+  .wip-card.locked{cursor:pointer;background:#f3f2ee;border-style:dashed;border-left-color:#b3ab8f;}
+  .wip-card.locked:hover{background:#ece9e0;}
+  .wip-card.locked .wip-title{color:#8a8272;}
+
+  .fb-wrap{margin-top:2px;}
+  .fb-toggle{
+    background:none;border:none;color:var(--sub);font-size:11px;font-weight:600;cursor:pointer;
+    text-align:left;padding:4px 2px;display:flex;align-items:center;gap:4px;width:100%;
+  }
+  .fb-toggle:hover{color:var(--ink);}
+  .fb-alert-dot{
+    display:inline-flex;align-items:center;background:#fdeceb;color:var(--bad);border:1px solid #f3c8c4;
+    border-radius:999px;padding:1px 8px;font-size:10px;font-weight:800;margin-left:4px;
+  }
+  .fb-panel{display:none;border-top:1px dashed var(--line);padding-top:8px;margin-top:2px;}
+  .fb-panel.open{display:block;}
+  .fb-list{display:flex;flex-direction:column;gap:7px;margin-bottom:8px;}
+  .fb-entry{background:#fafafa;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;}
+  .fb-text{white-space:pre-wrap;word-break:break-word;}
+  .fb-meta-row{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap;}
+  .fb-time{color:var(--sub);font-size:10.5px;}
+  .fb-status-badge{font-size:10px;font-weight:700;border-radius:999px;padding:1px 8px;}
+  .fb-status-badge.received{background:#eef0ec;color:#5b6a5c;}
+  .fb-status-badge.planned{background:var(--gold-bg);color:var(--gold);}
+  .fb-status-badge.done{background:var(--teal-bg);color:var(--teal);}
+  .fb-entry-actions{display:flex;gap:10px;margin-top:6px;}
+  .fb-entry-actions button{
+    background:none;border:none;color:var(--sub);font-size:11px;font-weight:600;cursor:pointer;padding:0;text-decoration:underline;
+  }
+  .fb-entry-actions button:hover{color:var(--ink);}
+  .fb-edit-textarea{
+    width:100%;min-height:48px;border:1px solid var(--line);border-radius:7px;padding:6px 8px;
+    font-size:12px;font-family:inherit;resize:vertical;margin-bottom:6px;
+  }
+  .fb-devbox{
+    margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);display:flex;gap:6px;flex-wrap:wrap;
+  }
+  .fb-devbox select{border:1px solid var(--line);border-radius:6px;padding:4px 6px;font-size:11px;font-family:inherit;}
+  .fb-devbox input{
+    flex:1;min-width:120px;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:11.5px;font-family:inherit;
+  }
+  .fb-devbox button{
+    background:var(--dark);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;
+  }
+  .fb-reply-shown{
+    margin-top:8px;background:var(--teal-bg);color:var(--teal);border-radius:7px;padding:7px 9px;font-size:11.5px;font-weight:600;
+  }
+  .fb-empty{font-size:12px;color:var(--sub);}
+  .fb-newform{display:flex;gap:6px;flex-direction:column;margin-top:6px;}
+  .fb-newform textarea{
+    width:100%;min-height:48px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;
+    font-size:12.5px;font-family:inherit;resize:vertical;
+  }
+  .fb-newform button{
+    align-self:flex-end;background:var(--dark);color:#fff;border:none;border-radius:7px;
+    padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;
+  }
+  .fb-newform-note{font-size:10.5px;color:var(--sub);}
+
+  .wip-section{margin-top:46px;}
+  .wip-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+  .wip-card{
+    background:var(--panel);border:1px dashed #c9ceb0;border-left:4px solid var(--gold);border-radius:12px;padding:14px;
+  }
+  .wip-card .wip-dept{font-size:10.5px;font-weight:800;color:var(--gold);letter-spacing:.03em;}
+  .wip-card .wip-title{font-size:14px;font-weight:700;margin:4px 0 2px;}
+  .wip-card .wip-owner{font-size:11.5px;color:var(--sub);}
+  .wip-owner-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:1px;}
+  .wip-owner-empty{color:#b3ab8f;font-style:italic;}
+  .wip-owner-edit{
+    background:none;border:none;color:var(--sub);font-size:11px;font-weight:700;cursor:pointer;
+    padding:1px 4px;border-radius:5px;
+  }
+  .wip-owner-edit:hover{color:var(--ink);background:#f1f2f0;}
+  .wip-card .wip-note{font-size:12px;color:var(--ink);margin-top:6px;}
+  .wip-card a{font-size:11.5px;color:var(--blue);display:inline-block;margin-top:6px;}
+  .wip-complete-row{margin-top:12px;border-top:1px dashed #c9ceb0;padding-top:10px;}
+  .wip-complete-label{display:block;font-size:10.5px;font-weight:700;color:var(--sub);margin-bottom:5px;}
+  .wip-complete-row select{
+    width:100%;border:1px solid var(--line);border-radius:7px;padding:6px 8px;font-size:12px;font-family:inherit;margin-bottom:7px;
+  }
+  .wip-complete{
+    display:block;width:100%;background:var(--dark);color:#fff;border:none;
+    border-radius:8px;padding:8px 10px;font-size:12px;font-weight:700;cursor:pointer;
+  }
+  .wip-complete:hover{opacity:.9;}
+  .wip-empty{
+    grid-column:1/-1;text-align:center;color:var(--sub);font-size:13px;padding:26px;
+    border:1px dashed var(--line);border-radius:12px;
+  }
+
+  .need-section{margin-top:46px;}
+  .need-groups{display:flex;flex-direction:column;gap:14px;}
+  .need-group{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
+  .need-group-title{font-size:12px;font-weight:800;color:var(--sub);margin-bottom:10px;letter-spacing:.02em;}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;
+    padding:6px 12px;font-size:12.5px;font-weight:600;background:#fbfbfa;cursor:default;
+  }
+  .chip .chip-code{font-size:10px;font-weight:800;border-radius:999px;padding:2px 7px;}
+  .chip-code.l1{background:var(--teal-bg);color:var(--teal);}
+  .chip-code.l2{background:var(--red-bg);color:var(--red);}
+  .chip-code.l3{background:var(--gold-bg);color:var(--gold);}
+  .chip-code.l4{background:var(--blue-bg);color:var(--blue);}
+
+  /* ---- 전직원 비상 연락망 (카드 하나 + 펼치기) ---- */
+  .contact-section{margin-bottom:34px;}
+  .contact-panel{
+    background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--red);
+    border-radius:14px;overflow:hidden;
+  }
+  .contact-panel-toggle{
+    width:100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    background:none;border:none;cursor:pointer;padding:18px 20px;text-align:left;font-family:inherit;
+  }
+  .contact-panel-toggle:hover{background:#fafafa;}
+  .contact-panel-title{font-size:16px;font-weight:800;color:var(--ink);}
+  .contact-panel-sub{font-size:12.5px;color:var(--sub);flex:1;}
+  .contact-panel-arrow{color:var(--sub);font-size:12px;transition:transform .15s ease;flex-shrink:0;}
+  .contact-panel-arrow.open{transform:rotate(180deg);}
+  .contact-panel-body{display:none;padding:0 20px 22px;}
+  .contact-panel-body.open{display:block;}
+
+  .contact-subhead{font-size:12.5px;font-weight:800;color:var(--sub);letter-spacing:.02em;margin:18px 0 2px;}
+  .contact-subhead:first-of-type{margin-top:4px;}
+
+  .contact-list{border-top:1px solid var(--line);margin-top:6px;}
+  .contact-row{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:9px 2px;border-bottom:1px solid var(--line);font-size:12.5px;
+  }
+  .contact-row-store{font-weight:800;font-size:13px;flex:0 0 88px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .contact-store-phone{font-size:12.5px;color:var(--red);font-weight:700;text-decoration:none;flex:0 0 118px;white-space:nowrap;}
+  .contact-store-phone:hover{text-decoration:underline;}
+  .contact-addr{font-size:11.5px;color:var(--sub);flex:1;min-width:120px;}
+
+  .contact-staff-name{font-weight:800;font-size:13px;flex:0 0 70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .contact-staff-role{
+    font-size:10.5px;font-weight:700;color:var(--sub);background:#f1f2f0;border-radius:999px;
+    padding:2px 8px;flex:0 0 auto;
+  }
+  .contact-staff-store{
+    font-size:10.5px;font-weight:700;color:var(--red);background:var(--red-bg);border-radius:999px;
+    padding:2px 8px;flex:0 0 auto;white-space:nowrap;
+  }
+  .contact-staff-phone{font-size:12.5px;color:var(--ink);font-weight:600;text-decoration:none;flex:1;min-width:100px;}
+  .contact-staff-phone:hover{text-decoration:underline;}
+
+  .contact-actions{display:flex;gap:2px;flex-shrink:0;margin-left:auto;}
+  .contact-actions button{
+    background:none;border:none;color:var(--sub);cursor:pointer;font-size:13px;
+    padding:3px 5px;border-radius:6px;line-height:1;
+  }
+  .contact-actions button:hover{color:var(--ink);background:#f1f2f0;}
+  .contact-empty{font-size:11.5px;color:var(--sub);padding:10px 2px;}
+  .contactAddRow{margin-top:12px;}
+  .contactForm{display:none;margin-top:14px;}
+  .contactForm.show{display:block;}
+  .contactPersonRow{display:flex;gap:6px;}
+  .contactPersonRow .cp-name{flex:1.2;}
+  .contactPersonRow .cp-role{flex:0 0 76px;}
+  .contactPersonRow .cp-phone{flex:1;}
+
+  footer{max-width:1180px;margin:40px auto 0;padding:20px;color:var(--sub);font-size:12px;border-top:1px solid var(--line);}
+  .footerLinks{display:flex;gap:14px;margin-top:8px;}
+  .footerLinks a{color:var(--sub);font-weight:700;}
+  .hidden{display:none !important;}
+  .no-result{text-align:center;color:var(--sub);padding:60px 0;font-size:14px;display:none;}
+
+  /* ---- 로고 / 스플래시 ---- */
+  .brandRow{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .brandRow .logo-badge{width:38px;height:38px;flex-shrink:0;}
+  .brandRow .wordmark{font-size:17px;font-weight:800;letter-spacing:.03em;color:#fff;line-height:1.1;}
+  .brandRow .subword{font-size:10px;font-weight:700;letter-spacing:.16em;color:#ffc94a;margin-top:1px;}
+
+  #splash{
+    position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;
+    background:radial-gradient(circle at 50% 35%, #ffe9a8 0%, #ffc94a 55%, #f5b929 100%);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    transition:opacity .55s ease, visibility .55s ease;
+    cursor:pointer;
+    /* 자바스크립트가 어떤 이유로든 실행되지 않는 경우를 대비한 순수 CSS 자동 해제(안전장치) */
+    animation:splashAutoHide .01s ease 2.6s forwards;
+  }
+  #splash.hide{opacity:0;visibility:hidden;pointer-events:none;}
+  @keyframes splashAutoHide{
+    to{opacity:0;visibility:hidden;pointer-events:none;}
+  }
+  #splash .splash-word{
+    font-size:76px;font-weight:900;letter-spacing:.1em;color:#111c28;
+    text-shadow:0 3px 14px rgba(17,28,40,.16);
+    opacity:0;animation:splashWord .8s ease forwards .1s;
+  }
+  #splash .splash-sub{
+    margin-top:9px;font-size:15px;font-weight:800;letter-spacing:.36em;color:#7a5710;
+    opacity:0;animation:splashWord .8s ease forwards .3s;
+  }
+  #splash .splash-tagline{
+    margin-top:16px;font-size:15px;font-weight:700;letter-spacing:.02em;color:#5b4108;
+    opacity:0;animation:splashWord .8s ease forwards .5s;
+  }
+  @keyframes splashIn{
+    0%{opacity:0;transform:scale(.8) rotate(-6deg);}
+    100%{opacity:1;transform:scale(1) rotate(0deg);}
+  }
+  @keyframes splashWord{
+    0%{opacity:0;transform:translateY(8px);}
+    100%{opacity:1;transform:translateY(0);}
+  }
+
+  /* ---- 커스텀 모달 (prompt/confirm/alert 대체 — 일부 환경에서 브라우저 기본 대화상자가 막혀서 자체 구현) ---- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(10,14,20,.55);z-index:10000;
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-box{
+    background:#fff;border-radius:14px;padding:22px;max-width:360px;width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.28);
+  }
+  .modal-msg{font-size:14px;color:var(--ink);font-weight:600;line-height:1.5;margin-bottom:14px;white-space:pre-wrap;}
+  .modal-input{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;
+    margin-bottom:14px;font-family:inherit;
+  }
+  .modal-actions{display:flex;justify-content:flex-end;gap:8px;}
+  .modal-actions button{border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;}
+  .modal-cancel{background:none;color:var(--sub);border:1px solid var(--line);}
+  .modal-confirm{background:var(--dark);color:#fff;border:none;}
+  .modal-confirm.danger{background:var(--bad);}
+
+  /* ---- 모바일 최적화 (핸드폰에서 볼 때) ---- */
+  @media (max-width:640px){
+    .wrap{padding:22px 14px 60px;}
+    header.top{padding:24px 14px 22px;}
+    h1{font-size:22px;line-height:1.25;}
+    .lead{font-size:13.5px;}
+    .toprow{flex-direction:column;align-items:stretch;gap:12px;}
+    .topbtns{width:100%;}
+    .adminBtn, .addBtn{flex:1;text-align:center;padding:11px 12px;font-size:13px;}
+    .searchbar{margin-top:16px;}
+    #search{min-width:0;font-size:15px;} /* 15px 미만이면 아이폰에서 화면이 확대됨 */
+    .stats{gap:6px;}
+    .stat{padding:8px 12px;font-size:11.5px;}
+
+    .grid{grid-template-columns:1fr;gap:12px;}
+    .wip-list{grid-template-columns:1fr;}
+    .addGrid{grid-template-columns:1fr;}
+
+    .layer-head{flex-wrap:wrap;}
+    .layer-title{font-size:15.5px;}
+    .card{padding:14px;}
+    .dept-head{flex-wrap:wrap;gap:6px;}
+    .dept-role{white-space:normal;overflow:visible;text-overflow:clip;}
+
+    /* 링크 카드: 제목이 잘리지 않고 줄바꿈되게 */
+    .link-title-text{white-space:normal;overflow:visible;text-overflow:clip;word-break:break-word;font-size:14.5px;line-height:1.35;}
+    a.link-item, .locked-item{padding:12px 12px;}
+    a.link-item > span, .locked-item > span{overflow:visible;text-overflow:clip;}
+    .owner-edit-btn, .revert-btn{width:40px;font-size:15px;} /* 손가락으로 누를 수 있는 크기 */
+
+    .contact-panel-toggle{padding:15px 14px;gap:6px;}
+    .contact-panel-title{font-size:15px;flex:1;}
+    .contact-panel-sub{order:3;flex:1 1 100%;font-size:12px;}
+    .contact-panel-body{padding:0 14px 18px;}
+    .contact-row{gap:6px 10px;padding:11px 2px;}
+    .contact-row-store{flex:1 1 100%;}
+    .contact-store-phone{flex:0 0 auto;}
+    .contact-addr{flex:1 1 100%;min-width:0;}
+    .contact-staff-name{flex:0 0 auto;}
+    .contact-staff-phone{flex:1 1 100%;min-width:0;}
+    .contact-actions{margin-left:auto;}
+    .contactPersonRow{flex-wrap:wrap;}
+    .contactPersonRow .cp-name, .contactPersonRow .cp-role, .contactPersonRow .cp-phone{flex:1 1 100%;}
+
+    .modal-box{padding:18px;}
+    #modalInput{font-size:16px;} /* 아이폰 확대 방지 */
+    footer{margin-top:28px;padding:18px 14px;}
+  }
+
+  @media (max-width:360px){
+    h1{font-size:20px;}
+    .stat{flex:1 1 100%;}
+  }
+
+</style>
+</head>
+<body>
+
+<div id="splash" onclick="dismissSplash()">
+  <div class="splash-word">WEVAPE</div>
+  <div class="splash-sub">SYSTEM HUB</div>
+  <div class="splash-tagline">AI와 함께하는 단단한 조직</div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-msg" id="modalMsg"></div>
+    <input type="text" class="modal-input" id="modalInput" style="display:none;">
+    <div class="modal-actions">
+      <button type="button" class="modal-cancel" id="modalCancelBtn">취소</button>
+      <button type="button" class="modal-confirm" id="modalConfirmBtn">확인</button>
+    </div>
+  </div>
+</div>
+
+<header class="top">
+  <div class="inner">
+    <div class="toprow">
+      <div>
+        <div class="brandRow">
+          <svg class="logo-badge" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bgHeader" cx="50%" cy="35%" r="75%">
+                <stop offset="0%" stop-color="#213548"/><stop offset="100%" stop-color="#0c161f"/>
+              </radialGradient>
+              <linearGradient id="wispHeaderA" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#ffc94a"/><stop offset="100%" stop-color="#f2e6c2"/>
+              </linearGradient>
+              <linearGradient id="wispHeaderB" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#5fa392"/><stop offset="100%" stop-color="#bfe3d8"/>
+              </linearGradient>
+            </defs>
+            <circle cx="60" cy="60" r="58" fill="url(#bgHeader)" stroke="rgba(207,174,95,.35)" stroke-width="1.5"/>
+            <path d="M40 88 C40 73,55 73,55 60 C55 47,42 47,42 34" stroke="url(#wispHeaderA)" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>
+            <path d="M56 92 C56 77,73 77,73 62 C73 47,59 47,59 28" stroke="url(#wispHeaderB)" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <path d="M72 87 C72 74,86 74,86 60 C86 46,75 46,75 33" stroke="url(#wispHeaderA)" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/>
+          </svg>
+          <div>
+            <div class="wordmark">WEVAPE</div>
+            <div class="subword">SYSTEM HUB</div>
+          </div>
+        </div>
+        <h1>위베이프 통합 시스템 허브</h1>
+        <p class="lead">직원들이 각자 만든 자동화·업무 시스템을 부서(역할) 기준으로 모아둔 바로가기 대시보드입니다. 새로 만든 프로그램은 아래 "+ 새 시스템 등록"에서 누구나 바로 올릴 수 있어요.</p>
+      </div>
+      <div class="topbtns">
+        <button class="addBtn" id="addBtn" onclick="toggleAddPanel()">＋ 새 시스템 등록</button>
+        <button class="adminBtn" id="lockBtn" onclick="toggleLock()">🔒 잠긴 시스템 보기</button>
+      </div>
+    </div>
+    <div class="searchbar">
+      <input id="search" type="text" placeholder="시스템 이름으로 검색 (예: 발주서, 스케줄, AS...)">
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="statLinks">0</b> 운영중 시스템</div>
+      <div class="stat"><b id="statDepts">0</b> / 20 부서에 시스템 보유</div>
+      <div class="stat"><b id="statWip">0</b> 개발 진행중 프로젝트</div>
+      <span class="syncBadge off" id="syncBadge" onclick="syncBadgeClick()" title="누르면 저장 상태를 확인할 수 있습니다">🔧 공용 데이터 연결 대기중</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="contact-section">
+    <div class="contact-panel">
+      <button type="button" class="contact-panel-toggle" id="contactPanelToggle" onclick="toggleContactPanel()">
+        <span class="contact-panel-title">🚨 전직원 비상 연락망</span>
+        <span class="contact-panel-sub" id="contactCountSub">지점 13곳 · 담당자 19명 · 눌러서 펼치기</span>
+        <span class="contact-panel-arrow" id="contactToggleIcon">▼</span>
+      </button>
+      <div class="contact-panel-body" id="contactPanelBody">
+        <div class="section-desc">지점 정보와 담당자 연락처를 따로 정리했어요. 비상시 누구나 바로 볼 수 있도록 비밀번호 없이 열어뒀어요. 정보가 바뀌었으면 아래에서 바로 추가·수정해주세요.</div>
+
+        <div class="contact-subhead">🏪 지점 정보</div>
+        <div class="contact-list" id="storeGrid"></div>
+        <div class="contactAddRow">
+          <button class="btn-secondary" id="storeAddBtn" onclick="toggleStoreForm()">＋ 지점 추가</button>
+        </div>
+        <div class="addPanel contactForm" id="storeForm">
+          <h3 id="storeFormTitle">＋ 지점 추가</h3>
+          <div class="addGrid">
+            <div class="full">
+              <label>지점명 *</label>
+              <input type="text" id="st-store" placeholder="예: 연수점">
+            </div>
+            <div>
+              <label>지점 대표 전화번호</label>
+              <input type="text" id="st-phone" placeholder="010-0000-0000">
+            </div>
+            <div>
+              <label>주소</label>
+              <input type="text" id="st-addr" placeholder="인천 연수구 ...">
+            </div>
+          </div>
+          <div class="addActions">
+            <button class="btn-secondary" onclick="toggleStoreForm()">취소</button>
+            <button class="btn-primary" id="storeSaveBtn" onclick="submitStoreForm()">등록하기</button>
+          </div>
+          <div class="formMsg" id="storeFormMsg"></div>
+        </div>
+
+        <div class="contact-subhead">👤 담당자</div>
+        <div class="contact-list" id="staffGrid"></div>
+        <div class="contactAddRow">
+          <button class="btn-secondary" id="staffAddBtn" onclick="toggleStaffForm()">＋ 담당자 추가</button>
+        </div>
+        <div class="addPanel contactForm" id="staffForm">
+          <h3 id="staffFormTitle">＋ 담당자 추가</h3>
+          <div class="addGrid">
+            <div>
+              <label>이름 *</label>
+              <input type="text" id="sf-name" placeholder="예: 홍길동">
+            </div>
+            <div>
+              <label>직책</label>
+              <input type="text" id="sf-role" placeholder="예: 주임">
+            </div>
+            <div>
+              <label>휴대폰</label>
+              <input type="text" id="sf-phone" placeholder="010-0000-0000">
+            </div>
+            <div>
+              <label>소속 지점</label>
+              <select id="sf-store"></select>
+            </div>
+          </div>
+          <div class="addActions">
+            <button class="btn-secondary" onclick="toggleStaffForm()">취소</button>
+            <button class="btn-primary" id="staffSaveBtn" onclick="submitStaffForm()">등록하기</button>
+          </div>
+          <div class="formMsg" id="staffFormMsg"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="addPanel" id="addPanel">
+    <h3>＋ 새 시스템 등록</h3>
+    <p class="hint">이름과 링크만 넣으면 담당 부서를 자동으로 추천해드려요. 틀렸으면 직접 바꿔주세요. 아직 완성 전이면 "개발중"에 체크해주세요.</p>
+    <div class="addGrid">
+      <div class="full">
+        <label>프로그램 이름 *</label>
+        <input type="text" id="f-title" placeholder="예: 재고 자동 발주 봇" oninput="onFormInput()">
+      </div>
+      <div class="full">
+        <label>URL *</label>
+        <input type="text" id="f-url" placeholder="https://...">
+      </div>
+      <div class="full">
+        <label>설명 (선택)</label>
+        <textarea id="f-note" placeholder="이 시스템이 무엇을 하는지 한두 줄로 적어주세요" oninput="onFormInput()"></textarea>
+      </div>
+      <div class="full">
+        <label>개발자 / 서포터 (선택)</label>
+        <div id="contributorRows" class="contributorRows"></div>
+        <button type="button" class="addContributorBtn" onclick="addContributorRow()">＋ 담당자 추가</button>
+      </div>
+      <div class="full">
+        <label class="checkRow" for="f-wip"><input type="checkbox" id="f-wip"><span>아직 개발중이에요 (미완성/테스트)</span></label>
+        <label class="checkRow" for="f-lock"><input type="checkbox" id="f-lock"><span>🔒 잠긴 시스템으로 등록 (비밀번호 있어야 볼 수 있어요 · 인사/매출 등 민감정보용)</span></label>
+      </div>
+      <div class="full suggestBox" id="suggestBox"></div>
+    </div>
+    <div class="addActions">
+      <button class="btn-secondary" onclick="toggleAddPanel()">취소</button>
+      <button class="btn-primary" onclick="submitEntry()">등록하기</button>
+    </div>
+    <div class="formMsg" id="formMsg"></div>
+  </div>
+
+  <div id="layers"></div>
+  <div class="no-result" id="noResult">검색 결과가 없습니다.</div>
+
+  <div class="wip-section" id="wipSection">
+    <div class="section-title">🛠 개발 진행중인 프로젝트</div>
+    <div class="section-desc">아직 완성되지 않았지만 만들고 있는 자동화/시스템입니다. 완성되면 "등록중" 체크를 해제해서 다시 올려주세요.</div>
+    <div class="wip-list" id="wipList"></div>
+  </div>
+
+  <div class="need-section">
+    <div class="section-title">🧩 개설 및 개발이 필요한 부서</div>
+    <div class="section-desc">아직 등록된 시스템이 없는 부서입니다.</div>
+    <div class="need-groups" id="needGroups"></div>
+  </div>
+</div>
+
+<footer>
+  Pathfinder Works AUTO 조직 아키텍처(20개 부서 체계)를 기준으로 분류했습니다. 부서 자동분류는 참고용이며, 등록 시 언제든 직접 바꿀 수 있습니다.
+  <div class="footerLinks">
+    <a href="https://docs.google.com/spreadsheets/d/1H7I4t2DjoEVsaogW2OFFR2CSt1ymQ1vdI9XOeWY68RU/edit" target="_blank" rel="noopener">📊 원본 데이터 시트</a>
+    <a href="https://docs.google.com/document/d/1Jud8EPX_KdMUFG2NuS4FH3FJLFL4un3tHaMzXtzdQZw/edit" target="_blank" rel="noopener">📘 자동저장 연결 가이드</a>
+    <a href="#" onclick="event.preventDefault();setupGhToken();" title="관리자만: 전직원 저장 열쇠를 이 브라우저에 등록합니다. 열쇠는 사이트 파일에 들어가지 않습니다.">🔑 관리자 저장 설정</a>
+    <a href="#" onclick="event.preventDefault();resetLocal();" title="이 기기에만 저장된 수정 내용을 지우고 전직원 공용 데이터로 되돌립니다">♻️ 내 기기 수정분 되돌리기</a>
+  </div>
+</footer>
+
+<script>
+// ---------------------------------------------------------------
+// 커스텀 모달 — window.prompt/confirm/alert 대체.
+// 일부 호스팅 환경(예: iframe 샌드박스)에서는 브라우저 기본 대화상자가
+// 조용히 막혀서 아무 반응이 없는 것처럼 보이기 때문에, 항상 동작하도록
+// 화면 안에서 직접 그리는 모달로 대체합니다.
+// ---------------------------------------------------------------
+let modalResolve = null;
+function openModal(opts){
+  return new Promise(resolve=>{
+    modalResolve = resolve;
+    document.getElementById('modalMsg').textContent = opts.message || '';
+    const input = document.getElementById('modalInput');
+    if(opts.withInput){
+      input.style.display = 'block';
+      input.type = opts.inputType || 'text';
+      input.value = opts.prefill || '';
+    } else {
+      input.style.display = 'none';
+    }
+    const cancelBtn = document.getElementById('modalCancelBtn');
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    cancelBtn.style.display = opts.onlyOk ? 'none' : 'inline-block';
+    confirmBtn.textContent = opts.confirmText || '확인';
+    confirmBtn.classList.toggle('danger', !!opts.danger);
+    document.getElementById('modalOverlay').classList.add('show');
+    if(opts.withInput){ setTimeout(()=>input.focus(), 50); }
+  });
+}
+function closeModal(result){
+  document.getElementById('modalOverlay').classList.remove('show');
+  if(modalResolve){ const r = modalResolve; modalResolve = null; r(result); }
+}
+function modalConfirmClick(){
+  const input = document.getElementById('modalInput');
+  closeModal(input.style.display !== 'none' ? input.value : true);
+}
+async function customPrompt(message, inputType, prefill){
+  return await openModal({message, withInput:true, inputType: inputType || 'text', prefill});
+}
+async function customConfirm(message, danger){
+  return await openModal({message, withInput:false, confirmText: danger ? '삭제' : '확인', danger});
+}
+async function customAlert(message){
+  return await openModal({message, withInput:false, onlyOk:true, confirmText:'확인'});
+}
+document.getElementById('modalCancelBtn').addEventListener('click', ()=>closeModal(null));
+document.getElementById('modalConfirmBtn').addEventListener('click', modalConfirmClick);
+document.getElementById('modalOverlay').addEventListener('click', (e)=>{
+  if(e.target.id === 'modalOverlay') closeModal(null);
+});
+document.getElementById('modalInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ e.preventDefault(); modalConfirmClick(); }
+});
+
+// ---------------------------------------------------------------
+// 부서(역할) 정의 — Pathfinder Works AUTO 20개 부서 체계 기준
+// ---------------------------------------------------------------
+const LAYERS = [
+  { id:1, title:"COMMAND & OWNERSHIP · 지시·책임층", desc:"지시를 사업목표와 책임으로 바꾸는 층",
+    depts:[
+      {code:"SEC", name:"개인비서실", role:"대표 선택지·결재·후속지시"},
+      {code:"BIZ", name:"사업총괄본부", role:"KPI·손익·일정·단일책임"},
+      {code:"CON", name:"컨설팅AI전략부", role:"전략안·조직개선·AI ROI"},
+      {code:"AUD", name:"진실검증통제부", role:"주장·증빙·근본원인 감사"},
+    ]},
+  { id:2, title:"CONTROL & COMPLIANCE · 통제·준법층", desc:"돈·법·세무·통관·사람의 실패를 사전에 거르는 층",
+    depts:[
+      {code:"FIN", name:"재무부", role:"현금흐름·정산·관리회계"},
+      {code:"TAX", name:"세무부", role:"국제조세·특수관계·신고"},
+      {code:"CUS", name:"통관부", role:"SKU 규제·수출입 문서"},
+      {code:"HR",  name:"인사부", role:"사람·AI 평가·성장·배치"},
+      {code:"LAW", name:"법률부", role:"계약·IP·규제·지배구조"},
+    ]},
+  { id:3, title:"MARKET & REVENUE · 시장·매출층", desc:"상품을 고객·매출·재구매로 연결하는 층",
+    depts:[
+      {code:"MD",  name:"상품사업부", role:"SKU·가격·소싱·품질"},
+      {code:"MKT", name:"마케팅부", role:"브랜드·콘텐츠·현지화"},
+      {code:"SLS", name:"영업부", role:"온라인·매장·B2B 전환"},
+      {code:"LOG", name:"물류부", role:"재고·배송·반품·비용"},
+      {code:"GRO", name:"성장데이터부", role:"퍼널·광고·CRM·실험"},
+      {code:"CX",  name:"고객경험부", role:"VOC·응대·분쟁·팬덤"},
+    ]},
+  { id:4, title:"CREATION & INTELLIGENCE · 창작·지식층", desc:"창작·개발·프롬프트·지식·지속성을 축적하는 층",
+    depts:[
+      {code:"DES", name:"디자인부", role:"세계관·UI·굿즈·공간"},
+      {code:"DEV", name:"개발부", role:"웹·결제·데이터·배포"},
+      {code:"PRM", name:"프롬프트연구부", role:"의도해석·평가·성공패턴"},
+      {code:"KMS", name:"경영지식보존부", role:"원본·출처·검색·백업"},
+      {code:"WEL", name:"건강지속가능성부", role:"집중·회복·업무지속성"},
+    ]},
+];
+
+const DEPTS = {};
+LAYERS.forEach(l => l.depts.forEach(d => DEPTS[d.code] = {...d, layerId:l.id}));
+
+const LAYER_ICONS = {1:"🧭", 2:"🛡️", 3:"📈", 4:"🎨"};
+const DEPT_ICONS = {
+  SEC:"🗂️", BIZ:"🎯", CON:"🧭", AUD:"🔍",
+  FIN:"💰", TAX:"🧾", CUS:"🛃", HR:"🧑‍🤝‍🧑", LAW:"⚖️",
+  MD:"📦", MKT:"📣", SLS:"🏪", LOG:"🚚", GRO:"📊", CX:"💬",
+  DES:"🎨", DEV:"💻", PRM:"🤖", KMS:"🗄️", WEL:"🌿",
+};
+
+// 부서 자동분류용 키워드 사전 (제목+설명에 포함된 단어로 점수 채점)
+const KEYWORDS = {
+  SEC:["대표","비서","결재","일정관리"],
+  BIZ:["사업","kpi","손익","전략기획","목표관리"],
+  CON:["컨설팅","조직개선","전략수립"],
+  AUD:["감사","검증","증빙","진실","오류검사"],
+  FIN:["재무","현금","정산","회계","입출금","매출정리"],
+  TAX:["세무","세금","신고","원천세","부가세"],
+  CUS:["통관","수출입","해외배송","관세"],
+  HR:["인사","채용","스케줄","근태","교육","평가","직원","재직","신입","출근","휴가"],
+  LAW:["법률","계약","상표","특허","약관","저작권"],
+  MD:["상품","sku","소싱","입고","품질","발주서","발주"],
+  MKT:["마케팅","브랜드","콘텐츠","sns","광고","캠페인","현지화","홍보"],
+  SLS:["영업","매장","판매","회원가입","전환","b2b","영업시간","가입"],
+  LOG:["물류","재고","배송","반품","택배","입출고","재고관리"],
+  GRO:["성장","데이터","퍼널","crm","분석","신규회원","통계","리포트","조회"],
+  CX:["고객","voc","문의","클레임","as","응대","청소","위생","팬덤","불만"],
+  DES:["디자인","ui","굿즈","브랜딩","공간","시안"],
+  DEV:["개발","웹","앱","포스","pos","결제","배포","시스템","자동화","프로그램","api","봇"],
+  PRM:["프롬프트","ai","챗봇","의도해석"],
+  KMS:["지식","문서","백업","원본","아카이브","보존","자료실"],
+  WEL:["건강","휴식","복지","지속가능","힐링"],
+};
+
+function classifyDept(text){
+  const t = (text || "").toLowerCase();
+  if(!t.trim()) return null;
+  let best = null, bestScore = 0;
+  Object.keys(KEYWORDS).forEach(code=>{
+    let score = 0;
+    KEYWORDS[code].forEach(kw=>{ if(t.includes(kw)) score++; });
+    if(score > bestScore){ bestScore = score; best = code; }
+  });
+  return best ? {code:best, score:bestScore} : null;
+}
+
+// ---------------------------------------------------------------
+// 데이터 소스: 구글시트(Apps Script) 연동. URL이 비어있으면 아래 시드 데이터로만 동작.
+// ---------------------------------------------------------------
+let APPS_SCRIPT_URL = ""; // 배포 후 이 값에 웹앱 URL을 넣으면 자동 저장/불러오기가 켜집니다.
+
+const SEED_ENTRIES = [
+  {dept:"HR",  title:"직원 일일 스케줄", url:"https://janghj201-cyber.github.io/-/", note:"", status:"운영중", owner:"장현진 팀장"},
+  {dept:"LOG", title:"발주서 관리", url:"https://order-hub-dfni.onrender.com/", note:"", status:"운영중", owner:"신재현 실장"},
+  {dept:"CX",  title:"대청소 리스트", url:"https://docs.google.com/spreadsheets/d/1Cw7speJsddFGBLBsaTq9YkdNFqggbksCjF5I-j0CadU/edit?usp=sharing", note:"Google Sheets", status:"운영중", owner:"장현진 팀장"},
+  {dept:"CX",  title:"AS 스프레드시트", url:"https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing", note:"Google Sheets", status:"운영중", owner:"정희경 주임"},
+  {dept:"SLS", title:"회원가입 구글폼", url:"https://forms.gle/gVSBo4eeU4Bev561A", note:"Google Forms", status:"운영중", owner:"장대운 주임"},
+  {dept:"GRO", title:"각지점 신규 회원량 조회", url:"https://znsl132-lang.github.io/BIGLUCKY/", note:"", status:"운영중", owner:"장대운 주임"},
+  {dept:"HR",  title:"신입 및 재직자 관련 현황", url:"https://ceohj0101.github.io/wevape-hr/", note:"", status:"운영중", owner:"김형진 팀장", sensitive:true},
+  {dept:"DEV", title:"포스 통합 프로그램", url:"https://wevape-pos-app.vercel.app/", note:"매장 POS 통합 프로그램", status:"개발중", owner:"김형진 팀장, 장현진 팀장"},
+  {dept:"HR",  title:"스케줄 생성기", url:"https://znsl132-lang.github.io/BIGLUCKY/schedule.html", note:"", status:"개발중", owner:"", sensitive:true},
+  {dept:"HR",  title:"휴무취합기", url:"https://znsl132-lang.github.io/BIGLUCKY/request.html", note:"", status:"개발중", owner:"", sensitive:true},
+  {dept:"HR",  title:"전직원 스케줄 뷰어", url:"https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html", note:"위베이프 직원 스케줄", status:"개발중", owner:"", sensitive:true},
+  {dept:"FIN", title:"인천/경기 통합 매출관리", url:"https://order-hub-dfni.onrender.com/sales?month=2026-06", note:"위베이프 인천/경기 총판 총 매출관리", status:"개발중", owner:"", sensitive:true},
+  {dept:"FIN", title:"위베이프 일매출 보고 시스템", url:"https://dksxoals0824-glitch.github.io/wevape-sales-report/", note:"전 매장 일매출 취합 후 카카오톡 사장님 단톡방 보고용", status:"운영중", owner:""},
+];
+
+let entries = SEED_ENTRIES.slice(); // 실제 렌더링에 쓰이는 전체 목록 (시트 fetch 성공시 교체됨)
+let synced = false;
+
+// ---------------------------------------------------------------
+// 전직원 비상 연락망 (2026-06-24 기준) — 비밀번호 없이 전 직원 공개
+// 지점 정보와 담당자 정보를 서로 다른 목록으로 관리합니다.
+// ---------------------------------------------------------------
+const SEED_STORES = [
+  {store:"연수점",   phone:"010-2493-3635", addr:"인천 연수구 연수동 596-6 아시스타워 101호"},
+  {store:"논현점",   phone:"010-2210-3536", addr:"인천 남동구 논현동 632-2 아이플렉스 126호"},
+  {store:"구월점",   phone:"010-2393-3536", addr:"인천 남동구 구월동 1199-1 그랜드프라자 108호"},
+  {store:"중동점",   phone:"010-7197-4537", addr:"경기 부천시 중동 1138 호정프라자 101호"},
+  {store:"로데오점", phone:"010-9130-3536", addr:"인천 남동구 구월동 1464 링크126 211호"},
+  {store:"상동점",   phone:"010-8213-5798", addr:"경기 부천시 상동 542-1 영플러스 130호"},
+  {store:"공항점",   phone:"0507-1398-3536", addr:"인천 중구 흰바위로59번길 8 상가동 1층"},
+  {store:"검단점",   phone:"0507-1377-4537", addr:"인천광역시 서구 원당대로 983 1층 104호"},
+  {store:"계산점",   phone:"010-4838-0379", addr:"인천 계양구 오조산로 91 새롬2차 107호"},
+  {store:"을지로점", phone:"010-7394-3536", addr:"서울 중구 을지로 156 2층 위베이프 을지로1호점"},
+  {store:"트리플점", phone:"0507-1488-8048", addr:"인천 연수구 송도동 174-3"},
+  {store:"청라점",   phone:"010-4711-8851", addr:"인천 서구 청라동 164-1 풍림엑슬루타워 A동 160-1호"},
+  {store:"성수점",   phone:"010-3746-1610", addr:"서울특별시 성동구 연무장7길3"},
+];
+
+const SEED_STAFF = [
+  {name:"정희석", role:"대표", phone:"010-8982-5798", store:"연수점"},
+  {name:"김성현", role:"대표", phone:"010-8999-2698", store:"연수점"},
+  {name:"신재현", role:"실장", phone:"010-8569-3281", store:"논현점"},
+  {name:"정하늘", role:"과장", phone:"010-3641-2328", store:"논현점"},
+  {name:"장현진", role:"팀장", phone:"010-4787-6928", store:"구월점"},
+  {name:"김형진", role:"팀장", phone:"010-8405-8802", store:"구월점"},
+  {name:"홍다운", role:"매니저", phone:"010-3310-2522", store:"중동점"},
+  {name:"오명록", role:"매니저", phone:"010-7190-8637", store:"중동점"},
+  {name:"정희경", role:"주임", phone:"010-5741-2648", store:"로데오점"},
+  {name:"이종혁", role:"주임", phone:"010-4012-6105", store:"로데오점"},
+  {name:"김다정", role:"주임", phone:"010-4608-9695", store:"상동점"},
+  {name:"장대운", role:"주임", phone:"010-4806-7342", store:"상동점"},
+  {name:"조효정", role:"주임", phone:"010-7725-6747", store:"공항점"},
+  {name:"윤하람", role:"주임", phone:"010-2320-9162", store:"공항점"},
+  {name:"차영근", role:"주임", phone:"010-8393-2884", store:"검단점"},
+  {name:"원주현", role:"주임", phone:"010-3936-8164", store:"검단점"},
+  {name:"고아현", role:"주임", phone:"010-5590-2927", store:"계산점"},
+  {name:"정유진", role:"주임", phone:"010-4742-7839", store:"계산점"},
+  {name:"안태민", role:"주임", phone:"010-9178-2639", store:"을지로점"},
+];
+
+let stores = SEED_STORES.slice();
+let staff = SEED_STAFF.slice();
+let editingStoreIdx = null;
+let editingStaffIdx = null;
+
+// 화면상 부서 운영상태 — 전 직원 누구나 사용 가능 (자동저장 미연동, 세션 한정)
+const STATUS = {};
+
+const STATUS_OPTIONS = ["정상운영","점검필요","이슈있음"];
+function statusDotClass(s){
+  if(s === "점검필요") return "warn";
+  if(s === "이슈있음") return "bad";
+  return "";
+}
+
+// ---------------------------------------------------------------
+// 잠긴 시스템 (민감정보: 매출/재무, 인사정보 등) — 비밀번호 0000
+// ---------------------------------------------------------------
+const LOCK_PASSWORD = "0000"; // 나중에 바꿔달라고 하면 이 값만 수정하면 됨
+let unlocked = false;
+
+function isLocked(entry){
+  return !!entry.sensitive && !unlocked;
+}
+
+async function toggleLock(){
+  if(!unlocked){
+    const code = await customPrompt("잠긴 시스템 열람 비밀번호를 입력하세요.", "password");
+    if(code === null) return;
+    if(code.trim() !== LOCK_PASSWORD){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
+    unlocked = true;
+  } else {
+    unlocked = false;
+  }
+  const btn = document.getElementById('lockBtn');
+  if(btn){
+    btn.textContent = unlocked ? "🔓 잠긴 시스템 열람중" : "🔒 잠긴 시스템 보기";
+    btn.classList.toggle('on', unlocked);
+  }
+  renderUI();
+}
+
+// 잠긴 항목 클릭 시: 비밀번호 맞으면 그 자리에서 바로 열람(이동)
+async function tryOpenLocked(url){
+  const code = await customPrompt("이 시스템은 잠겨 있습니다. 비밀번호를 입력하세요.", "password");
+  if(code === null) return;
+  if(code.trim() !== LOCK_PASSWORD){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
+  unlocked = true;
+  const btn = document.getElementById('lockBtn');
+  if(btn){
+    btn.textContent = "🔓 잠긴 시스템 열람중";
+    btn.classList.add('on');
+  }
+  renderUI();
+  if(url) window.open(url, '_blank');
+}
+
+// ---------------------------------------------------------------
+// 툴별 피드백 — 익명 작성, 수정/삭제, 담당자 답변+상태 체크
+// ---------------------------------------------------------------
+let FEEDBACK_LIST = [];      // [{id, url, text, time, status, reply}]
+let feedbackSeq = 0;
+let openFeedbackPanels = new Set();
+let editingFeedbackIds = new Set();
+const FB_STATUS_OPTIONS = ["접수됨","업데이트 예정","업데이트 완료"];
+
+function escapeHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function safeId(str){
+  return (str||'').replace(/[^a-zA-Z0-9]/g,'_');
+}
+function fbStatusClass(s){
+  if(s === "업데이트 예정") return "planned";
+  if(s === "업데이트 완료") return "done";
+  return "received";
+}
+function feedbackFor(url){
+  return FEEDBACK_LIST.filter(f => f.url === url);
+}
+function pendingCount(fbs){
+  return fbs.filter(f => f.status === "접수됨").length;
+}
+function fbAlertBadge(fbs){
+  const n = pendingCount(fbs);
+  return n > 0 ? `<span class="fb-alert-dot" title="답변/상태 업데이트가 필요한 피드백 ${n}건">🔴 미답변 ${n}</span>` : '';
+}
+
+function toggleFeedback(fid){
+  if(openFeedbackPanels.has(fid)) openFeedbackPanels.delete(fid);
+  else openFeedbackPanels.add(fid);
+  renderUI();
+}
+
+function submitNewFeedback(url, fid){
+  const ta = document.getElementById('fb-new-' + fid);
+  const text = ta.value.trim();
+  if(!text) return;
+  FEEDBACK_LIST.unshift({
+    id: 'fb' + (feedbackSeq++),
+    url, text,
+    time: new Date().toLocaleString('ko-KR', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}),
+    status: "접수됨",
+    reply: ""
+  });
+  openFeedbackPanels.add(fid);
+  render();
+}
+
+function startEditFeedback(id){
+  editingFeedbackIds.add(id);
+  renderUI();
+}
+function cancelEditFeedback(id){
+  editingFeedbackIds.delete(id);
+  renderUI();
+}
+function saveEditFeedback(id){
+  const entry = FEEDBACK_LIST.find(f=>f.id===id);
+  const ta = document.getElementById('fb-edit-' + id);
+  if(entry && ta){
+    const val = ta.value.trim();
+    if(val) entry.text = val;
+  }
+  editingFeedbackIds.delete(id);
+  if(entry) openFeedbackPanels.add(safeId(entry.url));
+  render();
+}
+async function deleteFeedback(id){
+  if(!(await customConfirm("이 피드백을 삭제할까요? (익명 피드백이라 되돌릴 수 없어요)", true))) return;
+  const entry = FEEDBACK_LIST.find(f=>f.id===id);
+  FEEDBACK_LIST = FEEDBACK_LIST.filter(f=>f.id!==id);
+  if(entry) openFeedbackPanels.add(safeId(entry.url));
+  render();
+}
+function saveFeedbackReply(id){
+  const entry = FEEDBACK_LIST.find(f=>f.id===id);
+  if(!entry) return;
+  const statusSel = document.getElementById('fb-status-' + id);
+  const replyInput = document.getElementById('fb-reply-' + id);
+  entry.status = statusSel ? statusSel.value : entry.status;
+  entry.reply = replyInput ? replyInput.value.trim() : entry.reply;
+  openFeedbackPanels.add(safeId(entry.url));
+  render();
+}
+
+function renderFeedbackEntry(f){
+  const editing = editingFeedbackIds.has(f.id);
+  if(editing){
+    return `
+      <div class="fb-entry">
+        <textarea class="fb-edit-textarea" id="fb-edit-${f.id}">${escapeHtml(f.text)}</textarea>
+        <div class="fb-entry-actions">
+          <button onclick="saveEditFeedback('${f.id}')">저장</button>
+          <button onclick="cancelEditFeedback('${f.id}')">취소</button>
+        </div>
+      </div>
+    `;
+  }
+  return `
+    <div class="fb-entry">
+      <div class="fb-text">${escapeHtml(f.text)}</div>
+      <div class="fb-meta-row">
+        <span class="fb-time">${f.time} · 익명</span>
+        <span class="fb-status-badge ${fbStatusClass(f.status)}">${f.status}</span>
+      </div>
+      <div class="fb-entry-actions">
+        <button onclick="startEditFeedback('${f.id}')">수정</button>
+        <button onclick="deleteFeedback('${f.id}')">삭제</button>
+      </div>
+      ${f.reply ? `<div class="fb-reply-shown">👨‍💻 담당자 답변: ${escapeHtml(f.reply)}</div>` : ''}
+      <div class="fb-devbox">
+        <select id="fb-status-${f.id}">
+          ${FB_STATUS_OPTIONS.map(s=>`<option value="${s}" ${s===f.status?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <input type="text" id="fb-reply-${f.id}" placeholder="담당자 답변 남기기 (선택)" value="${escapeHtml(f.reply||'')}">
+        <button onclick="saveFeedbackReply('${f.id}')">답변/상태 저장</button>
+      </div>
+    </div>
+  `;
+}
+
+function changeStatus(code, val){
+  STATUS[code] = val;
+  render();
+}
+
+// ---------------------------------------------------------------
+// 새 시스템 등록 폼
+// ---------------------------------------------------------------
+let manualDeptOverride = null;
+let contributorRowSeq = 0;
+
+// URL을 보고 어떤 종류의 툴인지 자동으로 판별 — 카드에 표시 아이콘으로 보여서 한눈에 알아보게 함
+function linkTypeInfo(url){
+  const u = (url||'').toLowerCase();
+  if(u.includes('docs.google.com/spreadsheets') || u.includes('/spreadsheets/')) return {icon:'📊', label:'구글 시트', cls:'sheet'};
+  if(u.includes('forms.gle') || u.includes('docs.google.com/forms')) return {icon:'📝', label:'구글 설문', cls:'form'};
+  if(u.includes('docs.google.com/document')) return {icon:'📄', label:'구글 문서', cls:'doc'};
+  if(u.includes('docs.google.com/presentation')) return {icon:'📽️', label:'구글 슬라이드', cls:'slide'};
+  if(u.includes('drive.google.com') || u.includes('calendar.google.com')) return {icon:'📁', label:'구글 문서', cls:'doc'};
+  return {icon:'🖥️', label:'웹 앱', cls:'webapp'};
+}
+
+// 담당자(개발자/서포터) 문자열 <-> 배열 변환. "역할:이름;역할:이름" 형식으로 저장.
+function formatContributors(list){
+  return list.map(c => `${c.role}:${c.name}`).join(';');
+}
+function parseContributors(str){
+  if(!str) return [];
+  return str.split(';').map(s=>s.trim()).filter(Boolean).map(s=>{
+    const idx = s.indexOf(':');
+    if(idx === -1) return {role:'개발자', name:s};
+    return {role:s.slice(0,idx).trim() || '개발자', name:s.slice(idx+1).trim()};
+  });
+}
+
+function addContributorRow(name, role){
+  const rows = document.getElementById('contributorRows');
+  const id = 'crow-' + (contributorRowSeq++);
+  const div = document.createElement('div');
+  div.className = 'contributorRow';
+  div.id = id;
+  const r = role || '개발자';
+  div.innerHTML = `
+    <select class="c-role">
+      <option value="개발자" ${r==='개발자'?'selected':''}>개발자</option>
+      <option value="서포터" ${r==='서포터'?'selected':''}>서포터</option>
+    </select>
+    <input type="text" class="c-name" placeholder="이름" value="${name||''}">
+    <button type="button" class="c-remove" onclick="document.getElementById('${id}').remove()">✕</button>
+  `;
+  rows.appendChild(div);
+}
+
+function collectContributors(){
+  return Array.from(document.querySelectorAll('#contributorRows .contributorRow')).map(row=>{
+    const role = row.querySelector('.c-role').value;
+    const name = row.querySelector('.c-name').value.trim();
+    return name ? {role, name} : null;
+  }).filter(Boolean);
+}
+
+function toggleAddPanel(){
+  const panel = document.getElementById('addPanel');
+  panel.classList.toggle('show');
+}
+
+function onFormInput(){
+  if(manualDeptOverride) return; // 사용자가 이미 직접 선택했으면 자동추천 갱신 안함
+  const title = document.getElementById('f-title').value;
+  const note = document.getElementById('f-note').value;
+  renderSuggestion(classifyDept(title + ' ' + note));
+}
+
+function renderSuggestion(result){
+  const box = document.getElementById('suggestBox');
+  if(!result){
+    box.innerHTML = `<span class="suggestPill unmatched">부서 자동추천: 입력을 기다리는 중</span>`;
+    return;
+  }
+  const d = DEPTS[result.code];
+  box.innerHTML = `
+    <span class="suggestPill">📍 자동추천 부서: ${d.code} · ${d.name}</span>
+    <button class="suggestChange" onclick="openManualDeptSelect()">다른 부서 같아요 (직접 선택)</button>
+  `;
+}
+
+function openManualDeptSelect(){
+  const box = document.getElementById('suggestBox');
+  const options = LAYERS.map(l => l.depts.map(d=>`<option value="${d.code}">${d.code} · ${d.name}</option>`).join('')).join('');
+  box.innerHTML = `
+    <select id="f-dept-manual" onchange="manualDeptOverride = this.value">
+      <option value="">부서를 선택하세요</option>
+      ${options}
+    </select>
+  `;
+  manualDeptOverride = "";
+}
+
+function resetAddForm(){
+  document.getElementById('f-title').value = "";
+  document.getElementById('f-url').value = "";
+  document.getElementById('f-note').value = "";
+  document.getElementById('f-wip').checked = false;
+  document.getElementById('f-lock').checked = false;
+  document.getElementById('contributorRows').innerHTML = '';
+  addContributorRow();
+  manualDeptOverride = null;
+  document.getElementById('suggestBox').innerHTML = `<span class="suggestPill unmatched">부서 자동추천: 입력을 기다리는 중</span>`;
+  document.getElementById('formMsg').className = 'formMsg';
+}
+
+async function submitEntry(){
+  const title = document.getElementById('f-title').value.trim();
+  const url = document.getElementById('f-url').value.trim();
+  const note = document.getElementById('f-note').value.trim();
+  const owner = formatContributors(collectContributors());
+  const isWip = document.getElementById('f-wip').checked;
+  const isSensitive = document.getElementById('f-lock').checked;
+  const msg = document.getElementById('formMsg');
+
+  if(!title || !url){
+    msg.textContent = "프로그램 이름과 URL은 꼭 입력해주세요.";
+    msg.className = "formMsg warn";
+    return;
+  }
+
+  let dept = manualDeptOverride || (classifyDept(title + ' ' + note) || {}).code;
+  if(!dept){
+    msg.textContent = "부서를 자동으로 찾지 못했어요. 위에서 '다른 부서 같아요'로 직접 선택해주세요.";
+    msg.className = "formMsg warn";
+    openManualDeptSelect();
+    return;
+  }
+
+  const entry = {dept, title, url, note, status: isWip ? "개발중" : "운영중", owner, sensitive: isSensitive};
+  entries.push(entry);
+  render();
+
+  msg.textContent = `등록 완료! (부서: ${DEPTS[dept].code} · ${DEPTS[dept].name}${isSensitive ? ' · 🔒 잠금' : ''})`;
+  msg.className = "formMsg ok";
+
+  if(isAdmin()){
+    msg.textContent += " — 전직원에게 자동 저장됩니다.";
+  } else if(localSaveOn){
+    msg.textContent += " — 내 기기에 저장됐어요. 전직원 반영은 관리자가 저장해야 합니다.";
+  } else {
+    msg.textContent += " — 지금은 저장이 안 되는 화면이라 새로고침하면 사라져요.";
+  }
+
+  setTimeout(()=>{ resetAddForm(); }, 3500);
+}
+
+// ---------------------------------------------------------------
+// 렌더링
+// ---------------------------------------------------------------
+function syncUpdate(entry, extra){
+  if(!APPS_SCRIPT_URL) return;
+  fetch(APPS_SCRIPT_URL, {
+    method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body: JSON.stringify(Object.assign({action:"update", url: entry.url, status: entry.status, dept: entry.dept, owner: entry.owner, sensitive: !!entry.sensitive}, extra||{}))
+  }).catch(()=>{});
+}
+
+// 개발중 → 완료 처리: 추천 부서(또는 직접 고른 부서)로 옮기며 운영중으로 전환
+function completeEntry(idx){
+  const entry = entries[idx];
+  if(!entry) return;
+  const sel = document.getElementById('complete-dept-' + idx);
+  const dept = sel ? sel.value : entry.dept;
+  entry.dept = dept;
+  entry.status = "운영중";
+  render();
+  syncUpdate(entry);
+}
+
+// 운영중 → 다시 개발중으로 되돌리기
+async function revertToWip(url){
+  const entry = entries.find(e => e.url === url);
+  if(!entry) return;
+  if(!(await customConfirm(`"${entry.title}"을(를) 다시 개발중 상태로 되돌릴까요?`))) return;
+  entry.status = "개발중";
+  render();
+  syncUpdate(entry);
+}
+
+// 개발자명 수정 — 잠긴 시스템 포함, 모든 카드에서 바로 고칠 수 있게
+async function editEntryOwner(url){
+  const entry = entries.find(e => e.url === url);
+  if(!entry) return;
+  const input = await customPrompt(`"${entry.title}"의 개발자명을 입력하세요. (여러 명이면 쉼표로 구분)`, 'text', entry.owner || '');
+  if(input === null) return;
+  entry.owner = input.trim();
+  render();
+  syncUpdate(entry);
+  if(isAdmin()){
+    // 관리자면 아무것도 물어보지 않음 — scheduleAutoSave()가 바로 전직원에게 저장함
+  } else if(localSaveOn){
+    await customAlert("수정했습니다. 새로고침해도 이 기기에서는 그대로 유지됩니다.\n전직원 화면에 반영하려면 관리자가 저장해야 합니다.");
+  } else {
+    await customAlert("수정을 반영했어요. 단, 이 화면에서는 저장 기능이 막혀 있어서 새로고침하면 원래대로 돌아가요.");
+  }
+}
+
+function render(){
+  saveLocal(); // 화면을 다시 그릴 때마다 = 뭔가 바뀌었을 때마다 내 기기에 저장
+  const liveEntries = entries.filter(e => e.status !== "개발중");
+  const wipEntries = entries.map((e, idx) => ({...e, idx})).filter(e => e.status === "개발중");
+  const activeDeptCodes = new Set(liveEntries.map(e => e.dept));
+
+  const root = document.getElementById('layers');
+  root.innerHTML = '';
+  let totalLinks = 0;
+
+  LAYERS.forEach(layer=>{
+    const activeDepts = layer.depts.filter(d => activeDeptCodes.has(d.code));
+    if(activeDepts.length === 0) return;
+
+    const section = document.createElement('div');
+    section.className = 'layer';
+    section.setAttribute('data-layer', layer.id);
+    section.innerHTML = `
+      <div class="layer-head">
+        <span class="layer-num">${LAYER_ICONS[layer.id]||''} LAYER ${layer.id}</span>
+        <span class="layer-title">${layer.title}</span>
+      </div>
+      <div class="layer-desc">${layer.desc}</div>
+    `;
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    activeDepts.forEach(dept=>{
+      const deptLinks = liveEntries.filter(e=>e.dept===dept.code);
+      totalLinks += deptLinks.length;
+      const status = STATUS[dept.code] || "정상운영";
+
+      const card = document.createElement('div');
+      card.setAttribute('data-searchtext', (dept.name+' '+dept.code+' '+deptLinks.map(l=>l.title+' '+(isLocked(l)?'':(l.owner||''))).join(' ')).toLowerCase());
+      card.className = 'card';
+
+      card.innerHTML = `
+        <div class="dept-head">
+          <div class="dept-head-left">
+            <span class="dept-icon">${DEPT_ICONS[dept.code]||'🔹'}</span>
+            <div>
+              <div class="dept-name">${dept.name}</div>
+              <span class="dept-code">${dept.code}</span>
+            </div>
+          </div>
+          <select class="status-select" onchange="changeStatus('${dept.code}', this.value)">
+            ${STATUS_OPTIONS.map(s=>`<option value="${s}" ${s===status?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>
+        <div class="dept-role" title="${dept.role}">${dept.role}</div>
+
+        <div class="links">
+          ${deptLinks.map(l=>{
+            if(isLocked(l)){
+              return `
+                <div class="link-item-wrap locked" onclick="tryOpenLocked('${l.url.replace(/'/g,"\\'")}')">
+                  <div class="link-item locked-item">
+                    <span class="link-title-block">
+                      <span class="link-type-badge type-locked">🔒 잠긴 시스템</span>
+                      <span class="link-title-text">${l.title}</span>
+                      <span class="link-meta">
+                        ${parseContributors(l.owner).map(c=>`<span class="dev-tag">${c.role}: ${c.name}</span>`).join('')}
+                        <span>클릭하면 비밀번호를 입력하고 열람합니다</span>
+                      </span>
+                    </span>
+                    <span class="arrow">🔒</span>
+                  </div>
+                  <button class="owner-edit-btn" title="개발자명 수정" onclick="event.stopPropagation(); editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
+                </div>
+              `;
+            }
+            const fid = safeId(l.url);
+            const fbs = feedbackFor(l.url);
+            const isOpen = openFeedbackPanels.has(fid);
+            const ti = linkTypeInfo(l.url);
+            return `
+            <div class="link-block">
+              <div class="link-item-wrap">
+                <a class="link-item" href="${l.url}" target="_blank" rel="noopener">
+                  <span class="link-title-block">
+                    <span class="link-type-badge type-${ti.cls}">${ti.icon} ${ti.label}</span>
+                    <span class="link-title-text">${l.title}</span>
+                    <span class="link-meta">
+                      ${l.note ? `<span>${l.note}</span>` : ''}
+                      ${parseContributors(l.owner).map(c=>`<span class="dev-tag">${c.role}: ${c.name}</span>`).join('')}
+                    </span>
+                  </span>
+                  <span class="arrow">↗</span>
+                </a>
+                <button class="owner-edit-btn" title="개발자명 수정" onclick="editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
+                <button class="revert-btn" title="개발중으로 되돌리기" onclick="revertToWip('${l.url.replace(/'/g,"\\'")}')">↩</button>
+              </div>
+              <div class="fb-wrap">
+                <button class="fb-toggle" onclick="toggleFeedback('${fid}')">💬 피드백 ${fbs.length ? `(${fbs.length})` : ''} ${isOpen ? '▲' : '▼'} ${fbAlertBadge(fbs)}</button>
+                <div class="fb-panel ${isOpen ? 'open' : ''}" id="fb-panel-${fid}">
+                  <div class="fb-list">
+                    ${fbs.length ? fbs.map(f=>renderFeedbackEntry(f)).join('') : `<div class="fb-empty">아직 피드백이 없습니다. 익명으로 편하게 남겨주세요.</div>`}
+                  </div>
+                  <div class="fb-newform">
+                    <textarea id="fb-new-${fid}" placeholder="이 시스템에 대한 의견을 익명으로 남겨주세요"></textarea>
+                    <button onclick="submitNewFeedback('${l.url.replace(/'/g,"\\'")}', '${fid}')">익명으로 남기기</button>
+                  </div>
+                  <div class="fb-newform-note">이름 없이 남겨져요 · 작성한 피드백은 누구나 수정·삭제할 수 있어요</div>
+                </div>
+              </div>
+            </div>
+          `;
+          }).join('')}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    root.appendChild(section);
+  });
+
+  document.getElementById('statLinks').textContent = totalLinks;
+  document.getElementById('statDepts').textContent = activeDeptCodes.size;
+
+  // ---- 진행중 프로젝트 ----
+  const wipList = document.getElementById('wipList');
+  document.getElementById('statWip').textContent = wipEntries.length;
+  if(wipEntries.length === 0){
+    wipList.innerHTML = `<div class="wip-empty">아직 등록된 진행중 프로젝트가 없습니다. 위 "+ 새 시스템 등록"에서 "개발중"에 체크해서 추가해보세요.</div>`;
+  } else {
+    wipList.innerHTML = wipEntries.map(w=>{
+      const d = DEPTS[w.dept];
+      if(isLocked(w)){
+        return `
+          <div class="wip-card locked" onclick="tryOpenLocked('${(w.url||'').replace(/'/g,"\\'")}')">
+            <div class="wip-dept">${DEPT_ICONS[w.dept]||'🔹'} ${w.dept} · ${d ? d.name : ''}</div>
+            <div class="wip-title">${w.title}</div>
+            <div class="wip-owner-row">
+              ${w.owner ? `<div class="wip-owner">${parseContributors(w.owner).map(c=>`${c.role}: ${c.name}`).join(' · ')}</div>` : `<div class="wip-owner wip-owner-empty">개발자 미입력</div>`}
+              <button type="button" class="wip-owner-edit" onclick="event.stopPropagation(); editEntryOwner('${(w.url||'').replace(/'/g,"\\'")}')">✏️ 개발자 수정</button>
+            </div>
+            <div class="wip-note">🔒 클릭하면 비밀번호를 입력하고 열람합니다</div>
+          </div>
+        `;
+      }
+      const rec = classifyDept(w.title + ' ' + (w.note||''));
+      const recCode = rec ? rec.code : w.dept;
+      const deptOptions = LAYERS.map(l => l.depts.map(dd=>
+        `<option value="${dd.code}" ${dd.code===recCode?'selected':''}>${dd.code} · ${dd.name}</option>`
+      ).join('')).join('');
+      const wfid = safeId(w.url || (w.dept + w.title));
+      const wfbs = feedbackFor(w.url || (w.dept + w.title));
+      const wOpen = openFeedbackPanels.has(wfid);
+      return `
+        <div class="wip-card">
+          <div class="wip-dept">${DEPT_ICONS[w.dept]||'🔹'} ${w.dept} · ${d ? d.name : ''} (임시 분류)</div>
+          <div class="wip-title">${w.title}</div>
+          <div class="wip-owner-row">
+            ${w.owner ? `<div class="wip-owner">${parseContributors(w.owner).map(c=>`${c.role}: ${c.name}`).join(' · ')}</div>` : `<div class="wip-owner wip-owner-empty">개발자 미입력</div>`}
+            <button type="button" class="wip-owner-edit" onclick="editEntryOwner('${(w.url||'').replace(/'/g,"\\'")}')">✏️ 개발자 수정</button>
+          </div>
+          ${w.note ? `<div class="wip-note">${w.note}</div>` : ''}
+          ${w.url ? `<a href="${w.url}" target="_blank" rel="noopener">테스트 링크 열기 ↗</a>` : ''}
+          <div class="wip-complete-row">
+            <label class="wip-complete-label">완료되면 이동할 부서 ${rec ? '· 📍 자동추천 반영됨' : ''}</label>
+            <select id="complete-dept-${w.idx}">${deptOptions}</select>
+            <button class="wip-complete" onclick="completeEntry(${w.idx})">✅ 이 부서로 완료 처리</button>
+          </div>
+          <div class="fb-wrap">
+            <button class="fb-toggle" onclick="toggleFeedback('${wfid}')">💬 피드백 ${wfbs.length ? `(${wfbs.length})` : ''} ${wOpen ? '▲' : '▼'} ${fbAlertBadge(wfbs)}</button>
+            <div class="fb-panel ${wOpen ? 'open' : ''}" id="fb-panel-${wfid}">
+              <div class="fb-list">
+                ${wfbs.length ? wfbs.map(f=>renderFeedbackEntry(f)).join('') : `<div class="fb-empty">아직 피드백이 없습니다. 익명으로 편하게 남겨주세요.</div>`}
+              </div>
+              <div class="fb-newform">
+                <textarea id="fb-new-${wfid}" placeholder="이 프로젝트에 대한 의견을 익명으로 남겨주세요"></textarea>
+                <button onclick="submitNewFeedback('${(w.url||(w.dept+w.title)).replace(/'/g,"\\'")}', '${wfid}')">익명으로 남기기</button>
+              </div>
+              <div class="fb-newform-note">이름 없이 남겨져요 · 작성한 피드백은 누구나 수정·삭제할 수 있어요</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ---- 개설 및 개발이 필요한 부서 ----
+  const needGroups = document.getElementById('needGroups');
+  const layerClass = {1:'l1',2:'l2',3:'l3',4:'l4'};
+  needGroups.innerHTML = LAYERS.map(layer=>{
+    const emptyDepts = layer.depts.filter(d => !activeDeptCodes.has(d.code));
+    if(emptyDepts.length === 0) return '';
+    return `
+      <div class="need-group">
+        <div class="need-group-title">LAYER ${layer.id} · ${layer.title}</div>
+        <div class="chip-row">
+          ${emptyDepts.map(d=>`
+            <span class="chip" title="${d.role}">
+              <span>${DEPT_ICONS[d.code]||'🔹'}</span>
+              <span class="chip-code ${layerClass[layer.id]}">${d.code}</span>${d.name}
+            </span>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateAdminLinks(){
+  const note = document.getElementById('scriptLinkNote');
+  if(!note) return;
+  if(APPS_SCRIPT_URL){
+    note.outerHTML = `<a href="${APPS_SCRIPT_URL}" target="_blank" rel="noopener" id="scriptLinkNote">🔌 자동저장 API 열기 (원시 데이터)</a>`;
+  }
+}
+
+// ---------------------------------------------------------------
+// 전직원 비상 연락망 렌더링 / 추가·수정·삭제 — 지점 목록과 담당자 목록을 분리 관리
+// ---------------------------------------------------------------
+function updateContactCountSub(){
+  const sub = document.getElementById('contactCountSub');
+  if(!sub) return;
+  const isOpen = document.getElementById('contactPanelBody').classList.contains('open');
+  sub.textContent = `지점 ${stores.length}곳 · 담당자 ${staff.length}명` + (isOpen ? '' : ' · 눌러서 펼치기');
+}
+
+function renderStores(){
+  saveLocal();
+  const grid = document.getElementById('storeGrid');
+  if(!grid) return;
+  if(!stores.length){
+    grid.innerHTML = `<div class="contact-empty">아직 등록된 지점이 없습니다. 아래 "＋ 지점 추가"에서 등록해보세요.</div>`;
+  } else {
+    grid.innerHTML = stores.map((s, idx) => `
+      <div class="contact-row">
+        <div class="contact-row-store">🏪 ${escapeHtml(s.store)}</div>
+        ${s.phone ? `<a class="contact-store-phone" href="tel:${s.phone.replace(/[^0-9]/g,'')}">📞 ${escapeHtml(s.phone)}</a>` : `<span class="contact-store-phone"></span>`}
+        <span class="contact-addr">${s.addr ? '📍 ' + escapeHtml(s.addr) : ''}</span>
+        <div class="contact-actions">
+          <button type="button" title="수정" onclick="editStore(${idx})">✏️</button>
+          <button type="button" title="삭제" onclick="deleteStore(${idx})">🗑</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  updateContactCountSub();
+}
+
+function renderStaff(){
+  saveLocal();
+  const grid = document.getElementById('staffGrid');
+  if(!grid) return;
+  if(!staff.length){
+    grid.innerHTML = `<div class="contact-empty">아직 등록된 담당자가 없습니다. 아래 "＋ 담당자 추가"에서 등록해보세요.</div>`;
+  } else {
+    grid.innerHTML = staff.map((p, idx) => `
+      <div class="contact-row">
+        <div class="contact-staff-name">${escapeHtml(p.name||'')}</div>
+        ${p.role ? `<span class="contact-staff-role">${escapeHtml(p.role)}</span>` : ''}
+        ${p.store ? `<span class="contact-staff-store">🏪 ${escapeHtml(p.store)}</span>` : ''}
+        ${p.phone ? `<a class="contact-staff-phone" href="tel:${p.phone.replace(/[^0-9]/g,'')}">📞 ${escapeHtml(p.phone)}</a>` : `<span class="contact-staff-phone"></span>`}
+        <div class="contact-actions">
+          <button type="button" title="수정" onclick="editStaff(${idx})">✏️</button>
+          <button type="button" title="삭제" onclick="deleteStaff(${idx})">🗑</button>
+        </div>
+      </div>
+    `).join('');
+  }
+  updateContactCountSub();
+}
+
+function populateStaffStoreSelect(selected){
+  const sel = document.getElementById('sf-store');
+  if(!sel) return;
+  sel.innerHTML = stores.map(s => `<option value="${escapeHtml(s.store)}" ${s.store===selected?'selected':''}>${escapeHtml(s.store)}</option>`).join('')
+    || `<option value="">등록된 지점이 없어요</option>`;
+}
+
+function toggleContactPanel(){
+  const body = document.getElementById('contactPanelBody');
+  const icon = document.getElementById('contactToggleIcon');
+  body.classList.toggle('open');
+  icon.classList.toggle('open');
+  updateContactCountSub();
+}
+
+function openContactPanel(){
+  const body = document.getElementById('contactPanelBody');
+  if(!body.classList.contains('open')){
+    body.classList.add('open');
+    document.getElementById('contactToggleIcon').classList.add('open');
+    updateContactCountSub();
+  }
+}
+
+// ---- 지점 추가/수정 ----
+function toggleStoreForm(){
+  openContactPanel();
+  const form = document.getElementById('storeForm');
+  const opening = !form.classList.contains('show');
+  form.classList.toggle('show');
+  if(opening){
+    resetStoreForm();
+  } else {
+    editingStoreIdx = null;
+  }
+}
+
+function resetStoreForm(){
+  editingStoreIdx = null;
+  document.getElementById('storeFormTitle').textContent = '＋ 지점 추가';
+  document.getElementById('storeSaveBtn').textContent = '등록하기';
+  document.getElementById('st-store').value = '';
+  document.getElementById('st-phone').value = '';
+  document.getElementById('st-addr').value = '';
+  document.getElementById('storeFormMsg').className = 'formMsg';
+  document.getElementById('storeFormMsg').textContent = '';
+}
+
+function editStore(idx){
+  const s = stores[idx];
+  if(!s) return;
+  editingStoreIdx = idx;
+  const form = document.getElementById('storeForm');
+  form.classList.add('show');
+  document.getElementById('storeFormTitle').textContent = '✏️ ' + s.store + ' 수정';
+  document.getElementById('storeSaveBtn').textContent = '수정 완료';
+  document.getElementById('st-store').value = s.store || '';
+  document.getElementById('st-phone').value = s.phone || '';
+  document.getElementById('st-addr').value = s.addr || '';
+  form.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+async function deleteStore(idx){
+  const s = stores[idx];
+  if(!s) return;
+  if(!(await customConfirm(`"${s.store}" 지점 정보를 삭제할까요? (담당자 목록은 그대로 남아요)`, true))) return;
+  stores.splice(idx, 1);
+  if(editingStoreIdx === idx){
+    document.getElementById('storeForm').classList.remove('show');
+    resetStoreForm();
+  }
+  renderStores();
+}
+
+function submitStoreForm(){
+  const store = document.getElementById('st-store').value.trim();
+  const msg = document.getElementById('storeFormMsg');
+  if(!store){
+    msg.className = 'formMsg warn';
+    msg.textContent = '지점명을 입력해주세요.';
+    return;
+  }
+  const phone = document.getElementById('st-phone').value.trim();
+  const addr = document.getElementById('st-addr').value.trim();
+  const data = {store, phone, addr};
+  if(editingStoreIdx !== null && stores[editingStoreIdx]){
+    stores[editingStoreIdx] = data;
+  } else {
+    stores.push(data);
+  }
+  document.getElementById('storeForm').classList.remove('show');
+  resetStoreForm();
+  renderStores();
+}
+
+// ---- 담당자 추가/수정 ----
+function toggleStaffForm(){
+  openContactPanel();
+  const form = document.getElementById('staffForm');
+  const opening = !form.classList.contains('show');
+  form.classList.toggle('show');
+  if(opening){
+    resetStaffForm();
+  } else {
+    editingStaffIdx = null;
+  }
+}
+
+function resetStaffForm(){
+  editingStaffIdx = null;
+  document.getElementById('staffFormTitle').textContent = '＋ 담당자 추가';
+  document.getElementById('staffSaveBtn').textContent = '등록하기';
+  document.getElementById('sf-name').value = '';
+  document.getElementById('sf-role').value = '';
+  document.getElementById('sf-phone').value = '';
+  populateStaffStoreSelect();
+  document.getElementById('staffFormMsg').className = 'formMsg';
+  document.getElementById('staffFormMsg').textContent = '';
+}
+
+function editStaff(idx){
+  const p = staff[idx];
+  if(!p) return;
+  editingStaffIdx = idx;
+  const form = document.getElementById('staffForm');
+  form.classList.add('show');
+  document.getElementById('staffFormTitle').textContent = '✏️ ' + p.name + ' 수정';
+  document.getElementById('staffSaveBtn').textContent = '수정 완료';
+  document.getElementById('sf-name').value = p.name || '';
+  document.getElementById('sf-role').value = p.role || '';
+  document.getElementById('sf-phone').value = p.phone || '';
+  populateStaffStoreSelect(p.store);
+  form.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+async function deleteStaff(idx){
+  const p = staff[idx];
+  if(!p) return;
+  if(!(await customConfirm(`"${p.name}" 담당자 정보를 삭제할까요?`, true))) return;
+  staff.splice(idx, 1);
+  if(editingStaffIdx === idx){
+    document.getElementById('staffForm').classList.remove('show');
+    resetStaffForm();
+  }
+  renderStaff();
+}
+
+function submitStaffForm(){
+  const name = document.getElementById('sf-name').value.trim();
+  const msg = document.getElementById('staffFormMsg');
+  if(!name){
+    msg.className = 'formMsg warn';
+    msg.textContent = '이름을 입력해주세요.';
+    return;
+  }
+  const role = document.getElementById('sf-role').value.trim();
+  const phone = document.getElementById('sf-phone').value.trim();
+  const store = document.getElementById('sf-store').value;
+  const data = {name, role, phone, store};
+  if(editingStaffIdx !== null && staff[editingStaffIdx]){
+    staff[editingStaffIdx] = data;
+  } else {
+    staff.push(data);
+  }
+  document.getElementById('staffForm').classList.remove('show');
+  resetStaffForm();
+  renderStaff();
+}
+
+// ===============================================================
+// 공용 데이터 저장 (깃허브) + 내 기기 임시 저장
+// ---------------------------------------------------------------
+// 구조를 쉬운 말로 설명하면:
+//
+//  1) 깃허브 저장소에 data.json 이라는 "공용 장부" 파일이 있습니다.
+//     전 직원의 화면은 켜질 때 이 장부를 읽어옵니다 → 그래서 모두 같은 내용을 봅니다.
+//     읽기는 누구나 됩니다 (비밀번호 필요 없음).
+//
+//  2) 장부에 "쓰기"는 관리자만 됩니다.
+//     쓰려면 깃허브 발급 열쇠(토큰)가 필요한데, 그 열쇠는 이 파일 안에 절대 넣지 않습니다.
+//     관리자가 자기 브라우저에 한 번만 등록해두고, 그 브라우저에만 남습니다.
+//     → 직원이 소스를 봐도 열쇠가 없으므로 저장소를 건드릴 수 없습니다. (읽기 전용)
+//
+//  3) 아직 공용 장부에 올리지 않은 수정분은 내 브라우저(localStorage)에 임시 보관됩니다.
+//     새로고침해도 안 날아갑니다. 상단 뱃지가 "저장 안 됨"으로 알려줍니다.
+// ===============================================================
+
+// ▼▼ 공용 장부 위치 (여기만 바꾸면 다른 저장소로 옮길 수 있습니다) ▼▼
+const GH_DEFAULT = { owner: "ceohj0101", repo: "wevape-hub", branch: "main", path: "data.json" };
+// ▲▲ 열쇠(토큰)는 여기에 없습니다. 절대 넣지 마세요. ▲▲
+
+const LOCAL_KEY  = "wevape_hub_state_v1";
+const TOKEN_KEY  = "wevape_hub_gh_token_v1"; // 관리자 열쇠 — 이 브라우저에만 저장됨
+const REPO_KEY   = "wevape_hub_gh_repo_v1";  // 저장소 위치 덮어쓰기(선택)
+
+let localSaveOn   = false; // 이 브라우저에서 저장 기능을 쓸 수 있는지
+let suppressDirty = 0;     // 0보다 크면 "수정됨" 표시를 켜지 않음 (불러오는 중일 때 사용)
+let dirty         = false; // 공용 장부에 아직 안 올린 수정분이 있는지
+let remoteLoaded  = false; // 공용 장부를 성공적으로 읽었는지
+let remoteSavedAt = "";    // 공용 장부가 마지막으로 저장된 시각
+let ghBusy        = false; // 저장 중 중복 클릭 방지
+let autoSaveTimer = null;  // 자동 저장 예약
+let saveError     = "";    // 마지막 저장 실패 사유 (뱃지에 보여줌)
+
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(err){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(err){ return false; } }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(err){} }
+
+function ghRepo(){
+  try{
+    const o = JSON.parse(lsGet(REPO_KEY) || "null");
+    if(o && o.owner && o.repo) return Object.assign({}, GH_DEFAULT, o);
+  }catch(err){}
+  return GH_DEFAULT;
+}
+function ghToken(){ return (lsGet(TOKEN_KEY) || "").trim(); }
+function isAdmin(){ return ghToken().length > 0; }
+
+// ---------------- 내 기기 임시 저장 ----------------
+function snapshot(){
+  return {
+    entries: entries,
+    stores: stores,
+    staff: staff,
+    status: STATUS,
+    feedback: FEEDBACK_LIST,
+    feedbackSeq: feedbackSeq,
+    savedAt: new Date().toISOString()
+  };
+}
+
+// 데이터가 안 바뀌는 화면 조작(패널 열기/닫기 등)은 "저장 안 됨"으로 잡지 않음
+function renderUI(){ suppressDirty++; try{ render(); } finally { suppressDirty--; } }
+
+function saveLocal(){
+  if(suppressDirty === 0) dirty = true; // 화면이 다시 그려졌다 = 뭔가 바뀌었다
+  if(localSaveOn){
+    const payload = snapshot();
+    payload.dirty = dirty;
+    if(!lsSet(LOCAL_KEY, JSON.stringify(payload))) localSaveOn = false;
+  }
+  updateSyncBadge();
+  if(suppressDirty === 0) scheduleAutoSave(); // 관리자면 알아서 전직원에게 저장
+}
+
+// 수정하면 버튼 누를 필요 없이 잠깐 뒤 자동으로 공용 장부에 올림.
+// (연속으로 여러 번 고칠 때 매번 저장하지 않도록 1초 모아서 한 번에 보냄)
+function scheduleAutoSave(){
+  if(!isAdmin() || !dirty) return;
+  if(autoSaveTimer) clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(function(){
+    autoSaveTimer = null;
+    if(isAdmin() && dirty && !ghBusy) saveToGithub({ silent: true });
+  }, 1000);
+}
+
+// 저장본/공용장부를 현재 화면 데이터에 반영. 기본 항목(SEED)이 빠지지 않게 합쳐줌.
+function applyData(d){
+  if(!d) return;
+  if(Array.isArray(d.entries) && d.entries.length){
+    const byUrl = new Map(d.entries.filter(e => e && e.url).map(e => [e.url, e]));
+    SEED_ENTRIES.forEach(seed => { if(!byUrl.has(seed.url)) byUrl.set(seed.url, Object.assign({}, seed)); });
+    entries = Array.from(byUrl.values());
+  }
+  if(Array.isArray(d.feedback)) FEEDBACK_LIST = d.feedback;
+  if(typeof d.feedbackSeq === "number") feedbackSeq = Math.max(feedbackSeq, d.feedbackSeq);
+
+  if(Array.isArray(d.stores) && d.stores.length){
+    const byStore = new Map(d.stores.filter(s => s && s.store).map(s => [s.store, s]));
+    SEED_STORES.forEach(seed => { if(!byStore.has(seed.store)) byStore.set(seed.store, Object.assign({}, seed)); });
+    stores = Array.from(byStore.values());
+  }
+  if(Array.isArray(d.staff) && d.staff.length){
+    const key = s => (s.name || "") + "|" + (s.phone || "");
+    const byStaff = new Map(d.staff.filter(s => s && s.name).map(s => [key(s), s]));
+    SEED_STAFF.forEach(seed => { if(!byStaff.has(key(seed))) byStaff.set(key(seed), Object.assign({}, seed)); });
+    staff = Array.from(byStaff.values());
+  }
+  if(d.status && typeof d.status === "object"){
+    Object.keys(d.status).forEach(k => { STATUS[k] = d.status[k]; });
+  }
+}
+
+function loadLocal(){
+  // 이 환경에서 저장 기능을 쓸 수 있는지 먼저 확인 (일부 뷰어/시크릿모드는 차단함)
+  if(!lsSet(LOCAL_KEY + "_t", "1")){ localSaveOn = false; return; }
+  lsDel(LOCAL_KEY + "_t");
+  localSaveOn = true;
+
+  let saved = null;
+  try{ saved = JSON.parse(lsGet(LOCAL_KEY) || "null"); }catch(err){ saved = null; }
+  if(!saved) return;
+  applyData(saved);
+  dirty = !!saved.dirty;
+}
+
+// ---------------- 공용 장부 읽기 (누구나) ----------------
+async function loadRemote(){
+  const R = ghRepo();
+  const bust = "?t=" + Date.now();
+  const urls = [
+    `https://raw.githubusercontent.com/${R.owner}/${R.repo}/${R.branch}/${R.path}` + bust,
+    `https://api.github.com/repos/${R.owner}/${R.repo}/contents/${R.path}?ref=${R.branch}&t=${Date.now()}`
+  ];
+  for(let i = 0; i < urls.length; i++){
+    try{
+      const opt = i === 1 ? { headers: { "Accept": "application/vnd.github.raw" } } : { cache: "no-store" };
+      const res = await fetch(urls[i], opt);
+      if(!res.ok) continue;
+      const data = await res.json();
+      if(!data || typeof data !== "object") continue;
+
+      remoteLoaded  = true;
+      remoteSavedAt = data.savedAt || "";
+
+      if(dirty){
+        // 내 기기에 아직 안 올린 수정분이 있으면 그걸 지키고, 뱃지로 알려줌
+        updateSyncBadge();
+        return;
+      }
+      suppressDirty++;
+      applyData(data);
+      render(); renderStores(); renderStaff();
+      suppressDirty--;
+      updateSyncBadge();
+      return;
+    }catch(err){ /* 다음 방법으로 시도 */ }
+  }
+  updateSyncBadge(); // 둘 다 실패 — 화면은 기본 데이터로 정상 동작
+}
+
+// ---------------- 공용 장부 쓰기 (관리자만) ----------------
+function utf8ToBase64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = "";
+  for(let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+
+// silent:true 면 자동 저장 (성공 알림창 없음). 손으로 뱃지를 누르면 silent:false.
+async function saveToGithub(opts){
+  const silent = !!(opts && opts.silent);
+  if(ghBusy) return;
+  const token = ghToken();
+  if(!token){
+    if(!silent) await customAlert("전직원에게 반영하려면 관리자 저장 열쇠가 필요합니다.\n\n화면 맨 아래 \"🔑 관리자 저장 설정\"에서 한 번만 등록해주세요.\n(열쇠는 이 브라우저에만 저장되고, 사이트 파일에는 들어가지 않습니다)");
+    return;
+  }
+  const R = ghRepo();
+  const api = `https://api.github.com/repos/${R.owner}/${R.repo}/contents/${R.path}`;
+  const head = { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json" };
+
+  ghBusy = true;
+  saveError = "";
+  const badge = document.getElementById('syncBadge');
+  if(badge){ badge.textContent = "⏳ 저장중..."; badge.className = "syncBadge off"; }
+
+  // 현재 버전 번호(sha) 읽기 — 파일이 아직 없으면 404 (첫 저장, 정상)
+  async function readSha(){
+    const cur = await fetch(`${api}?ref=${R.branch}&t=${Date.now()}`, { headers: head });
+    if(cur.status === 200) return (await cur.json()).sha;
+    if(cur.status === 401 || cur.status === 403) throw new Error("열쇠(토큰)가 잘못됐거나 권한이 없습니다. 관리자 저장 설정에서 다시 등록해주세요.");
+    if(cur.status === 404) return null;
+    return null;
+  }
+
+  let payload = null;
+  try{
+    let sha = await readSha();
+
+    // 최대 3번 시도: sha가 어긋나면(409/422) 최신 sha를 다시 받아서 재시도
+    for(let attempt = 0; attempt < 3; attempt++){
+      payload = snapshot();
+      const body = {
+        message: "허브 데이터 업데이트 " + payload.savedAt,
+        content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+        branch: R.branch
+      };
+      if(sha) body.sha = sha;
+
+      const put = await fetch(api, { method: "PUT", headers: head, body: JSON.stringify(body) });
+      if(put.ok) break;
+
+      let detail = "";
+      try{ detail = (await put.json()).message || ""; }catch(err){}
+
+      if((put.status === 409 || put.status === 422) && attempt < 2){
+        sha = await readSha(); // 다른 기기에서 먼저 저장됨 → 최신 버전 위에 다시 얹기
+        continue;
+      }
+      if(put.status === 401 || put.status === 403) detail = "열쇠(토큰)가 잘못됐거나 권한이 없습니다. 관리자 저장 설정에서 다시 등록해주세요.";
+      if(put.status === 404) detail = `저장소를 찾을 수 없습니다 (${R.owner}/${R.repo}). 저장소 이름과 열쇠 권한을 확인해주세요.`;
+      throw new Error(detail || ("저장 실패 (코드 " + put.status + ")"));
+    }
+
+    dirty = false;
+    remoteLoaded = true;
+    remoteSavedAt = payload.savedAt;
+    ghBusy = false; // 뱃지를 다시 그릴 수 있게 먼저 해제
+    suppressDirty++; saveLocal(); suppressDirty--;
+    updateSyncBadge();
+    if(!silent) await customAlert("전직원에게 저장 완료!\n\n다른 직원이 새로고침하면 바로 이 내용이 보입니다.\n(깃허브 반영에 최대 1분 걸릴 수 있습니다)");
+  }catch(err){
+    ghBusy = false;
+    saveError = (err && err.message) ? err.message : "네트워크 오류";
+    updateSyncBadge();
+    // 자동 저장 중 실패했으면 창을 띄우지 않고 뱃지로만 알림 (수정 내용은 기기에 남아 있음)
+    if(!silent) await customAlert("저장 실패\n\n" + saveError + "\n\n수정한 내용은 이 기기에 그대로 남아 있으니, 원인 해결 후 다시 저장하면 됩니다.");
+  }finally{
+    ghBusy = false;
+  }
+}
+
+// ---------------- 관리자 열쇠 등록 / 해제 ----------------
+async function setupGhToken(){
+  const R = ghRepo();
+  if(isAdmin()){
+    if(await customConfirm(`이 브라우저에 등록된 관리자 저장 열쇠를 삭제할까요?\n(저장소: ${R.owner}/${R.repo})\n삭제하면 이 브라우저에서는 전직원 저장을 못 하게 됩니다.`, true)){
+      lsDel(TOKEN_KEY);
+      updateSyncBadge();
+      await customAlert("열쇠를 삭제했습니다. 이제 이 브라우저는 읽기 전용입니다.");
+    }
+    return;
+  }
+  // 저장소는 이미 정해져 있으므로 물어보지 않음. 열쇠만 한 번 받으면 끝.
+  const tok = await customPrompt(`깃허브 저장 열쇠(토큰)를 붙여넣어 주세요.\n저장소: ${R.owner}/${R.repo}\n\n※ 이 열쇠는 이 브라우저에만 저장되고, 사이트 파일이나 다른 직원 화면에는 절대 들어가지 않습니다.`, 'password', '');
+  if(tok === null) return;
+  if(!tok.trim()){ await customAlert("열쇠가 비어 있습니다."); return; }
+
+  if(!lsSet(REPO_KEY, JSON.stringify({ owner: R.owner, repo: R.repo, branch: R.branch, path: R.path })) ||
+     !lsSet(TOKEN_KEY, tok.trim())){
+    await customAlert("이 브라우저에서는 저장 기능이 막혀 있어 열쇠를 보관할 수 없습니다.\n크롬/사파리 일반 창(시크릿 모드 아님)에서 다시 시도해주세요.");
+    return;
+  }
+  updateSyncBadge();
+  await customAlert("관리자 등록 완료!\n\n이제부터는 수정하면 버튼 누를 필요 없이 자동으로 전직원에게 저장됩니다.");
+}
+
+// ---------------- 상단 뱃지 ----------------
+function updateSyncBadge(){
+  const badge = document.getElementById('syncBadge');
+  if(!badge || ghBusy) return;
+  const admin = isAdmin();
+
+  if(dirty){
+    if(admin){
+      if(saveError){
+        badge.textContent = "❗ 저장 실패 — 눌러서 다시 시도";
+        badge.title = saveError + "\n수정한 내용은 이 기기에 남아 있습니다.";
+      } else {
+        badge.textContent = "💾 자동 저장 대기중...";
+        badge.title = "잠시 뒤 자동으로 전직원에게 저장됩니다. 바로 저장하려면 누르세요.";
+      }
+    } else {
+      badge.textContent = "⚠️ 내 화면에만 저장됨";
+      badge.title = "이 수정은 이 브라우저에만 남아 있습니다. 전직원 화면에 반영하려면 관리자에게 알려주세요.";
+    }
+    badge.className = "syncBadge off";
+    return;
+  }
+  if(remoteLoaded){
+    badge.textContent = admin ? "🟢 자동 저장 켜짐 (관리자)" : "🟢 전직원 공유 데이터";
+    badge.title = "공용 장부에서 불러온 최신 내용입니다." + (remoteSavedAt ? "\n마지막 저장: " + remoteSavedAt.replace('T',' ').slice(0,16) : "");
+    badge.className = "syncBadge on";
+    return;
+  }
+  badge.textContent = "🔧 공용 데이터 연결 대기중";
+  badge.title = "공용 장부(data.json)를 아직 읽지 못했습니다. 저장소에 파일이 올라가면 자동으로 연결됩니다. 화면은 기본 데이터로 정상 동작합니다.";
+  badge.className = "syncBadge off";
+}
+
+// 뱃지를 눌렀을 때
+async function syncBadgeClick(){
+  if(autoSaveTimer){ clearTimeout(autoSaveTimer); autoSaveTimer = null; }
+  if(dirty || isAdmin()){ await saveToGithub({ silent: false }); return; }
+  await customAlert(remoteLoaded
+    ? "지금 보고 있는 내용은 전직원 공용 데이터입니다. (최신)"
+    : "공용 데이터를 아직 읽지 못했습니다. 화면은 기본 데이터로 정상 동작합니다.");
+}
+
+// 이 기기에 저장된 임시 수정분을 지우고 공용 장부 내용으로 되돌리기
+async function resetLocal(){
+  if(!(await customConfirm("이 기기에만 저장된 수정 내용을 지우고, 전직원 공용 데이터로 되돌릴까요?\n(관리자 열쇠는 지워지지 않습니다)", true))) return;
+  lsDel(LOCAL_KEY);
+  location.reload();
+}
+
+// ---------------- 시작 ----------------
+suppressDirty++;
+loadLocal();
+render();
+resetAddForm();
+renderStores();
+renderStaff();
+resetStoreForm();
+resetStaffForm();
+suppressDirty--;
+updateSyncBadge();
+updateAdminLinks();
+loadRemote();
+
+// 스플래시 화면: 잠깐 로고 보여준 뒤 대시보드로 전환
+// (터치/탭으로도 바로 넘어갈 수 있고, 1.3초 뒤 자동으로도 넘어갑니다)
+function dismissSplash(){
+  const splash = document.getElementById('splash');
+  if(!splash) return;
+  splash.classList.add('hide');
+  setTimeout(()=>{ if(splash && splash.parentNode) splash.remove(); }, 650);
+}
+setTimeout(dismissSplash, 1300);
+
+// 검색 필터
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', ()=>{
+  const q = searchInput.value.trim().toLowerCase();
+  const layers = document.querySelectorAll('.layer');
+  let anyVisible = false;
+
+  layers.forEach(layer=>{
+    let layerHasVisible = false;
+    layer.querySelectorAll('.card').forEach(card=>{
+      const show = !q || card.getAttribute('data-searchtext').includes(q);
+      card.classList.toggle('hidden', !show);
+      if(show){ layerHasVisible = true; anyVisible = true; }
+    });
+    layer.classList.toggle('hidden', !layerHasVisible);
+  });
+
+  document.getElementById('noResult').style.display = (q && !anyVisible) ? 'block' : 'none';
+  document.getElementById('wipSection').style.display = q ? 'none' : '';
+  document.querySelector('.need-section').style.display = q ? 'none' : '';
+});
+</script>
+
+</body>
+</html>
