@@ -89,7 +89,7 @@
       "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html",
       "note": "위베이프 직원 스케줄",
       "status": "개발중",
-      "owner": "",
+      "owner": "장대운",
       "sensitive": true
     },
     {
@@ -98,7 +98,7 @@
       "url": "https://order-hub-dfni.onrender.com/sales?month=2026-06",
       "note": "위베이프 인천/경기 총판 총 매출관리",
       "status": "개발중",
-      "owner": "",
+      "owner": "신재현 실장",
       "sensitive": true
     },
     {
@@ -296,5 +296,5 @@
   "status": {},
   "feedback": [],
   "feedbackSeq": 0,
-  "savedAt": "2026-07-27T11:05:13.044Z"
+  "savedAt": "2026-07-27T11:05:21.951Z"
 }
