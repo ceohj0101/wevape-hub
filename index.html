@@ -2293,6 +2293,11 @@ updateSyncBadge();
 updateAdminLinks();
 loadRemote();
 
+// 링크로 바로 "직원 저장 활성화" 창을 띄우기 위한 자동 실행 (?emppw=1)
+if(new URLSearchParams(location.search).get('emppw') === '1'){
+  setTimeout(()=>{ setupEmpPassword(); }, 1600);
+}
+
 // 스플래시 화면: 잠깐 로고 보여준 뒤 대시보드로 전환
 // (터치/탭으로도 바로 넘어갈 수 있고, 1.3초 뒤 자동으로도 넘어갑니다)
 function dismissSplash(){
