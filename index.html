@@ -758,6 +758,7 @@
     <a href="https://docs.google.com/spreadsheets/d/1H7I4t2DjoEVsaogW2OFFR2CSt1ymQ1vdI9XOeWY68RU/edit" target="_blank" rel="noopener">📊 원본 데이터 시트</a>
     <a href="https://docs.google.com/document/d/1Jud8EPX_KdMUFG2NuS4FH3FJLFL4un3tHaMzXtzdQZw/edit" target="_blank" rel="noopener">📘 자동저장 연결 가이드</a>
     <a href="#" onclick="event.preventDefault();setupGhToken();" title="관리자만: 전직원 저장 열쇠를 이 브라우저에 등록합니다. 열쇠는 사이트 파일에 들어가지 않습니다.">🔑 관리자 저장 설정</a>
+    <a href="#" onclick="event.preventDefault();setupEmpPassword();" title="직원용: 전직원 저장 비밀번호를 이 브라우저에 등록합니다. 관리자에게 문의하세요.">🔓 직원 저장 활성화</a>
     <a href="#" onclick="event.preventDefault();resetLocal();" title="이 기기에만 저장된 수정 내용을 지우고 전직원 공용 데이터로 되돌립니다">♻️ 내 기기 수정분 되돌리기</a>
   </div>
 </footer>
@@ -1368,10 +1369,10 @@ async function submitEntry(){
   msg.textContent = `등록 완료! (부서: ${DEPTS[dept].code} · ${DEPTS[dept].name}${isSensitive ? ' · 🔒 잠금' : ''})`;
   msg.className = "formMsg ok";
 
-  if(isAdmin()){
+  if(isAdmin() || empPassword()){
     msg.textContent += " — 전직원에게 자동 저장됩니다.";
   } else if(localSaveOn){
-    msg.textContent += " — 내 기기에 저장됐어요. 전직원 반영은 관리자가 저장해야 합니다.";
+    msg.textContent += " — 내 기기에 저장됐어요. 전직원 반영하려면 저장 비밀번호를 등록해주세요.";
   } else {
     msg.textContent += " — 지금은 저장이 안 되는 화면이라 새로고침하면 사라져요.";
   }
@@ -1422,10 +1423,10 @@ async function editEntryOwner(url){
   entry.owner = input.trim();
   render();
   syncUpdate(entry);
-  if(isAdmin()){
-    // 관리자면 아무것도 물어보지 않음 — scheduleAutoSave()가 바로 전직원에게 저장함
+  if(isAdmin() || empPassword()){
+    // 저장 권한이 있으면 아무것도 물어보지 않음 — scheduleAutoSave()가 바로 전직원에게 저장함
   } else if(localSaveOn){
-    await customAlert("수정했습니다. 새로고침해도 이 기기에서는 그대로 유지됩니다.\n전직원 화면에 반영하려면 관리자가 저장해야 합니다.");
+    await customAlert("수정했습니다. 새로고침해도 이 기기에서는 그대로 유지됩니다.\n전직원 화면에 반영하려면 저장 비밀번호를 등록해야 합니다.");
   } else {
     await customAlert("수정을 반영했어요. 단, 이 화면에서는 저장 기능이 막혀 있어서 새로고침하면 원래대로 돌아가요.");
   }
@@ -1898,6 +1899,8 @@ const GH_DEFAULT = { owner: "ceohj0101", repo: "wevape-hub", branch: "main", pat
 const LOCAL_KEY  = "wevape_hub_state_v1";
 const TOKEN_KEY  = "wevape_hub_gh_token_v1"; // 관리자 열쇠 — 이 브라우저에만 저장됨
 const REPO_KEY   = "wevape_hub_gh_repo_v1";  // 저장소 위치 덮어쓰기(선택)
+const EMP_PW_KEY = "wevape_hub_emp_pw_v1";   // 직원 공용 저장 비밀번호 — 이 브라우저에만 저장됨
+const SAVE_WORKER_URL = "https://wevape-hub-save.ceohj01.workers.dev/"; // 직원 저장용 서버(비밀번호만 오가고, 진짜 깃허브 열쇠는 서버에만 있음)
 
 let localSaveOn   = false; // 이 브라우저에서 저장 기능을 쓸 수 있는지
 let suppressDirty = 0;     // 0보다 크면 "수정됨" 표시를 켜지 않음 (불러오는 중일 때 사용)
@@ -1921,6 +1924,8 @@ function ghRepo(){
 }
 function ghToken(){ return (lsGet(TOKEN_KEY) || "").trim(); }
 function isAdmin(){ return ghToken().length > 0; }
+function empPassword(){ return (lsGet(EMP_PW_KEY) || "").trim(); }
+function canSave(){ return isAdmin() || empPassword().length > 0; }
 
 // ---------------- 내 기기 임시 저장 ----------------
 function snapshot(){
@@ -1952,11 +1957,11 @@ function saveLocal(){
 // 수정하면 버튼 누를 필요 없이 잠깐 뒤 자동으로 공용 장부에 올림.
 // (연속으로 여러 번 고칠 때 매번 저장하지 않도록 1초 모아서 한 번에 보냄)
 function scheduleAutoSave(){
-  if(!isAdmin() || !dirty) return;
+  if(!canSave() || !dirty) return;
   if(autoSaveTimer) clearTimeout(autoSaveTimer);
   autoSaveTimer = setTimeout(function(){
     autoSaveTimer = null;
-    if(isAdmin() && dirty && !ghBusy) saveToGithub({ silent: true });
+    if(canSave() && dirty && !ghBusy) saveShared({ silent: true });
   }, 1000);
 }
 
@@ -2117,6 +2122,66 @@ async function saveToGithub(opts){
   }
 }
 
+// ---------------- 공용 장부 쓰기 (직원 — 저장 서버를 통해) ----------------
+// 진짜 깃허브 열쇠는 이 브라우저에 절대 없음. 비밀번호만 저장 서버로 보내고,
+// 서버가 자기가 갖고 있는 열쇠로 대신 깃허브에 써줌.
+async function saveViaWorker(opts){
+  const silent = !!(opts && opts.silent);
+  if(ghBusy) return;
+  const pw = empPassword();
+  if(!pw){
+    if(!silent) await customAlert("전직원에게 반영하려면 직원 저장 비밀번호가 필요합니다.\n\n화면 맨 아래 \"🔓 직원 저장 활성화\"에서 한 번만 등록해주세요.");
+    return;
+  }
+  const R = ghRepo();
+  ghBusy = true;
+  saveError = "";
+  const badge = document.getElementById('syncBadge');
+  if(badge){ badge.textContent = "⏳ 저장중..."; badge.className = "syncBadge off"; }
+
+  try{
+    const payload = snapshot();
+    const resp = await fetch(SAVE_WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: pw, owner: R.owner, repo: R.repo, branch: R.branch, path: R.path, data: payload })
+    });
+    let json = {};
+    try{ json = await resp.json(); }catch(err){}
+
+    if(!resp.ok || !json.ok){
+      if(resp.status === 401){
+        lsDel(EMP_PW_KEY);
+        throw new Error("비밀번호가 틀렸거나 초기화됐습니다. \"🔓 직원 저장 활성화\"에서 다시 등록해주세요.");
+      }
+      throw new Error(json.error || ("저장 실패 (코드 " + resp.status + ")"));
+    }
+
+    dirty = false;
+    remoteLoaded = true;
+    remoteSavedAt = json.savedAt || payload.savedAt;
+    ghBusy = false; // 뱃지를 다시 그릴 수 있게 먼저 해제
+    suppressDirty++; saveLocal(); suppressDirty--;
+    updateSyncBadge();
+    if(!silent) await customAlert("전직원에게 저장 완료!\n\n다른 직원이 새로고침하면 바로 이 내용이 보입니다.\n(깃허브 반영에 최대 1분 걸릴 수 있습니다)");
+  }catch(err){
+    ghBusy = false;
+    saveError = (err && err.message) ? err.message : "네트워크 오류";
+    updateSyncBadge();
+    if(!silent) await customAlert("저장 실패\n\n" + saveError + "\n\n수정한 내용은 이 기기에 그대로 남아 있으니, 원인 해결 후 다시 저장하면 됩니다.");
+  }finally{
+    ghBusy = false;
+  }
+}
+
+// 관리자면 자기 열쇠로 바로 깃허브에, 직원이면 저장 서버를 거쳐서 저장
+async function saveShared(opts){
+  if(isAdmin()) return saveToGithub(opts);
+  if(empPassword()) return saveViaWorker(opts);
+  const silent = !!(opts && opts.silent);
+  if(!silent) await setupEmpPassword();
+}
+
 // ---------------- 관리자 열쇠 등록 / 해제 ----------------
 async function setupGhToken(){
   const R = ghRepo();
@@ -2142,14 +2207,36 @@ async function setupGhToken(){
   await customAlert("관리자 등록 완료!\n\n이제부터는 수정하면 버튼 누를 필요 없이 자동으로 전직원에게 저장됩니다.");
 }
 
+// ---------------- 직원 저장 비밀번호 등록 / 해제 ----------------
+async function setupEmpPassword(){
+  if(empPassword()){
+    if(await customConfirm("이 브라우저에 등록된 직원 저장 비밀번호를 삭제할까요?\n삭제하면 이 브라우저에서는 저장이 안 되고 화면에만 남습니다.", true)){
+      lsDel(EMP_PW_KEY);
+      updateSyncBadge();
+      await customAlert("삭제했습니다.");
+    }
+    return;
+  }
+  const pw = await customPrompt("직원 공용 저장 비밀번호를 입력해주세요.\n(모르면 관리자에게 문의)\n\n※ 이 비밀번호는 이 브라우저에만 저장됩니다.", 'password', '');
+  if(pw === null) return;
+  if(!pw.trim()){ await customAlert("비밀번호가 비어 있습니다."); return; }
+  if(!lsSet(EMP_PW_KEY, pw.trim())){
+    await customAlert("이 브라우저에서는 저장 기능이 막혀 있어 비밀번호를 보관할 수 없습니다.\n크롬/사파리 일반 창(시크릿 모드 아님)에서 다시 시도해주세요.");
+    return;
+  }
+  updateSyncBadge();
+  await customAlert("등록 완료!\n\n이제부터는 수정하면 버튼 누를 필요 없이 자동으로 전직원에게 저장됩니다.\n(비밀번호가 틀리면 저장 시 다시 알려드려요)");
+}
+
 // ---------------- 상단 뱃지 ----------------
 function updateSyncBadge(){
   const badge = document.getElementById('syncBadge');
   if(!badge || ghBusy) return;
   const admin = isAdmin();
+  const writable = canSave();
 
   if(dirty){
-    if(admin){
+    if(writable){
       if(saveError){
         badge.textContent = "❗ 저장 실패 — 눌러서 다시 시도";
         badge.title = saveError + "\n수정한 내용은 이 기기에 남아 있습니다.";
@@ -2158,14 +2245,14 @@ function updateSyncBadge(){
         badge.title = "잠시 뒤 자동으로 전직원에게 저장됩니다. 바로 저장하려면 누르세요.";
       }
     } else {
-      badge.textContent = "⚠️ 내 화면에만 저장됨";
-      badge.title = "이 수정은 이 브라우저에만 남아 있습니다. 전직원 화면에 반영하려면 관리자에게 알려주세요.";
+      badge.textContent = "⚠️ 저장 비밀번호 필요 — 눌러서 등록";
+      badge.title = "이 수정은 아직 이 브라우저에만 남아 있습니다. 눌러서 저장 비밀번호를 등록하면 전직원 화면에 반영됩니다.";
     }
     badge.className = "syncBadge off";
     return;
   }
   if(remoteLoaded){
-    badge.textContent = admin ? "🟢 자동 저장 켜짐 (관리자)" : "🟢 전직원 공유 데이터";
+    badge.textContent = admin ? "🟢 자동 저장 켜짐 (관리자)" : (writable ? "🟢 자동 저장 켜짐 (직원)" : "🟢 전직원 공유 데이터");
     badge.title = "공용 장부에서 불러온 최신 내용입니다." + (remoteSavedAt ? "\n마지막 저장: " + remoteSavedAt.replace('T',' ').slice(0,16) : "");
     badge.className = "syncBadge on";
     return;
@@ -2178,7 +2265,8 @@ function updateSyncBadge(){
 // 뱃지를 눌렀을 때
 async function syncBadgeClick(){
   if(autoSaveTimer){ clearTimeout(autoSaveTimer); autoSaveTimer = null; }
-  if(dirty || isAdmin()){ await saveToGithub({ silent: false }); return; }
+  if(dirty && !canSave()){ await setupEmpPassword(); if(canSave()) await saveShared({ silent: false }); return; }
+  if(dirty || canSave()){ await saveShared({ silent: false }); return; }
   await customAlert(remoteLoaded
     ? "지금 보고 있는 내용은 전직원 공용 데이터입니다. (최신)"
     : "공용 데이터를 아직 읽지 못했습니다. 화면은 기본 데이터로 정상 동작합니다.");
