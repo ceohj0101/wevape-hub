@@ -296,6 +296,16 @@
   "status": {},
   "feedback": [
     {
+      "id": "fb1",
+      "url": "__site__",
+      "text": "[진단테스트-직원] 직원 경로 저장 확인",
+      "author": "진단봇직원",
+      "time": "07. 27. 오후 08:09",
+      "date": "2026-07-27",
+      "status": "접수됨",
+      "reply": ""
+    },
+    {
       "id": "fb0",
       "url": "__site__",
       "text": "[진단테스트] 저장 확인용 피드백 - 지워도 됩니다",
@@ -306,6 +316,7 @@
       "reply": ""
     }
   ],
-  "feedbackSeq": 1,
-  "savedAt": "2026-07-27T11:09:05.794Z"
+  "feedbackSeq": 2,
+  "savedAt": "2026-07-27T11:09:36.424Z",
+  "savedBy": "employee"
 }
