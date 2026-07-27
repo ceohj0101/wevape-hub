@@ -276,6 +276,10 @@
   }
   .fb-empty{font-size:12px;color:var(--sub);}
   .fb-newform{display:flex;gap:6px;flex-direction:column;margin-top:6px;}
+  .fb-newform input[type=text]{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:7px 9px;
+    font-size:12.5px;font-family:inherit;
+  }
   .fb-newform textarea{
     width:100%;min-height:48px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;
     font-size:12.5px;font-family:inherit;resize:vertical;
@@ -350,6 +354,26 @@
   .contact-panel-arrow.open{transform:rotate(180deg);}
   .contact-panel-body{display:none;padding:0 20px 22px;}
   .contact-panel-body.open{display:block;}
+  .contact-panel.fb-accent{border-left-color:var(--gold);}
+
+  /* ---- 오늘 등록된 피드백 알림 배너 ---- */
+  .today-fb-notice{
+    background:var(--gold-bg);border:1px solid var(--gold);border-radius:12px;
+    padding:14px 18px;margin-bottom:20px;
+  }
+  .today-fb-title{font-weight:800;font-size:14px;color:var(--ink);margin-bottom:8px;}
+  .today-fb-list{display:flex;flex-direction:column;gap:8px;}
+  .today-fb-item{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;
+  }
+  .today-fb-dept{font-weight:700;color:var(--ink);}
+  .today-fb-author{color:var(--sub);font-size:11.5px;}
+  .today-fb-text{flex:1;min-width:120px;color:var(--ink);}
+  .today-fb-item button{
+    background:var(--dark);color:#fff;border:none;border-radius:7px;padding:5px 10px;
+    font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap;
+  }
 
   .contact-subhead{font-size:12.5px;font-weight:800;color:var(--sub);letter-spacing:.02em;margin:18px 0 2px;}
   .contact-subhead:first-of-type{margin-top:4px;}
@@ -582,6 +606,28 @@
 </header>
 
 <div class="wrap">
+
+  <div class="today-fb-notice" id="todayFbNotice" style="display:none"></div>
+
+  <div class="contact-section">
+    <div class="contact-panel fb-accent">
+      <button type="button" class="contact-panel-toggle" id="siteFbToggle" onclick="toggleSiteFeedbackPanel()">
+        <span class="contact-panel-title">💬 허브 사이트 피드백</span>
+        <span class="contact-panel-sub" id="siteFbCountSub">0건 · 눌러서 펼치기</span>
+        <span class="contact-panel-arrow" id="siteFbToggleIcon">▼</span>
+      </button>
+      <div class="contact-panel-body" id="siteFbBody">
+        <div class="section-desc">이 허브 사이트 자체(구성·사용성 등)에 대한 의견은 여기에 남겨주세요. 특정 시스템에 대한 의견은 각 카드의 "💬 피드백"을 이용해주세요.</div>
+        <div class="fb-list" id="siteFbList"></div>
+        <div class="fb-newform">
+          <input type="text" id="fb-author-__site__" placeholder="이름 (예: 김철수 매니저)">
+          <textarea id="fb-new-__site__" placeholder="허브 사이트에 대한 의견을 남겨주세요"></textarea>
+          <button onclick="submitNewFeedback('__site__', '__site__')">피드백 남기기</button>
+        </div>
+        <div class="fb-newform-note">작성자 이름과 함께 남겨져요</div>
+      </div>
+    </div>
+  </div>
 
   <div class="contact-section">
     <div class="contact-panel">
@@ -980,7 +1026,7 @@ async function tryOpenLocked(url){
 }
 
 // ---------------------------------------------------------------
-// 툴별 피드백 — 익명 작성, 수정/삭제, 담당자 답변+상태 체크
+// 툴별 피드백 — 작성자 이름 기입, 수정/삭제, 담당자 답변+상태 체크
 // ---------------------------------------------------------------
 let FEEDBACK_LIST = [];      // [{id, url, text, time, status, reply}]
 let feedbackSeq = 0;
@@ -1016,17 +1062,25 @@ function toggleFeedback(fid){
   renderUI();
 }
 
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
 function submitNewFeedback(url, fid){
   const ta = document.getElementById('fb-new-' + fid);
+  const authorEl = document.getElementById('fb-author-' + fid);
   const text = ta.value.trim();
+  const author = authorEl ? authorEl.value.trim() : '';
   if(!text) return;
+  if(!author){ customAlert('작성자 이름을 입력해주세요.'); return; }
   FEEDBACK_LIST.unshift({
     id: 'fb' + (feedbackSeq++),
-    url, text,
+    url, text, author,
     time: new Date().toLocaleString('ko-KR', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}),
+    date: todayStr(),
     status: "접수됨",
     reply: ""
   });
+  if(ta) ta.value = '';
+  if(authorEl) authorEl.value = '';
   openFeedbackPanels.add(fid);
   render();
 }
@@ -1051,7 +1105,7 @@ function saveEditFeedback(id){
   render();
 }
 async function deleteFeedback(id){
-  if(!(await customConfirm("이 피드백을 삭제할까요? (익명 피드백이라 되돌릴 수 없어요)", true))) return;
+  if(!(await customConfirm("이 피드백을 삭제할까요? (삭제하면 되돌릴 수 없어요)", true))) return;
   const entry = FEEDBACK_LIST.find(f=>f.id===id);
   FEEDBACK_LIST = FEEDBACK_LIST.filter(f=>f.id!==id);
   if(entry) openFeedbackPanels.add(safeId(entry.url));
@@ -1085,7 +1139,7 @@ function renderFeedbackEntry(f){
     <div class="fb-entry">
       <div class="fb-text">${escapeHtml(f.text)}</div>
       <div class="fb-meta-row">
-        <span class="fb-time">${f.time} · 익명</span>
+        <span class="fb-time">${f.time} · ${escapeHtml(f.author || '이름없음')}</span>
         <span class="fb-status-badge ${fbStatusClass(f.status)}">${f.status}</span>
       </div>
       <div class="fb-entry-actions">
@@ -1100,6 +1154,75 @@ function renderFeedbackEntry(f){
         <input type="text" id="fb-reply-${f.id}" placeholder="담당자 답변 남기기 (선택)" value="${escapeHtml(f.reply||'')}">
         <button onclick="saveFeedbackReply('${f.id}')">답변/상태 저장</button>
       </div>
+    </div>
+  `;
+}
+
+function todaysFeedback(){
+  return FEEDBACK_LIST.filter(f => f.date === todayStr());
+}
+function feedbackLabel(url){
+  if(url === '__site__') return '🌐 허브 사이트 전체';
+  let e = entries.find(x => x.url === url);
+  if(!e) e = entries.find(x => !x.url && (x.dept + x.title) === url);
+  if(e) return `${DEPT_ICONS[e.dept]||'🔹'} ${e.dept} · ${e.title}`;
+  return '기타';
+}
+function openSiteFeedbackPanel(){
+  const body = document.getElementById('siteFbBody');
+  const icon = document.getElementById('siteFbToggleIcon');
+  if(body && !body.classList.contains('open')){
+    body.classList.add('open');
+    if(icon) icon.classList.add('open');
+  }
+}
+function toggleSiteFeedbackPanel(){
+  const body = document.getElementById('siteFbBody');
+  const icon = document.getElementById('siteFbToggleIcon');
+  if(!body) return;
+  body.classList.toggle('open');
+  if(icon) icon.classList.toggle('open');
+}
+function jumpToFeedback(url, fid){
+  if(url === '__site__'){
+    openSiteFeedbackPanel();
+  } else {
+    openFeedbackPanels.add(fid);
+    render();
+  }
+  setTimeout(function(){
+    const el = document.getElementById('fb-panel-' + fid) || document.getElementById('siteFbBody');
+    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 60);
+}
+function renderSiteFeedback(){
+  const list = document.getElementById('siteFbList');
+  if(!list) return;
+  const fbs = feedbackFor('__site__');
+  list.innerHTML = fbs.length ? fbs.map(f=>renderFeedbackEntry(f)).join('') : `<div class="fb-empty">아직 피드백이 없습니다. 이름과 함께 편하게 남겨주세요.</div>`;
+  const sub = document.getElementById('siteFbCountSub');
+  if(sub) sub.innerHTML = `${fbs.length}건 ${fbAlertBadge(fbs)}`;
+}
+function renderTodayFeedbackNotice(){
+  const box = document.getElementById('todayFbNotice');
+  if(!box) return;
+  const list = todaysFeedback();
+  if(!list.length){ box.style.display = 'none'; box.innerHTML = ''; return; }
+  box.style.display = '';
+  box.innerHTML = `
+    <div class="today-fb-title">📢 오늘 등록된 피드백 ${list.length}건</div>
+    <div class="today-fb-list">
+      ${list.map(f=>{
+        const fid = safeId(f.url);
+        return `
+          <div class="today-fb-item">
+            <span class="today-fb-dept">${feedbackLabel(f.url)}</span>
+            <span class="today-fb-author">${escapeHtml(f.author||'이름없음')}</span>
+            <span class="today-fb-text">${escapeHtml(f.text)}</span>
+            <button onclick="jumpToFeedback('${f.url.replace(/'/g,"\\'")}', '${fid}')">답변하러 가기 →</button>
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
 }
@@ -1405,13 +1528,14 @@ function render(){
                 <button class="fb-toggle" onclick="toggleFeedback('${fid}')">💬 피드백 ${fbs.length ? `(${fbs.length})` : ''} ${isOpen ? '▲' : '▼'} ${fbAlertBadge(fbs)}</button>
                 <div class="fb-panel ${isOpen ? 'open' : ''}" id="fb-panel-${fid}">
                   <div class="fb-list">
-                    ${fbs.length ? fbs.map(f=>renderFeedbackEntry(f)).join('') : `<div class="fb-empty">아직 피드백이 없습니다. 익명으로 편하게 남겨주세요.</div>`}
+                    ${fbs.length ? fbs.map(f=>renderFeedbackEntry(f)).join('') : `<div class="fb-empty">아직 피드백이 없습니다. 이름과 함께 편하게 남겨주세요.</div>`}
                   </div>
                   <div class="fb-newform">
-                    <textarea id="fb-new-${fid}" placeholder="이 시스템에 대한 의견을 익명으로 남겨주세요"></textarea>
-                    <button onclick="submitNewFeedback('${l.url.replace(/'/g,"\\'")}', '${fid}')">익명으로 남기기</button>
+                    <input type="text" id="fb-author-${fid}" placeholder="이름 (예: 김철수 매니저)">
+                    <textarea id="fb-new-${fid}" placeholder="이 시스템에 대한 의견을 남겨주세요"></textarea>
+                    <button onclick="submitNewFeedback('${l.url.replace(/'/g,"\\'")}', '${fid}')">피드백 남기기</button>
                   </div>
-                  <div class="fb-newform-note">이름 없이 남겨져요 · 작성한 피드백은 누구나 수정·삭제할 수 있어요</div>
+                  <div class="fb-newform-note">작성자 이름과 함께 남겨져요</div>
                 </div>
               </div>
             </div>
@@ -1477,13 +1601,14 @@ function render(){
             <button class="fb-toggle" onclick="toggleFeedback('${wfid}')">💬 피드백 ${wfbs.length ? `(${wfbs.length})` : ''} ${wOpen ? '▲' : '▼'} ${fbAlertBadge(wfbs)}</button>
             <div class="fb-panel ${wOpen ? 'open' : ''}" id="fb-panel-${wfid}">
               <div class="fb-list">
-                ${wfbs.length ? wfbs.map(f=>renderFeedbackEntry(f)).join('') : `<div class="fb-empty">아직 피드백이 없습니다. 익명으로 편하게 남겨주세요.</div>`}
+                ${wfbs.length ? wfbs.map(f=>renderFeedbackEntry(f)).join('') : `<div class="fb-empty">아직 피드백이 없습니다. 이름과 함께 편하게 남겨주세요.</div>`}
               </div>
               <div class="fb-newform">
-                <textarea id="fb-new-${wfid}" placeholder="이 프로젝트에 대한 의견을 익명으로 남겨주세요"></textarea>
-                <button onclick="submitNewFeedback('${(w.url||(w.dept+w.title)).replace(/'/g,"\\'")}', '${wfid}')">익명으로 남기기</button>
+                <input type="text" id="fb-author-${wfid}" placeholder="이름 (예: 김철수 매니저)">
+                <textarea id="fb-new-${wfid}" placeholder="이 프로젝트에 대한 의견을 남겨주세요"></textarea>
+                <button onclick="submitNewFeedback('${(w.url||(w.dept+w.title)).replace(/'/g,"\\'")}', '${wfid}')">피드백 남기기</button>
               </div>
-              <div class="fb-newform-note">이름 없이 남겨져요 · 작성한 피드백은 누구나 수정·삭제할 수 있어요</div>
+              <div class="fb-newform-note">작성자 이름과 함께 남겨져요</div>
             </div>
           </div>
         </div>
@@ -1511,6 +1636,9 @@ function render(){
       </div>
     `;
   }).join('');
+
+  renderSiteFeedback();
+  renderTodayFeedbackNotice();
 }
 
 function updateAdminLinks(){
