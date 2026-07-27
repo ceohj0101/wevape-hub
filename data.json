@@ -1,57 +1,300 @@
 {
   "entries": [
-    { "dept": "HR", "title": "직원 일일 스케줄", "url": "https://janghj201-cyber.github.io/-/", "note": "", "status": "운영중", "owner": "장현진 팀장" },
-    { "dept": "LOG", "title": "발주서 관리", "url": "https://order-hub-dfni.onrender.com/", "note": "", "status": "운영중", "owner": "신재현 실장" },
-    { "dept": "CX", "title": "대청소 리스트", "url": "https://docs.google.com/spreadsheets/d/1Cw7speJsddFGBLBsaTq9YkdNFqggbksCjF5I-j0CadU/edit?usp=sharing", "note": "Google Sheets", "status": "운영중", "owner": "장현진 팀장" },
-    { "dept": "CX", "title": "AS 스프레드시트", "url": "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing", "note": "Google Sheets", "status": "운영중", "owner": "정희경 주임" },
-    { "dept": "SLS", "title": "회원가입 구글폼", "url": "https://forms.gle/gVSBo4eeU4Bev561A", "note": "Google Forms", "status": "운영중", "owner": "장대운 주임" },
-    { "dept": "GRO", "title": "각지점 신규 회원량 조회", "url": "https://znsl132-lang.github.io/BIGLUCKY/", "note": "", "status": "운영중", "owner": "장대운 주임" },
-    { "dept": "HR", "title": "신입 및 재직자 관련 현황", "url": "https://ceohj0101.github.io/wevape-hr/", "note": "", "status": "운영중", "owner": "김형진 팀장", "sensitive": true },
-    { "dept": "DEV", "title": "포스 통합 프로그램", "url": "https://wevape-pos-app.vercel.app/", "note": "매장 POS 통합 프로그램", "status": "개발중", "owner": "김형진 팀장, 장현진 팀장" },
-    { "dept": "HR", "title": "스케줄 생성기", "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html", "note": "", "status": "개발중", "owner": "", "sensitive": true },
-    { "dept": "HR", "title": "휴무취합기", "url": "https://znsl132-lang.github.io/BIGLUCKY/request.html", "note": "", "status": "개발중", "owner": "", "sensitive": true },
-    { "dept": "HR", "title": "전직원 스케줄 뷰어", "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html", "note": "위베이프 직원 스케줄", "status": "개발중", "owner": "", "sensitive": true },
-    { "dept": "FIN", "title": "인천/경기 통합 매출관리", "url": "https://order-hub-dfni.onrender.com/sales?month=2026-06", "note": "위베이프 인천/경기 총판 총 매출관리", "status": "개발중", "owner": "", "sensitive": true },
-    { "dept": "FIN", "title": "위베이프 일매출 보고 시스템", "url": "https://dksxoals0824-glitch.github.io/wevape-sales-report/", "note": "전 매장 일매출 취합 후 카카오톡 사장님 단톡방 보고용", "status": "운영중", "owner": "" }
+    {
+      "dept": "HR",
+      "title": "직원 일일 스케줄",
+      "url": "https://janghj201-cyber.github.io/-/",
+      "note": "",
+      "status": "운영중",
+      "owner": "장현진 팀장"
+    },
+    {
+      "dept": "LOG",
+      "title": "발주서 관리",
+      "url": "https://order-hub-dfni.onrender.com/",
+      "note": "",
+      "status": "운영중",
+      "owner": "신재현 실장"
+    },
+    {
+      "dept": "CX",
+      "title": "대청소 리스트",
+      "url": "https://docs.google.com/spreadsheets/d/1Cw7speJsddFGBLBsaTq9YkdNFqggbksCjF5I-j0CadU/edit?usp=sharing",
+      "note": "Google Sheets",
+      "status": "운영중",
+      "owner": "장현진 팀장"
+    },
+    {
+      "dept": "CX",
+      "title": "AS 스프레드시트",
+      "url": "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing",
+      "note": "Google Sheets",
+      "status": "운영중",
+      "owner": "정희경 주임"
+    },
+    {
+      "dept": "SLS",
+      "title": "회원가입 구글폼",
+      "url": "https://forms.gle/gVSBo4eeU4Bev561A",
+      "note": "Google Forms",
+      "status": "운영중",
+      "owner": "장대운 주임"
+    },
+    {
+      "dept": "GRO",
+      "title": "각지점 신규 회원량 조회",
+      "url": "https://znsl132-lang.github.io/BIGLUCKY/",
+      "note": "",
+      "status": "운영중",
+      "owner": "장대운 주임"
+    },
+    {
+      "dept": "HR",
+      "title": "신입 및 재직자 관련 현황",
+      "url": "https://ceohj0101.github.io/wevape-hr/",
+      "note": "",
+      "status": "운영중",
+      "owner": "김형진 팀장",
+      "sensitive": true
+    },
+    {
+      "dept": "DEV",
+      "title": "포스 통합 프로그램",
+      "url": "https://wevape-pos-app.vercel.app/",
+      "note": "매장 POS 통합 프로그램",
+      "status": "개발중",
+      "owner": "김형진 팀장, 장현진 팀장"
+    },
+    {
+      "dept": "HR",
+      "title": "스케줄 생성기",
+      "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html",
+      "note": "",
+      "status": "개발중",
+      "owner": "",
+      "sensitive": true
+    },
+    {
+      "dept": "HR",
+      "title": "휴무취합기",
+      "url": "https://znsl132-lang.github.io/BIGLUCKY/request.html",
+      "note": "",
+      "status": "개발중",
+      "owner": "",
+      "sensitive": true
+    },
+    {
+      "dept": "HR",
+      "title": "전직원 스케줄 뷰어",
+      "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html",
+      "note": "위베이프 직원 스케줄",
+      "status": "개발중",
+      "owner": "",
+      "sensitive": true
+    },
+    {
+      "dept": "FIN",
+      "title": "인천/경기 통합 매출관리",
+      "url": "https://order-hub-dfni.onrender.com/sales?month=2026-06",
+      "note": "위베이프 인천/경기 총판 총 매출관리",
+      "status": "개발중",
+      "owner": "",
+      "sensitive": true
+    },
+    {
+      "dept": "FIN",
+      "title": "위베이프 일매출 보고 시스템",
+      "url": "https://dksxoals0824-glitch.github.io/wevape-sales-report/",
+      "note": "전 매장 일매출 취합 후 카카오톡 사장님 단톡방 보고용",
+      "status": "운영중",
+      "owner": ""
+    }
   ],
   "stores": [
-    { "store": "연수점", "phone": "010-2493-3635", "addr": "인천 연수구 연수동 596-6 아시스타워 101호" },
-    { "store": "논현점", "phone": "010-2210-3536", "addr": "인천 남동구 논현동 632-2 아이플렉스 126호" },
-    { "store": "구월점", "phone": "010-2393-3536", "addr": "인천 남동구 구월동 1199-1 그랜드프라자 108호" },
-    { "store": "중동점", "phone": "010-7197-4537", "addr": "경기 부천시 중동 1138 호정프라자 101호" },
-    { "store": "로데오점", "phone": "010-9130-3536", "addr": "인천 남동구 구월동 1464 링크126 211호" },
-    { "store": "상동점", "phone": "010-8213-5798", "addr": "경기 부천시 상동 542-1 영플러스 130호" },
-    { "store": "공항점", "phone": "0507-1398-3536", "addr": "인천 중구 흰바위로59번길 8 상가동 1층" },
-    { "store": "검단점", "phone": "0507-1377-4537", "addr": "인천광역시 서구 원당대로 983 1층 104호" },
-    { "store": "계산점", "phone": "010-4838-0379", "addr": "인천 계양구 오조산로 91 새롬2차 107호" },
-    { "store": "을지로점", "phone": "010-7394-3536", "addr": "서울 중구 을지로 156 2층 위베이프 을지로1호점" },
-    { "store": "트리플점", "phone": "0507-1488-8048", "addr": "인천 연수구 송도동 174-3" },
-    { "store": "청라점", "phone": "010-4711-8851", "addr": "인천 서구 청라동 164-1 풍림엑슬루타워 A동 160-1호" },
-    { "store": "성수점", "phone": "010-3746-1610", "addr": "서울특별시 성동구 연무장7길3" }
+    {
+      "store": "연수점",
+      "phone": "010-2493-3635",
+      "addr": "인천 연수구 연수동 596-6 아시스타워 101호"
+    },
+    {
+      "store": "논현점",
+      "phone": "010-2210-3536",
+      "addr": "인천 남동구 논현동 632-2 아이플렉스 126호"
+    },
+    {
+      "store": "구월점",
+      "phone": "010-2393-3536",
+      "addr": "인천 남동구 구월동 1199-1 그랜드프라자 108호"
+    },
+    {
+      "store": "중동점",
+      "phone": "010-7197-4537",
+      "addr": "경기 부천시 중동 1138 호정프라자 101호"
+    },
+    {
+      "store": "로데오점",
+      "phone": "010-9130-3536",
+      "addr": "인천 남동구 구월동 1464 링크126 211호"
+    },
+    {
+      "store": "상동점",
+      "phone": "010-8213-5798",
+      "addr": "경기 부천시 상동 542-1 영플러스 130호"
+    },
+    {
+      "store": "공항점",
+      "phone": "0507-1398-3536",
+      "addr": "인천 중구 흰바위로59번길 8 상가동 1층"
+    },
+    {
+      "store": "검단점",
+      "phone": "0507-1377-4537",
+      "addr": "인천광역시 서구 원당대로 983 1층 104호"
+    },
+    {
+      "store": "계산점",
+      "phone": "010-4838-0379",
+      "addr": "인천 계양구 오조산로 91 새롬2차 107호"
+    },
+    {
+      "store": "을지로점",
+      "phone": "010-7394-3536",
+      "addr": "서울 중구 을지로 156 2층 위베이프 을지로1호점"
+    },
+    {
+      "store": "트리플점",
+      "phone": "0507-1488-8048",
+      "addr": "인천 연수구 송도동 174-3"
+    },
+    {
+      "store": "청라점",
+      "phone": "010-4711-8851",
+      "addr": "인천 서구 청라동 164-1 풍림엑슬루타워 A동 160-1호"
+    },
+    {
+      "store": "성수점",
+      "phone": "010-3746-1610",
+      "addr": "서울특별시 성동구 연무장7길3"
+    }
   ],
   "staff": [
-    { "name": "정희석", "role": "대표", "phone": "010-8982-5798", "store": "연수점" },
-    { "name": "김성현", "role": "대표", "phone": "010-8999-2698", "store": "연수점" },
-    { "name": "신재현", "role": "실장", "phone": "010-8569-3281", "store": "논현점" },
-    { "name": "정하늘", "role": "과장", "phone": "010-3641-2328", "store": "논현점" },
-    { "name": "장현진", "role": "팀장", "phone": "010-4787-6928", "store": "구월점" },
-    { "name": "김형진", "role": "팀장", "phone": "010-8405-8802", "store": "구월점" },
-    { "name": "홍다운", "role": "매니저", "phone": "010-3310-2522", "store": "중동점" },
-    { "name": "오명록", "role": "매니저", "phone": "010-7190-8637", "store": "중동점" },
-    { "name": "정희경", "role": "주임", "phone": "010-5741-2648", "store": "로데오점" },
-    { "name": "이종혁", "role": "주임", "phone": "010-4012-6105", "store": "로데오점" },
-    { "name": "김다정", "role": "주임", "phone": "010-4608-9695", "store": "상동점" },
-    { "name": "장대운", "role": "주임", "phone": "010-4806-7342", "store": "상동점" },
-    { "name": "조효정", "role": "주임", "phone": "010-7725-6747", "store": "공항점" },
-    { "name": "윤하람", "role": "주임", "phone": "010-2320-9162", "store": "공항점" },
-    { "name": "차영근", "role": "주임", "phone": "010-8393-2884", "store": "검단점" },
-    { "name": "원주현", "role": "주임", "phone": "010-3936-8164", "store": "검단점" },
-    { "name": "고아현", "role": "주임", "phone": "010-5590-2927", "store": "계산점" },
-    { "name": "정유진", "role": "주임", "phone": "010-4742-7839", "store": "계산점" },
-    { "name": "안태민", "role": "주임", "phone": "010-9178-2639", "store": "을지로점" }
+    {
+      "name": "정희석",
+      "role": "대표",
+      "phone": "010-8982-5798",
+      "store": "연수점"
+    },
+    {
+      "name": "김성현",
+      "role": "대표",
+      "phone": "010-8999-2698",
+      "store": "연수점"
+    },
+    {
+      "name": "신재현",
+      "role": "실장",
+      "phone": "010-8569-3281",
+      "store": "논현점"
+    },
+    {
+      "name": "정하늘",
+      "role": "과장",
+      "phone": "010-3641-2328",
+      "store": "논현점"
+    },
+    {
+      "name": "장현진",
+      "role": "팀장",
+      "phone": "010-4787-6928",
+      "store": "구월점"
+    },
+    {
+      "name": "김형진",
+      "role": "팀장",
+      "phone": "010-8405-8802",
+      "store": "구월점"
+    },
+    {
+      "name": "홍다운",
+      "role": "매니저",
+      "phone": "010-3310-2522",
+      "store": "중동점"
+    },
+    {
+      "name": "오명록",
+      "role": "매니저",
+      "phone": "010-7190-8637",
+      "store": "중동점"
+    },
+    {
+      "name": "정희경",
+      "role": "주임",
+      "phone": "010-5741-2648",
+      "store": "로데오점"
+    },
+    {
+      "name": "이종혁",
+      "role": "주임",
+      "phone": "010-4012-6105",
+      "store": "로데오점"
+    },
+    {
+      "name": "김다정",
+      "role": "주임",
+      "phone": "010-4608-9695",
+      "store": "상동점"
+    },
+    {
+      "name": "장대운",
+      "role": "주임",
+      "phone": "010-4806-7342",
+      "store": "상동점"
+    },
+    {
+      "name": "조효정",
+      "role": "주임",
+      "phone": "010-7725-6747",
+      "store": "공항점"
+    },
+    {
+      "name": "윤하람",
+      "role": "주임",
+      "phone": "010-2320-9162",
+      "store": "공항점"
+    },
+    {
+      "name": "차영근",
+      "role": "주임",
+      "phone": "010-8393-2884",
+      "store": "검단점"
+    },
+    {
+      "name": "원주현",
+      "role": "주임",
+      "phone": "010-3936-8164",
+      "store": "검단점"
+    },
+    {
+      "name": "고아현",
+      "role": "주임",
+      "phone": "010-5590-2927",
+      "store": "계산점"
+    },
+    {
+      "name": "정유진",
+      "role": "주임",
+      "phone": "010-4742-7839",
+      "store": "계산점"
+    },
+    {
+      "name": "안태민",
+      "role": "주임",
+      "phone": "010-9178-2639",
+      "store": "을지로점"
+    }
   ],
   "status": {},
   "feedback": [],
   "feedbackSeq": 0,
-  "savedAt": "2026-07-26T05:38:13.477Z"
+  "savedAt": "2026-07-27T02:42:52.152Z"
 }
