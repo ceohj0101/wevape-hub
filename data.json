@@ -108,6 +108,15 @@
       "note": "전 매장 일매출 취합 후 카카오톡 사장님 단톡방 보고용",
       "status": "운영중",
       "owner": "안태민 주임"
+    },
+    {
+      "dept": "HR",
+      "title": "스케줄 생성기",
+      "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html",
+      "note": "",
+      "status": "개발중",
+      "owner": "장대운 주임",
+      "sensitive": true
     }
   ],
   "stores": [
@@ -298,6 +307,6 @@
   },
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-07-28T09:32:45.872Z",
+  "savedAt": "2026-07-28T09:50:10.902Z",
   "savedBy": "employee"
 }
