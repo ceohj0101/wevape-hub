@@ -98,7 +98,7 @@
       "url": "https://order-hub-dfni.onrender.com/sales?month=2026-06",
       "note": "위베이프 인천/경기 총판 총 매출관리",
       "status": "개발중",
-      "owner": "장대운",
+      "owner": "신재현 실장",
       "sensitive": true
     },
     {
@@ -293,8 +293,11 @@
       "store": "을지로점"
     }
   ],
-  "status": {},
+  "status": {
+    "FIN": "정상운영"
+  },
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-07-28T08:17:24.341Z"
+  "savedAt": "2026-07-28T09:22:17.320Z",
+  "savedBy": "employee"
 }
