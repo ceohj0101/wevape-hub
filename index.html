@@ -546,6 +546,189 @@
     .stat{flex:1 1 100%;}
   }
 
+  /* ================================================================
+     B안 스킨 — 메신저/토스 스타일 목록 + 상세 (아래 규칙이 위 규칙을 덮어씀)
+     ================================================================ */
+  body{background:#fff;}
+  .wrap{max-width:1180px;padding:0 0 40px;}
+
+  /* --- 헤더 --- */
+  header.top{background:#fff;color:#191f28;padding:18px 20px 0;}
+  header.top .inner{max-width:1180px;}
+  .toprow{align-items:flex-start;}
+  .brandRow{margin-bottom:6px;}
+  .logo-badge{width:30px;height:30px;}
+  .wordmark{color:#191f28 !important;font-size:13px !important;}
+  .subword{color:#b0b6bf !important;}
+  h1{font-size:26px;font-weight:900;letter-spacing:-1px;color:#191f28;margin:0;}
+  .lead{color:#8b919c;font-size:13px;margin:3px 0 0;max-width:560px;}
+
+  .topbtns{gap:6px;}
+  .adminBtn,.addBtn{
+    background:#f2f4f6;border:0;color:#3c434f;border-radius:11px;
+    padding:10px 14px;font-size:12.5px;font-weight:800;box-shadow:none;
+  }
+  .adminBtn.on{background:#191f28;color:#fff;}
+  .addBtn{background:#191f28;color:#fff;}
+
+  .searchbar{margin-top:14px;}
+  #search{
+    background:#f2f4f6;border:0;color:#191f28;border-radius:11px;
+    padding:13px 15px;font-size:15px;box-shadow:none;
+  }
+  #search::placeholder{color:#a0a6b0;}
+  #search:focus{background:#eef0f3;}
+
+  /* --- 필터 탭 --- */
+  .tabs{display:flex;gap:6px;padding:13px 0 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .tabs::-webkit-scrollbar{height:0;}
+  .tab{
+    flex-shrink:0;font-size:13.5px;font-weight:800;padding:9px 15px;border-radius:20px;
+    background:#f2f4f6;color:#7c838f;cursor:pointer;border:0;font-family:inherit;white-space:nowrap;
+  }
+  .tab.on{background:#191f28;color:#fff;}
+
+  .stats{margin-top:10px;gap:6px;}
+  .stat{display:none !important;}   /* 숫자는 제목 밑에 이미 나옴 */
+  .syncBadge{box-shadow:none;}
+
+  /* --- 사용법 안내 --- */
+  .hintbar{
+    background:#f7f8fa;border-radius:13px;padding:12px 14px;font-size:12.8px;
+    line-height:1.8;margin:14px 20px 0;color:#5b626d;
+  }
+  .hintbar b{color:#191f28;}
+
+  /* --- 목록 --- */
+  #layers{display:block;}
+  .sec{
+    font-size:12.5px;font-weight:800;color:#a0a6b0;padding:20px 20px 7px;
+    display:flex;align-items:center;gap:7px;
+  }
+  .sec em{font-style:normal;color:#c8cdd4;}
+  .row{
+    display:flex;align-items:center;gap:13px;padding:13px 20px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .row:active{background:#f7f8fa;}
+  .row.on{background:#f2f6ff;}
+  .r-i{
+    width:46px;height:46px;border-radius:15px;display:flex;align-items:center;
+    justify-content:center;font-size:21px;flex-shrink:0;
+  }
+  .r-m{flex:1;min-width:0;}
+  .r-t{
+    font-size:16px;font-weight:800;letter-spacing:-.3px;color:#191f28;
+    display:flex;align-items:center;gap:5px;
+  }
+  .r-t .lk{font-size:12px;}
+  .r-s{font-size:12.5px;color:#8b919c;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .r-s .warn{color:#f04452;font-weight:800;}
+  .r-r{flex-shrink:0;text-align:right;}
+  .r-st{font-size:11.5px;font-weight:900;padding:4px 9px;border-radius:7px;display:inline-block;}
+  .r-st.ok{background:#e7f9f0;color:#02a45a;}
+  .r-st.wip{background:#fff4e0;color:#d97a00;}
+  .r-more{font-size:11.5px;color:#b0b6bf;margin-top:6px;font-weight:700;}
+  .r-more .fbn{color:#3182f6;font-weight:800;}
+  .divl{height:1px;background:#f2f4f6;margin-left:79px;}
+  .badd{
+    margin:8px 20px 0;border:2px dashed #dfe3e8;border-radius:13px;padding:15px;
+    text-align:center;cursor:pointer;
+  }
+  .badd:active{background:#f7f8fa;}
+  .badd b{display:block;font-size:14px;font-weight:900;color:#5b626d;}
+  .badd i{font-style:normal;font-size:11.5px;color:#a0a6b0;}
+
+  /* --- 하단 고정 버튼 --- */
+  .bbot{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;background:#fff;
+    border-top:1px solid #f0f2f5;display:flex;gap:9px;padding:11px 16px 15px;
+  }
+  .bb{
+    flex:1;height:50px;border:0;border-radius:13px;font-family:inherit;font-size:14.5px;
+    font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .bb.p{background:#191f28;color:#fff;}
+  .bb.s{background:#f2f4f6;color:#3c434f;}
+  .bb:active{opacity:.6;}
+  body{padding-bottom:78px;}
+
+  /* --- 상세 화면 --- */
+  #detail{display:none;}
+  .br{background:#fbfcfd;padding:22px 20px 30px;}
+  .br-back{
+    display:block;background:#f2f4f6;border:0;border-radius:10px;font-family:inherit;font-size:13px;
+    font-weight:800;color:#3c434f;padding:10px 15px;cursor:pointer;margin-bottom:16px;
+  }
+  .br-tag{
+    font-size:12px;font-weight:900;color:#02a45a;background:#e7f9f0;
+    display:inline-block;padding:5px 11px;border-radius:7px;
+  }
+  .br-tag.wip{color:#d97a00;background:#fff4e0;}
+  .br-t{font-size:26px;font-weight:900;letter-spacing:-1px;margin:13px 0 8px;color:#191f28;}
+  .br-t small{font-size:15px;color:#a0a6b0;font-weight:700;letter-spacing:0;}
+  .br-u{font-size:13px;color:#8b919c;word-break:break-all;}
+  .br-open{
+    margin-top:18px;height:54px;width:100%;border:0;border-radius:14px;background:#191f28;
+    color:#fff;font-family:inherit;font-size:16px;font-weight:900;cursor:pointer;
+  }
+  .br-open:active{opacity:.8;}
+  .br-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:20px;}
+  .br-f{background:#fff;border:1px solid #eef0f3;border-radius:13px;padding:14px 15px;}
+  .br-f i{font-style:normal;font-size:11.5px;color:#a0a6b0;font-weight:800;}
+  .br-f b{display:block;font-size:15px;font-weight:800;margin-top:5px;color:#191f28;word-break:break-all;}
+  .br-f b.warn{color:#f04452;}
+  .br-f u{
+    text-decoration:none;font-size:11.5px;color:#3182f6;font-weight:800;cursor:pointer;
+    display:inline-block;margin-top:7px;
+  }
+  .br-f u:active{opacity:.6;}
+  .br-fb{margin-top:20px;background:#fff;border:1px solid #eef0f3;border-radius:14px;padding:18px;}
+  .br-fb .fbh{font-size:15px;font-weight:900;color:#191f28;}
+  .br-fb p{font-size:13px;color:#8b919c;margin:6px 0 12px;}
+  .br-fb .fb-list{margin-bottom:12px;}
+  .br-empty{display:none;}
+
+  /* 상세 안 피드백 입력 */
+  .br-fb input[type=text]{
+    width:100%;border:1px solid #e6e9ed;border-radius:11px;padding:11px;
+    font-family:inherit;font-size:14px;outline:0;margin-bottom:7px;
+  }
+  .br-fb textarea{
+    width:100%;height:74px;border:1px solid #e6e9ed;border-radius:11px;padding:11px;
+    font-family:inherit;font-size:14px;resize:vertical;outline:0;
+  }
+  .br-fb .fbsend{
+    margin-top:9px;height:44px;padding:0 20px;border:0;border-radius:11px;background:#3182f6;
+    color:#fff;font-family:inherit;font-weight:900;font-size:14.5px;cursor:pointer;
+  }
+
+  /* --- 옛 레이아웃 잔재 숨김 (JS 호환용으로 DOM에는 남겨둠) --- */
+  #legacyHidden{display:none !important;}
+
+  /* --- PC: 왼쪽 목록 / 오른쪽 상세 --- */
+  @media (min-width:1000px){
+    .splitwrap{display:flex;align-items:flex-start;max-width:1180px;margin:0 auto;}
+    .bl{width:430px;flex-shrink:0;border-right:1px solid #f0f2f5;min-height:80vh;}
+    #detail{display:block;flex:1;position:sticky;top:0;}
+    .br{padding:32px 36px 40px;min-height:80vh;}
+    .br-back{display:none;}
+    .br-t{font-size:29px;}
+    .bbot{position:static;padding:16px 20px 24px;border-top:1px solid #f0f2f5;}
+    body{padding-bottom:0;}
+    .panelzone{max-width:1180px;margin:0 auto;padding:0 20px;}
+  }
+  @media (max-width:999px){
+    /* 휴대폰: 항목을 누르면 상세가 화면 전체를 덮음 */
+    body.detailopen header.top,
+    body.detailopen .bl,
+    body.detailopen .bbot,
+    body.detailopen .panelzone{display:none;}
+    body.detailopen #detail{display:block;}
+    body.detailopen{padding-bottom:0;}
+    .br{min-height:100vh;}
+  }
+
 </style>
 </head>
 <body>
@@ -595,27 +778,51 @@
             <div class="subword">SYSTEM HUB</div>
           </div>
         </div>
-        <h1>위베이프 통합 시스템 허브</h1>
-        <p class="lead">직원들이 각자 만든 자동화·업무 시스템을 부서(역할) 기준으로 모아둔 바로가기 대시보드입니다. 새로 만든 프로그램은 아래 "+ 새 시스템 등록"에서 누구나 바로 올릴 수 있어요.</p>
+        <h1>업무 모음</h1>
+        <p class="lead" id="headSub">쓰고 싶은 걸 누르면 자세히 보여줍니다.</p>
       </div>
       <div class="topbtns">
-        <button class="addBtn" id="addBtn" onclick="toggleAddPanel()">＋ 새 시스템 등록</button>
+        <button class="addBtn" id="addBtn" onclick="toggleAddPanel()">＋ 새로 넣기</button>
         <button class="adminBtn" id="lockBtn" onclick="toggleLock()">🔒 잠긴 시스템 보기</button>
       </div>
     </div>
     <div class="searchbar">
-      <input id="search" type="text" placeholder="시스템 이름으로 검색 (예: 발주서, 스케줄, AS...)">
+      <input id="search" type="text" placeholder="🔍 스케줄, 발주, 매출…">
+    </div>
+    <div class="tabs" id="filterTabs">
+      <button type="button" class="tab on" data-f="all"  onclick="setFilter('all')">전체 <span id="tabAll">0</span></button>
+      <button type="button" class="tab"    data-f="ok"   onclick="setFilter('ok')">✅ 사용가능 <span id="tabOk">0</span></button>
+      <button type="button" class="tab"    data-f="wip"  onclick="setFilter('wip')">🔧 만드는중 <span id="tabWip">0</span></button>
+      <button type="button" class="tab"    data-f="noown" onclick="setFilter('noown')">⚠️ 담당자없음 <span id="tabNoown">0</span></button>
     </div>
     <div class="stats">
-      <div class="stat"><b id="statLinks">0</b> 운영중 시스템</div>
-      <div class="stat"><b id="statDepts">0</b> / 20 부서에 시스템 보유</div>
-      <div class="stat"><b id="statWip">0</b> 개발 진행중 프로젝트</div>
+      <div class="stat"><b id="statLinks">0</b> 사용가능</div>
+      <div class="stat"><b id="statWip">0</b> 만드는중</div>
+      <div class="stat" style="display:none"><b id="statDepts">0</b></div>
       <span class="syncBadge off" id="syncBadge" onclick="syncBadgeClick()" title="누르면 저장 상태를 확인할 수 있습니다">🔧 공용 데이터 연결 대기중</span>
     </div>
   </div>
 </header>
 
 <div class="wrap">
+
+  <div class="splitwrap">
+    <div class="bl">
+      <div class="hintbar">
+        <b>✅ 사용가능</b> = 지금 바로 쓸 수 있어요 &nbsp; <b>🔧 만드는중</b> = 아직 만들고 있어요 &nbsp; <b>🔒</b> = 비밀번호 필요<br>
+        이름을 누르면 <b>자세히 보기</b>가 열리고, 거기서 <b>열기 · 담당자·주소 바꾸기 · 의견 남기기</b>를 다 할 수 있어요.
+      </div>
+      <div id="layers"></div>
+      <div class="no-result" id="noResult">검색 결과가 없습니다.</div>
+      <div class="bbot">
+        <button type="button" class="bb s" onclick="openContactFromDock()">📞 전화번호부</button>
+        <button type="button" class="bb p" onclick="openSiteFbFromDock()">💬 의견 남기기</button>
+      </div>
+    </div>
+    <div id="detail"></div>
+  </div>
+
+  <div class="panelzone">
 
   <div class="today-fb-notice" id="todayFbNotice" style="display:none"></div>
 
@@ -746,9 +953,9 @@
     <div class="formMsg" id="formMsg"></div>
   </div>
 
-  <div id="layers"></div>
-  <div class="no-result" id="noResult">검색 결과가 없습니다.</div>
+  </div><!-- /panelzone -->
 
+  <div id="legacyHidden">
   <div class="wip-section" id="wipSection">
     <div class="section-title">🛠 개발 진행중인 프로젝트</div>
     <div class="section-desc">아직 완성되지 않았지만 만들고 있는 자동화/시스템입니다. 완성되면 "등록중" 체크를 해제해서 다시 올려주세요.</div>
@@ -760,6 +967,7 @@
     <div class="section-desc">아직 등록된 시스템이 없는 부서입니다.</div>
     <div class="need-groups" id="needGroups"></div>
   </div>
+  </div><!-- /legacyHidden -->
 </div>
 
 <footer>
@@ -888,6 +1096,25 @@ const DEPT_ICONS = {
   MD:"📦", MKT:"📣", SLS:"🏪", LOG:"🚚", GRO:"📊", CX:"💬",
   DES:"🎨", DEV:"💻", PRM:"🤖", KMS:"🗄️", WEL:"🌿",
 };
+
+// ---------------------------------------------------------------
+// 직원이 알아보기 쉬운 "묶음" — 20개 부서를 7개 생활언어 묶음으로 묶음
+// ---------------------------------------------------------------
+const GROUPS = [
+  {id:"work",  e:"🗓️", t:"근무 · 스케줄", s:"출근표 · 휴무 · 직원현황", c:"#dbe9ff", depts:["HR","WEL"]},
+  {id:"money", e:"💰", t:"매출 · 돈",     s:"일매출 · 지점매출 · 세무",  c:"#fff0d4", depts:["FIN","TAX"]},
+  {id:"stock", e:"📦", t:"발주 · 재고",   s:"물건 주문 · 입고 · 통관",   c:"#d9f5e6", depts:["LOG","MD","CUS"]},
+  {id:"shop",  e:"🏪", t:"매장 · 고객",   s:"청소 · AS · 회원가입 · 홍보", c:"#ffe6e9", depts:["CX","SLS","MKT"]},
+  {id:"data",  e:"📊", t:"숫자 보기",     s:"회원수 · 지점비교 · 검증",   c:"#e7e0ff", depts:["GRO","AUD"]},
+  {id:"sys",   e:"💻", t:"프로그램 개발", s:"포스 · 디자인 · AI · 자료실", c:"#d6eef7", depts:["DEV","DES","PRM","KMS"]},
+  {id:"mgmt",  e:"🧭", t:"경영 · 지시",   s:"대표 지시 · 사업총괄 · 법률", c:"#e4e7ee", depts:["SEC","BIZ","CON","LAW"]},
+];
+const GROUP_OF = {};
+GROUPS.forEach(g => g.depts.forEach(d => GROUP_OF[d] = g));
+function groupOf(deptCode){ return GROUP_OF[deptCode] || GROUPS[GROUPS.length-1]; }
+function groupLabel(deptCode){ const g = groupOf(deptCode); return g.e + " " + g.t; }
+// 목록/상세에서 항목을 가리키는 열쇠 (url 없는 항목도 안전하게)
+function entryKey(e){ return e.url || (e.dept + e.title); }
 
 // 부서 자동분류용 키워드 사전 (제목+설명에 포함된 단어로 점수 채점)
 const KEYWORDS = {
@@ -1314,7 +1541,31 @@ function collectContributors(){
 
 function toggleAddPanel(){
   const panel = document.getElementById('addPanel');
+  closeDetail();
   panel.classList.toggle('show');
+  if(panel.classList.contains('show')){
+    setTimeout(()=>{ panel.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+    setTimeout(()=>{ const t = document.getElementById('f-title'); if(t) t.focus(); }, 400);
+  }
+}
+
+// 목록의 "＋ ○○에 새로 넣기"를 눌렀을 때: 등록창을 열고 그 묶음을 미리 골라둔다
+function openAddForGroup(gid){
+  const g = GROUPS.find(x => x.id === gid) || GROUPS[0];
+  const panel = document.getElementById('addPanel');
+  closeDetail();
+  panel.classList.add('show');
+  manualDeptOverride = g.depts[0];
+  const box = document.getElementById('suggestBox');
+  if(box){
+    const options = GROUPS.flatMap(gg => gg.depts.filter(c=>DEPTS[c]).map(c =>
+      `<option value="${c}" ${c === manualDeptOverride ? 'selected' : ''}>${gg.e} ${gg.t} › ${DEPTS[c].name}(${c})</option>`
+    )).join('');
+    box.innerHTML = `<span class="suggestPill">📍 넣을 묶음: ${g.e} ${g.t}</span>
+      <select id="f-dept-manual" onchange="manualDeptOverride = this.value">${options}</select>`;
+  }
+  setTimeout(()=>{ panel.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+  setTimeout(()=>{ const t = document.getElementById('f-title'); if(t) t.focus(); }, 400);
 }
 
 function onFormInput(){
@@ -1427,9 +1678,14 @@ function completeEntry(idx){
   syncUpdate(entry);
 }
 
+// 주소나 열쇠(dept+title) 어느 쪽으로 찾아도 항목을 찾아준다
+function findEntry(k){
+  return entries.find(e => e.url === k) || entries.find(e => entryKey(e) === k);
+}
+
 // 운영중 → 다시 개발중으로 되돌리기
 async function revertToWip(url){
-  const entry = entries.find(e => e.url === url);
+  const entry = findEntry(url);
   if(!entry) return;
   if(!(await customConfirm(`"${entry.title}"을(를) 다시 개발중 상태로 되돌릴까요?`))) return;
   entry.status = "개발중";
@@ -1439,9 +1695,9 @@ async function revertToWip(url){
 
 // 개발자명 수정 — 잠긴 시스템 포함, 모든 카드에서 바로 고칠 수 있게
 async function editEntryOwner(url){
-  const entry = entries.find(e => e.url === url);
+  const entry = findEntry(url);
   if(!entry) return;
-  const input = await customPrompt(`"${entry.title}"의 개발자명을 입력하세요. (여러 명이면 쉼표로 구분)`, 'text', entry.owner || '');
+  const input = await customPrompt(`"${entry.title}"을(를) 만든 사람 / 담당자 이름을 적어주세요. (여러 명이면 쉼표로 구분)`, 'text', entry.owner || '');
   if(input === null) return;
   entry.owner = input.trim();
   render();
@@ -1451,7 +1707,7 @@ async function editEntryOwner(url){
 
 // 링크(주소) 수정 — 툴 주소가 바뀌었을 때 바로 다른 주소로 교체
 async function editEntryUrl(url){
-  const entry = entries.find(e => e.url === url);
+  const entry = findEntry(url);
   if(!entry) return;
   const input = await customPrompt(`"${entry.title}"의 링크 주소를 입력하세요.`, 'text', entry.url || '');
   if(input === null) return;
@@ -1465,6 +1721,7 @@ async function editEntryUrl(url){
   // 이 링크에 달려있던 피드백/열려있던 패널도 새 주소로 같이 옮긴다 (안 옮기면 피드백이 고아가 됨)
   FEEDBACK_LIST.forEach(f => { if(f.url === oldUrl) f.url = newUrl; });
   if(openFeedbackPanels.has(safeId(oldUrl))){ openFeedbackPanels.delete(safeId(oldUrl)); openFeedbackPanels.add(safeId(newUrl)); }
+  if(selectedKey === entryKey(entry)) selectedKey = newUrl;
   entry.url = newUrl;
   render();
   syncUpdate(entry);
@@ -1473,10 +1730,12 @@ async function editEntryUrl(url){
 
 // 부서 이동 — 잠긴 시스템 포함, 운영중인 카드를 다른 부서로 옮긴다
 async function moveEntryDept(url){
-  const entry = entries.find(e => e.url === url);
+  const entry = findEntry(url);
   if(!entry) return;
-  const options = LAYERS.flatMap(l => l.depts.map(d => ({ value: d.code, label: `${d.code} · ${d.name}` })));
-  const picked = await customSelect(`"${entry.title}"을(를) 옮길 부서를 선택하세요. (현재: ${entry.dept})`, options, entry.dept);
+  const options = GROUPS.flatMap(g => g.depts.filter(c=>DEPTS[c]).map(c => ({
+    value: c, label: `${g.e} ${g.t} › ${DEPTS[c].name}(${c})`
+  })));
+  const picked = await customSelect(`"${entry.title}"을(를) 어느 묶음으로 옮길까요? (지금: ${groupLabel(entry.dept)})`, options, entry.dept);
   if(picked === null || picked === entry.dept) return;
   entry.dept = picked;
   render();
@@ -1493,136 +1752,238 @@ async function askEmpPasswordThenSave(){
   else await customAlert("등록하지 않았습니다. 이 수정은 새로고침하면 사라집니다.");
 }
 
+// ---------------------------------------------------------------
+// B안 목록 · 상세 화면
+// ---------------------------------------------------------------
+let filterMode = "all";     // all | ok | wip | noown
+let selectedKey = "";       // 지금 상세로 열어놓은 항목
+let detailOpen = false;     // 휴대폰에서 상세 화면이 덮여 있는지
+
+function setFilter(mode){
+  filterMode = mode;
+  document.querySelectorAll('#filterTabs .tab').forEach(t=>{
+    t.classList.toggle('on', t.getAttribute('data-f') === mode);
+  });
+  renderUI();
+  applySearchFilter();
+}
+
+// 검색어로 목록 줄이기 (묶음 제목·＋버튼도 같이 정리)
+function applySearchFilter(){
+  const box = document.getElementById('search');
+  const q = box ? box.value.trim().toLowerCase() : '';
+  let anyVisible = false;
+
+  document.querySelectorAll('#layers .grp').forEach(grp=>{
+    let grpHas = false;
+    grp.querySelectorAll('.row').forEach(row=>{
+      const txt = row.getAttribute('data-searchtext') || '';
+      const show = !q || txt.includes(q);
+      row.style.display = show ? '' : 'none';
+      // 줄 바로 뒤의 구분선도 같이 숨김
+      const div = row.nextElementSibling;
+      if(div && div.classList.contains('divl')) div.style.display = show ? '' : 'none';
+      if(show){ grpHas = true; anyVisible = true; }
+    });
+    // 검색중이면 ＋버튼 숨기고, 결과 없는 묶음은 통째로 숨김
+    const addBox = grp.querySelector('.badd');
+    if(addBox) addBox.style.display = q ? 'none' : '';
+    grp.style.display = (q && !grpHas) ? 'none' : '';
+  });
+
+  const nr = document.getElementById('noResult');
+  if(nr) nr.style.display = (q && !anyVisible) ? 'block' : 'none';
+  const hint = document.querySelector('.hintbar');
+  if(hint) hint.style.display = q ? 'none' : '';
+}
+
+function passFilter(e){
+  if(filterMode === "ok")    return e.status !== "개발중";
+  if(filterMode === "wip")   return e.status === "개발중";
+  if(filterMode === "noown") return !(e.owner || "").trim();
+  return true;
+}
+
+function openDetail(key){
+  selectedKey = key;
+  detailOpen = true;
+  document.body.classList.add('detailopen');
+  renderUI();
+  window.scrollTo(0,0);
+}
+function closeDetail(){
+  detailOpen = false;
+  document.body.classList.remove('detailopen');
+  renderUI();
+}
+function openContactFromDock(){
+  closeDetail();
+  openContactPanel();
+  setTimeout(()=>{
+    const el = document.getElementById('contactPanelToggle');
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 60);
+}
+function openSiteFbFromDock(){
+  closeDetail();
+  openSiteFeedbackPanel();
+  setTimeout(()=>{
+    const el = document.getElementById('siteFbToggle');
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 60);
+}
+
+// 목록 한 줄
+function rowHtml(e){
+  const g = groupOf(e.dept);
+  const key = entryKey(e);
+  const locked = isLocked(e);
+  const ok = e.status !== "개발중";
+  const own = (e.owner || "").trim();
+  const fbs = feedbackFor(key);
+  const sub = own
+    ? `${g.e} ${g.t} · ${escapeHtml(parseContributors(own).map(c=>c.name).join(', '))}`
+    : `${g.e} ${g.t} · <span class="warn">담당자 없음</span>`;
+  const ti = linkTypeInfo(e.url);
+  const icon = locked ? '🔒' : (ti.cls === 'sheet' ? '📊' : ti.cls === 'form' ? '📝' : (DEPT_ICONS[e.dept] || g.e));
+  const searchtext = (e.title + ' ' + e.dept + ' ' + (DEPTS[e.dept] ? DEPTS[e.dept].name : '') + ' ' + g.t + ' ' + (locked ? '' : own) + ' ' + (e.note||'')).toLowerCase();
+  return `
+    <div class="row ${selectedKey === key ? 'on' : ''}" data-searchtext="${escapeHtml(searchtext)}" onclick="openDetail('${key.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}')">
+      <div class="r-i" style="background:${g.c}">${icon}</div>
+      <div class="r-m">
+        <div class="r-t">${escapeHtml(e.title)}${e.sensitive ? '<span class="lk">🔒</span>' : ''}</div>
+        <div class="r-s">${sub}</div>
+      </div>
+      <div class="r-r">
+        <div class="r-st ${ok ? 'ok' : 'wip'}">${ok ? '사용가능' : '만드는중'}</div>
+        <div class="r-more">${fbs.length ? `<span class="fbn">💬 ${fbs.length}</span>` : '자세히 ›'}</div>
+      </div>
+    </div>
+    <div class="divl"></div>`;
+}
+
+// 상세 화면
+function detailHtml(){
+  const host = document.getElementById('detail');
+  if(!host) return;
+  const e = entries.find(x => entryKey(x) === selectedKey);
+  if(!e){
+    host.innerHTML = `
+      <div class="br">
+        <div class="br-tag" style="background:#f2f4f6;color:#8b919c">👈 왼쪽에서 고르세요</div>
+        <div class="br-t">쓰고 싶은 걸 눌러보세요</div>
+        <div class="br-u">왼쪽 목록에서 시스템 이름을 누르면 여기에 자세한 내용이 나옵니다.<br>열기 · 담당자 바꾸기 · 주소 바꾸기 · 의견 남기기를 전부 여기서 할 수 있어요.</div>
+      </div>`;
+    return;
+  }
+  const g = groupOf(e.dept);
+  const key = entryKey(e);
+  const kq = key.replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  const uq = (e.url||'').replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  const ok = e.status !== "개발중";
+  const locked = isLocked(e);
+  const own = (e.owner || "").trim();
+  const fbs = feedbackFor(key);
+  const fid = safeId(key);
+
+  return host.innerHTML = `
+    <div class="br">
+      <button type="button" class="br-back" onclick="closeDetail()">‹ 목록으로</button>
+      <span class="br-tag ${ok ? '' : 'wip'}">${ok ? '✅ 지금 사용 가능' : '🔧 아직 만드는 중'}</span>
+      <div class="br-t">${escapeHtml(e.title)} <small>· ${g.t}</small></div>
+      <div class="br-u">${locked ? '🔒 잠긴 시스템입니다. 열 때 비밀번호를 물어봅니다.' : escapeHtml(e.url || '주소가 없습니다')}</div>
+      ${e.note ? `<div class="br-u" style="margin-top:6px;color:#5b626d">${escapeHtml(e.note)}</div>` : ''}
+      <button type="button" class="br-open" onclick="${locked ? `tryOpenLocked('${uq}')` : `window.open('${uq}','_blank')`}">${locked ? '🔒 비밀번호 넣고 열기 →' : '열기 →'}</button>
+
+      <div class="br-grid">
+        <div class="br-f">
+          <i>담당자</i>
+          <b class="${own ? '' : 'warn'}">${own ? escapeHtml(parseContributors(own).map(c=>`${c.role}: ${c.name}`).join(' · ')) : '아직 없음'}</b>
+          <u onclick="editEntryOwner('${uq}')">이름 바꾸기</u>
+        </div>
+        <div class="br-f">
+          <i>인터넷 주소</i>
+          <b style="font-size:12.5px">${escapeHtml((e.url||'').replace(/^https?:\/\//,'').slice(0,60) || '없음')}</b>
+          <u onclick="editEntryUrl('${uq}')">주소 바꾸기</u>
+        </div>
+        <div class="br-f">
+          <i>묶음</i>
+          <b>${g.e} ${g.t}</b>
+          <u onclick="moveEntryDept('${uq}')">다른 묶음으로 옮기기</u>
+        </div>
+        <div class="br-f">
+          <i>상태</i>
+          <b>${ok ? '사용 가능' : '만드는 중'}</b>
+          ${ok ? `<u onclick="revertToWip('${uq}')">만드는중으로 되돌리기</u>` : `<u onclick="completeEntryByKey('${kq}')">✅ 다 만들어졌어요</u>`}
+        </div>
+      </div>
+
+      <div class="br-fb">
+        <div class="fbh">💬 이 시스템에 대한 의견 (${fbs.length}건) ${fbAlertBadge(fbs)}</div>
+        <p>불편한 점·고쳐야 할 것을 적어주세요. 누구나 쓸 수 있고 전 직원이 바로 봅니다.</p>
+        <div class="fb-list" id="fb-panel-${fid}">
+          ${fbs.length ? fbs.map(f=>renderFeedbackEntry(f)).join('') : ''}
+        </div>
+        <input type="text" id="fb-author-${fid}" placeholder="이름 (예: 김철수 매니저)">
+        <textarea id="fb-new-${fid}" placeholder="예) 발주 수량 입력할 때 저장이 안 될 때가 있어요"></textarea>
+        <button type="button" class="fbsend" onclick="submitNewFeedback('${kq}', '${fid}')">의견 등록</button>
+      </div>
+    </div>`;
+}
+
+// 만드는중 → 완료 처리 (부서를 골라서)
+async function completeEntryByKey(key){
+  const entry = entries.find(x => entryKey(x) === key);
+  if(!entry) return;
+  const rec = classifyDept(entry.title + ' ' + (entry.note||''));
+  const options = GROUPS.flatMap(g => g.depts.filter(c=>DEPTS[c]).map(c => ({
+    value: c, label: `${g.e} ${g.t} › ${DEPTS[c].name}(${c})`
+  })));
+  const picked = await customSelect("다 만들어진 시스템입니다. 어느 묶음에 넣을까요?", options, rec ? rec.code : entry.dept);
+  if(picked === null) return;
+  entry.dept = picked;
+  entry.status = "운영중";
+  render();
+  syncUpdate(entry);
+  if(!canSave()) await askEmpPasswordThenSave();
+}
+
 function render(){
   saveLocal(); // 화면을 다시 그릴 때마다 = 뭔가 바뀌었을 때마다 내 기기에 저장
   const liveEntries = entries.filter(e => e.status !== "개발중");
   const wipEntries = entries.map((e, idx) => ({...e, idx})).filter(e => e.status === "개발중");
   const activeDeptCodes = new Set(liveEntries.map(e => e.dept));
+  const noOwnCount = entries.filter(e => !(e.owner||'').trim()).length;
 
+  // ---- 필터 탭 숫자 ----
+  const setTxt = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
+  setTxt('tabAll', entries.length);
+  setTxt('tabOk', liveEntries.length);
+  setTxt('tabWip', wipEntries.length);
+  setTxt('tabNoown', noOwnCount);
+  const hs = document.getElementById('headSub');
+  if(hs) hs.textContent = `사용가능 ${liveEntries.length} · 만드는중 ${wipEntries.length} · 담당자없음 ${noOwnCount}`;
+
+  // ---- 묶음별 목록 ----
   const root = document.getElementById('layers');
-  root.innerHTML = '';
-  let totalLinks = 0;
-
-  LAYERS.forEach(layer=>{
-    const activeDepts = layer.depts.filter(d => activeDeptCodes.has(d.code));
-    if(activeDepts.length === 0) return;
-
-    const section = document.createElement('div');
-    section.className = 'layer';
-    section.setAttribute('data-layer', layer.id);
-    section.innerHTML = `
-      <div class="layer-head">
-        <span class="layer-num">${LAYER_ICONS[layer.id]||''} LAYER ${layer.id}</span>
-        <span class="layer-title">${layer.title}</span>
-      </div>
-      <div class="layer-desc">${layer.desc}</div>
-    `;
-
-    const grid = document.createElement('div');
-    grid.className = 'grid';
-
-    activeDepts.forEach(dept=>{
-      const deptLinks = liveEntries.filter(e=>e.dept===dept.code);
-      totalLinks += deptLinks.length;
-      const status = STATUS[dept.code] || "정상운영";
-
-      const card = document.createElement('div');
-      card.setAttribute('data-searchtext', (dept.name+' '+dept.code+' '+deptLinks.map(l=>l.title+' '+(isLocked(l)?'':(l.owner||''))).join(' ')).toLowerCase());
-      card.className = 'card';
-
-      card.innerHTML = `
-        <div class="dept-head">
-          <div class="dept-head-left">
-            <span class="dept-icon">${DEPT_ICONS[dept.code]||'🔹'}</span>
-            <div>
-              <div class="dept-name">${dept.name}</div>
-              <span class="dept-code">${dept.code}</span>
-            </div>
-          </div>
-          <select class="status-select" onchange="changeStatus('${dept.code}', this.value)">
-            ${STATUS_OPTIONS.map(s=>`<option value="${s}" ${s===status?'selected':''}>${s}</option>`).join('')}
-          </select>
+  root.innerHTML = GROUPS.map(g=>{
+    const list = entries.filter(e => groupOf(e.dept).id === g.id && passFilter(e));
+    return `
+      <div class="grp" data-grp="${g.id}">
+        <div class="sec">${g.e} ${g.t} <em>${list.length}</em></div>
+        ${list.map(rowHtml).join('')}
+        <div class="badd" onclick="openAddForGroup('${g.id}')">
+          <b>＋ ${g.t}에 새로 넣기</b>
+          <i>여기 누르면 이 묶음에 추가됩니다</i>
         </div>
-        <div class="dept-role" title="${dept.role}">${dept.role}</div>
+      </div>`;
+  }).join('');
 
-        <div class="links">
-          ${deptLinks.map(l=>{
-            if(isLocked(l)){
-              return `
-                <div class="link-item-wrap locked" onclick="tryOpenLocked('${l.url.replace(/'/g,"\\'")}')">
-                  <div class="link-item locked-item">
-                    <span class="link-title-block">
-                      <span class="link-type-badge type-locked">🔒 잠긴 시스템</span>
-                      <span class="link-title-text">${l.title}</span>
-                      <span class="link-meta">
-                        ${parseContributors(l.owner).map(c=>`<span class="dev-tag">${c.role}: ${c.name}</span>`).join('')}
-                        <span>클릭하면 비밀번호를 입력하고 열람합니다</span>
-                      </span>
-                    </span>
-                    <span class="arrow">🔒</span>
-                  </div>
-                  <div class="link-actions">
-                    <button class="owner-edit-btn" title="개발자명 수정" onclick="event.stopPropagation(); editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
-                    <button class="owner-edit-btn" title="링크 주소 수정" onclick="event.stopPropagation(); editEntryUrl('${l.url.replace(/'/g,"\\'")}')">🔗</button>
-                    <button class="owner-edit-btn" title="부서 이동" onclick="event.stopPropagation(); moveEntryDept('${l.url.replace(/'/g,"\\'")}')">🏢</button>
-                  </div>
-                </div>
-              `;
-            }
-            const fid = safeId(l.url);
-            const fbs = feedbackFor(l.url);
-            const isOpen = openFeedbackPanels.has(fid);
-            const ti = linkTypeInfo(l.url);
-            return `
-            <div class="link-block">
-              <div class="link-item-wrap">
-                <a class="link-item" href="${l.url}" target="_blank" rel="noopener">
-                  <span class="link-title-block">
-                    <span class="link-type-badge type-${ti.cls}">${ti.icon} ${ti.label}</span>
-                    <span class="link-title-text">${l.title}</span>
-                    <span class="link-meta">
-                      ${l.note ? `<span>${l.note}</span>` : ''}
-                      ${parseContributors(l.owner).map(c=>`<span class="dev-tag">${c.role}: ${c.name}</span>`).join('')}
-                    </span>
-                  </span>
-                  <span class="arrow">↗</span>
-                </a>
-                <div class="link-actions">
-                  <button class="owner-edit-btn" title="개발자명 수정" onclick="editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
-                  <button class="owner-edit-btn" title="링크 주소 수정" onclick="editEntryUrl('${l.url.replace(/'/g,"\\'")}')">🔗</button>
-                  <button class="owner-edit-btn" title="부서 이동" onclick="moveEntryDept('${l.url.replace(/'/g,"\\'")}')">🏢</button>
-                  <button class="revert-btn" title="개발중으로 되돌리기" onclick="revertToWip('${l.url.replace(/'/g,"\\'")}')">↩</button>
-                </div>
-              </div>
-              <div class="fb-wrap">
-                <button class="fb-toggle" onclick="toggleFeedback('${fid}')">💬 피드백 ${fbs.length ? `(${fbs.length})` : ''} ${isOpen ? '▲' : '▼'} ${fbAlertBadge(fbs)}</button>
-                <div class="fb-panel ${isOpen ? 'open' : ''}" id="fb-panel-${fid}">
-                  <div class="fb-list">
-                    ${fbs.length ? fbs.map(f=>renderFeedbackEntry(f)).join('') : `<div class="fb-empty">아직 피드백이 없습니다. 이름과 함께 편하게 남겨주세요.</div>`}
-                  </div>
-                  <div class="fb-newform">
-                    <input type="text" id="fb-author-${fid}" placeholder="이름 (예: 김철수 매니저)">
-                    <textarea id="fb-new-${fid}" placeholder="이 시스템에 대한 의견을 남겨주세요"></textarea>
-                    <button onclick="submitNewFeedback('${l.url.replace(/'/g,"\\'")}', '${fid}')">피드백 남기기</button>
-                  </div>
-                  <div class="fb-newform-note">작성자 이름과 함께 남겨져요</div>
-                </div>
-              </div>
-            </div>
-          `;
-          }).join('')}
-        </div>
-      `;
-      grid.appendChild(card);
-    });
+  detailHtml();
+  applySearchFilter();   // 목록을 다시 그렸으니 검색어도 다시 적용
 
-    section.appendChild(grid);
-    root.appendChild(section);
-  });
-
-  document.getElementById('statLinks').textContent = totalLinks;
+  document.getElementById('statLinks').textContent = liveEntries.length;
   document.getElementById('statDepts').textContent = activeDeptCodes.size;
-
   // ---- 진행중 프로젝트 ----
   const wipList = document.getElementById('wipList');
   document.getElementById('statWip').textContent = wipEntries.length;
@@ -2413,25 +2774,7 @@ setTimeout(dismissSplash, 1300);
 
 // 검색 필터
 const searchInput = document.getElementById('search');
-searchInput.addEventListener('input', ()=>{
-  const q = searchInput.value.trim().toLowerCase();
-  const layers = document.querySelectorAll('.layer');
-  let anyVisible = false;
-
-  layers.forEach(layer=>{
-    let layerHasVisible = false;
-    layer.querySelectorAll('.card').forEach(card=>{
-      const show = !q || card.getAttribute('data-searchtext').includes(q);
-      card.classList.toggle('hidden', !show);
-      if(show){ layerHasVisible = true; anyVisible = true; }
-    });
-    layer.classList.toggle('hidden', !layerHasVisible);
-  });
-
-  document.getElementById('noResult').style.display = (q && !anyVisible) ? 'block' : 'none';
-  document.getElementById('wipSection').style.display = q ? 'none' : '';
-  document.querySelector('.need-section').style.display = q ? 'none' : '';
-});
+searchInput.addEventListener('input', applySearchFilter);
 </script>
 
 </body>
