@@ -71,7 +71,7 @@
       "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html",
       "note": "",
       "status": "개발중",
-      "owner": "장대운",
+      "owner": "UI테스트 홍길동",
       "sensitive": true
     },
     {
@@ -296,6 +296,5 @@
   "status": {},
   "feedback": [],
   "feedbackSeq": 2,
-  "savedAt": "2026-07-28T02:17:42.489Z",
-  "savedBy": "employee"
+  "savedAt": "2026-07-28T02:18:05.872Z"
 }
