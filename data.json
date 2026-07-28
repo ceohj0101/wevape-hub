@@ -71,7 +71,7 @@
       "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html",
       "note": "",
       "status": "개발중",
-      "owner": "장대운",
+      "owner": "장대운 주임",
       "sensitive": true
     },
     {
@@ -294,19 +294,8 @@
     }
   ],
   "status": {},
-  "feedback": [
-    {
-      "id": "fb2",
-      "url": "https://janghj201-cyber.github.io/-/",
-      "text": "안녕",
-      "author": "김형진",
-      "time": "07. 28. 오후 12:41",
-      "date": "2026-07-28",
-      "status": "접수됨",
-      "reply": ""
-    }
-  ],
+  "feedback": [],
   "feedbackSeq": 3,
-  "savedAt": "2026-07-28T03:41:39.526Z",
+  "savedAt": "2026-07-28T03:41:49.603Z",
   "savedBy": "employee"
 }
