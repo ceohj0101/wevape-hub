@@ -97,7 +97,7 @@
       "title": "인천/경기 통합 매출관리",
       "url": "https://order-hub-dfni.onrender.com/sales?month=2026-06",
       "note": "위베이프 인천/경기 총판 총 매출관리",
-      "status": "개발중",
+      "status": "운영중",
       "owner": "신재현 실장",
       "sensitive": true
     },
@@ -298,6 +298,6 @@
   },
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-07-28T09:22:17.320Z",
+  "savedAt": "2026-07-28T09:22:38.480Z",
   "savedBy": "employee"
 }
