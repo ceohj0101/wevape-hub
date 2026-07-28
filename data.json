@@ -89,7 +89,7 @@
       "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html",
       "note": "위베이프 직원 스케줄",
       "status": "개발중",
-      "owner": "",
+      "owner": "장대운",
       "sensitive": true
     },
     {
@@ -296,6 +296,6 @@
   "status": {},
   "feedback": [],
   "feedbackSeq": 2,
-  "savedAt": "2026-07-28T03:41:13.515Z",
+  "savedAt": "2026-07-28T03:41:16.125Z",
   "savedBy": "employee"
 }
