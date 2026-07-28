@@ -218,6 +218,7 @@
     color:#c7ccd1;font-size:13px;cursor:pointer;
   }
   .owner-edit-btn:hover{color:var(--ink);background:#f1f2f0;}
+  .link-actions{display:flex;flex-shrink:0;} /* 모바일에서는 이 묶음을 통째로 아래줄로 내림 (아래 미디어쿼리) */
   .link-item-wrap.locked{cursor:pointer;background:#f3f2ee;border-style:dashed;}
   .link-item-wrap.locked:hover{background:#ece9e0;}
   .locked-item{
@@ -512,6 +513,14 @@
     a.link-item, .locked-item{padding:12px 12px;}
     a.link-item > span, .locked-item > span{overflow:visible;text-overflow:clip;}
     .owner-edit-btn, .revert-btn{width:40px;font-size:15px;} /* 손가락으로 누를 수 있는 크기 */
+
+    /* 편집 버튼(✏️🔗🏢↩)이 4개까지 늘어나서 제목이 다 눌리는 문제 → 버튼 묶음을 통째로 아래줄로 내림 */
+    .link-item-wrap{flex-wrap:wrap;}
+    .link-actions{flex:1 1 100%;border-top:1px solid var(--line);}
+    .link-actions .owner-edit-btn, .link-actions .revert-btn{
+      flex:1 1 0;width:auto;padding:11px 0;font-size:16px;border-left:1px solid var(--line);
+    }
+    .link-actions .owner-edit-btn:first-child{border-left:none;}
 
     .contact-panel-toggle{padding:15px 14px;gap:6px;}
     .contact-panel-title{font-size:15px;flex:1;}
@@ -1552,9 +1561,11 @@ function render(){
                     </span>
                     <span class="arrow">🔒</span>
                   </div>
-                  <button class="owner-edit-btn" title="개발자명 수정" onclick="event.stopPropagation(); editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
-                  <button class="owner-edit-btn" title="링크 주소 수정" onclick="event.stopPropagation(); editEntryUrl('${l.url.replace(/'/g,"\\'")}')">🔗</button>
-                  <button class="owner-edit-btn" title="부서 이동" onclick="event.stopPropagation(); moveEntryDept('${l.url.replace(/'/g,"\\'")}')">🏢</button>
+                  <div class="link-actions">
+                    <button class="owner-edit-btn" title="개발자명 수정" onclick="event.stopPropagation(); editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
+                    <button class="owner-edit-btn" title="링크 주소 수정" onclick="event.stopPropagation(); editEntryUrl('${l.url.replace(/'/g,"\\'")}')">🔗</button>
+                    <button class="owner-edit-btn" title="부서 이동" onclick="event.stopPropagation(); moveEntryDept('${l.url.replace(/'/g,"\\'")}')">🏢</button>
+                  </div>
                 </div>
               `;
             }
@@ -1576,10 +1587,12 @@ function render(){
                   </span>
                   <span class="arrow">↗</span>
                 </a>
-                <button class="owner-edit-btn" title="개발자명 수정" onclick="editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
-                <button class="owner-edit-btn" title="링크 주소 수정" onclick="editEntryUrl('${l.url.replace(/'/g,"\\'")}')">🔗</button>
-                <button class="owner-edit-btn" title="부서 이동" onclick="moveEntryDept('${l.url.replace(/'/g,"\\'")}')">🏢</button>
-                <button class="revert-btn" title="개발중으로 되돌리기" onclick="revertToWip('${l.url.replace(/'/g,"\\'")}')">↩</button>
+                <div class="link-actions">
+                  <button class="owner-edit-btn" title="개발자명 수정" onclick="editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
+                  <button class="owner-edit-btn" title="링크 주소 수정" onclick="editEntryUrl('${l.url.replace(/'/g,"\\'")}')">🔗</button>
+                  <button class="owner-edit-btn" title="부서 이동" onclick="moveEntryDept('${l.url.replace(/'/g,"\\'")}')">🏢</button>
+                  <button class="revert-btn" title="개발중으로 되돌리기" onclick="revertToWip('${l.url.replace(/'/g,"\\'")}')">↩</button>
+                </div>
               </div>
               <div class="fb-wrap">
                 <button class="fb-toggle" onclick="toggleFeedback('${fid}')">💬 피드백 ${fbs.length ? `(${fbs.length})` : ''} ${isOpen ? '▲' : '▼'} ${fbAlertBadge(fbs)}</button>
