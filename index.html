@@ -2020,13 +2020,15 @@ function loadLocal(){
 async function loadRemote(){
   const R = ghRepo();
   const bust = "?t=" + Date.now();
+  // raw.githubusercontent.com 은 중간 서버가 옛날 내용을 최대 수십 분까지 물고 있어서
+  // "다른 직원이 내 수정을 못 보는" 원인이었음 → 항상 최신인 깃허브 API를 먼저 읽고, 실패할 때만 raw 사용
   const urls = [
-    `https://raw.githubusercontent.com/${R.owner}/${R.repo}/${R.branch}/${R.path}` + bust,
-    `https://api.github.com/repos/${R.owner}/${R.repo}/contents/${R.path}?ref=${R.branch}&t=${Date.now()}`
+    `https://api.github.com/repos/${R.owner}/${R.repo}/contents/${R.path}?ref=${R.branch}&t=${Date.now()}`,
+    `https://raw.githubusercontent.com/${R.owner}/${R.repo}/${R.branch}/${R.path}` + bust
   ];
   for(let i = 0; i < urls.length; i++){
     try{
-      const opt = i === 1 ? { headers: { "Accept": "application/vnd.github.raw" } } : { cache: "no-store" };
+      const opt = i === 0 ? { headers: { "Accept": "application/vnd.github.raw" }, cache: "no-store" } : { cache: "no-store" };
       const res = await fetch(urls[i], opt);
       if(!res.ok) continue;
       const data = await res.json();
@@ -2314,6 +2316,20 @@ suppressDirty--;
 updateSyncBadge();
 updateAdminLinks();
 loadRemote();
+
+// 창을 켜둔 채로 있어도 남이 고친 내용이 들어오게 주기적으로 다시 읽음
+// (탭을 다시 볼 때 + 10분마다. 내가 아직 안 올린 수정분이 있으면 loadRemote가 알아서 지켜줌)
+let lastRemoteLoad = Date.now();
+function refreshRemote(minGapMs){
+  if(ghBusy) return;
+  if(Date.now() - lastRemoteLoad < minGapMs) return;
+  lastRemoteLoad = Date.now();
+  loadRemote();
+}
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'visible') refreshRemote(90000);
+});
+setInterval(function(){ refreshRemote(60000); }, 600000);
 
 // 링크로 바로 "직원 저장 활성화" 창을 띄우기 위한 자동 실행 (?emppw=1)
 if(new URLSearchParams(location.search).get('emppw') === '1'){
