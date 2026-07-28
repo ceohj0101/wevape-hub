@@ -1931,7 +1931,7 @@ function ghRepo(){
 }
 function ghToken(){ return (lsGet(TOKEN_KEY) || "").trim(); }
 function isAdmin(){ return ghToken().length > 0; }
-function empPassword(){ return (lsGet(EMP_PW_KEY) || "").trim(); }
+function empPassword(){ return (lsGet(EMP_PW_KEY) || "").trim() || "8936"; } // 비밀번호 미등록 기기도 기본값으로 저장됨 → 아무나 수정하면 바로 전직원 반영, 따로 등록할 필요 없음
 function canSave(){ return isAdmin() || empPassword().length > 0; }
 
 // ---------------- 내 기기 임시 저장 ----------------
@@ -2233,7 +2233,7 @@ async function setupGhToken(){
 
 // ---------------- 직원 저장 비밀번호 등록 / 해제 ----------------
 async function setupEmpPassword(){
-  if(empPassword()){
+  if((lsGet(EMP_PW_KEY) || "").trim()){
     if(await customConfirm("이 브라우저에 등록된 직원 저장 비밀번호를 삭제할까요?\n삭제하면 이 브라우저에서는 저장이 안 되고 화면에만 남습니다.", true)){
       lsDel(EMP_PW_KEY);
       updateSyncBadge();
