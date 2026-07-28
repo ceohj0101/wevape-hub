@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>위베이프 시스템 허브</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%23FFC94A'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Arial,%20Helvetica,%20sans-serif'%20font-size='36'%20font-weight='900'%20fill='%23111C28'%20text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#191f28">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="시스템 허브">
+<meta name="description" content="위베이프 전 지점이 쓰는 업무 시스템 모음">
 <style>
   :root{
     --bg:#f4f5f3;
@@ -729,6 +737,30 @@
     .br{min-height:100vh;}
   }
 
+  /* ---- 앱으로 받기 버튼 · 설치 안내창 ---- */
+  .instBtn{background:#ffc94a !important;color:#191f28 !important;font-weight:900 !important;}
+  body.appmode .instBtn{display:none !important;}   /* 이미 앱으로 실행중이면 숨김 */
+
+  #instGuide{
+    position:fixed;inset:0;z-index:10000;background:rgba(17,28,40,.55);
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  #instGuide.on{display:flex;}
+  #instGuide .ig{
+    background:#fff;border-radius:18px;padding:24px 22px;max-width:420px;width:100%;
+    max-height:86vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);
+  }
+  #instGuide h3{margin:0 0 6px;font-size:19px;font-weight:900;color:#191f28;letter-spacing:-.5px;}
+  #instGuide .igsub{font-size:13px;color:#8b919c;margin:0 0 16px;}
+  #instGuide .igb{background:#f7f8fa;border-radius:12px;padding:13px 15px;margin-bottom:9px;}
+  #instGuide .igb > b{display:block;font-size:13.5px;font-weight:900;color:#191f28;margin-bottom:5px;}
+  #instGuide .igb li b{font-weight:900;color:#191f28;}
+  #instGuide .igb ol{margin:0;padding-left:18px;font-size:13px;color:#5b626d;line-height:1.75;}
+  #instGuide .igclose{
+    margin-top:14px;width:100%;height:48px;border:0;border-radius:13px;background:#191f28;color:#fff;
+    font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;
+  }
+
 </style>
 </head>
 <body>
@@ -782,6 +814,7 @@
         <p class="lead" id="headSub">쓰고 싶은 걸 누르면 자세히 보여줍니다.</p>
       </div>
       <div class="topbtns">
+        <button class="adminBtn instBtn" id="installBtn" onclick="installApp()">📲 앱으로 받기</button>
         <button class="addBtn" id="addBtn" onclick="toggleAddPanel()">＋ 새로 넣기</button>
         <button class="adminBtn" id="lockBtn" onclick="toggleLock()">🔒 잠긴 시스템 보기</button>
       </div>
@@ -2775,7 +2808,104 @@ setTimeout(dismissSplash, 1300);
 // 검색 필터
 const searchInput = document.getElementById('search');
 searchInput.addEventListener('input', applySearchFilter);
+
+/* ============================================================
+   앱으로 받기 (바탕화면 / 홈화면 설치)
+   ============================================================ */
+let deferredPrompt = null;
+
+// 크롬·엣지가 "설치 가능" 이라고 알려주면 그 신호를 잡아둔다
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const b = document.getElementById('installBtn');
+  if (b) b.style.display = '';
+});
+
+// 설치가 끝나면 버튼을 숨긴다
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  document.body.classList.add('appmode');
+  try { customAlert('앱으로 설치됐어요! 이제 바탕화면 아이콘으로 바로 들어올 수 있습니다.'); } catch(_) {}
+});
+
+function isStandalone(){
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+      || window.navigator.standalone === true;
+}
+if (isStandalone()) {
+  document.addEventListener('DOMContentLoaded', () => document.body.classList.add('appmode'));
+  if (document.body) document.body.classList.add('appmode');
+}
+
+function closeInstGuide(){
+  const g = document.getElementById('instGuide');
+  if (g) g.classList.remove('on');
+}
+
+function installApp(){
+  // 크롬/엣지: 바로 설치창 띄우기
+  if (deferredPrompt) {
+    const p = deferredPrompt;
+    deferredPrompt = null;
+    p.prompt();
+    p.userChoice.then((r) => {
+      if (r && r.outcome === 'accepted') {
+        document.body.classList.add('appmode');
+      } else {
+        deferredPrompt = p; // 취소했으면 다시 쓸 수 있게 되돌림
+      }
+    }).catch(() => { deferredPrompt = p; });
+    return;
+  }
+  // 그 외(사파리·이미 설치됨 등): 직접 설치하는 방법 안내
+  const ua = navigator.userAgent || '';
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isAndroid = /Android/.test(ua);
+  const g = document.getElementById('instGuide');
+  const box = document.getElementById('instSteps');
+  if (!g || !box) return;
+  let html = '';
+  if (isIOS) {
+    html = '<div class="igb"><b>아이폰 · 아이패드 (사파리)</b><ol>'
+         + '<li>화면 아래(또는 위) <b>공유 버튼</b>(네모에 화살표 ↑) 누르기</li>'
+         + '<li>목록을 내려서 <b>홈 화면에 추가</b> 누르기</li>'
+         + '<li>오른쪽 위 <b>추가</b> 누르면 끝</li></ol></div>';
+  } else if (isAndroid) {
+    html = '<div class="igb"><b>안드로이드 (크롬)</b><ol>'
+         + '<li>오른쪽 위 <b>⋮</b> 점 세 개 누르기</li>'
+         + '<li><b>앱 설치</b> 또는 <b>홈 화면에 추가</b> 누르기</li>'
+         + '<li><b>설치</b> 누르면 끝</li></ol></div>';
+  } else {
+    html = '<div class="igb"><b>윈도우 · 맥 (크롬 / 엣지)</b><ol>'
+         + '<li>주소창 오른쪽 끝의 <b>설치 아이콘</b>(모니터에 ↓) 누르기</li>'
+         + '<li>안 보이면 오른쪽 위 <b>⋮</b> → <b>캐스트, 저장 및 공유</b> → <b>페이지를 앱으로 설치</b></li>'
+         + '<li><b>설치</b> 누르면 바탕화면에 아이콘이 생깁니다</li></ol></div>'
+         + '<div class="igb"><b>사파리(맥)를 쓰신다면</b><ol>'
+         + '<li>메뉴에서 <b>파일</b> → <b>독에 추가</b></li></ol></div>';
+  }
+  html += '<div class="igb"><b>이미 설치했다면?</b><ol>'
+        + '<li>바탕화면(또는 홈화면)에 노란 <b>W</b> 아이콘을 찾아 누르세요</li></ol></div>';
+  box.innerHTML = html;
+  g.classList.add('on');
+}
+
+// 서비스워커 등록 (앱처럼 설치되게 하고, 인터넷 끊겨도 열리게)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
 </script>
+
+<div id="instGuide" onclick="if(event.target===this) closeInstGuide()">
+  <div class="ig">
+    <h3>📲 앱처럼 바탕화면에 두기</h3>
+    <p class="igsub">아래대로 한 번만 하면, 다음부터는 아이콘만 눌러서 바로 들어옵니다.</p>
+    <div id="instSteps"></div>
+    <button class="igclose" onclick="closeInstGuide()">확인</button>
+  </div>
+</div>
 
 </body>
 </html>
