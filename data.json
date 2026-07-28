@@ -296,16 +296,6 @@
   "status": {},
   "feedback": [
     {
-      "id": "fb4",
-      "url": "https://janghj201-cyber.github.io/-/",
-      "text": "ㅂㄹㅈㄼㅈ",
-      "author": "ㅈㅂㅇㅂㅈㅇ",
-      "time": "07. 28. 오후 01:42",
-      "date": "2026-07-28",
-      "status": "업데이트 완료",
-      "reply": ""
-    },
-    {
       "id": "fb3",
       "url": "https://janghj201-cyber.github.io/-/",
       "text": "ㅂㅈㄼㅎㄹ",
@@ -317,6 +307,6 @@
     }
   ],
   "feedbackSeq": 5,
-  "savedAt": "2026-07-28T04:46:10.757Z",
+  "savedAt": "2026-07-28T05:03:15.181Z",
   "savedBy": "employee"
 }
