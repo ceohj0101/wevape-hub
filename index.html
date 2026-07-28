@@ -761,6 +761,34 @@
     font-family:inherit;font-size:15px;font-weight:900;cursor:pointer;
   }
 
+  /* ---- 업데이트 안내 팝업 ---- */
+  .updBtn{background:#eaf2ff !important;color:#1b64da !important;font-weight:900 !important;}
+  #updPop{
+    position:fixed;inset:0;z-index:2147483000;background:rgba(17,28,40,.55);
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  #updPop.on{display:flex;}
+  #updPop .up{
+    background:#fff;border-radius:18px;max-width:440px;width:100%;
+    max-height:88vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);
+  }
+  #updPop .uphead{background:#191f28;color:#fff;padding:20px 22px 17px;border-radius:18px 18px 0 0;}
+  #updPop .update{display:inline-block;background:#ffc94a;color:#191f28;font-size:12px;font-weight:900;
+    padding:4px 10px;border-radius:999px;margin-bottom:9px;}
+  #updPop .uphead h3{margin:0;font-size:20px;font-weight:900;letter-spacing:-.6px;}
+  #updPop .uphead p{margin:6px 0 0;font-size:13px;color:#b9c0cc;}
+  #updPop .upbody{padding:18px 22px 8px;}
+  #updPop .ui{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px;}
+  #updPop .ui .uic{flex:0 0 30px;height:30px;border-radius:9px;background:#f2f4f7;display:flex;
+    align-items:center;justify-content:center;font-size:16px;}
+  #updPop .ui .uit{font-size:14.5px;font-weight:900;color:#191f28;margin-bottom:2px;letter-spacing:-.3px;}
+  #updPop .ui .uid{font-size:13px;color:#5b626d;line-height:1.6;}
+  #updPop .upfoot{padding:4px 22px 20px;}
+  #updPop .upclose{
+    width:100%;height:50px;border:0;border-radius:13px;background:#191f28;color:#fff;
+    font-family:inherit;font-size:15.5px;font-weight:900;cursor:pointer;
+  }
+
 </style>
 </head>
 <body>
@@ -814,6 +842,7 @@
         <p class="lead" id="headSub">쓰고 싶은 걸 누르면 자세히 보여줍니다.</p>
       </div>
       <div class="topbtns">
+        <button class="adminBtn updBtn" id="updBtn" onclick="showUpdate(true)">🆕 업데이트 내역</button>
         <button class="adminBtn instBtn" id="installBtn" onclick="installApp()">📲 앱으로 받기</button>
         <button class="addBtn" id="addBtn" onclick="toggleAddPanel()">＋ 새로 넣기</button>
         <button class="adminBtn" id="lockBtn" onclick="toggleLock()">🔒 잠긴 시스템 보기</button>
@@ -1272,8 +1301,13 @@ function statusDotClass(s){
 const LOCK_PASSWORD = "0000"; // 나중에 바꿔달라고 하면 이 값만 수정하면 됨
 let unlocked = false;
 
+// 잠기는 조건: ① 민감정보로 지정된 것  ② "만드는중"인 것 전부
+//  → 만드는중은 제목·개발자명만 보이고, 주소는 비밀번호를 넣어야 보인다.
+function isLockedByRule(entry){
+  return !!entry.sensitive || entry.status === "개발중";
+}
 function isLocked(entry){
-  return !!entry.sensitive && !unlocked;
+  return isLockedByRule(entry) && !unlocked;
 }
 
 async function toggleLock(){
@@ -1879,12 +1913,12 @@ function rowHtml(e){
     : `${g.e} ${g.t} · <span class="warn">담당자 없음</span>`;
   const ti = linkTypeInfo(e.url);
   const icon = locked ? '🔒' : (ti.cls === 'sheet' ? '📊' : ti.cls === 'form' ? '📝' : (DEPT_ICONS[e.dept] || g.e));
-  const searchtext = (e.title + ' ' + e.dept + ' ' + (DEPTS[e.dept] ? DEPTS[e.dept].name : '') + ' ' + g.t + ' ' + (locked ? '' : own) + ' ' + (e.note||'')).toLowerCase();
+  const searchtext = (e.title + ' ' + e.dept + ' ' + (DEPTS[e.dept] ? DEPTS[e.dept].name : '') + ' ' + g.t + ' ' + own + ' ' + (e.note||'')).toLowerCase();
   return `
     <div class="row ${selectedKey === key ? 'on' : ''}" data-searchtext="${escapeHtml(searchtext)}" onclick="openDetail('${key.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}')">
       <div class="r-i" style="background:${g.c}">${icon}</div>
       <div class="r-m">
-        <div class="r-t">${escapeHtml(e.title)}${e.sensitive ? '<span class="lk">🔒</span>' : ''}</div>
+        <div class="r-t">${escapeHtml(e.title)}${isLockedByRule(e) ? '<span class="lk">🔒</span>' : ''}</div>
         <div class="r-s">${sub}</div>
       </div>
       <div class="r-r">
@@ -1924,7 +1958,7 @@ function detailHtml(){
       <button type="button" class="br-back" onclick="closeDetail()">‹ 목록으로</button>
       <span class="br-tag ${ok ? '' : 'wip'}">${ok ? '✅ 지금 사용 가능' : '🔧 아직 만드는 중'}</span>
       <div class="br-t">${escapeHtml(e.title)} <small>· ${g.t}</small></div>
-      <div class="br-u">${locked ? '🔒 잠긴 시스템입니다. 열 때 비밀번호를 물어봅니다.' : escapeHtml(e.url || '주소가 없습니다')}</div>
+      <div class="br-u">${locked ? (ok ? '🔒 잠긴 시스템입니다. 열 때 비밀번호를 물어봅니다.' : '🔒 아직 만드는 중이라 주소는 가려져 있습니다. 비밀번호를 넣으면 열립니다.') : escapeHtml(e.url || '주소가 없습니다')}</div>
       ${e.note ? `<div class="br-u" style="margin-top:6px;color:#5b626d">${escapeHtml(e.note)}</div>` : ''}
       <button type="button" class="br-open" onclick="${locked ? `tryOpenLocked('${uq}')` : `window.open('${uq}','_blank')`}">${locked ? '🔒 비밀번호 넣고 열기 →' : '열기 →'}</button>
 
@@ -1936,8 +1970,8 @@ function detailHtml(){
         </div>
         <div class="br-f">
           <i>인터넷 주소</i>
-          <b style="font-size:12.5px">${escapeHtml((e.url||'').replace(/^https?:\/\//,'').slice(0,60) || '없음')}</b>
-          <u onclick="editEntryUrl('${uq}')">주소 바꾸기</u>
+          <b style="font-size:12.5px">${locked ? '🔒 비밀번호 필요' : escapeHtml((e.url||'').replace(/^https?:\/\//,'').slice(0,60) || '없음')}</b>
+          ${locked ? `<u onclick="tryOpenLocked('')">비밀번호 넣고 보기</u>` : `<u onclick="editEntryUrl('${uq}')">주소 바꾸기</u>`}
         </div>
         <div class="br-f">
           <i>묶음</i>
@@ -2896,6 +2930,50 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   });
 }
+
+/* ============================================================
+   업데이트 안내 팝업 — 새 소식이 있으면 처음 들어올 때 한 번만 뜬다
+   ★ 다음에 또 업데이트하면 UPDATE_ID 날짜만 바꾸고
+     UPDATE_ITEMS 내용을 갈아끼우면 끝. 다른 건 건드릴 필요 없음.
+   ============================================================ */
+const UPDATE_ID   = '2026-07-28';
+const UPDATE_SEEN = 'wevape_hub_upd_seen';
+const UPDATE_ITEMS = [
+  ['🧭', '화면을 확 바꿨습니다',      '복잡한 카드가 없어지고 카톡처럼 한 줄 목록이 됐습니다. 누르면 오른쪽(휴대폰은 전체화면)에 자세한 내용이 나옵니다.'],
+  ['🗂️', '부서 코드를 없앴습니다',    'HR·FIN 같은 영어 코드 대신 근무·스케줄 / 매출·돈 / 발주·재고 처럼 알아볼 수 있는 7개 묶음으로 정리했습니다.'],
+  ['💬', '의견(피드백)이 저장됩니다', '남긴 의견이 사라지던 문제를 고쳤습니다. 이제 쓰는 즉시 저장되고 전 직원 화면에 바로 보입니다.'],
+  ['🔓', '비밀번호 없이 저장됩니다',  '따로 등록할 필요 없이 누구나 바로 수정하고 저장할 수 있습니다.'],
+  ['✏️', '직접 고칠 수 있습니다',     '담당자 이름, 사이트 주소, 어느 묶음에 넣을지까지 상세 화면에서 바로 바꿀 수 있습니다.'],
+  ['🔎', '검색과 분류 추가',          '위쪽 검색창과 전체 / 사용가능 / 만드는중 / 담당자없음 탭으로 원하는 것만 골라 볼 수 있습니다.'],
+  ['📲', '앱처럼 설치됩니다',         '오른쪽 위 「앱으로 받기」를 누르면 바탕화면(휴대폰은 홈화면)에 아이콘이 생깁니다. 다음부터 주소 칠 필요 없습니다.']
+];
+
+function closeUpdate(){
+  const p = document.getElementById('updPop');
+  if (p) p.classList.remove('on');
+  try { localStorage.setItem(UPDATE_SEEN, UPDATE_ID); } catch(_) {}
+}
+
+function showUpdate(force){
+  try {
+    if (!force && localStorage.getItem(UPDATE_SEEN) === UPDATE_ID) return;
+  } catch(_) {}
+  const p = document.getElementById('updPop');
+  const box = document.getElementById('updList');
+  const dt = document.getElementById('updDate');
+  if (!p || !box) return;
+  if (dt) {
+    const mm = UPDATE_ID.split('-');
+    dt.textContent = Number(mm[1]) + '월 ' + Number(mm[2]) + '일 업데이트';
+  }
+  box.innerHTML = UPDATE_ITEMS.map(function(it){
+    return '<div class="ui"><div class="uic">' + it[0] + '</div><div><div class="uit">'
+         + it[1] + '</div><div class="uid">' + it[2] + '</div></div></div>';
+  }).join('');
+  p.classList.add('on');
+}
+
+window.addEventListener('load', function(){ setTimeout(function(){ showUpdate(false); }, 600); });
 </script>
 
 <div id="instGuide" onclick="if(event.target===this) closeInstGuide()">
@@ -2904,6 +2982,18 @@ if ('serviceWorker' in navigator) {
     <p class="igsub">아래대로 한 번만 하면, 다음부터는 아이콘만 눌러서 바로 들어옵니다.</p>
     <div id="instSteps"></div>
     <button class="igclose" onclick="closeInstGuide()">확인</button>
+  </div>
+</div>
+
+<div id="updPop" onclick="if(event.target===this) closeUpdate()">
+  <div class="up">
+    <div class="uphead">
+      <span class="update" id="updDate">업데이트</span>
+      <h3>이렇게 바뀌었습니다</h3>
+      <p>딱 한 번만 보여드립니다. 나중에 다시 보려면 위쪽 「🆕 업데이트 내역」을 누르세요.</p>
+    </div>
+    <div class="upbody" id="updList"></div>
+    <div class="upfoot"><button class="upclose" onclick="closeUpdate()">확인했습니다</button></div>
   </div>
 </div>
 
