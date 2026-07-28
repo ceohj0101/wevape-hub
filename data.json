@@ -294,19 +294,8 @@
     }
   ],
   "status": {},
-  "feedback": [
-    {
-      "id": "fbTESTB1785206601690",
-      "url": "https://order-hub-dfni.onrender.com/",
-      "text": "[TESTB] 직원 피드백 동기화 확인",
-      "author": "테스트",
-      "time": "07-28 11:00",
-      "date": "2026-07-28",
-      "status": "접수됨",
-      "reply": ""
-    }
-  ],
+  "feedback": [],
   "feedbackSeq": 2,
-  "savedAt": "2026-07-28T02:43:23.492Z",
+  "savedAt": "2026-07-28T02:43:29.414Z",
   "savedBy": "employee"
 }
