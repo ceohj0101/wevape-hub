@@ -551,6 +551,7 @@
   <div class="modal-box">
     <div class="modal-msg" id="modalMsg"></div>
     <input type="text" class="modal-input" id="modalInput" style="display:none;">
+    <select class="modal-input" id="modalSelect" style="display:none;"></select>
     <div class="modal-actions">
       <button type="button" class="modal-cancel" id="modalCancelBtn">취소</button>
       <button type="button" class="modal-confirm" id="modalConfirmBtn">확인</button>
@@ -776,12 +777,19 @@ function openModal(opts){
     modalResolve = resolve;
     document.getElementById('modalMsg').textContent = opts.message || '';
     const input = document.getElementById('modalInput');
-    if(opts.withInput){
+    const select = document.getElementById('modalSelect');
+    if(opts.withSelect){
+      select.innerHTML = (opts.options||[]).map(o=>`<option value="${o.value}" ${o.value===opts.selected?'selected':''}>${o.label}</option>`).join('');
+      select.style.display = 'block';
+      input.style.display = 'none';
+    } else if(opts.withInput){
       input.style.display = 'block';
       input.type = opts.inputType || 'text';
       input.value = opts.prefill || '';
+      select.style.display = 'none';
     } else {
       input.style.display = 'none';
+      select.style.display = 'none';
     }
     const cancelBtn = document.getElementById('modalCancelBtn');
     const confirmBtn = document.getElementById('modalConfirmBtn');
@@ -798,10 +806,15 @@ function closeModal(result){
 }
 function modalConfirmClick(){
   const input = document.getElementById('modalInput');
+  const select = document.getElementById('modalSelect');
+  if(select.style.display !== 'none'){ closeModal(select.value); return; }
   closeModal(input.style.display !== 'none' ? input.value : true);
 }
 async function customPrompt(message, inputType, prefill){
   return await openModal({message, withInput:true, inputType: inputType || 'text', prefill});
+}
+async function customSelect(message, options, selected){
+  return await openModal({message, withSelect:true, options, selected});
 }
 async function customConfirm(message, danger){
   return await openModal({message, withInput:false, confirmText: danger ? '삭제' : '확인', danger});
@@ -1427,6 +1440,41 @@ async function editEntryOwner(url){
   if(!canSave()) await askEmpPasswordThenSave();
 }
 
+// 링크(주소) 수정 — 툴 주소가 바뀌었을 때 바로 다른 주소로 교체
+async function editEntryUrl(url){
+  const entry = entries.find(e => e.url === url);
+  if(!entry) return;
+  const input = await customPrompt(`"${entry.title}"의 링크 주소를 입력하세요.`, 'text', entry.url || '');
+  if(input === null) return;
+  const newUrl = input.trim();
+  if(!newUrl){ await customAlert("링크 주소는 비워둘 수 없습니다."); return; }
+  if(newUrl !== entry.url && entries.some(e => e !== entry && e.url === newUrl)){
+    await customAlert("이미 다른 카드가 쓰고 있는 링크입니다. 다른 주소를 입력해주세요.");
+    return;
+  }
+  const oldUrl = entry.url;
+  // 이 링크에 달려있던 피드백/열려있던 패널도 새 주소로 같이 옮긴다 (안 옮기면 피드백이 고아가 됨)
+  FEEDBACK_LIST.forEach(f => { if(f.url === oldUrl) f.url = newUrl; });
+  if(openFeedbackPanels.has(safeId(oldUrl))){ openFeedbackPanels.delete(safeId(oldUrl)); openFeedbackPanels.add(safeId(newUrl)); }
+  entry.url = newUrl;
+  render();
+  syncUpdate(entry);
+  if(!canSave()) await askEmpPasswordThenSave();
+}
+
+// 부서 이동 — 잠긴 시스템 포함, 운영중인 카드를 다른 부서로 옮긴다
+async function moveEntryDept(url){
+  const entry = entries.find(e => e.url === url);
+  if(!entry) return;
+  const options = LAYERS.flatMap(l => l.depts.map(d => ({ value: d.code, label: `${d.code} · ${d.name}` })));
+  const picked = await customSelect(`"${entry.title}"을(를) 옮길 부서를 선택하세요. (현재: ${entry.dept})`, options, entry.dept);
+  if(picked === null || picked === entry.dept) return;
+  entry.dept = picked;
+  render();
+  syncUpdate(entry);
+  if(!canSave()) await askEmpPasswordThenSave();
+}
+
 // 저장 권한이 없는 기기에서 수정했을 때: 비밀번호를 받아서 바로 전직원에게 올린다.
 // (권한 없이 화면에만 남기면 새로고침 때 공용 데이터로 덮여서 사라짐)
 async function askEmpPasswordThenSave(){
@@ -1505,6 +1553,8 @@ function render(){
                     <span class="arrow">🔒</span>
                   </div>
                   <button class="owner-edit-btn" title="개발자명 수정" onclick="event.stopPropagation(); editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
+                  <button class="owner-edit-btn" title="링크 주소 수정" onclick="event.stopPropagation(); editEntryUrl('${l.url.replace(/'/g,"\\'")}')">🔗</button>
+                  <button class="owner-edit-btn" title="부서 이동" onclick="event.stopPropagation(); moveEntryDept('${l.url.replace(/'/g,"\\'")}')">🏢</button>
                 </div>
               `;
             }
@@ -1527,6 +1577,8 @@ function render(){
                   <span class="arrow">↗</span>
                 </a>
                 <button class="owner-edit-btn" title="개발자명 수정" onclick="editEntryOwner('${l.url.replace(/'/g,"\\'")}')">✏️</button>
+                <button class="owner-edit-btn" title="링크 주소 수정" onclick="editEntryUrl('${l.url.replace(/'/g,"\\'")}')">🔗</button>
+                <button class="owner-edit-btn" title="부서 이동" onclick="moveEntryDept('${l.url.replace(/'/g,"\\'")}')">🏢</button>
                 <button class="revert-btn" title="개발중으로 되돌리기" onclick="revertToWip('${l.url.replace(/'/g,"\\'")}')">↩</button>
               </div>
               <div class="fb-wrap">
