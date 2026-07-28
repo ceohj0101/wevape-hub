@@ -80,7 +80,7 @@
       "url": "https://znsl132-lang.github.io/BIGLUCKY/request.html",
       "note": "",
       "status": "개발중",
-      "owner": "[E2E테스트]홍길동",
+      "owner": "",
       "sensitive": true
     },
     {
@@ -294,18 +294,7 @@
     }
   ],
   "status": {},
-  "feedback": [
-    {
-      "id": "fbE2E",
-      "url": "https://order-hub-dfni.onrender.com/",
-      "text": "[E2E테스트] 직원 화면에 보이나요",
-      "author": "테스터",
-      "time": "07-28 12:00",
-      "date": "2026-07-28",
-      "status": "접수됨",
-      "reply": ""
-    }
-  ],
+  "feedback": [],
   "feedbackSeq": 2,
-  "savedAt": "2026-07-28T02:48:28.888Z"
+  "savedAt": "2026-07-28T02:49:16.894Z"
 }
