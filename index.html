@@ -1065,7 +1065,7 @@ function toggleFeedback(fid){
 
 function todayStr(){ return new Date().toISOString().slice(0,10); }
 
-function submitNewFeedback(url, fid){
+async function submitNewFeedback(url, fid){
   const ta = document.getElementById('fb-new-' + fid);
   const authorEl = document.getElementById('fb-author-' + fid);
   const text = ta.value.trim();
@@ -1084,6 +1084,7 @@ function submitNewFeedback(url, fid){
   if(authorEl) authorEl.value = '';
   openFeedbackPanels.add(fid);
   render();
+  if(!canSave()) await askEmpPasswordThenSave();
 }
 
 function startEditFeedback(id){
@@ -1189,7 +1190,7 @@ function jumpToFeedback(url, fid){
     openSiteFeedbackPanel();
   } else {
     openFeedbackPanels.add(fid);
-    render();
+    renderUI(); // 단순히 패널만 여는 동작 — "저장 안 된 수정분"으로 잡으면 안 됨
   }
   setTimeout(function(){
     const el = document.getElementById('fb-panel-' + fid) || document.getElementById('siteFbBody');
@@ -1423,13 +1424,16 @@ async function editEntryOwner(url){
   entry.owner = input.trim();
   render();
   syncUpdate(entry);
-  if(isAdmin() || empPassword()){
-    // 저장 권한이 있으면 아무것도 물어보지 않음 — scheduleAutoSave()가 바로 전직원에게 저장함
-  } else if(localSaveOn){
-    await customAlert("수정했습니다. 새로고침해도 이 기기에서는 그대로 유지됩니다.\n전직원 화면에 반영하려면 저장 비밀번호를 등록해야 합니다.");
-  } else {
-    await customAlert("수정을 반영했어요. 단, 이 화면에서는 저장 기능이 막혀 있어서 새로고침하면 원래대로 돌아가요.");
-  }
+  if(!canSave()) await askEmpPasswordThenSave();
+}
+
+// 저장 권한이 없는 기기에서 수정했을 때: 비밀번호를 받아서 바로 전직원에게 올린다.
+// (권한 없이 화면에만 남기면 새로고침 때 공용 데이터로 덮여서 사라짐)
+async function askEmpPasswordThenSave(){
+  await customAlert("저장 비밀번호가 없어서 이 수정은 아직 전직원에게 반영되지 않았습니다.\n지금 비밀번호를 등록하면 곧바로 저장됩니다.\n(모르면 관리자에게 문의)");
+  await setupEmpPassword();
+  if(canSave()){ await saveShared({ silent: false }); }
+  else await customAlert("등록하지 않았습니다. 이 수정은 새로고침하면 사라집니다.");
 }
 
 function render(){
@@ -1912,6 +1916,7 @@ let autoSaveTimer = null;  // 자동 저장 예약
 let saveError     = "";    // 마지막 저장 실패 사유 (뱃지에 보여줌)
 let changeSeq     = 0;     // 수정이 일어난 횟수 (저장 중에 또 고쳤는지 판별용)
 let savingSeq     = -1;    // 지금 올리고 있는 데이터가 몇 번째 수정분인지
+let localSavedAt  = "";    // 이 기기 임시 저장본이 만들어진 시각 (공용 장부보다 오래됐는지 판별용)
 
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(err){ return null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(err){ return false; } }
@@ -1946,7 +1951,7 @@ function snapshot(){
 function renderUI(){ suppressDirty++; try{ render(); } finally { suppressDirty--; } }
 
 function saveLocal(){
-  if(suppressDirty === 0){ dirty = true; changeSeq++; } // 화면이 다시 그려졌다 = 뭔가 바뀌었다
+  if(suppressDirty === 0){ dirty = true; changeSeq++; localSavedAt = new Date().toISOString(); } // 화면이 다시 그려졌다 = 뭔가 바뀌었다
   if(localSaveOn){
     const payload = snapshot();
     payload.dirty = dirty;
@@ -2008,6 +2013,7 @@ function loadLocal(){
   if(!saved) return;
   applyData(saved);
   dirty = !!saved.dirty;
+  localSavedAt = saved.savedAt || "";
 }
 
 // ---------------- 공용 장부 읽기 (누구나) ----------------
@@ -2029,13 +2035,16 @@ async function loadRemote(){
       remoteLoaded  = true;
       remoteSavedAt = data.savedAt || "";
 
-      if(dirty){
-        // 내 기기에 아직 안 올린 수정분이 있으면 그걸 지키고, 뱃지로 알려줌
+      // 아직 안 올린 수정분이 있고, 올릴 권한도 있고, 내 것이 공용 장부보다 최신일 때만 내 것을 지킨다.
+      // 공용 장부가 더 최신이면 내 dirty는 옛날 찌꺼기 → 그걸로 덮어쓰면 남의 수정을 지워버린다.
+      if(dirty && canSave() && (!remoteSavedAt || (localSavedAt && localSavedAt > remoteSavedAt))){
         updateSyncBadge();
-        // 저장 권한이 있으면 그냥 놔두지 말고 지금 바로 공용 장부에 올린다
-        if(canSave()) scheduleAutoSave();
+        scheduleAutoSave();
         return;
       }
+      // 올릴 권한이 없는 기기가 dirty를 붙잡고 있으면 공용 데이터를 영원히 못 받는다
+      // (개발자 이름/피드백이 "없음"으로 보이던 원인) → 그 기기 것은 버리고 공용 데이터를 따른다
+      dirty = false;
       suppressDirty++;
       applyData(data);
       render(); renderStores(); renderStaff();
