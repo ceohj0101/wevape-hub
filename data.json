@@ -68,7 +68,7 @@
     {
       "dept": "HR",
       "title": "스케줄 생성기",
-      "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html",
+      "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1",
       "note": "",
       "status": "운영중",
       "owner": "장대운 주임",
@@ -298,6 +298,6 @@
   },
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-07-28T09:22:38.480Z",
+  "savedAt": "2026-07-28T09:32:45.872Z",
   "savedBy": "employee"
 }
