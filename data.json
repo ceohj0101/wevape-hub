@@ -63,7 +63,7 @@
       "url": "https://wevape-pos-app.vercel.app/",
       "note": "매장 POS 통합 프로그램",
       "status": "개발중",
-      "owner": "김형진 팀장, 장현진 팀장 [FIX3]"
+      "owner": "김형진 팀장, 장현진 팀장"
     },
     {
       "dept": "HR",
@@ -296,5 +296,5 @@
   "status": {},
   "feedback": [],
   "feedbackSeq": 2,
-  "savedAt": "2026-07-28T02:16:55.900Z"
+  "savedAt": "2026-07-28T02:17:07.870Z"
 }
