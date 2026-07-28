@@ -33,7 +33,7 @@
       "owner": "정희경 주임"
     },
     {
-      "dept": "SLS",
+      "dept": "GRO",
       "title": "회원가입 구글폼",
       "url": "https://forms.gle/gVSBo4eeU4Bev561A",
       "note": "Google Forms",
@@ -296,5 +296,5 @@
   "status": {},
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-07-28T08:16:05.092Z"
+  "savedAt": "2026-07-28T08:17:24.341Z"
 }
