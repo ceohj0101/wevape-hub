@@ -294,16 +294,8 @@
     }
   ],
   "status": {},
-  "feedback": [
-    {
-      "id": "e2e-test-1785208838299",
-      "url": "__site__",
-      "text": "[E2E테스트] 자동검증",
-      "author": "자동검증",
-      "ts": "2026-07-28T03:20:38.299Z"
-    }
-  ],
+  "feedback": [],
   "feedbackSeq": 2,
-  "savedAt": "2026-07-28T03:20:38.390Z",
+  "savedAt": "2026-07-28T03:21:23.055Z",
   "savedBy": "employee"
 }
