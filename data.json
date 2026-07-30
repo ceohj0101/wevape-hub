@@ -117,6 +117,15 @@
       "status": "개발중",
       "owner": "장대운 주임",
       "sensitive": true
+    },
+    {
+      "dept": "CX",
+      "title": "위베이프 이슈 모니터링",
+      "url": "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
+      "note": "전자담배 관련 뉴스기사 또는 매장 관련 CS 내용을 수집합니다",
+      "status": "개발중",
+      "owner": "개발자:장대운 주임",
+      "sensitive": false
     }
   ],
   "stores": [
@@ -307,6 +316,6 @@
   },
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-07-29T05:10:04.769Z",
+  "savedAt": "2026-07-30T05:27:43.450Z",
   "savedBy": "employee"
 }
