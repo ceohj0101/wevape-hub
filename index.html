@@ -995,9 +995,60 @@
   button.mm-leaf:active{background:#eef1f5;}
   button.mm-leaf.go:after{content:"›";float:right;color:#c3c8d0;font-weight:900;}
 
+  
+  /* ---- 들어가기 비밀번호 화면 ---- */
+  #gate{
+    display:none;
+    position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483600;
+    background:radial-gradient(circle at 50% 30%, #ffe9a8 0%, #ffc94a 55%, #f5b929 100%);
+    align-items:center;justify-content:center;flex-direction:column;padding:24px;
+  }
+  #gate.on{display:flex;}
+  #gate .gw{font-size:34px;font-weight:900;letter-spacing:.1em;color:#111c28;}
+  #gate .gs{margin-top:6px;font-size:11px;font-weight:800;letter-spacing:.3em;color:#7a5710;}
+  #gate .gbox{
+    margin-top:24px;width:100%;max-width:320px;background:#fff;border-radius:18px;
+    padding:22px 18px 18px;box-shadow:0 10px 30px rgba(90,60,0,.18);text-align:center;
+  }
+  #gate .gt{font-size:15.5px;font-weight:900;color:#191f28;letter-spacing:-.3px;}
+  #gate .gd{margin-top:6px;font-size:12px;font-weight:600;color:#8b919c;line-height:1.55;}
+  #gate input{
+    margin-top:15px;width:100%;height:56px;border:2px solid #e6e9ed;border-radius:12px;
+    font-size:28px;font-weight:900;text-align:center;letter-spacing:12px;color:#191f28;
+    font-family:inherit;outline:none;background:#fafbfc;box-sizing:border-box;
+  }
+  #gate input:focus{border-color:#ffc94a;background:#fff;}
+  #gate .gbtn{
+    margin-top:11px;width:100%;height:50px;border:0;border-radius:12px;
+    background:#111c28;color:#fff;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;
+  }
+  #gate .gbtn:active{background:#2b3a4d;}
+  #gate .gerr{margin-top:10px;font-size:12.5px;font-weight:800;color:#e0483c;min-height:17px;}
+  #gate .gnote{margin-top:16px;font-size:11.5px;font-weight:700;color:#7a5710;text-align:center;line-height:1.6;}
+  #gate.shake .gbox{animation:gshake .34s;}
+  @keyframes gshake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-9px);}
+    40%{transform:translateX(9px);}
+    60%{transform:translateX(-6px);}
+    80%{transform:translateX(6px);}
+  }
   </style>
 </head>
 <body>
+
+<div id="gate">
+  <div class="gw">WEVAPE</div>
+  <div class="gs">SYSTEM HUB</div>
+  <div class="gbox">
+    <div class="gt">비밀번호를 넣어주세요</div>
+    <div class="gd">숫자 4자리입니다. 한 번 넣으면 창을 완전히 닫기 전까지 다시 묻지 않습니다.</div>
+    <input id="gateInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="••••">
+    <button class="gbtn" onclick="gateTry()">들어가기</button>
+    <div class="gerr" id="gateErr"></div>
+  </div>
+  <div class="gnote">비밀번호를 모르면 팀장에게 물어보세요.</div>
+</div>
 
 <div id="splash" onclick="dismissSplash()">
   <div class="splash-word">WEVAPE</div>
@@ -3657,7 +3708,52 @@ function showUpdate(force){
   p.classList.add('on');
 }
 
-window.addEventListener('load', function(){ setTimeout(function(){ showUpdate(false); }, 600); });
+window.addEventListener('load', function(){ setTimeout(function(){ if(!gateOpen()) return; showUpdate(false); }, 600); });
+/* ============================================================
+   들어가기 비밀번호 — 창을 완전히 닫기 전까지 한 번만 묻는다
+   ★ 비밀번호를 바꾸려면 ENTRY_PASSWORD 값만 고치면 끝.
+   ★ sessionStorage를 쓰는 이유: 새로고침·화면 이동에는 유지되고,
+     브라우저(또는 앱) 창을 완전히 닫으면 다음에 다시 묻는다.
+   ★ 자바스크립트가 어떤 이유로든 안 돌면 이 화면 자체가 안 뜬다.
+     직원이 못 들어오는 사고를 막으려고 일부러 그렇게 짰다(열리는 쪽으로 실패).
+   ============================================================ */
+const ENTRY_PASSWORD = "8936";
+const GATE_KEY = "wevape_hub_entry_v1";
+
+function gateOpen(){
+  try { return sessionStorage.getItem(GATE_KEY) === 'ok'; } catch(_) { return true; }
+}
+function gatePass(){
+  const g = document.getElementById('gate');
+  try { sessionStorage.setItem(GATE_KEY, 'ok'); } catch(_) {}
+  if (g) g.classList.remove('on');
+  setTimeout(function(){ try{ showUpdate(false); }catch(_){} }, 500);
+}
+function gateTry(){
+  const i = document.getElementById('gateInput');
+  const e = document.getElementById('gateErr');
+  const g = document.getElementById('gate');
+  const v = i ? String(i.value || '').trim() : '';
+  if (v === ENTRY_PASSWORD) { if (e) e.textContent = ''; gatePass(); return; }
+  if (e) e.textContent = '비밀번호가 다릅니다. 다시 넣어주세요.';
+  if (i) { i.value = ''; try{ i.focus(); }catch(_){} }
+  if (g) { g.classList.add('shake'); setTimeout(function(){ g.classList.remove('shake'); }, 400); }
+}
+(function initGate(){
+  if (gateOpen()) return;
+  const g = document.getElementById('gate');
+  if (!g) return;
+  g.classList.add('on');
+  const i = document.getElementById('gateInput');
+  if (!i) return;
+  setTimeout(function(){ try{ i.focus(); }catch(_){} }, 250);
+  i.addEventListener('input', function(){
+    const e = document.getElementById('gateErr');
+    if (e && e.textContent) e.textContent = '';
+    if (String(i.value || '').length >= ENTRY_PASSWORD.length) gateTry();
+  });
+  i.addEventListener('keydown', function(ev){ if (ev.key === 'Enter') gateTry(); });
+})();
 </script>
 
 <div id="instGuide" onclick="if(event.target===this) closeInstGuide()">
