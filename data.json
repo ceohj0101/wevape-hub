@@ -125,15 +125,6 @@
       "note": "",
       "status": "운영중",
       "owner": "장현진 팀장"
-    },
-    {
-      "dept": "DEV",
-      "title": "위베이프 이슈 모니터링",
-      "url": "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
-      "note": "전자담배 법안 관련 내용 또는 뉴스 기사를 수집하며,\n매장 관련된 게시글 ( 블로그 , 카페 등 ) 을 검토하여 \n불만족 또는 클레임 이슈를 빠르게 파악합니다.",
-      "status": "개발중",
-      "owner": "개발자:장대운",
-      "sensitive": true
     }
   ],
   "stores": [
@@ -322,8 +313,19 @@
   "status": {
     "FIN": "정상운영"
   },
-  "feedback": [],
-  "feedbackSeq": 5,
+  "feedback": [
+    {
+      "id": "fb5",
+      "url": "__site__",
+      "text": "성장 로드맵 새 업무검토 관련 문의\n\n피드백 및 수정 보고 중 사진 첨부 기능 추가 요청\n검토 건 펼치고 접을 수 있는 기능 추가 요청",
+      "author": "성장 로드맵 새 업무검토 관련 문의",
+      "time": "08. 01. 오후 09:40",
+      "date": "2026-08-01",
+      "status": "접수됨",
+      "reply": ""
+    }
+  ],
+  "feedbackSeq": 6,
   "reviews": [
     {
       "id": "rv1",
@@ -692,6 +694,6 @@
   "deleted": [
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html"
   ],
-  "savedAt": "2026-08-01T11:45:10.423Z",
+  "savedAt": "2026-08-01T12:40:28.585Z",
   "savedBy": "employee"
 }
