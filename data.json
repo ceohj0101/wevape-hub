@@ -125,6 +125,15 @@
       "note": "",
       "status": "운영중",
       "owner": "장현진 팀장"
+    },
+    {
+      "dept": "DEV",
+      "title": "위베이프 이슈 모니터링",
+      "url": "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
+      "note": "전자담배 법안 관련 내용 또는 뉴스 기사를 수집하며,\n매장 관련된 게시글 ( 블로그 , 카페 등 ) 을 검토하여 \n불만족 또는 클레임 이슈를 빠르게 파악합니다.",
+      "status": "개발중",
+      "owner": "개발자:장대운",
+      "sensitive": true
     }
   ],
   "stores": [
@@ -668,6 +677,6 @@
   "deleted": [
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html"
   ],
-  "savedAt": "2026-08-01T11:13:15.664Z",
+  "savedAt": "2026-08-01T11:44:26.445Z",
   "savedBy": "employee"
 }
