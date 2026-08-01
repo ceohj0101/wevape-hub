@@ -76,7 +76,7 @@
     },
     {
       "dept": "HR",
-      "title": "휴무취합기",
+      "title": "휴무 신청",
       "url": "https://znsl132-lang.github.io/BIGLUCKY/request.html",
       "note": "",
       "status": "개발중",
@@ -327,6 +327,6 @@
   "reviews": [],
   "reviewSeq": 0,
   "deleted": [],
-  "savedAt": "2026-08-01T07:50:37.130Z",
+  "savedAt": "2026-08-01T07:50:52.937Z",
   "savedBy": "employee"
 }
