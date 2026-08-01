@@ -126,6 +126,14 @@
       "status": "개발중",
       "owner": "개발자:장대운 주임",
       "sensitive": false
+    },
+    {
+      "dept": "HR",
+      "title": "직원 일일 스케줄",
+      "url": "https://janghj201-cyber.github.io/-/",
+      "note": "",
+      "status": "운영중",
+      "owner": "장현진 팀장"
     }
   ],
   "stores": [
@@ -316,6 +324,6 @@
   },
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-08-01T03:41:33.511Z",
+  "savedAt": "2026-08-01T06:37:47.843Z",
   "savedBy": "employee"
 }
