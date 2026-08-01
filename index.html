@@ -970,7 +970,32 @@
     margin-top:12px;background:#fff8f2;border:1px solid #ffd9b8;border-radius:12px;
     padding:12px 14px;font-size:13px;color:#6b4a2c;line-height:1.65;
   }
-</style>
+
+  /* ---- 마인드맵 자동집계 UI ---- */
+  .mm-sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 10px;}
+  .mm-s{background:#fff;border:1px solid #e6e9ed;border-radius:12px;padding:10px 6px;text-align:center;}
+  .mm-s b{display:block;font-size:22px;font-weight:900;letter-spacing:-1px;line-height:1.1;}
+  .mm-s span{display:block;font-size:11px;font-weight:800;color:#8b919c;margin-top:3px;letter-spacing:-.3px;}
+  .mm-s.ok b{color:#2f9e6e;}
+  .mm-s.wip b{color:#d19a2b;}
+  .mm-s.no b{color:#b0b6bf;}
+  .mm-s.all b{color:#191f28;}
+  .mm-bigbar{display:flex;height:10px;border-radius:99px;overflow:hidden;background:#e9ecf0;margin:0 0 16px;}
+  .mm-bigbar i.ok{background:#2f9e6e;}
+  .mm-bigbar i.wip{background:#e8b84b;}
+  .mm-bar{display:flex;height:5px;border-radius:99px;overflow:hidden;background:#eceef2;margin:0 0 9px 6px;}
+  .mm-bar i.ok{background:#2f9e6e;}
+  .mm-bar i.wip{background:#e8b84b;}
+  .mm-cnt{float:right;font-size:11.5px;font-weight:900;color:#8b919c;background:#f2f4f7;
+    border-radius:99px;padding:2px 8px;letter-spacing:0;}
+  .mm-leaf em{font-style:normal;font-weight:800;font-size:11px;color:#b0b6bf;margin-left:6px;}
+  .mm-leaf.wip em{color:#c99524;}
+  button.mm-leaf{display:block;width:100%;text-align:left;font-family:inherit;border:0;
+    background:transparent;cursor:pointer;}
+  button.mm-leaf:active{background:#eef1f5;}
+  button.mm-leaf.go:after{content:"›";float:right;color:#c3c8d0;font-weight:900;}
+
+  </style>
 </head>
 <body>
 
@@ -1075,78 +1100,7 @@
       <h3>🗺️ 한 장으로 보는 우리 시스템 지도</h3>
       <p class="rm-desc">가운데가 <b>심장</b>입니다. 모든 숫자가 여기 모이고, 여기서 각 부서로 뻗어 나갑니다. 동그라미 색으로 지금 상태를 표시했습니다.</p>
 
-      <div class="mm">
-        <div class="mm-core">🏛️ 통합 데이터 창고
-          <small>모든 매장의 숫자가 한 곳에 모이는 자리 · 「포스 통합 프로그램」이 이 역할</small>
-        </div>
-        <div class="mm-stem"></div>
-
-        <div class="mm-grid">
-          <div class="mm-br b1">
-            <div class="mm-bt">💰 돈 — 매출 · 손익</div>
-            <div class="mm-leaf wip">포스 통합 프로그램</div>
-            <div class="mm-leaf ok">일매출 보고 시스템</div>
-            <div class="mm-leaf ok">인천 · 경기 통합 매출관리</div>
-            <div class="mm-leaf no">매장별 손익표 (매출−원가−인건비−임대료)</div>
-            <div class="mm-leaf no">결제 · 정산 대사</div>
-          </div>
-
-          <div class="mm-br b2">
-            <div class="mm-bt">📦 물건 — 발주 · 재고</div>
-            <div class="mm-leaf ok">발주서 관리</div>
-            <div class="mm-leaf no">재고 실사 입력</div>
-            <div class="mm-leaf no">재고 · 로스 관리</div>
-            <div class="mm-leaf no">발주량 자동 추천</div>
-            <div class="mm-leaf no">입고 · 반품 이력</div>
-          </div>
-
-          <div class="mm-br b3">
-            <div class="mm-bt">🗓️ 사람 — 근무 · 인사</div>
-            <div class="mm-leaf ok">스케줄 생성기</div>
-            <div class="mm-leaf ok">휴무 취합기</div>
-            <div class="mm-leaf ok">전직원 스케줄 뷰어</div>
-            <div class="mm-leaf no">채용 · 교육 · 평가</div>
-            <div class="mm-leaf no">근태 · 인건비 연동</div>
-          </div>
-
-          <div class="mm-br b4">
-            <div class="mm-bt">🎯 고객 — CRM · 마케팅</div>
-            <div class="mm-leaf ok">회원가입 폼</div>
-            <div class="mm-leaf no">재방문 주기 · 단골 분석</div>
-            <div class="mm-leaf no">이탈 고객 찾기</div>
-            <div class="mm-leaf no">마케팅 성과 측정</div>
-            <div class="mm-leaf no">문자 · 알림톡 발송</div>
-          </div>
-
-          <div class="mm-br b5">
-            <div class="mm-bt">🏪 매장 — 시설 · 확장</div>
-            <div class="mm-leaf ok">매장 정보 · 연락망</div>
-            <div class="mm-leaf no">임대 · 계약 관리</div>
-            <div class="mm-leaf no">장비 A/S 이력</div>
-            <div class="mm-leaf no">신규 매장 오픈 체크리스트</div>
-          </div>
-
-          <div class="mm-br b6">
-            <div class="mm-bt">🛡️ 관리 — 규제 · 기준</div>
-            <div class="mm-leaf no">서류 만료 자동 알림</div>
-            <div class="mm-leaf no">표준 업무(체크리스트)</div>
-            <div class="mm-leaf no">매장 · 상품 코드 기준표</div>
-            <div class="mm-leaf no">권한 구조 (본사/점장)</div>
-          </div>
-        </div>
-
-        <div class="mm-legend">
-          <span>● 지금 쓸 수 있음</span>
-          <span>◐ 만드는 중</span>
-          <span>○ 아직 없음</span>
-        </div>
-
-        <div class="mm-note">
-          <b>이 그림에서 읽어야 할 것 한 가지.</b> 초록(있음)이 몰려 있는 곳은 <b>사람·근무</b>쪽이고,
-          <b>돈이 새는 쪽(물건 · 손익 · 규제)</b>은 거의 비어 있습니다.
-          그래서 다음에 만들 것은 "편한 도구"가 아니라 <b>돈을 지키는 도구</b>입니다.
-        </div>
-      </div>
+      <div class="mm" id="mmRoot"></div>
     </div>
 
     <div class="rm-sec">
@@ -1386,7 +1340,7 @@
 
   <div class="rm-foot">
     이 로드맵은 현재 등록된 시스템과 운영 상황을 근거로 작성됐습니다.<br>
-    상황이 바뀌면 갱신됩니다 · 최종 정리 2026-07-30
+    상황이 바뀌면 갱신됩니다 · 최종 정리 2026-08-01
   </div>
 
 </section>
@@ -2401,6 +2355,7 @@ function renderRoadmapNums(){
   set('rmNumWip', wip);
   set('rmNumOwner', names.size);
   set('rmNumNoown', noown);
+  try{ renderMindmap(); }catch(err){}
 }
 
 // 로드맵 소메뉴 (세분화 탭)
@@ -2415,6 +2370,151 @@ function setRmTab(k){
   try{ renderRoadmapNums(); }catch(err){}
   try{ window.scrollTo(0,0); }catch(err){}
 }
+
+// ===== 마인드맵: 실제 등록된 시스템에서 자동으로 상태를 읽어온다 =====
+// u(주소)가 있으면 → 등록 목록에서 찾아서 운영중이면 ●, 개발중이면 ◐
+// u가 없으면 → 아직 만들지 않은 것 ○
+const MM_SPEC = [
+  { k:'b1', t:'💰 돈 — 매출 · 손익 · 원가', items:[
+    { n:'일매출 보고 시스템', u:'https://dksxoals0824-glitch.github.io/wevape-sales-report/' },
+    { n:'인천 · 경기 통합 매출관리', u:'https://order-hub-dfni.onrender.com/sales?month=2026-06' },
+    { n:'포스 매출 분석', u:'https://wevape-pos-app.vercel.app/' },
+    { n:'매장별 손익표 (매출−원가−인건비−임대료)' },
+    { n:'원가 · 마진 관리' },
+    { n:'카드 · 현금 정산 대사' },
+    { n:'월 결산 · 세무 자료' }
+  ]},
+  { k:'b2', t:'📦 물건 — 발주 · 재고', items:[
+    { n:'발주서 관리', u:'https://order-hub-dfni.onrender.com/' },
+    { n:'품절 · 매장 분배 현황', u:'https://order-hub-dfni.onrender.com/' },
+    { n:'포스 재고 실사 · 매장간 이동', u:'https://wevape-pos-app.vercel.app/' },
+    { n:'발주량 자동 추천' },
+    { n:'입고 검수 · 반품 이력' },
+    { n:'재고 로스(손실) 추적' },
+    { n:'유통기한 · 회수 관리' }
+  ]},
+  { k:'b3', t:'🗓️ 사람 — 근무 · 인사', items:[
+    { n:'직원 일일 스케줄 (V-Flow)', u:'https://vflow.kr' },
+    { n:'전직원 스케줄 뷰어', u:'https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html' },
+    { n:'스케줄 생성기', u:'https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1' },
+    { n:'휴무 취합기', u:'https://znsl132-lang.github.io/BIGLUCKY/request.html' },
+    { n:'신입 · 재직자 현황', u:'https://ceohj0101.github.io/wevape-hr/' },
+    { n:'근태(출퇴근) 기록' },
+    { n:'급여 · 인건비 계산' },
+    { n:'교육 · 평가 관리' }
+  ]},
+  { k:'b4', t:'🎯 고객 — CRM · 마케팅', items:[
+    { n:'회원가입 폼', u:'https://forms.gle/gVSBo4eeU4Bev561A' },
+    { n:'지점별 신규 회원 조회', u:'https://znsl132-lang.github.io/BIGLUCKY/' },
+    { n:'포인트 · 등급 관리', u:'https://wevape-pos-app.vercel.app/' },
+    { n:'재방문 주기 · 단골 분석' },
+    { n:'이탈 고객 찾기' },
+    { n:'문자 · 알림톡 발송' },
+    { n:'마케팅 성과 측정' }
+  ]},
+  { k:'b5', t:'🏪 매장 — 시설 · 확장', items:[
+    { n:'대청소 리스트', u:'https://docs.google.com/spreadsheets/d/1Cw7speJsddFGBLBsaTq9YkdNFqggbksCjF5I-j0CadU/edit?usp=sharing' },
+    { n:'A/S 접수 관리', u:'https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing' },
+    { n:'매장 오픈 · 마감 체크리스트' },
+    { n:'임대 · 계약 만료 관리' },
+    { n:'집기 · 장비 자산 대장' },
+    { n:'신규 출점 검토' }
+  ]},
+  { k:'b6', t:'🛡️ 관리 — 규제 · 기준', items:[
+    { n:'이슈 · 뉴스 모니터링', u:'https://znsl132-lang.github.io/BIGLUCKY/feeds.html' },
+    { n:'규제 · 법령 변경 추적' },
+    { n:'매장 표준 업무 매뉴얼' },
+    { n:'사고 · 클레임 기록' },
+    { n:'매장 · 상품 코드 기준표' },
+    { n:'권한 구조 (본사 / 점장)' }
+  ]}
+];
+
+function mmFind(u){
+  if(!u) return null;
+  const list = Array.isArray(entries) ? entries : [];
+  for(let i=0;i<list.length;i++){ if(list[i] && list[i].url === u) return list[i]; }
+  return null;
+}
+function mmStat(it){
+  const e = mmFind(it.u);
+  if(!e) return 'no';
+  return (e.status === '개발중') ? 'wip' : 'ok';
+}
+function mmEsc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function mmOpen(u){
+  const e = mmFind(u);
+  if(!e) return;
+  try{
+    if(typeof isLocked === 'function' && isLocked(e)){ tryOpenLocked(e.url); return; }
+  }catch(err){}
+  window.open(e.url, '_blank');
+}
+
+function renderMindmap(){
+  const root = document.getElementById('mmRoot');
+  if(!root) return;
+  let tOk = 0, tWip = 0, tNo = 0, tAll = 0;
+  let body = '';
+
+  for(let b=0;b<MM_SPEC.length;b++){
+    const br = MM_SPEC[b];
+    let ok=0, wip=0, no=0, leaves='';
+    for(let i=0;i<br.items.length;i++){
+      const it = br.items[i];
+      const st = mmStat(it);
+      if(st==='ok') ok++; else if(st==='wip') wip++; else no++;
+      const e = mmFind(it.u);
+      const clickable = !!e;
+      const label = mmEsc(it.n);
+      const tail = (st==='wip') ? '<em>만드는 중</em>' : (st==='no' ? '<em>아직 없음</em>' : '');
+      if(clickable){
+        leaves += '<button type="button" class="mm-leaf '+st+' go" onclick="mmOpen(\''+mmEsc(it.u).replace(/'/g,"\\'")+'\')">'+label+tail+'</button>';
+      } else {
+        leaves += '<div class="mm-leaf '+st+'">'+label+tail+'</div>';
+      }
+    }
+    const tot = br.items.length;
+    tOk+=ok; tWip+=wip; tNo+=no; tAll+=tot;
+    const pctOk  = Math.round(ok/tot*100);
+    const pctWip = Math.round(wip/tot*100);
+    body += '<div class="mm-br '+br.k+'">'
+          +   '<div class="mm-bt">'+br.t+'<span class="mm-cnt">'+ok+'/'+tot+'</span></div>'
+          +   '<div class="mm-bar"><i class="ok" style="width:'+pctOk+'%"></i><i class="wip" style="width:'+pctWip+'%"></i></div>'
+          +   leaves
+          + '</div>';
+  }
+
+  const pct = tAll ? Math.round(tOk/tAll*100) : 0;
+  const sum = '<div class="mm-sum">'
+    + '<div class="mm-s ok"><b>'+tOk+'</b><span>● 되어 있음</span></div>'
+    + '<div class="mm-s wip"><b>'+tWip+'</b><span>◐ 만드는 중</span></div>'
+    + '<div class="mm-s no"><b>'+tNo+'</b><span>○ 아직 없음</span></div>'
+    + '<div class="mm-s all"><b>'+pct+'%</b><span>전체 완성도</span></div>'
+    + '</div>'
+    + '<div class="mm-bigbar"><i class="ok" style="width:'+(tAll?Math.round(tOk/tAll*100):0)+'%"></i>'
+    + '<i class="wip" style="width:'+(tAll?Math.round(tWip/tAll*100):0)+'%"></i></div>';
+
+  const core = '<div class="mm-core">🏛️ 통합 데이터 창고'
+    + '<small>모든 매장의 숫자가 한 곳에 모이는 자리 · 「포스 통합 프로그램」이 이 역할</small></div>'
+    + '<div class="mm-stem"></div>';
+
+  const legend = '<div class="mm-legend">'
+    + '<span>● 지금 쓸 수 있음 (눌러서 바로 열기)</span>'
+    + '<span>◐ 만드는 중</span>'
+    + '<span>○ 아직 없음</span>'
+    + '</div>';
+
+  const note = '<div class="mm-note"><b>이 그림은 자동입니다.</b> 업무 모음에 시스템을 새로 등록하거나 '
+    + '「만드는중 → 운영중」으로 바꾸면 이 지도의 색과 숫자도 같이 바뀝니다. 따로 고칠 필요 없습니다.</div>';
+
+  root.innerHTML = sum + core + '<div class="mm-grid">' + body + '</div>' + legend + note;
+}
+
 
 // 검색어로 목록 줄이기 (묶음 제목·＋버튼도 같이 정리)
 function applySearchFilter(){
@@ -3518,10 +3618,10 @@ if ('serviceWorker' in navigator) {
    ★ 다음에 또 업데이트하면 UPDATE_ID 날짜만 바꾸고
      UPDATE_ITEMS 내용을 갈아끼우면 끝. 다른 건 건드릴 필요 없음.
    ============================================================ */
-const UPDATE_ID   = '2026-07-30';
+const UPDATE_ID   = '2026-08-01';
 const UPDATE_SEEN = 'wevape_hub_upd_seen';
 const UPDATE_ITEMS = [
-  ['🗺️', '로드맵에 「마인드맵」이 생겼습니다', '우리 시스템 전체가 어떻게 연결되는지 한 장 그림으로 봅니다. 지금 쓸 수 있는 것 ● / 만드는 중 ◐ / 아직 없는 것 ○ 이 색으로 구분됩니다.'],
+  ['🗺️', '마인드맵이 자동으로 바뀝니다', '되어 있는 것 ● / 만드는 중 ◐ / 아직 없는 것 ○ 을 실제 등록 현황에서 자동으로 계산합니다. 초록 항목은 눌러서 바로 열 수 있고, 시스템을 새로 등록하면 지도도 같이 바뀝니다.'],
   ['🧭', '성장 로드맵이 6개 소메뉴로 나뉘었습니다', '마인드맵 / 지금 현황 / 빠진 것 / 만드는 순서 / AI 활용 / 조직·규칙 으로 나눠서, 보고 싶은 것만 골라 볼 수 있습니다.'],
   ['🧩', '화면을 확 바꿨습니다',      '복잡한 카드가 없어지고 카톡처럼 한 줄 목록이 됐습니다. 누르면 오른쪽(휴대폰은 전체화면)에 자세한 내용이 나옵니다.'],
   ['🗂️', '부서 코드를 없앴습니다',    'HR·FIN 같은 영어 코드 대신 근무·스케줄 / 매출·돈 / 발주·재고 처럼 알아볼 수 있는 7개 묶음으로 정리했습니다.'],
