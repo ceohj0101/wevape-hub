@@ -1091,10 +1091,29 @@
   .dk-badge.done{background:#e8f6ec;color:#1d7a3b;}
   .dk-reply{margin-top:11px;background:#f4f6f8;border-radius:12px;padding:12px;font-size:13px;line-height:1.75;color:#2b3138;font-weight:600;white-space:pre-wrap;}
   .dk-reply b{display:block;margin-bottom:5px;color:#6b4ec7;font-size:12px;}
-  .dk-acts{margin-top:10px;display:flex;gap:6px;}
-  .dk-acts button{flex:1;height:40px;border:1px solid #e6e9ed;background:#fff;border-radius:10px;
+  .dk-flow{display:flex;gap:4px;margin:12px 0 2px;}
+  .dk-flow div{flex:1;text-align:center;font-size:10px;font-weight:900;color:#b3b8c0;padding:7px 2px;border-radius:8px;background:#f4f6f8;line-height:1.35;}
+  .dk-flow div.on{background:#ede7fb;color:#4a2f9e;}
+  .dk-flow div.cur{background:#6b4ec7;color:#fff;}
+  .dk-flow div.no{background:#fdeceb;color:#c0392b;font-size:12px;padding:9px 2px;}
+  .dk-todo{margin-top:11px;border:1.5px solid #ffe0b2;background:#fffaf2;border-radius:12px;padding:12px;}
+  .dk-todo .tt{font-size:12px;font-weight:900;color:#b57200;margin-bottom:8px;}
+  .dk-todo label{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.65;color:#3d3d3d;font-weight:700;padding:5px 0;cursor:pointer;}
+  .dk-todo label.ok{color:#9aa0aa;text-decoration:line-through;}
+  .dk-todo input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:#6b4ec7;}
+  .dk-log{margin-top:11px;background:#f8f9fa;border-radius:12px;padding:11px 12px;}
+  .dk-log .tt{font-size:11.5px;font-weight:900;color:#6b7280;margin-bottom:6px;}
+  .dk-log .r{font-size:12px;color:#4a5058;font-weight:700;line-height:1.75;}
+  .dk-log .r b{color:#6b4ec7;}
+  .dk-acts{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;}
+  .dk-acts button{flex:1 1 44%;min-width:104px;height:40px;border:1px solid #e6e9ed;background:#fff;border-radius:10px;
     font-family:inherit;font-size:12.5px;font-weight:800;color:#4a5058;cursor:pointer;}
   .dk-acts button.del{color:#e0483c;}
+  .dk-acts button.go{background:#6b4ec7;color:#fff;border-color:#6b4ec7;}
+  .dk-acts button.fin{background:#1d7a3b;color:#fff;border-color:#1d7a3b;}
+  .dk-badge.re{background:#e8eefb;color:#2a55b5;}
+  .dk-badge.fin{background:#1d7a3b;color:#fff;}
+  .dk-badge.no{background:#fdeceb;color:#c0392b;}
   .dk-empty{background:#fff;border:1px dashed #d8dce1;border-radius:14px;padding:26px 16px;text-align:center;
     font-size:13px;color:#9aa0aa;font-weight:700;line-height:1.7;}
   .dk-foot{margin-top:22px;font-size:11.5px;color:#9aa0aa;font-weight:700;text-align:center;line-height:1.8;}
@@ -1470,6 +1489,7 @@
        어떻게 붙여야 하는지 방향을 잡아드립니다. 올리면 바로 1차 진단이 뜨고,<br>
        매일 <b>오전 11시</b>에 감독관 검토 의견이 아래에 붙습니다.</p>
     <div class="dk-q">
+      <div>🔒 <b>진행 순서</b> — ① 제출 → ② 감독관 보완 지시 → ③ 담당자 수정 후 재검토 요청 → ④ 감독관 통과 → ⑤ <b>대표 최종 승인</b><br>최종 승인 전에는 확정된 게 아닙니다. 누가 언제 뭘 했는지는 각 건의 「진행 이력」에 다 남습니다.</div>
       <div>① 이게 어떤 <b>판단</b>을 가능하게 하나? (숫자만 쌓이면 일이 늘 뿐입니다)</div>
       <div>② 데이터가 <b>어디에</b> 쌓이나? (개인 엑셀·브라우저에 쌓이면 회사 자산이 아닙니다)</div>
       <div>③ 이미 있는 것과 <b>겹치나</b>? (겹치면 붙이지 말고 합쳐야 합니다)</div>
@@ -1501,7 +1521,8 @@
 
   <div class="dk-foot">
     감독관 검토 의견은 매일 오전 11시에 갱신됩니다.<br>
-    급하면 팀장에게 바로 말하세요 — 여기는 "판에 어떻게 붙일지"를 정하는 자리입니다.
+    보완 지시를 다 처리했으면 체크하고 「수정 완료 · 재검토 요청」을 누르세요.<br>
+    최종 승인은 대표만 할 수 있습니다.
   </div>
 
 </section>
@@ -3991,8 +4012,11 @@ async function submitReview(){
     title, url, text, author,
     time: new Date().toLocaleString('ko-KR', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}),
     date: todayStr(),
-    status: '검토중',
-    reply: ''
+    status: '제출됨',
+    stage: '제출됨',
+    reply: '',
+    todos: [],
+    log: [{w:'담당자', a:'검토 요청 제출', t:dkNow()}]
   });
   if(g('dkTitle')) g('dkTitle').value = '';
   if(g('dkUrl')) g('dkUrl').value = '';
@@ -4004,13 +4028,166 @@ async function submitReview(){
   try{ if(!canSave()) await askEmpPasswordThenSave(); else await saveShared({silent:true}); }catch(err){}
 }
 
+/* ============================================================
+   🔐 검토 → 보완 지시 → 재검토 → 감독관 통과 → 대표 최종승인
+   ★ 단계는 r.stage 에 저장된다. 예전 데이터(stage 없음)는 dkStage()가
+     reply 유무로 알아서 추정하므로 기존 건이 깨지지 않는다.
+   ★ 최종 승인은 CEO_PASSWORD 를 받아야만 눌린다 = 대표 본인 확인용.
+     (보안 장치가 아니라 "아무나 못 누르게" 하는 확인 절차다)
+   ★ 모든 동작은 r.log 에 [누가·언제·뭘] 로 남는다 = 개발자와 대표가
+     같은 화면에서 진행 과정을 확인할 수 있다.
+   ============================================================ */
+const CEO_PASSWORD = "0638";
+const DK_STAGES = ['제출됨','보완필요','재검토요청','승인대기','최종승인'];
+const DK_STEPS = [['제출됨','① 제출'],['보완필요','② 보완지시'],['재검토요청','③ 재검토'],['승인대기','④ 감독관통과'],['최종승인','⑤ 대표승인']];
+
+function dkNow(){
+  return new Date().toLocaleString('ko-KR', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'});
+}
+function dkStage(r){
+  if(r && r.stage) return r.stage;
+  return (r && r.reply) ? '승인대기' : '제출됨';
+}
+function dkSetStage(r, st){ r.stage = st; r.status = st; }
+function dkLog(r, who, act){
+  if(!Array.isArray(r.log)) r.log = [];
+  r.log.push({w:who, a:act, t:dkNow()});
+}
+function dkBadge(st){
+  const m = {'제출됨':['wait','⏳ 검토 대기'], '보완필요':['wait','📋 보완 필요'],
+             '재검토요청':['re','🔁 재검토 요청'], '승인대기':['re','🖊 대표 승인 대기'],
+             '최종승인':['fin','✅ 최종 승인 완료'], '반려':['no','⛔ 반려']};
+  return m[st] || ['wait','⏳ 검토 대기'];
+}
+function dkFlowHtml(r){
+  const st = dkStage(r);
+  if(st === '반려') return '<div class="dk-flow"><div class="no">⛔ 반려됨 — 이 건은 중단되었습니다</div></div>';
+  const i = DK_STAGES.indexOf(st);
+  return '<div class="dk-flow">' + DK_STEPS.map(function(s, n){
+    return '<div class="' + (n < i ? 'on' : (n === i ? 'cur' : '')) + '">' + s[1] + '</div>';
+  }).join('') + '</div>';
+}
+function dkTodoHtml(r){
+  const list = Array.isArray(r.todos) ? r.todos : [];
+  if(!list.length) return '';
+  const st = dkStage(r);
+  const lock = (st === '최종승인' || st === '반려');
+  const dn = list.filter(x => x.d).length;
+  return '<div class="dk-todo"><div class="tt">📋 감독관 보완 지시 — ' + list.length + '개 중 ' + dn + '개 완료</div>' +
+    list.map(function(x, n){
+      return '<label class="' + (x.d ? 'ok' : '') + '"><input type="checkbox" ' + (x.d ? 'checked ' : '') +
+        (lock ? 'disabled ' : '') + 'onchange="dkToggle(\'' + r.id + '\',' + n + ')">' +
+        '<span>' + escapeHtml(x.t) + '</span></label>';
+    }).join('') + '</div>';
+}
+function dkLogHtml(r){
+  const l = Array.isArray(r.log) ? r.log : [];
+  if(!l.length) return '';
+  return '<div class="dk-log"><div class="tt">🧾 진행 이력 — 누가 언제 뭘 했는지</div>' +
+    l.map(function(x){
+      return '<div class="r">' + escapeHtml(x.t || '') + ' · <b>' + escapeHtml(x.w || '') + '</b> — ' + escapeHtml(x.a || '') + '</div>';
+    }).join('') + '</div>';
+}
+async function dkSaveReview(){
+  renderDesk();
+  saveLocal();
+  try{ if(!canSave()) await askEmpPasswordThenSave(); else await saveShared({silent:true}); }catch(err){}
+}
+
+// 담당자: 지시 하나를 완료 체크 / 해제
+async function dkToggle(id, n){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r || !Array.isArray(r.todos) || !r.todos[n]) return;
+  r.todos[n].d = !r.todos[n].d;
+  dkLog(r, '담당자', (r.todos[n].d ? '완료 체크 — ' : '체크 해제 — ') + r.todos[n].t);
+  await dkSaveReview();
+}
+
+// 감독관: 보완 지시(할 일)를 등록한다 → 담당자에게 수정 요청
+async function deskTodos(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const cur = (Array.isArray(r.todos) ? r.todos : []).map(x => x.t).join(' / ');
+  const v = await customPrompt('보완·수정 지시를 적어주세요.\n여러 개면 슬래시( / )로 나눠주세요.', 'text', cur);
+  if(v === null) return;
+  const arr = String(v).split('/').map(s => s.trim()).filter(Boolean);
+  if(!arr.length){ await customAlert('지시 내용이 비어 있습니다.'); return; }
+  const old = Array.isArray(r.todos) ? r.todos : [];
+  r.todos = arr.map(function(t){
+    const p = old.find(o => o.t === t);
+    return {t:t, d: p ? !!p.d : false};
+  });
+  dkSetStage(r, '보완필요');
+  dkLog(r, '감독관', '보완 지시 ' + arr.length + '개 등록 → 담당자 수정 요청');
+  await dkSaveReview();
+}
+
+// 담당자: 다 고쳤다 → 재검토 요청
+async function deskResubmit(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const left = (Array.isArray(r.todos) ? r.todos : []).filter(x => !x.d).length;
+  if(left && !(await customConfirm('아직 체크 안 된 지시가 ' + left + '개 있습니다.\n그래도 재검토를 요청할까요?'))) return;
+  const v = await customPrompt('뭘 어떻게 고쳤는지 한 줄로 적어주세요.', 'text', '');
+  if(v === null) return;
+  dkSetStage(r, '재검토요청');
+  dkLog(r, '담당자', '수정 완료 · 재검토 요청 — ' + (String(v).trim() || '내용 없음'));
+  await dkSaveReview();
+  await customAlert('재검토 요청이 올라갔습니다.\n감독관 확인 후 대표 최종 승인으로 넘어갑니다.');
+}
+
+// 감독관: 통과 → 대표 최종승인 요청
+async function deskPass(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const left = (Array.isArray(r.todos) ? r.todos : []).filter(x => !x.d).length;
+  if(left && !(await customConfirm('안 끝난 지시가 ' + left + '개 있습니다.\n그래도 통과시킬까요?'))) return;
+  dkSetStage(r, '승인대기');
+  dkLog(r, '감독관', '검토 통과 → 대표 최종 승인 요청');
+  await dkSaveReview();
+}
+
+// 대표: 최종 승인 (대표 비밀번호 확인)
+async function deskApprove(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const pw = await customPrompt('대표 최종 승인입니다.\n대표 비밀번호를 입력해주세요.', 'password', '');
+  if(pw === null) return;
+  if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다.'); return; }
+  dkSetStage(r, '최종승인');
+  r.approvedAt = dkNow();
+  dkLog(r, '대표', '최종 승인 — 진행 확정');
+  await dkSaveReview();
+  await customAlert('최종 승인되었습니다. 이제 진행하세요.');
+}
+
+// 반려 / 되돌리기
+async function deskReject(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const v = await customPrompt('반려 사유를 적어주세요.', 'text', '');
+  if(v === null) return;
+  dkSetStage(r, '반려');
+  dkLog(r, '감독관/대표', '반려 — ' + (String(v).trim() || '사유 없음'));
+  await dkSaveReview();
+}
+async function deskReopen(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  if(!(await customConfirm('이 건을 다시 진행 상태로 되돌릴까요?'))) return;
+  dkSetStage(r, '제출됨');
+  dkLog(r, '감독관', '다시 진행 상태로 되돌림');
+  await dkSaveReview();
+}
+
 async function deskReply(id){
   const it = REVIEW_LIST.find(r => r.id === id);
   if(!it) return;
   const v = await customPrompt('감독관 검토 의견을 적어주세요.', 'text', it.reply || '');
   if(v === null) return;
   it.reply = String(v).trim();
-  it.status = it.reply ? '검토완료' : '검토중';
+  if(!it.stage) dkSetStage(it, dkStage(it));
+  dkLog(it, '감독관', '검토 의견 작성');
   renderDesk();
   saveLocal();
   try{ await saveShared({silent:true}); }catch(err){}
@@ -4035,18 +4212,30 @@ function renderDesk(){
   }
   const admin = (function(){ try{ return isAdmin(); }catch(e){ return false; } })();
   box.innerHTML = REVIEW_LIST.map(function(r){
-    const done = r.status === '검토완료';
+    const st = dkStage(r);
+    const bg = dkBadge(st);
+    const canFix = (st === '보완필요' || st === '재검토요청');
     return '<div class="dk-item">' +
-      '<span class="dk-badge ' + (done ? 'done' : 'wait') + '">' + (done ? '검토완료' : '검토중') + '</span>' +
+      '<span class="dk-badge ' + bg[0] + '">' + bg[1] + '</span>' +
       '<span class="it">' + escapeHtml(r.title) + '</span>' +
       (r.url ? '<div class="iu">' + escapeHtml(r.url) + '</div>' : '') +
+      dkFlowHtml(r) +
       (r.text ? '<div class="ix">' + escapeHtml(r.text) + '</div>' : '') +
-      '<div class="im">' + escapeHtml(r.author || '이름없음') + ' · ' + escapeHtml(r.time || '') + '</div>' +
+      '<div class="im">' + escapeHtml(r.author || '이름없음') + ' · ' + escapeHtml(r.time || '') +
+        (r.approvedAt ? ' · 🏁 대표 최종승인 ' + escapeHtml(r.approvedAt) : '') + '</div>' +
       deskDiagHtml(r) +
       (r.reply ? '<div class="dk-reply"><b>🧭 감독관 검토 의견</b>' + escapeHtml(r.reply) + '</div>' : '') +
+      dkTodoHtml(r) +
+      dkLogHtml(r) +
       '<div class="dk-acts">' +
-        (admin ? '<button type="button" onclick="deskReply(\'' + r.id + '\')">✍️ 검토 의견 달기</button>' : '') +
-        '<button type="button" class="del" onclick="deskDelete(\'' + r.id + '\')">삭제</button>' +
+        (admin ? '<button type="button" onclick="deskReply(\'' + r.id + '\')">✍️ 검토 의견</button>' : '') +
+        (admin ? '<button type="button" onclick="deskTodos(\'' + r.id + '\')">📋 보완 지시</button>' : '') +
+        (canFix ? '<button type="button" class="go" onclick="deskResubmit(\'' + r.id + '\')">🔁 수정 완료 · 재검토 요청</button>' : '') +
+        ((admin && st !== '승인대기' && st !== '최종승인' && st !== '반려') ? '<button type="button" onclick="deskPass(\'' + r.id + '\')">✅ 검토 통과</button>' : '') +
+        ((admin && st === '승인대기') ? '<button type="button" class="fin" onclick="deskApprove(\'' + r.id + '\')">🏁 대표 최종 승인</button>' : '') +
+        ((admin && st !== '최종승인' && st !== '반려') ? '<button type="button" class="del" onclick="deskReject(\'' + r.id + '\')">반려</button>' : '') +
+        ((admin && (st === '최종승인' || st === '반려')) ? '<button type="button" onclick="deskReopen(\'' + r.id + '\')">되돌리기</button>' : '') +
+        (admin ? '<button type="button" class="del" onclick="deskDelete(\'' + r.id + '\')">삭제</button>' : '') +
       '</div>' +
     '</div>';
   }).join('');
