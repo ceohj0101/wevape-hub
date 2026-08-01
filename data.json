@@ -119,15 +119,6 @@
       "sensitive": true
     },
     {
-      "dept": "CX",
-      "title": "위베이프 이슈 모니터링",
-      "url": "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
-      "note": "전자담배 관련 뉴스기사 또는 매장 관련 CS 내용을 수집합니다",
-      "status": "개발중",
-      "owner": "개발자:장대운 주임",
-      "sensitive": false
-    },
-    {
       "dept": "HR",
       "title": "직원 일일 스케줄",
       "url": "https://janghj201-cyber.github.io/-/",
@@ -432,7 +423,8 @@
     }
   ],
   "reviewSeq": 2,
-  "deleted": [],
-  "savedAt": "2026-08-01T09:32:17.379Z",
-  "savedBy": "employee"
+  "deleted": [
+    "https://znsl132-lang.github.io/BIGLUCKY/feeds.html"
+  ],
+  "savedAt": "2026-08-01T09:35:16.957Z"
 }
