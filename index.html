@@ -1114,6 +1114,28 @@
   .dk-badge.re{background:#e8eefb;color:#2a55b5;}
   .dk-badge.fin{background:#1d7a3b;color:#fff;}
   .dk-badge.no{background:#fdeceb;color:#c0392b;}
+  /* 🔔 알림 뱃지 + 담당 개발자 + 항목별 확인 */
+  .vnav{position:relative;}
+  .nv-dot{position:absolute;top:3px;right:5px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;
+    background:#e0483c;color:#fff;font-size:11px;font-weight:900;line-height:19px;text-align:center;
+    box-shadow:0 0 0 2px #fff;}
+  .vnav.on .nv-dot{box-shadow:0 0 0 2px #191f28;}
+  .dk-new{display:inline-block;padding:3px 8px;border-radius:8px;background:#e0483c;color:#fff;
+    font-size:10.5px;font-weight:900;margin-right:5px;}
+  .dk-dev{margin-top:8px;background:#f2eefc;border:1px solid #e0d7f7;border-radius:10px;padding:9px 11px;
+    font-size:12.5px;font-weight:800;color:#4a2f9e;line-height:1.6;}
+  .dk-dev b{font-size:13.5px;font-weight:900;}
+  .dk-dev span{color:#8b83a3;font-weight:700;}
+  .dk-todo .nt{margin:1px 0 5px 26px;font-size:12px;font-weight:700;color:#6b7280;line-height:1.6;}
+  .dk-todo .nt b{color:#1d7a3b;}
+  .dk-todo .nt i{font-style:normal;color:#c0392b;}
+  .dk-vb{margin:2px 0 9px 26px;display:flex;gap:5px;}
+  .dk-vb button{border:1px solid #e6e9ed;background:#fff;border-radius:8px;font-family:inherit;
+    font-size:11.5px;font-weight:800;color:#4a5058;padding:6px 10px;cursor:pointer;}
+  .dk-vb button.y{border-color:#1d7a3b;color:#1d7a3b;}
+  .dk-vb button.n{border-color:#e0483c;color:#e0483c;}
+  .dk-warn{margin-top:11px;background:#fdeceb;border:1px solid #f7c9c4;border-radius:12px;padding:11px 12px;
+    font-size:12.5px;font-weight:800;color:#c0392b;line-height:1.65;}
   .dk-empty{background:#fff;border:1px dashed #d8dce1;border-radius:14px;padding:26px 16px;text-align:center;
     font-size:13px;color:#9aa0aa;font-weight:700;line-height:1.7;}
   .dk-foot{margin-top:22px;font-size:11.5px;color:#9aa0aa;font-weight:700;text-align:center;line-height:1.8;}
@@ -1157,7 +1179,7 @@
     <div class="viewnav">
       <button type="button" class="vnav on" id="vnavHub" onclick="setView('hub')">📋 업무 모음</button>
       <button type="button" class="vnav" id="vnavMap" onclick="setView('map')">🧭 성장 로드맵</button>
-      <button type="button" class="vnav" id="vnavDesk" onclick="setView('desk')">🧩 새 업무 검토</button>
+      <button type="button" class="vnav" id="vnavDesk" onclick="setView('desk')">🧩 새 업무 검토<span class="nv-dot" id="vnavDeskDot" style="display:none">0</span></button>
     </div>
     <div class="toprow">
       <div>
@@ -1487,9 +1509,10 @@
     <h2>🧩 새 업무 검토</h2>
     <p>진행 중인 업무나 링크를 여기에 올리면, 지금 우리가 짜고 있는 판에<br>
        어떻게 붙여야 하는지 방향을 잡아드립니다. 올리면 바로 1차 진단이 뜨고,<br>
-       매일 <b>오전 11시</b>에 감독관 검토 의견이 아래에 붙습니다.</p>
+       <b>검토 요청이 올라오면</b> 감독관 검토 의견과 보완 지시가 아래에 붙습니다.</p>
     <div class="dk-q">
       <div>🔒 <b>진행 순서</b> — ① 제출 → ② 감독관 보완 지시 → ③ 담당자 수정 후 재검토 요청 → ④ 감독관 통과 → ⑤ <b>대표 최종 승인</b><br>최종 승인 전에는 확정된 게 아닙니다. 누가 언제 뭘 했는지는 각 건의 「진행 이력」에 다 남습니다.</div>
+      <div>🔍 <b>검토는 한 번에 통과되지 않습니다</b> — 담당자는 지시 하나를 체크할 때 <b>뭘 했는지</b>를 반드시 적어야 하고, 감독관은 <b>항목마다 하나씩</b> 「확인 완료」를 눌러야 합니다. 하나라도 미확인이면 통과 버튼이 막힙니다.</div>
       <div>① 이게 어떤 <b>판단</b>을 가능하게 하나? (숫자만 쌓이면 일이 늘 뿐입니다)</div>
       <div>② 데이터가 <b>어디에</b> 쌓이나? (개인 엑셀·브라우저에 쌓이면 회사 자산이 아닙니다)</div>
       <div>③ 이미 있는 것과 <b>겹치나</b>? (겹치면 붙이지 말고 합쳐야 합니다)</div>
@@ -1506,6 +1529,9 @@
     <label class="dk-lb">링크 (있으면)</label>
     <input type="text" id="dkUrl" placeholder="https://..." autocomplete="off">
 
+    <label class="dk-lb">담당 개발자 · 만든 사람 (필수)</label>
+    <input type="text" id="dkDev" placeholder="예) 장현진 — 이 업무를 실제로 만들고 고칠 사람" autocomplete="off">
+
     <label class="dk-lb">지금 어디까지 됐고, 뭘 하려는 건가요?</label>
     <textarea id="dkText" placeholder="예) 매장에서 주 1회 재고를 세서 구글시트에 넣고 있음. 본사에서 한눈에 보고 발주에 연결하고 싶음."></textarea>
 
@@ -1520,8 +1546,8 @@
   <div id="dkList"></div>
 
   <div class="dk-foot">
-    감독관 검토 의견은 매일 오전 11시에 갱신됩니다.<br>
-    보완 지시를 다 처리했으면 체크하고 「수정 완료 · 재검토 요청」을 누르세요.<br>
+    검토 요청이 올라오면 감독관이 확인해서 보완 지시를 답니다.<br>
+    담당자는 지시를 체크할 때 <b>뭘 했는지</b>를 적어야 하고, 감독관은 <b>항목마다</b> 확인합니다.<br>
     최종 승인은 대표만 할 수 있습니다.
   </div>
 
@@ -2572,6 +2598,7 @@ function setView(v){
     if(h) h.textContent = '새 업무 검토';
     if(s) s.textContent = '링크나 진행 중인 업무를 올리면, 지금 판에 어떻게 붙일지 잡아드립니다.';
     try{ renderDesk(); }catch(err){}
+    try{ dkMarkSeen(); dkPaintBadge(); }catch(err){}
   } else if(currentView === 'map'){
     document.body.classList.remove('detailopen');
     if(h) h.textContent = '성장 로드맵';
@@ -4005,22 +4032,25 @@ async function submitReview(){
   const url   = (g('dkUrl')   ? g('dkUrl').value   : '').trim();
   const text  = (g('dkText')  ? g('dkText').value  : '').trim();
   const author= (g('dkAuthor')? g('dkAuthor').value: '').trim();
+  const dev   = (g('dkDev')   ? g('dkDev').value   : '').trim();
   if(!title){ customAlert('무슨 업무인지 제목을 넣어주세요.'); return; }
+  if(!dev){ customAlert('담당 개발자(이 업무를 실제로 만들고 고칠 사람) 이름을 넣어주세요.\n누가 고쳐야 하는지 없으면 보완 지시를 줄 수가 없습니다.'); return; }
   if(!author){ customAlert('올린 사람 이름을 넣어주세요.'); return; }
   REVIEW_LIST.unshift({
     id: 'rv' + (reviewSeq++),
-    title, url, text, author,
+    title, url, text, author, dev,
     time: new Date().toLocaleString('ko-KR', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}),
     date: todayStr(),
     status: '제출됨',
     stage: '제출됨',
     reply: '',
     todos: [],
-    log: [{w:'담당자', a:'검토 요청 제출', t:dkNow()}]
+    log: [{w:(dev || '담당자'), a:'검토 요청 제출', t:dkNow()}]
   });
   if(g('dkTitle')) g('dkTitle').value = '';
   if(g('dkUrl')) g('dkUrl').value = '';
   if(g('dkText')) g('dkText').value = '';
+  if(g('dkDev')) g('dkDev').value = '';
   const d = g('dkDiag');
   if(d) d.innerHTML = deskDiagHtml(REVIEW_LIST[0]);
   renderDesk();
@@ -4072,13 +4102,59 @@ function dkTodoHtml(r){
   if(!list.length) return '';
   const st = dkStage(r);
   const lock = (st === '최종승인' || st === '반려');
+  const admin = (function(){ try{ return isAdmin(); }catch(e){ return false; } })();
   const dn = list.filter(x => x.d).length;
-  return '<div class="dk-todo"><div class="tt">📋 감독관 보완 지시 — ' + list.length + '개 중 ' + dn + '개 완료</div>' +
+  const ok = list.filter(x => x.v === 'ok').length;
+  return '<div class="dk-todo"><div class="tt">📋 감독관 보완 지시 ' + list.length + '개 — 담당자 완료 ' + dn + '개 · 감독관 확인 ' + ok + '개</div>' +
     list.map(function(x, n){
-      return '<label class="' + (x.d ? 'ok' : '') + '"><input type="checkbox" ' + (x.d ? 'checked ' : '') +
-        (lock ? 'disabled ' : '') + 'onchange="dkToggle(\'' + r.id + '\',' + n + ')">' +
+      let h = '<label class="' + (x.v === 'ok' ? 'ok' : '') + '"><input type="checkbox" ' + (x.d ? 'checked ' : '') +
+        ((lock || x.v === 'ok') ? 'disabled ' : '') + 'onchange="dkToggle(\'' + r.id + '\',' + n + ')">' +
         '<span>' + escapeHtml(x.t) + '</span></label>';
+      if(x.n) h += '<div class="nt">↳ 담당자: ' + escapeHtml(x.n) + '</div>';
+      if(x.v === 'ok') h += '<div class="nt"><b>✅ 감독관 확인 완료</b>' + (x.c ? ' — ' + escapeHtml(x.c) : '') + '</div>';
+      if(x.v === 'no') h += '<div class="nt"><i>↩ 미흡 · 다시 해야 함' + (x.c ? ' — ' + escapeHtml(x.c) : '') + '</i></div>';
+      if(admin && !lock && x.d && x.v !== 'ok'){
+        h += '<div class="dk-vb"><button type="button" class="y" onclick="dkVerify(\'' + r.id + '\',' + n + ',1)">✅ 확인 완료</button>' +
+             '<button type="button" class="n" onclick="dkVerify(\'' + r.id + '\',' + n + ',0)">↩ 미흡 · 다시</button></div>';
+      }
+      return h;
     }).join('') + '</div>';
+}
+
+/* 🔔 알림 뱃지 — 새로 올라온 건 + 내가 지금 손대야 하는 건
+   ★ localStorage 키를 상수로 빼지 않는다. 이 파일은 부팅 코드가 중간에서
+     돌기 때문에, 아래쪽에 const 를 선언하면 부팅 때 터진다(TDZ). */
+function dkSeenMap(){
+  try{ return JSON.parse(localStorage.getItem('wevape_hub_dk_seen_v1') || '{}') || {}; }catch(e){ return {}; }
+}
+function dkStamp(r){ return dkStage(r) + '|' + (Array.isArray(r.log) ? r.log.length : 0); }
+function dkIsNew(r){
+  const s = dkSeenMap();
+  if(!Object.keys(s).length) return false;   // 첫 방문은 전부 새 걸로 치지 않는다
+  return s[r.id] !== dkStamp(r);
+}
+function dkNeedsMe(r){
+  const admin = (function(){ try{ return isAdmin(); }catch(e){ return false; } })();
+  const st = dkStage(r);
+  if(admin) return (st === '제출됨' || st === '재검토요청' || st === '승인대기');
+  return (st === '보완필요');
+}
+function dkAlertCount(){
+  try{ return REVIEW_LIST.filter(r => dkNeedsMe(r) || dkIsNew(r)).length; }catch(e){ return 0; }
+}
+function dkMarkSeen(){
+  try{
+    const s = {};
+    REVIEW_LIST.forEach(function(r){ s[r.id] = dkStamp(r); });
+    localStorage.setItem('wevape_hub_dk_seen_v1', JSON.stringify(s));
+  }catch(e){}
+}
+function dkPaintBadge(){
+  const d = document.getElementById('vnavDeskDot');
+  if(!d) return;
+  const n = dkAlertCount();
+  d.textContent = (n > 99) ? '99+' : String(n);
+  d.style.display = n ? 'inline-block' : 'none';
 }
 function dkLogHtml(r){
   const l = Array.isArray(r.log) ? r.log : [];
@@ -4090,16 +4166,48 @@ function dkLogHtml(r){
 }
 async function dkSaveReview(){
   renderDesk();
+  try{ if(currentView === 'desk'){ dkMarkSeen(); dkPaintBadge(); } }catch(e){}
   saveLocal();
   try{ if(!canSave()) await askEmpPasswordThenSave(); else await saveShared({silent:true}); }catch(err){}
 }
 
-// 담당자: 지시 하나를 완료 체크 / 해제
+// 담당자: 지시 하나를 완료 보고 / 취소
+// ★ 체크만 하고 넘어갈 수 없다. "뭘 했는지"를 반드시 적어야 체크가 된다.
 async function dkToggle(id, n){
   const r = REVIEW_LIST.find(x => x.id === id);
   if(!r || !Array.isArray(r.todos) || !r.todos[n]) return;
-  r.todos[n].d = !r.todos[n].d;
-  dkLog(r, '담당자', (r.todos[n].d ? '완료 체크 — ' : '체크 해제 — ') + r.todos[n].t);
+  const t = r.todos[n];
+  const who = r.dev || '담당자';
+  if(t.v === 'ok'){ renderDesk(); return; }   // 감독관이 확인한 항목은 못 건드린다
+  if(!t.d){
+    const v = await customPrompt('이 지시를 어떻게 처리했는지 적어주세요.\n(뭘 했는지 없이 체크만 하면 감독관이 확인해줄 수 없습니다)\n\n· ' + t.t, 'text', t.n || '');
+    if(v === null || !String(v).trim()){ renderDesk(); return; }
+    t.d = true; t.n = String(v).trim(); t.v = '';
+    dkLog(r, who, '완료 보고 — ' + t.t + ' → ' + t.n);
+  } else {
+    t.d = false; t.v = '';
+    dkLog(r, who, '완료 취소 — ' + t.t);
+  }
+  await dkSaveReview();
+}
+
+// 감독관: 지시를 항목마다 하나씩 확인한다 (한 번에 통과시킬 수 없다)
+async function dkVerify(id, n, ok){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r || !Array.isArray(r.todos) || !r.todos[n]) return;
+  const t = r.todos[n];
+  if(ok){
+    const v = await customPrompt('이 항목을 확인 완료로 표시합니다.\n뭘 보고 확인했는지 적어주세요. (화면 확인 / 캡처 받음 / 문서 확인 등)\n\n· ' + t.t, 'text', '');
+    if(v === null || !String(v).trim()) return;
+    t.v = 'ok'; t.c = String(v).trim(); t.d = true;
+    dkLog(r, '감독관', '항목 확인 완료 — ' + t.t + ' → ' + t.c);
+  } else {
+    const v = await customPrompt('어디가 미흡한지 적어주세요.\n이 항목은 체크가 풀리고 담당자에게 다시 넘어갑니다.\n\n· ' + t.t, 'text', '');
+    if(v === null || !String(v).trim()) return;
+    t.v = 'no'; t.c = String(v).trim(); t.d = false;
+    dkSetStage(r, '보완필요');
+    dkLog(r, '감독관', '항목 미흡 · 재작업 지시 — ' + t.t + ' → ' + t.c);
+  }
   await dkSaveReview();
 }
 
@@ -4115,7 +4223,7 @@ async function deskTodos(id){
   const old = Array.isArray(r.todos) ? r.todos : [];
   r.todos = arr.map(function(t){
     const p = old.find(o => o.t === t);
-    return {t:t, d: p ? !!p.d : false};
+    return p ? {t:t, d:!!p.d, n:p.n||'', v:p.v||'', c:p.c||''} : {t:t, d:false, n:'', v:'', c:''};
   });
   dkSetStage(r, '보완필요');
   dkLog(r, '감독관', '보완 지시 ' + arr.length + '개 등록 → 담당자 수정 요청');
@@ -4126,25 +4234,39 @@ async function deskTodos(id){
 async function deskResubmit(id){
   const r = REVIEW_LIST.find(x => x.id === id);
   if(!r) return;
-  const left = (Array.isArray(r.todos) ? r.todos : []).filter(x => !x.d).length;
-  if(left && !(await customConfirm('아직 체크 안 된 지시가 ' + left + '개 있습니다.\n그래도 재검토를 요청할까요?'))) return;
-  const v = await customPrompt('뭘 어떻게 고쳤는지 한 줄로 적어주세요.', 'text', '');
-  if(v === null) return;
+  const list = Array.isArray(r.todos) ? r.todos : [];
+  const left = list.filter(x => !x.d);
+  if(!list.length){ await customAlert('아직 보완 지시가 없습니다. 감독관 검토를 기다려주세요.'); return; }
+  if(left.length){
+    await customAlert('아직 처리 안 된 지시가 ' + left.length + '개 있습니다.\n먼저 체크하고 뭘 했는지 적어주세요.\n\n· ' + left.map(x => x.t).join('\n· '));
+    return;
+  }
+  const v = await customPrompt('전체적으로 뭘 어떻게 고쳤는지 적어주세요.', 'text', '');
+  if(v === null || !String(v).trim()) return;
   dkSetStage(r, '재검토요청');
-  dkLog(r, '담당자', '수정 완료 · 재검토 요청 — ' + (String(v).trim() || '내용 없음'));
+  dkLog(r, (r.dev || '담당자'), '수정 완료 · 재검토 요청 — ' + String(v).trim());
   await dkSaveReview();
-  await customAlert('재검토 요청이 올라갔습니다.\n감독관 확인 후 대표 최종 승인으로 넘어갑니다.');
+  await customAlert('재검토 요청이 올라갔습니다.\n감독관이 항목마다 하나씩 확인한 뒤 대표 최종 승인으로 넘어갑니다.');
 }
 
 // 감독관: 통과 → 대표 최종승인 요청
 async function deskPass(id){
   const r = REVIEW_LIST.find(x => x.id === id);
   if(!r) return;
-  const left = (Array.isArray(r.todos) ? r.todos : []).filter(x => !x.d).length;
-  if(left && !(await customConfirm('안 끝난 지시가 ' + left + '개 있습니다.\n그래도 통과시킬까요?'))) return;
+  const list = Array.isArray(r.todos) ? r.todos : [];
+  if(!list.length){
+    await customAlert('보완 지시가 하나도 없습니다.\n먼저 「📋 보완 지시」로 뭘 고쳐야 하는지 적어주세요.\n지시 없이 통과시킬 수 없습니다.');
+    return;
+  }
+  const left = list.filter(x => x.v !== 'ok');
+  if(left.length){
+    await customAlert('아직 확인하지 않은 항목이 ' + left.length + '개 있습니다.\n항목마다 「✅ 확인 완료」를 눌러 하나씩 확인해야 통과시킬 수 있습니다.\n\n· ' + left.map(x => x.t).join('\n· '));
+    return;
+  }
   dkSetStage(r, '승인대기');
-  dkLog(r, '감독관', '검토 통과 → 대표 최종 승인 요청');
+  dkLog(r, '감독관', '전 항목 ' + list.length + '개 확인 완료 → 대표 최종 승인 요청');
   await dkSaveReview();
+  await customAlert('대표 최종 승인 대기로 넘겼습니다.');
 }
 
 // 대표: 최종 승인 (대표 비밀번호 확인)
@@ -4208,6 +4330,7 @@ function renderDesk(){
   if(!box) return;
   if(!REVIEW_LIST.length){
     box.innerHTML = '<div class="dk-empty">아직 올라온 검토가 없습니다.<br>위에 진행 중인 업무나 링크를 올려보세요.</div>';
+    try{ dkPaintBadge(); }catch(e){}
     return;
   }
   const admin = (function(){ try{ return isAdmin(); }catch(e){ return false; } })();
@@ -4215,17 +4338,23 @@ function renderDesk(){
     const st = dkStage(r);
     const bg = dkBadge(st);
     const canFix = (st === '보완필요' || st === '재검토요청');
+    const isNew = (function(){ try{ return dkIsNew(r); }catch(e){ return false; } })();
     return '<div class="dk-item">' +
+      (isNew ? '<span class="dk-new">🆕 새 소식</span>' : '') +
       '<span class="dk-badge ' + bg[0] + '">' + bg[1] + '</span>' +
       '<span class="it">' + escapeHtml(r.title) + '</span>' +
+      '<div class="dk-dev">👤 담당 개발자 <b>' + escapeHtml(r.dev || r.author || '미지정') + '</b>' +
+        ((r.author && r.author !== (r.dev || r.author)) ? ' <span>· 올린 사람 ' + escapeHtml(r.author) + '</span>' : '') + '</div>' +
       (r.url ? '<div class="iu">' + escapeHtml(r.url) + '</div>' : '') +
       dkFlowHtml(r) +
       (r.text ? '<div class="ix">' + escapeHtml(r.text) + '</div>' : '') +
-      '<div class="im">' + escapeHtml(r.author || '이름없음') + ' · ' + escapeHtml(r.time || '') +
+      '<div class="im">올린 사람 ' + escapeHtml(r.author || '이름없음') + ' · ' + escapeHtml(r.time || '') +
         (r.approvedAt ? ' · 🏁 대표 최종승인 ' + escapeHtml(r.approvedAt) : '') + '</div>' +
       deskDiagHtml(r) +
       (r.reply ? '<div class="dk-reply"><b>🧭 감독관 검토 의견</b>' + escapeHtml(r.reply) + '</div>' : '') +
       dkTodoHtml(r) +
+      ((admin && st === '재검토요청') ? '<div class="dk-warn">🔍 담당자가 수정 완료를 보고했습니다. 항목마다 「✅ 확인 완료」를 눌러 하나씩 확인해야 통과시킬 수 있습니다.</div>' : '') +
+      ((!admin && st === '보완필요') ? '<div class="dk-warn">📋 고쳐야 할 지시가 있습니다. 하나씩 처리하고 체크할 때 뭘 했는지 적어주세요.</div>' : '') +
       dkLogHtml(r) +
       '<div class="dk-acts">' +
         (admin ? '<button type="button" onclick="deskReply(\'' + r.id + '\')">✍️ 검토 의견</button>' : '') +
@@ -4239,6 +4368,7 @@ function renderDesk(){
       '</div>' +
     '</div>';
   }).join('');
+  try{ dkPaintBadge(); }catch(e){}
 }
 /* ============================================================
    들어가기 비밀번호 — 창을 완전히 닫기 전까지 한 번만 묻는다
@@ -4284,6 +4414,14 @@ function gateTry(){
     if (String(i.value || '').length >= ENTRY_PASSWORD.length) gateTry();
   });
   i.addEventListener('keydown', function(ev){ if (ev.key === 'Enter') gateTry(); });
+})();
+
+/* 🔔 알림 뱃지 첫 표시
+   ★ 반드시 스크립트 맨 끝에서 돌린다. 위쪽 applyData() 는 파일 중간에서
+     실행되기 때문에 그 시점엔 아래쪽 상수들이 아직 준비 전이다(TDZ).
+   ★ 실패해도 사이트는 그냥 돌아간다(뱃지만 안 보임). */
+(function initDeskBadge(){
+  try{ dkPaintBadge(); }catch(e){}
 })();
 </script>
 
