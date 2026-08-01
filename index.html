@@ -675,6 +675,8 @@
   .br-tag.wip{color:#d97a00;background:#fff4e0;}
   .br-t{font-size:26px;font-weight:900;letter-spacing:-1px;margin:13px 0 8px;color:#191f28;}
   .br-t small{font-size:15px;color:#a0a6b0;font-weight:700;letter-spacing:0;}
+  .br-ren{margin-left:8px;background:#f2f4f8;border:1px solid #e3e7ee;color:#5b626d;font-size:12px;font-weight:800;border-radius:9px;padding:5px 10px;cursor:pointer;vertical-align:middle;letter-spacing:0;white-space:nowrap;}
+  .br-ren:active{background:#e7ebf2;}
   .br-u{font-size:13px;color:#8b919c;word-break:break-all;}
   .br-open{
     margin-top:18px;height:54px;width:100%;border:0;border-radius:14px;background:#191f28;
@@ -2451,6 +2453,33 @@ async function moveEntryDept(url){
   if(!canSave()) await askEmpPasswordThenSave();
 }
 
+// ✏️ 시스템 이름(제목) 수정 — 같은 이름이 두 개라 헷갈릴 때 구분해서 붙일 수 있게
+// 주의: 주소가 없는 항목은 열쇠(key)가 「부서+제목」이라 이름을 바꾸면 열쇠도 바뀐다. 피드백을 같이 옮겨야 한다.
+async function editEntryTitle(k){
+  const entry = findEntry(k);
+  if(!entry) return;
+  const input = await customPrompt('이 시스템의 이름을 적어주세요.\n(예: 스케줄 생성기 — 인천점)', 'text', entry.title || '');
+  if(input === null) return;
+  const newTitle = String(input).trim().replace(/\s+/g,' ');
+  if(!newTitle){ await customAlert('이름은 비워둘 수 없습니다.'); return; }
+  if(newTitle.length > 40){ await customAlert('이름이 너무 깁니다. 40자 안으로 줄여주세요.'); return; }
+  if(newTitle === entry.title) return;
+  if(entries.some(e => e !== entry && (e.title||'').trim() === newTitle)){
+    if(!(await customConfirm(`"${newTitle}"이라는 이름이 이미 있습니다.\n똑같은 이름이 두 개가 되면 헷갈립니다.\n\n그래도 이대로 쓸까요?`))) return;
+  }
+  const oldKey = entryKey(entry);
+  entry.title = newTitle;
+  const newKey = entryKey(entry);
+  if(oldKey !== newKey){
+    FEEDBACK_LIST.forEach(f => { if(f.url === oldKey) f.url = newKey; });
+    if(openFeedbackPanels.has(safeId(oldKey))){ openFeedbackPanels.delete(safeId(oldKey)); openFeedbackPanels.add(safeId(newKey)); }
+    if(selectedKey === oldKey) selectedKey = newKey;
+  }
+  render();
+  syncUpdate(entry);
+  if(!canSave()) await askEmpPasswordThenSave();
+}
+
 // 🗑 시스템(기능) 삭제 — 되돌릴 수 없어서 두 단계로 확인한다.
 // 기본 목록(SEED)에 있는 항목도 DELETED_URLS 에 남겨두면 새로고침 때 되살아나지 않는다.
 async function deleteEntry(url){
@@ -2818,7 +2847,7 @@ function detailHtml(){
       <div class="br">
         <div class="br-tag" style="background:#f2f4f6;color:#8b919c">👈 왼쪽에서 고르세요</div>
         <div class="br-t">쓰고 싶은 걸 눌러보세요</div>
-        <div class="br-u">왼쪽 목록에서 시스템 이름을 누르면 여기에 자세한 내용이 나옵니다.<br>열기 · 담당자 바꾸기 · 주소 바꾸기 · 의견 남기기를 전부 여기서 할 수 있어요.</div>
+        <div class="br-u">왼쪽 목록에서 시스템 이름을 누르면 여기에 자세한 내용이 나옵니다.<br>열기 · 이름 바꾸기 · 담당자 바꾸기 · 주소 바꾸기 · 의견 남기기를 전부 여기서 할 수 있어요.</div>
       </div>`;
     return;
   }
@@ -2836,7 +2865,7 @@ function detailHtml(){
     <div class="br">
       <button type="button" class="br-back" onclick="closeDetail()">‹ 목록으로</button>
       <span class="br-tag ${ok ? '' : 'wip'}">${ok ? '✅ 지금 사용 가능' : '🔧 아직 만드는 중'}</span>
-      <div class="br-t">${escapeHtml(e.title)} <small>· ${g.t}</small></div>
+      <div class="br-t">${escapeHtml(e.title)} <small>· ${g.t}</small> <button type="button" class="br-ren" onclick="editEntryTitle('${kq}')">✏️ 이름 수정</button></div>
       <div class="br-u">${locked ? (ok ? '🔒 잠긴 시스템입니다. 열 때 비밀번호를 물어봅니다.' : '🔒 아직 만드는 중이라 주소는 가려져 있습니다. 비밀번호를 넣으면 열립니다.') : escapeHtml(e.url || '주소가 없습니다')}</div>
       ${e.note ? `<div class="br-u" style="margin-top:6px;color:#5b626d">${escapeHtml(e.note)}</div>` : ''}
       <button type="button" class="br-open" onclick="${locked ? `tryOpenLocked('${uq}')` : `window.open('${uq}','_blank')`}">${locked ? '🔒 비밀번호 넣고 열기 →' : '열기 →'}</button>
@@ -2845,7 +2874,7 @@ function detailHtml(){
         <div class="br-f">
           <i>담당자</i>
           <b class="${own ? '' : 'warn'}">${own ? escapeHtml(parseContributors(own).map(c=>`${c.role}: ${c.name}`).join(' · ')) : '아직 없음'}</b>
-          <u onclick="editEntryOwner('${uq}')">이름 바꾸기</u>
+          <u onclick="editEntryOwner('${uq}')">담당자 바꾸기</u>
         </div>
         <div class="br-f">
           <i>인터넷 주소</i>
