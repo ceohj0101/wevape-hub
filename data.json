@@ -85,7 +85,7 @@
     },
     {
       "dept": "HR",
-      "title": "전직원 스케줄 뷰어",
+      "title": "위베이프 근무표",
       "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html",
       "note": "위베이프 직원 스케줄",
       "status": "운영중",
@@ -324,6 +324,9 @@
   },
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-08-01T06:37:47.843Z",
+  "reviews": [],
+  "reviewSeq": 0,
+  "deleted": [],
+  "savedAt": "2026-08-01T07:49:39.807Z",
   "savedBy": "employee"
 }
