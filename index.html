@@ -789,6 +789,132 @@
     font-family:inherit;font-size:15.5px;font-weight:900;cursor:pointer;
   }
 
+  /* ================= 🧭 성장 로드맵 (두 번째 메뉴) ================= */
+  .viewnav{display:flex;gap:6px;margin:0 0 14px;}
+  .vnav{
+    flex:1;max-width:230px;font-family:inherit;cursor:pointer;border:0;
+    background:#f2f4f6;color:#7c838f;font-size:14px;font-weight:900;
+    padding:12px 10px;border-radius:12px;letter-spacing:-.3px;
+  }
+  .vnav.on{background:#191f28;color:#fff;}
+
+  #roadmap{display:none;max-width:1180px;margin:0 auto;padding:6px 20px 90px;}
+  body.mapview .wrap{display:none !important;}
+  body.mapview #roadmap{display:block;}
+  body.mapview .searchbar,
+  body.mapview .tabs,
+  body.mapview .stats,
+  body.mapview .topbtns{display:none !important;}
+
+  .rm-hero{
+    background:linear-gradient(135deg,#111a24 0%,#1d2c3c 100%);
+    color:#fff;border-radius:18px;padding:22px 20px;margin-bottom:18px;
+  }
+  .rm-hero h2{margin:0 0 8px;font-size:20px;font-weight:900;letter-spacing:-.6px;}
+  .rm-hero p{margin:0;font-size:14px;line-height:1.65;color:#c6d2de;}
+  .rm-hero .rm-oneline{
+    margin-top:14px;background:rgba(255,255,255,.09);border-radius:12px;
+    padding:12px 14px;font-size:14.5px;font-weight:800;color:#ffd97a;line-height:1.6;
+  }
+
+  .rm-sec{margin:26px 0 0;}
+  .rm-sec > h3{
+    margin:0 0 4px;font-size:17px;font-weight:900;color:#191f28;letter-spacing:-.5px;
+  }
+  .rm-sec > .rm-desc{margin:0 0 12px;font-size:13px;color:#8b919c;line-height:1.6;}
+
+  .rm-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;}
+  .rm-card{
+    background:#fff;border:1px solid #eceef1;border-radius:14px;padding:14px 15px;
+  }
+  .rm-card .rm-k{font-size:12px;font-weight:800;color:#a0a6b0;margin-bottom:5px;}
+  .rm-card .rm-v{font-size:15px;font-weight:900;color:#191f28;line-height:1.45;}
+  .rm-card .rm-s{margin-top:6px;font-size:12.5px;color:#7c838f;line-height:1.6;}
+  .rm-card.hot{border-color:#ffd08a;background:#fffaf0;}
+  .rm-card.cold{border-color:#e6e9ed;background:#fafbfc;}
+
+  .rm-num{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;}
+  .rm-num > div{background:#f7f8fa;border-radius:14px;padding:14px;text-align:center;}
+  .rm-num b{display:block;font-size:24px;font-weight:900;color:#191f28;letter-spacing:-1px;}
+  .rm-num span{display:block;margin-top:3px;font-size:12px;color:#8b919c;font-weight:700;}
+
+  /* 데이터 흐름도 */
+  .rm-flow{background:#f7f8fa;border-radius:16px;padding:18px 16px;}
+  .rm-flow .fl-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .rm-flow .fl-box{
+    background:#fff;border:1px solid #e6e9ed;border-radius:12px;
+    padding:10px 13px;font-size:13px;font-weight:800;color:#3c434f;
+  }
+  .rm-flow .fl-box.wip{border-style:dashed;color:#a0a6b0;background:#fbfcfd;}
+  .rm-flow .fl-hub{
+    background:#191f28;color:#fff;border:0;font-size:14.5px;padding:14px 20px;
+    border-radius:14px;font-weight:900;text-align:center;line-height:1.5;
+  }
+  .rm-flow .fl-hub small{display:block;font-weight:700;font-size:11.5px;color:#9fb0c1;margin-top:3px;}
+  .rm-flow .fl-arrow{text-align:center;color:#c3c8d0;font-size:18px;margin:9px 0;}
+  .rm-flow .fl-cap{text-align:center;font-size:11.5px;font-weight:800;color:#a0a6b0;margin-bottom:8px;letter-spacing:.3px;}
+
+  /* 단계 로드맵 */
+  .rm-step{
+    background:#fff;border:1px solid #eceef1;border-radius:16px;
+    padding:16px 16px 14px;margin-bottom:10px;position:relative;overflow:hidden;
+  }
+  .rm-step:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:#dfe3e8;}
+  .rm-step.s1:before{background:#2f7d5e;}
+  .rm-step.s2:before{background:#2b6cb0;}
+  .rm-step.s3:before{background:#a6791f;}
+  .rm-step.s4:before{background:#8a3d6b;}
+  .rm-step .st-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:3px;}
+  .rm-step .st-n{font-size:12px;font-weight:900;color:#a0a6b0;}
+  .rm-step .st-t{font-size:16.5px;font-weight:900;color:#191f28;letter-spacing:-.5px;}
+  .rm-step .st-w{
+    font-size:11.5px;font-weight:800;color:#5b626d;background:#f2f4f6;
+    padding:3px 9px;border-radius:20px;
+  }
+  .rm-step .st-goal{font-size:13px;color:#7c838f;margin:0 0 10px;line-height:1.6;}
+  .rm-step ul{margin:0;padding-left:0;list-style:none;}
+  .rm-step li{
+    font-size:13.5px;color:#3c434f;line-height:1.65;padding:7px 0 7px 22px;
+    border-top:1px solid #f4f5f7;position:relative;
+  }
+  .rm-step li:first-child{border-top:0;}
+  .rm-step li:before{content:"□";position:absolute;left:2px;top:7px;color:#c3c8d0;font-size:13px;}
+  .rm-step li b{color:#191f28;font-weight:900;}
+  .rm-step li i{font-style:normal;color:#8b919c;font-size:12.5px;}
+
+  /* AI 붙는 지점 */
+  .rm-ai{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:10px;}
+  .rm-ai > div{
+    background:#f4f8ff;border:1px solid #dbe7fb;border-radius:14px;padding:14px 15px;
+  }
+  .rm-ai .ai-t{font-size:14.5px;font-weight:900;color:#1b3a5c;margin-bottom:5px;}
+  .rm-ai .ai-d{font-size:12.5px;color:#4a5f75;line-height:1.65;}
+  .rm-ai .ai-n{margin-top:7px;font-size:11.5px;font-weight:800;color:#7d92aa;}
+
+  /* 규칙 / 경고 */
+  .rm-rule{
+    background:#fff8f2;border:1px solid #ffd9b8;border-radius:14px;padding:14px 15px;margin-bottom:9px;
+  }
+  .rm-rule .ru-t{font-size:14.5px;font-weight:900;color:#8a4a12;margin-bottom:4px;}
+  .rm-rule .ru-d{font-size:13px;color:#6b4a2c;line-height:1.65;}
+
+  .rm-ask{background:#f2f4f6;border-radius:16px;padding:16px;}
+  .rm-ask h4{margin:0 0 4px;font-size:15px;font-weight:900;color:#191f28;}
+  .rm-ask p{margin:0 0 10px;font-size:12.5px;color:#8b919c;line-height:1.6;}
+  .rm-ask ol{margin:0;padding-left:19px;}
+  .rm-ask li{font-size:13.5px;color:#3c434f;line-height:1.7;margin-bottom:5px;}
+
+  .rm-foot{margin-top:26px;font-size:12px;color:#a0a6b0;line-height:1.7;text-align:center;}
+
+  @media (max-width:640px){
+    #roadmap{padding:4px 14px 90px;}
+    .viewnav .vnav{font-size:13px;padding:11px 6px;}
+    .rm-hero{padding:18px 16px;}
+    .rm-hero h2{font-size:18px;}
+    .rm-cards{grid-template-columns:1fr 1fr;}
+    .rm-ai{grid-template-columns:1fr;}
+  }
+
 </style>
 </head>
 <body>
@@ -813,6 +939,10 @@
 
 <header class="top">
   <div class="inner">
+    <div class="viewnav">
+      <button type="button" class="vnav on" id="vnavHub" onclick="setView('hub')">📋 업무 모음</button>
+      <button type="button" class="vnav" id="vnavMap" onclick="setView('map')">🧭 성장 로드맵</button>
+    </div>
     <div class="toprow">
       <div>
         <div class="brandRow">
@@ -865,6 +995,251 @@
     </div>
   </div>
 </header>
+
+<section id="roadmap">
+
+  <div class="rm-hero">
+    <h2>🧭 위베이프가 갈 길 — 내수에서 일본까지</h2>
+    <p>지금 만들고 있는 건 "편한 도구 몇 개"가 아닙니다. <b>사람이 아니라 시스템이 매장을 돌리게 만드는 것</b>이 목표입니다.
+       그래야 매장을 하나 더 열든, 일본에 열든, 사람을 새로 뽑아 가르치는 대신 <b>시스템을 복사해서 붙이면</b> 됩니다.</p>
+    <div class="rm-oneline">한 줄 요약 — 지금 우리가 하는 일은 「매장 운영을 복사할 수 있게 만드는 작업」입니다.</div>
+  </div>
+
+  <!-- 1. 현재 지도 -->
+  <div class="rm-sec">
+    <h3>1. 지금 우리가 가진 것</h3>
+    <p class="rm-desc">업무 모음 탭에 등록된 실제 숫자입니다. (자동 집계)</p>
+    <div class="rm-num">
+      <div><b id="rmNumAll">0</b><span>등록된 시스템</span></div>
+      <div><b id="rmNumOk">0</b><span>지금 쓸 수 있음</span></div>
+      <div><b id="rmNumWip">0</b><span>만드는 중</span></div>
+      <div><b id="rmNumOwner">0</b><span>실제 담당자 수</span></div>
+      <div><b id="rmNumNoown">0</b><span>주인 없는 시스템</span></div>
+    </div>
+    <p class="rm-desc" style="margin-top:10px">
+      ⚠️ 솔직하게 짚고 갑니다. 시스템 수보다 <b>담당자 수가 훨씬 적습니다.</b>
+      주인이 없는 시스템은 반드시 방치됩니다. 새로 만드는 것보다 <b>지금 있는 것에 이름 붙이는 게 먼저</b>입니다.
+    </p>
+  </div>
+
+  <!-- 2. 연결 구조 -->
+  <div class="rm-sec">
+    <h3>2. 이 시스템들이 어떻게 하나로 붙는가</h3>
+    <p class="rm-desc">포스 통합 프로그램이 <b>심장</b>입니다. 여기가 완성돼야 아래 모든 게 자동으로 굴러갑니다.</p>
+    <div class="rm-flow">
+      <div class="fl-cap">① 현장에서 숫자가 들어온다</div>
+      <div class="fl-row">
+        <div class="fl-box">🧾 포스 (판매)</div>
+        <div class="fl-box">📦 발주서 관리</div>
+        <div class="fl-box">🗓️ 근무 스케줄</div>
+        <div class="fl-box">👤 회원가입 폼</div>
+        <div class="fl-box wip">📋 재고 실사 <small>(없음)</small></div>
+      </div>
+      <div class="fl-arrow">▼</div>
+      <div class="fl-hub">🏛️ 통합 데이터 창고
+        <small>모든 숫자가 한 곳에 모이는 자리 · 「포스 통합 프로그램」이 이 역할</small>
+      </div>
+      <div class="fl-arrow">▼</div>
+      <div class="fl-cap">② 숫자가 판단으로 바뀐다</div>
+      <div class="fl-row">
+        <div class="fl-box">📊 일매출 보고</div>
+        <div class="fl-box wip">💹 매장별 손익 <small>(없음)</small></div>
+        <div class="fl-box wip">📉 재고·로스 관리 <small>(없음)</small></div>
+        <div class="fl-box wip">🎯 고객 재방문/CRM <small>(없음)</small></div>
+        <div class="fl-box wip">📢 마케팅 성과 <small>(없음)</small></div>
+      </div>
+      <div class="fl-arrow">▼</div>
+      <div class="fl-cap">③ 사람이 움직인다</div>
+      <div class="fl-row">
+        <div class="fl-box">🧭 경영 판단 · 지시</div>
+        <div class="fl-box">🏪 매장 실행</div>
+        <div class="fl-box wip">🤖 AI 자동 브리핑 <small>(없음)</small></div>
+      </div>
+    </div>
+    <p class="rm-desc" style="margin-top:12px">
+      점선 상자는 <b>아직 없는 것</b>입니다. 지금 우리는 ①은 어느 정도 있고, ②가 거의 비어 있습니다.
+      ②가 비어 있으면 숫자를 모아도 <b>판단으로 안 바뀝니다.</b> 그래서 다음 순서가 중요합니다.
+    </p>
+  </div>
+
+  <!-- 3. 빠진 조각 -->
+  <div class="rm-sec">
+    <h3>3. 빠져 있는 7개 영역</h3>
+    <p class="rm-desc">매장 운영을 온전히 돌리려면 있어야 하는데, 지금 시스템에 자리가 없는 것들입니다.</p>
+    <div class="rm-cards">
+      <div class="rm-card hot">
+        <div class="rm-k">🔥 가장 급함</div>
+        <div class="rm-v">재고 · 로스 관리</div>
+        <div class="rm-s">전자담배는 액상·기기 단가가 높습니다. 지금은 "얼마나 없어졌는지"를 아무도 숫자로 모릅니다. 새는 돈은 매출을 올려서 못 메꿉니다.</div>
+      </div>
+      <div class="rm-card hot">
+        <div class="rm-k">🔥 가장 급함</div>
+        <div class="rm-v">규제 · 서류 만료 알림</div>
+        <div class="rm-s">담배소매인 지정, 영업신고, 임대차, 보험, 소방. 하나 놓치면 매장 하나가 멈춥니다. 사람 기억에 맡길 일이 아닙니다.</div>
+      </div>
+      <div class="rm-card hot">
+        <div class="rm-k">🔥 가장 급함</div>
+        <div class="rm-v">매장별 손익</div>
+        <div class="rm-s">매출은 보이는데 <b>어느 매장이 돈을 버는지</b>는 안 보입니다. 임대료·인건비·원가를 매장 단위로 붙여야 폐점·확장 판단이 가능합니다.</div>
+      </div>
+      <div class="rm-card">
+        <div class="rm-k">그 다음</div>
+        <div class="rm-v">고객 · CRM</div>
+        <div class="rm-s">회원가입은 받는데 그 뒤가 없습니다. 재방문 주기, 이탈 고객, 단골 비중을 봐야 합니다. <b>이게 마케팅보다 먼저입니다.</b></div>
+      </div>
+      <div class="rm-card">
+        <div class="rm-k">그 다음</div>
+        <div class="rm-v">마케팅</div>
+        <div class="rm-s">고객 데이터가 없으면 마케팅비는 전부 감(感)입니다. CRM이 생긴 뒤에 붙여야 "얼마 써서 얼마 벌었나"가 계산됩니다.</div>
+      </div>
+      <div class="rm-card cold">
+        <div class="rm-k">나중에</div>
+        <div class="rm-v">매장 시설 · 계약</div>
+        <div class="rm-s">임대 조건, 인테리어 이력, 장비 A/S 이력. 매장이 늘수록 없으면 반드시 사고가 납니다.</div>
+      </div>
+      <div class="rm-card cold">
+        <div class="rm-k">나중에</div>
+        <div class="rm-v">인사 (채용~평가)</div>
+        <div class="rm-s">지금 인사는 스케줄까지만 있습니다. 채용·교육·평가·퇴사가 빠져 있고, 이건 일본 갈 때 반드시 필요해집니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 단계별 로드맵 -->
+  <div class="rm-sec">
+    <h3>4. 만드는 순서 — 4단계</h3>
+    <p class="rm-desc">순서를 바꾸면 앞의 것이 무너집니다. 특히 <b>고객(CRM)은 마케팅보다 먼저</b>, <b>손익은 확장보다 먼저</b>입니다.</p>
+
+    <div class="rm-step s1">
+      <div class="st-h"><span class="st-n">1단계</span><span class="st-t">돈이 새는 곳부터 막는다</span><span class="st-w">0~3개월</span></div>
+      <p class="st-goal">목표 — "지금 우리 얼마 벌고 얼마 새는지"를 매일 숫자로 본다.</p>
+      <ul>
+        <li><b>포스 통합 프로그램 완성</b> <i>— 모든 것의 심장. 이게 늦으면 뒤가 전부 밀립니다.</i></li>
+        <li><b>재고 · 로스 관리 시스템</b> <i>— 입고/판매/실사 차이를 매장별로 자동 계산.</i></li>
+        <li><b>규제 · 서류 만료 알림</b> <i>— 만료 30일 전 자동 알림. 가장 싸게 만들고 가장 크게 막습니다.</i></li>
+        <li><b>주인 없는 시스템에 담당자 지정</b> <i>— 개발이 아니라 결정. 오늘 할 수 있습니다.</i></li>
+      </ul>
+    </div>
+
+    <div class="rm-step s2">
+      <div class="st-h"><span class="st-n">2단계</span><span class="st-t">숫자로 경영한다</span><span class="st-w">3~6개월</span></div>
+      <p class="st-goal">목표 — 감이 아니라 표를 보고 결정한다. 대표가 매장에 안 가도 상태가 보인다.</p>
+      <ul>
+        <li><b>매장별 손익표</b> <i>— 매출 − 원가 − 인건비 − 임대료. 13개 매장 한 화면.</i></li>
+        <li><b>고객 CRM</b> <i>— 회원 재방문 주기, 이탈 위험, 매장별 단골 비중.</i></li>
+        <li><b>일일 경영 브리핑 자동 발송</b> <i>— 매일 아침 어제 숫자 + 이상한 점 요약.</i></li>
+        <li><b>발주 자동 추천</b> <i>— 판매 속도 기준으로 "이만큼 시키세요"까지.</i></li>
+      </ul>
+    </div>
+
+    <div class="rm-step s3">
+      <div class="st-h"><span class="st-n">3단계</span><span class="st-t">복사할 수 있게 만든다</span><span class="st-w">6~12개월</span></div>
+      <p class="st-goal">목표 — 신규 매장 하나를 <b>사람 교육 없이</b> 열 수 있는 상태. 여기가 일본의 진짜 준비입니다.</p>
+      <ul>
+        <li><b>매뉴얼 · 표준 업무(SOP) 디지털화</b> <i>— 청소·응대·마감·A/S를 글이 아니라 체크리스트로.</i></li>
+        <li><b>신규 매장 오픈 체크리스트</b> <i>— 계약부터 오픈까지 순서를 시스템이 시킨다.</i></li>
+        <li><b>다점포 권한 구조</b> <i>— 본사/지역/점장이 각자 볼 것만 보게. 지금은 전부 다 보입니다.</i></li>
+        <li><b>마케팅 성과 측정</b> <i>— CRM이 깔린 뒤라야 의미가 있습니다.</i></li>
+        <li><b>다국어 · 다통화 대비</b> <i>— 화면 글자와 금액 단위를 한 곳에 모아둡니다.</i></li>
+      </ul>
+    </div>
+
+    <div class="rm-step s4">
+      <div class="st-h"><span class="st-n">4단계</span><span class="st-t">일본에 붙인다</span><span class="st-w">12개월~</span></div>
+      <p class="st-goal">목표 — 한국에서 돌던 시스템을 <b>번역과 법규 레이어만 갈아끼워</b> 일본에서 그대로 돌린다.</p>
+      <ul>
+        <li><b>일본어 화면</b> <i>— 3단계에서 글자를 모아뒀으면 교체 작업으로 끝납니다.</i></li>
+        <li><b>현지 법규 · 세금 레이어</b> <i>— 일본 전자담배 규제는 한국과 다릅니다. 규칙만 갈아끼우는 구조로.</i></li>
+        <li><b>엔화 / 원화 동시 보기</b> <i>— 본사는 원화 환산, 현지는 엔화.</i></li>
+        <li><b>본사–현지 리포팅 라인</b> <i>— 같은 지표를 같은 정의로. 여기서 정의가 다르면 관리가 불가능해집니다.</i></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. AI 붙는 지점 -->
+  <div class="rm-sec">
+    <h3>5. AI가 실제로 붙는 자리 5곳</h3>
+    <p class="rm-desc">AI는 "있으면 좋은 것"이 아니라, <b>사람 수를 늘리지 않고 매장 수를 늘리는 방법</b>입니다. 막연히 쓰는 게 아니라 아래 5곳에 붙습니다.</p>
+    <div class="rm-ai">
+      <div>
+        <div class="ai-t">🤖 매일 아침 경영 브리핑</div>
+        <div class="ai-d">어제 13개 매장 숫자를 읽고 "어디가 이상한지"를 사람 말로 정리해 카톡으로 보냅니다. 표를 볼 시간을 없애줍니다.</div>
+        <div class="ai-n">붙는 단계 · 2단계</div>
+      </div>
+      <div>
+        <div class="ai-t">📦 발주량 예측</div>
+        <div class="ai-d">매장·상품별 판매 속도와 계절성을 보고 발주 수량을 추천합니다. 재고 과다와 품절을 동시에 줄입니다.</div>
+        <div class="ai-n">붙는 단계 · 2단계</div>
+      </div>
+      <div>
+        <div class="ai-t">🚨 로스 이상 감지</div>
+        <div class="ai-d">특정 매장·특정 시간대에 재고 차이가 비정상적으로 크면 자동으로 표시합니다. 사람이 매일 대조할 필요가 없어집니다.</div>
+        <div class="ai-n">붙는 단계 · 1~2단계</div>
+      </div>
+      <div>
+        <div class="ai-t">🎯 이탈 고객 예측</div>
+        <div class="ai-d">평소 주기보다 늦게 오는 회원을 골라내 재방문 유도 메시지를 보냅니다. 신규 유치보다 훨씬 쌉니다.</div>
+        <div class="ai-n">붙는 단계 · 2~3단계</div>
+      </div>
+      <div>
+        <div class="ai-t">📑 규제 · 문서 요약</div>
+        <div class="ai-d">바뀌는 전자담배 규제·공문을 읽고 "우리가 뭘 해야 하는지"로 바꿔줍니다. 일본 진출 때 특히 큽니다.</div>
+        <div class="ai-n">붙는 단계 · 3~4단계</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 조직 -->
+  <div class="rm-sec">
+    <h3>6. 조직 — 시스템에는 주인이 있어야 합니다</h3>
+    <p class="rm-desc">부서 칸은 많은데 실제 이름이 붙은 사람은 소수입니다. 새 부서를 만들라는 뜻이 아니라, <b>겸직이라도 이름을 못 박자</b>는 뜻입니다.</p>
+    <div class="rm-cards">
+      <div class="rm-card"><div class="rm-k">필요 역할</div><div class="rm-v">데이터 주인</div><div class="rm-s">포스 통합·숫자 정의를 지키는 사람. 지표 정의가 흔들리면 전부 무너집니다.</div></div>
+      <div class="rm-card"><div class="rm-k">필요 역할</div><div class="rm-v">재고 · 구매</div><div class="rm-s">발주와 로스를 같이 봅니다. 지금은 발주만 있고 로스가 없습니다.</div></div>
+      <div class="rm-card"><div class="rm-k">필요 역할</div><div class="rm-v">고객 · 마케팅</div><div class="rm-s">CRM이 생긴 뒤 만들어야 의미가 있습니다. 그전엔 겸직으로 충분합니다.</div></div>
+      <div class="rm-card"><div class="rm-k">필요 역할</div><div class="rm-v">규제 · 총무</div><div class="rm-s">서류 만료·매장 계약·시설. 사고를 막는 자리입니다.</div></div>
+      <div class="rm-card"><div class="rm-k">필요 역할</div><div class="rm-v">시스템 개발</div><div class="rm-s">지금 실질적으로 이 허브를 굴리는 축. 여기가 병목이 되지 않게 우선순위를 지켜야 합니다.</div></div>
+    </div>
+  </div>
+
+  <!-- 7. 지금부터 지켜야 할 규칙 -->
+  <div class="rm-sec">
+    <h3>7. 일본까지 가려면 지금부터 지켜야 할 3가지</h3>
+    <p class="rm-desc">지금 안 지키면 나중에 <b>고칠 수 없는</b> 것들입니다. 비용이 가장 싼 지금 정해야 합니다.</p>
+    <div class="rm-rule">
+      <div class="ru-t">① 매장코드 · 상품코드 체계를 지금 확정한다</div>
+      <div class="ru-d">매장마다 이름을 다르게 부르고 상품명을 자유롭게 적으면, 나중에 13개 매장 숫자를 합칠 수 없습니다. 코드는 한 번 퍼지면 되돌리기 거의 불가능합니다.</div>
+    </div>
+    <div class="rm-rule">
+      <div class="ru-t">② 금액은 항상 「통화 표시」와 같이 저장한다</div>
+      <div class="ru-d">지금은 전부 원화라 신경 안 써도 됩니다. 하지만 일본 매장이 생기는 순간, 통화 표시가 없는 과거 데이터는 전부 쓰레기가 됩니다.</div>
+    </div>
+    <div class="rm-rule">
+      <div class="ru-t">③ 화면에 보이는 글자는 코드 안에 박지 않는다</div>
+      <div class="ru-d">한국어 문구를 한 곳에 모아두면 일본어 전환은 "번역해서 갈아끼우기"로 끝납니다. 흩어져 있으면 전부 새로 만들어야 합니다.</div>
+    </div>
+  </div>
+
+  <!-- 8. 확인 필요 -->
+  <div class="rm-sec">
+    <div class="rm-ask">
+      <h4>❓ 이 계획을 더 정확하게 만들려면 — 확인이 필요한 것</h4>
+      <p>아래 4가지는 제가 모르는 정보라 일반적인 기준으로 잡아둔 부분입니다. 답이 정해지면 위 순서와 기간이 바뀝니다.</p>
+      <ol>
+        <li>13개 매장이 <b>전부 직영</b>인가, 가맹이 섞여 있나? → 가맹이 있으면 "통제형"이 아니라 "정산·리포트형"으로 설계가 달라집니다.</li>
+        <li>포스 통합 프로그램이 <b>어디까지</b> 가져오나? (매출 총액만 / 상품별 판매내역 / 회원까지) → 상품별이 안 들어오면 재고·로스와 발주 예측이 불가능합니다.</li>
+        <li>마케팅은 지금 <b>누가</b> 하고 있나? (없음 / 대표 직접 / 외주) → 담당이 없으면 CRM을 먼저 만들어도 쓸 사람이 없습니다.</li>
+        <li>일본 진출은 <b>직영 1호점</b>인가 <b>현지 파트너</b>인가, 대략 몇 년 뒤인가? → 파트너 방식이면 3단계의 권한 구조가 훨씬 앞당겨져야 합니다.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="rm-foot">
+    이 로드맵은 현재 등록된 시스템과 운영 상황을 근거로 작성됐습니다.<br>
+    상황이 바뀌면 갱신됩니다 · 최종 정리 2026-07-28
+  </div>
+
+</section>
 
 <div class="wrap">
 
@@ -1835,6 +2210,49 @@ function setFilter(mode){
   applySearchFilter();
 }
 
+// ===== 🧭 성장 로드맵 (두 번째 메뉴) =====
+let currentView = 'hub';
+function setView(v){
+  currentView = (v === 'map') ? 'map' : 'hub';
+  document.body.classList.toggle('mapview', currentView === 'map');
+  const a = document.getElementById('vnavHub'), b = document.getElementById('vnavMap');
+  if(a) a.classList.toggle('on', currentView === 'hub');
+  if(b) b.classList.toggle('on', currentView === 'map');
+  const h = document.querySelector('header.top h1');
+  const s = document.getElementById('headSub');
+  if(currentView === 'map'){
+    document.body.classList.remove('detailopen');
+    if(h) h.textContent = '성장 로드맵';
+    if(s) s.textContent = '지금 뭐가 부족하고, 무슨 순서로 만들어야 하는지.';
+    try{ renderRoadmapNums(); }catch(err){}
+  } else {
+    if(h) h.textContent = '업무 모음';
+    try{ renderUI(); }catch(err){}
+  }
+  try{ window.scrollTo(0,0); }catch(err){}
+}
+
+// 로드맵 상단 숫자 = 실제 등록된 시스템에서 자동 집계
+function renderRoadmapNums(){
+  const set = (id,v)=>{ const el = document.getElementById(id); if(el) el.textContent = v; };
+  const list = Array.isArray(entries) ? entries : [];
+  const ok = list.filter(e => e.status !== '개발중').length;
+  const wip = list.filter(e => e.status === '개발중').length;
+  const noown = list.filter(e => !((e.owner||'').trim())).length;
+  const names = new Set();
+  list.forEach(e => {
+    parseContributors(e.owner||'').forEach(c => {
+      const n = (c.name||'').trim();
+      if(n) names.add(n);
+    });
+  });
+  set('rmNumAll', list.length);
+  set('rmNumOk', ok);
+  set('rmNumWip', wip);
+  set('rmNumOwner', names.size);
+  set('rmNumNoown', noown);
+}
+
 // 검색어로 목록 줄이기 (묶음 제목·＋버튼도 같이 정리)
 function applySearchFilter(){
   const box = document.getElementById('search');
@@ -2029,7 +2447,7 @@ function render(){
   setTxt('tabWip', wipEntries.length);
   setTxt('tabNoown', noOwnCount);
   const hs = document.getElementById('headSub');
-  if(hs) hs.textContent = `사용가능 ${liveEntries.length} · 만드는중 ${wipEntries.length} · 담당자없음 ${noOwnCount}`;
+  if(hs && !document.body.classList.contains('mapview')) hs.textContent = `사용가능 ${liveEntries.length} · 만드는중 ${wipEntries.length} · 담당자없음 ${noOwnCount}`;
 
   // ---- 묶음별 목록 ----
   const root = document.getElementById('layers');
@@ -2048,6 +2466,7 @@ function render(){
 
   detailHtml();
   applySearchFilter();   // 목록을 다시 그렸으니 검색어도 다시 적용
+  try{ renderRoadmapNums(); }catch(err){}
 
   document.getElementById('statLinks').textContent = liveEntries.length;
   document.getElementById('statDepts').textContent = activeDeptCodes.size;
@@ -2936,10 +3355,11 @@ if ('serviceWorker' in navigator) {
    ★ 다음에 또 업데이트하면 UPDATE_ID 날짜만 바꾸고
      UPDATE_ITEMS 내용을 갈아끼우면 끝. 다른 건 건드릴 필요 없음.
    ============================================================ */
-const UPDATE_ID   = '2026-07-28';
+const UPDATE_ID   = '2026-07-29';
 const UPDATE_SEEN = 'wevape_hub_upd_seen';
 const UPDATE_ITEMS = [
-  ['🧭', '화면을 확 바꿨습니다',      '복잡한 카드가 없어지고 카톡처럼 한 줄 목록이 됐습니다. 누르면 오른쪽(휴대폰은 전체화면)에 자세한 내용이 나옵니다.'],
+  ['🧭', '「성장 로드맵」 메뉴가 생겼습니다', '맨 위에서 「업무 모음 / 성장 로드맵」을 고를 수 있습니다. 우리가 지금 뭐가 부족하고, 어떤 순서로 만들어 나가는지, 나중에 일본까지 어떻게 이어지는지를 한 장에 정리했습니다.'],
+  ['🧩', '화면을 확 바꿨습니다',      '복잡한 카드가 없어지고 카톡처럼 한 줄 목록이 됐습니다. 누르면 오른쪽(휴대폰은 전체화면)에 자세한 내용이 나옵니다.'],
   ['🗂️', '부서 코드를 없앴습니다',    'HR·FIN 같은 영어 코드 대신 근무·스케줄 / 매출·돈 / 발주·재고 처럼 알아볼 수 있는 7개 묶음으로 정리했습니다.'],
   ['💬', '의견(피드백)이 저장됩니다', '남긴 의견이 사라지던 문제를 고쳤습니다. 이제 쓰는 즉시 저장되고 전 직원 화면에 바로 보입니다.'],
   ['🔓', '비밀번호 없이 저장됩니다',  '따로 등록할 필요 없이 누구나 바로 수정하고 저장할 수 있습니다.'],
