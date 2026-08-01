@@ -1138,6 +1138,39 @@
     font-size:12.5px;font-weight:800;color:#c0392b;line-height:1.65;}
   .dk-empty{background:#fff;border:1px dashed #d8dce1;border-radius:14px;padding:26px 16px;text-align:center;
     font-size:13px;color:#9aa0aa;font-weight:700;line-height:1.7;}
+  /* 📚 업무가 쌓여도 한눈에 — 접기 + 필터 + 찾기 */
+  .dk-search{width:100%;height:44px;border:1px solid #e6e9ed;border-radius:12px;padding:0 13px;background:#fff;
+    font-family:inherit;font-size:13.5px;font-weight:700;color:#191f28;box-sizing:border-box;margin-bottom:9px;}
+  .dk-tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+  .dk-chip{border:1px solid #e6e9ed;background:#fff;border-radius:999px;padding:8px 13px;font-family:inherit;
+    font-size:12px;font-weight:800;color:#6b7280;cursor:pointer;line-height:1;}
+  .dk-chip.on{background:#6b4ec7;border-color:#6b4ec7;color:#fff;}
+  .dk-chip em{font-style:normal;font-weight:900;margin-left:5px;opacity:.8;}
+  .dk-chip.mn.on{background:#e0483c;border-color:#e0483c;}
+  .dk-head{display:flex;gap:10px;align-items:flex-start;cursor:pointer;}
+  .dk-head .hb{flex:1;min-width:0;}
+  .dk-head .cv{flex:none;width:28px;height:28px;border-radius:9px;background:#f4f6f8;color:#6b7280;
+    font-size:13px;font-weight:900;line-height:28px;text-align:center;}
+  .dk-head .cv:after{content:'▾';}
+  .dk-item.op .dk-head .cv{background:#6b4ec7;color:#fff;}
+  .dk-item.op .dk-head .cv:after{content:'▴';}
+  .dk-sum{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px;align-items:center;
+    font-size:11.5px;font-weight:800;color:#9aa0aa;}
+  .dk-sum span{border-radius:7px;padding:3px 7px;background:#f4f6f8;}
+  .dk-sum .who{background:#f2eefc;color:#4a2f9e;cursor:pointer;border:1px solid #e0d7f7;}
+  .dk-sum .pg{background:#fff4e0;color:#b57200;}
+  .dk-sum .pg.done{background:#e8f6ec;color:#1d7a3b;}
+  .dk-sum .mine{background:#e0483c;color:#fff;}
+  .dk-body{display:none;}
+  .dk-item.op .dk-body{display:block;}
+  .dk-item.mine{border-color:#f3b8b2;box-shadow:0 0 0 2px #fdeceb;}
+  .dk-clip{position:relative;max-height:190px;overflow:hidden;}
+  .dk-clip:after{content:'';position:absolute;left:0;right:0;bottom:0;height:52px;pointer-events:none;
+    background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.97));}
+  .dk-more{margin-top:6px;border:1px solid #e6e9ed;background:#fff;border-radius:9px;font-family:inherit;
+    font-size:11.5px;font-weight:800;color:#6b4ec7;padding:7px 12px;cursor:pointer;}
+  .dk-none{background:#fff;border:1px dashed #d8dce1;border-radius:14px;padding:22px 16px;text-align:center;
+    font-size:12.5px;color:#9aa0aa;font-weight:700;line-height:1.7;}
   .dk-foot{margin-top:22px;font-size:11.5px;color:#9aa0aa;font-weight:700;text-align:center;line-height:1.8;}
   </style>
 </head>
@@ -1543,6 +1576,9 @@
   </div>
 
   <div class="dk-sec">올라온 검토 <em id="dkCount">0</em>건</div>
+  <input type="text" id="dkSearch" class="dk-search" style="display:none"
+    placeholder="🔎 제목이나 담당 개발자 이름으로 찾기" autocomplete="off" oninput="dkSetSearch(this.value)">
+  <div class="dk-tools" id="dkTools"></div>
   <div id="dkList"></div>
 
   <div class="dk-foot">
@@ -4051,6 +4087,7 @@ async function submitReview(){
   if(g('dkUrl')) g('dkUrl').value = '';
   if(g('dkText')) g('dkText').value = '';
   if(g('dkDev')) g('dkDev').value = '';
+  try{ dkUI().open[REVIEW_LIST[0].id] = true; }catch(e){}   // 방금 올린 건은 펼쳐서 보여준다
   const d = g('dkDiag');
   if(d) d.innerHTML = deskDiagHtml(REVIEW_LIST[0]);
   renderDesk();
@@ -4155,6 +4192,88 @@ function dkPaintBadge(){
   const n = dkAlertCount();
   d.textContent = (n > 99) ? '99+' : String(n);
   d.style.display = n ? 'inline-block' : 'none';
+}
+/* 📚 목록이 쌓여도 한눈에 — 접기 + 필터 + 찾기
+   ★ 상태는 window 에 담는다. 이 파일은 부팅 코드(applyData)가 파일 중간에서
+     돌기 때문에 아래쪽에 let/const 를 두면 부팅이 터진다(TDZ).
+     함수 선언은 위로 끌어올려지므로 안전하다. */
+function dkUI(){
+  if(!window.__dkUI) window.__dkUI = {open:{}, tab:'all', q:''};
+  return window.__dkUI;
+}
+function dkToggleOpen(id){
+  const u = dkUI();
+  u.open[id] = !u.open[id];
+  const el = document.getElementById('dki_' + id);
+  if(el) el.classList.toggle('op', !!u.open[id]);
+}
+function dkSetTab(t){ dkUI().tab = t; renderDesk(); }
+/* 담당자 이름표를 누르면 그 사람 업무만 모아서 본다 */
+function dkPickDev(v){
+  let nm = '';
+  try{ nm = decodeURIComponent(v || ''); }catch(e){ nm = String(v || ''); }
+  const u = dkUI();
+  u.q = nm.toLowerCase();
+  u.tab = 'all';
+  const s = document.getElementById('dkSearch');
+  if(s){ s.style.display = 'block'; s.value = nm; }
+  renderDesk();
+}
+function dkSetSearch(v){ dkUI().q = String(v || '').trim().toLowerCase(); renderDesk(); }
+function dkOpenAll(v){
+  const u = dkUI();
+  if(v) dkVisible().forEach(function(r){ u.open[r.id] = true; });
+  else u.open = {};
+  renderDesk();
+}
+function dkTabOf(r){
+  const st = dkStage(r);
+  if(st === '최종승인' || st === '반려') return 'done';
+  if(st === '보완필요') return 'fix';
+  return 'wait';
+}
+function dkVisible(){
+  const u = dkUI();
+  return REVIEW_LIST.filter(function(r){
+    if(u.tab === 'mine'){ if(!dkNeedsMe(r)) return false; }
+    else if(u.tab !== 'all'){ if(dkTabOf(r) !== u.tab) return false; }
+    if(u.q){
+      const s = ((r.title||'') + ' ' + (r.dev||'') + ' ' + (r.author||'') + ' ' + (r.url||'')).toLowerCase();
+      if(s.indexOf(u.q) < 0) return false;
+    }
+    return true;
+  }).sort(function(a, b){
+    return (dkNeedsMe(b) ? 1 : 0) - (dkNeedsMe(a) ? 1 : 0);
+  });
+}
+function dkToolsHtml(){
+  const u = dkUI();
+  const n = function(f){ try{ return REVIEW_LIST.filter(f).length; }catch(e){ return 0; } };
+  const tabs = [
+    ['mine', '🔴 지금 내 차례', n(dkNeedsMe), ' mn'],
+    ['all',  '전체', REVIEW_LIST.length, ''],
+    ['wait', '검토 진행중', n(function(r){ return dkTabOf(r) === 'wait'; }), ''],
+    ['fix',  '보완 필요', n(function(r){ return dkTabOf(r) === 'fix'; }), ''],
+    ['done', '끝난 것', n(function(r){ return dkTabOf(r) === 'done'; }), '']
+  ];
+  return tabs.map(function(t){
+    return '<button type="button" class="dk-chip' + t[3] + (u.tab === t[0] ? ' on' : '') +
+      '" onclick="dkSetTab(\'' + t[0] + '\')">' + t[1] + '<em>' + t[2] + '</em></button>';
+  }).join('') +
+  '<button type="button" class="dk-chip" onclick="dkOpenAll(1)">모두 펼치기</button>' +
+  '<button type="button" class="dk-chip" onclick="dkOpenAll(0)">모두 접기</button>';
+}
+/* 긴 글은 접어두고 「더 보기」로 편다 */
+function dkMore(b){
+  const p = b.previousElementSibling;
+  if(!p) return;
+  const on = p.classList.toggle('dk-clip');
+  b.textContent = on ? '▾ 더 보기' : '▴ 접기';
+}
+function dkClip(html, long, label){
+  if(!long) return html;
+  return '<div class="dk-clip">' + html + '</div>' +
+    '<button type="button" class="dk-more" onclick="dkMore(this)">▾ ' + label + '</button>';
 }
 function dkLogHtml(r){
   const l = Array.isArray(r.log) ? r.log : [];
@@ -4326,36 +4445,76 @@ async function deskDelete(id){
 function renderDesk(){
   const box = document.getElementById('dkList');
   const cnt = document.getElementById('dkCount');
+  const tools = document.getElementById('dkTools');
+  const sch = document.getElementById('dkSearch');
   if(cnt) cnt.textContent = REVIEW_LIST.length;
   if(!box) return;
+  // 업무가 2건 이상일 때만 필터, 4건 이상일 때만 찾기창을 보여준다
+  if(tools) tools.innerHTML = (REVIEW_LIST.length >= 2) ? dkToolsHtml() : '';
+  if(sch) sch.style.display = ((REVIEW_LIST.length >= 4) || dkUI().q) ? 'block' : 'none';
   if(!REVIEW_LIST.length){
     box.innerHTML = '<div class="dk-empty">아직 올라온 검토가 없습니다.<br>위에 진행 중인 업무나 링크를 올려보세요.</div>';
     try{ dkPaintBadge(); }catch(e){}
     return;
   }
   const admin = (function(){ try{ return isAdmin(); }catch(e){ return false; } })();
-  box.innerHTML = REVIEW_LIST.map(function(r){
+  const u = dkUI();
+  const list = dkVisible();
+  if(!list.length){
+    box.innerHTML = '<div class="dk-none">여기에 맞는 업무가 없습니다.<br>위에서 「전체」를 눌러보세요.</div>';
+    try{ dkPaintBadge(); }catch(e){}
+    return;
+  }
+  const solo = (list.length === 1);   // 딱 한 건이면 그냥 펼쳐 둔다
+  box.innerHTML = list.map(function(r){
     const st = dkStage(r);
     const bg = dkBadge(st);
     const canFix = (st === '보완필요' || st === '재검토요청');
     const isNew = (function(){ try{ return dkIsNew(r); }catch(e){ return false; } })();
-    return '<div class="dk-item">' +
-      (isNew ? '<span class="dk-new">🆕 새 소식</span>' : '') +
-      '<span class="dk-badge ' + bg[0] + '">' + bg[1] + '</span>' +
-      '<span class="it">' + escapeHtml(r.title) + '</span>' +
+    const mine = (function(){ try{ return dkNeedsMe(r); }catch(e){ return false; } })();
+    const td = Array.isArray(r.todos) ? r.todos : [];
+    const dn = td.filter(function(x){ return x.d; }).length;
+    const okn = td.filter(function(x){ return x.v === 'ok'; }).length;
+    const op = (u.open[r.id] === undefined) ? solo : !!u.open[r.id];
+    u.open[r.id] = op;
+    const pg = td.length
+      ? '<span class="pg' + ((okn === td.length) ? ' done' : '') + '">지시 ' + td.length +
+        '개 · 담당자 완료 ' + dn + ' · 감독관 확인 ' + okn + '</span>' : '';
+    const rep = String(r.reply || '');
+    const txt = String(r.text || '');
+    const logn = Array.isArray(r.log) ? r.log.length : 0;
+    return '<div class="dk-item' + (op ? ' op' : '') + (mine ? ' mine' : '') + '" id="dki_' + r.id + '">' +
+      '<div class="dk-head" onclick="dkToggleOpen(\'' + r.id + '\')">' +
+        '<div class="hb">' +
+          (isNew ? '<span class="dk-new">🆕 새 소식</span>' : '') +
+          '<span class="dk-badge ' + bg[0] + '">' + bg[1] + '</span>' +
+          '<span class="it">' + escapeHtml(r.title) + '</span>' +
+          '<div class="dk-sum">' +
+            (mine ? '<span class="mine">지금 내 차례</span>' : '') +
+            '<span class="who" onclick="event.stopPropagation();dkPickDev(\'' +
+              encodeURIComponent(r.dev || r.author || '') + '\')">👤 ' +
+              escapeHtml(r.dev || r.author || '미지정') + '</span>' +
+            pg +
+            (r.time ? '<span>' + escapeHtml(r.time) + '</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="cv"></div>' +
+      '</div>' +
+      '<div class="dk-body">' +
       '<div class="dk-dev">👤 담당 개발자 <b>' + escapeHtml(r.dev || r.author || '미지정') + '</b>' +
         ((r.author && r.author !== (r.dev || r.author)) ? ' <span>· 올린 사람 ' + escapeHtml(r.author) + '</span>' : '') + '</div>' +
       (r.url ? '<div class="iu">' + escapeHtml(r.url) + '</div>' : '') +
       dkFlowHtml(r) +
-      (r.text ? '<div class="ix">' + escapeHtml(r.text) + '</div>' : '') +
+      (txt ? dkClip('<div class="ix">' + escapeHtml(txt) + '</div>', txt.length > 260, '내용 더 보기') : '') +
       '<div class="im">올린 사람 ' + escapeHtml(r.author || '이름없음') + ' · ' + escapeHtml(r.time || '') +
         (r.approvedAt ? ' · 🏁 대표 최종승인 ' + escapeHtml(r.approvedAt) : '') + '</div>' +
       deskDiagHtml(r) +
-      (r.reply ? '<div class="dk-reply"><b>🧭 감독관 검토 의견</b>' + escapeHtml(r.reply) + '</div>' : '') +
+      (rep ? dkClip('<div class="dk-reply"><b>🧭 감독관 검토 의견</b>' + escapeHtml(rep) + '</div>',
+                    rep.length > 300, '검토 의견 전체 보기') : '') +
       dkTodoHtml(r) +
       ((admin && st === '재검토요청') ? '<div class="dk-warn">🔍 담당자가 수정 완료를 보고했습니다. 항목마다 「✅ 확인 완료」를 눌러 하나씩 확인해야 통과시킬 수 있습니다.</div>' : '') +
       ((!admin && st === '보완필요') ? '<div class="dk-warn">📋 고쳐야 할 지시가 있습니다. 하나씩 처리하고 체크할 때 뭘 했는지 적어주세요.</div>' : '') +
-      dkLogHtml(r) +
+      dkClip(dkLogHtml(r), logn > 5, '진행 이력 전체 보기') +
       '<div class="dk-acts">' +
         (admin ? '<button type="button" onclick="deskReply(\'' + r.id + '\')">✍️ 검토 의견</button>' : '') +
         (admin ? '<button type="button" onclick="deskTodos(\'' + r.id + '\')">📋 보완 지시</button>' : '') +
@@ -4365,6 +4524,7 @@ function renderDesk(){
         ((admin && st !== '최종승인' && st !== '반려') ? '<button type="button" class="del" onclick="deskReject(\'' + r.id + '\')">반려</button>' : '') +
         ((admin && (st === '최종승인' || st === '반려')) ? '<button type="button" onclick="deskReopen(\'' + r.id + '\')">되돌리기</button>' : '') +
         (admin ? '<button type="button" class="del" onclick="deskDelete(\'' + r.id + '\')">삭제</button>' : '') +
+      '</div>' +
       '</div>' +
     '</div>';
   }).join('');
