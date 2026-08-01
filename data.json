@@ -3,7 +3,7 @@
     {
       "dept": "HR",
       "title": "직원 일일 스케줄",
-      "url": "https://janghj201-cyber.github.io/-/",
+      "url": "https://vflow.kr",
       "note": "",
       "status": "운영중",
       "owner": "장현진 팀장"
@@ -316,6 +316,6 @@
   },
   "feedback": [],
   "feedbackSeq": 5,
-  "savedAt": "2026-08-01T02:51:42.150Z",
+  "savedAt": "2026-08-01T03:41:33.511Z",
   "savedBy": "employee"
 }
