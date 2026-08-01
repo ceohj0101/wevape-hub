@@ -67,7 +67,7 @@
     },
     {
       "dept": "HR",
-      "title": "스케줄 생성기",
+      "title": "근무표 편성(관리자)",
       "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1",
       "note": "",
       "status": "운영중",
@@ -327,6 +327,6 @@
   "reviews": [],
   "reviewSeq": 0,
   "deleted": [],
-  "savedAt": "2026-08-01T07:50:02.370Z",
+  "savedAt": "2026-08-01T07:50:37.130Z",
   "savedBy": "employee"
 }
