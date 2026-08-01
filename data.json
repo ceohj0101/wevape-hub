@@ -117,14 +117,6 @@
       "status": "개발중",
       "owner": "장대운 주임",
       "sensitive": true
-    },
-    {
-      "dept": "HR",
-      "title": "브이플로우(스케줄 앱)",
-      "url": "https://janghj201-cyber.github.io/-/",
-      "note": "",
-      "status": "운영중",
-      "owner": "장현진 팀장"
     }
   ],
   "stores": [
@@ -692,8 +684,9 @@
   ],
   "reviewSeq": 2,
   "deleted": [
-    "https://znsl132-lang.github.io/BIGLUCKY/feeds.html"
+    "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
+    "https://janghj201-cyber.github.io/-/"
   ],
-  "savedAt": "2026-08-01T13:22:04.023Z",
+  "savedAt": "2026-08-01T13:22:21.764Z",
   "savedBy": "employee"
 }
