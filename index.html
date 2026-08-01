@@ -691,6 +691,10 @@
     display:inline-block;margin-top:7px;
   }
   .br-f u:active{opacity:.6;}
+  .br-danger{margin-top:14px;background:#fff;border:1px solid #ffe0e3;border-radius:13px;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .br-danger span{font-size:12.5px;color:#a0a6b0;font-weight:600;}
+  .br-danger button{background:#fff;border:1px solid #ffc9cf;color:#f04452;font-size:13px;font-weight:800;border-radius:10px;padding:9px 14px;cursor:pointer;}
+  .br-danger button:active{background:#fff2f3;}
   .br-fb{margin-top:20px;background:#fff;border:1px solid #eef0f3;border-radius:14px;padding:18px;}
   .br-fb .fbh{font-size:15px;font-weight:900;color:#191f28;}
   .br-fb p{font-size:13px;color:#8b919c;margin:6px 0 12px;}
@@ -1983,6 +1987,7 @@ let FEEDBACK_LIST = [];      // [{id, url, text, time, status, reply}]
 let feedbackSeq = 0;
 let REVIEW_LIST = [];   // 🧩 새 업무 검토 [{id,title,url,text,author,time,date,status,reply}]
 let reviewSeq = 0;
+let DELETED_URLS = [];  // 🗑 지운 시스템 주소 목록 (기본 목록에서 되살아나지 않게 기록해 둠)
 let openFeedbackPanels = new Set();
 let editingFeedbackIds = new Set();
 const FB_STATUS_OPTIONS = ["접수됨","업데이트 예정","업데이트 완료"];
@@ -2446,6 +2451,35 @@ async function moveEntryDept(url){
   if(!canSave()) await askEmpPasswordThenSave();
 }
 
+// 🗑 시스템(기능) 삭제 — 되돌릴 수 없어서 두 단계로 확인한다.
+// 기본 목록(SEED)에 있는 항목도 DELETED_URLS 에 남겨두면 새로고침 때 되살아나지 않는다.
+async function deleteEntry(url){
+  const entry = findEntry(url);
+  if(!entry) return;
+  const key = entryKey(entry);
+  const fbCount = feedbackFor(key).length;
+  const warn = `"${entry.title}"을(를) 목록에서 완전히 지울까요?\n\n`
+    + `· 전 직원 화면에서 함께 사라집니다\n`
+    + (fbCount ? `· 여기 달린 의견 ${fbCount}건도 같이 지워집니다\n` : '')
+    + `· 되돌릴 수 없습니다\n\n`
+    + `(프로그램 자체가 없어지는 건 아니고, 이 모음에서만 빠집니다)`;
+  if(!(await customConfirm(warn, true))) return;
+  const typed = await customPrompt('실수 방지용입니다. 아래 칸에  삭제  라고 그대로 입력해주세요.', 'text', '');
+  if(typed === null) return;
+  if(String(typed).trim() !== '삭제'){ await customAlert('입력이 달라서 지우지 않았습니다.'); return; }
+
+  FEEDBACK_LIST = FEEDBACK_LIST.filter(f => f.url !== key && f.url !== entry.url);
+  openFeedbackPanels.delete(safeId(key));
+  if(entry.url && DELETED_URLS.indexOf(entry.url) === -1) DELETED_URLS.push(entry.url);
+  entries = entries.filter(x => x !== entry);
+  if(selectedKey === key) selectedKey = "";
+  detailOpen = false;
+  document.body.classList.remove('detailopen');
+  render();
+  if(!canSave()) await askEmpPasswordThenSave();
+  else await customAlert(`"${entry.title}"을(를) 지웠습니다.`);
+}
+
 // 저장 권한이 없는 기기에서 수정했을 때: 비밀번호를 받아서 바로 전직원에게 올린다.
 // (권한 없이 화면에만 남기면 새로고침 때 공용 데이터로 덮여서 사라짐)
 async function askEmpPasswordThenSave(){
@@ -2828,6 +2862,11 @@ function detailHtml(){
           <b>${ok ? '사용 가능' : '만드는 중'}</b>
           ${ok ? `<u onclick="revertToWip('${uq}')">만드는중으로 되돌리기</u>` : `<u onclick="completeEntryByKey('${kq}')">✅ 다 만들어졌어요</u>`}
         </div>
+      </div>
+
+      <div class="br-danger">
+        <span>이 시스템을 더 안 쓰면 목록에서 지울 수 있습니다.</span>
+        <button type="button" onclick="deleteEntry('${uq}')">🗑 이 기능 삭제</button>
       </div>
 
       <div class="br-fb">
@@ -3284,6 +3323,7 @@ function snapshot(){
     feedbackSeq: feedbackSeq,
     reviews: REVIEW_LIST,
     reviewSeq: reviewSeq,
+    deleted: DELETED_URLS,
     savedAt: new Date().toISOString()
   };
 }
@@ -3319,10 +3359,14 @@ function scheduleAutoSave(){
 // 저장본/공용장부를 현재 화면 데이터에 반영. 기본 항목(SEED)이 빠지지 않게 합쳐줌.
 function applyData(d){
   if(!d) return;
+  if(Array.isArray(d.deleted)) DELETED_URLS = d.deleted.slice();
+  const dead = new Set(DELETED_URLS);
   if(Array.isArray(d.entries) && d.entries.length){
-    const byUrl = new Map(d.entries.filter(e => e && e.url).map(e => [e.url, e]));
-    SEED_ENTRIES.forEach(seed => { if(!byUrl.has(seed.url)) byUrl.set(seed.url, Object.assign({}, seed)); });
+    const byUrl = new Map(d.entries.filter(e => e && e.url && !dead.has(e.url)).map(e => [e.url, e]));
+    SEED_ENTRIES.forEach(seed => { if(!dead.has(seed.url) && !byUrl.has(seed.url)) byUrl.set(seed.url, Object.assign({}, seed)); });
     entries = Array.from(byUrl.values());
+  } else if(dead.size){
+    entries = entries.filter(e => !dead.has(e.url));
   }
   if(Array.isArray(d.feedback)) FEEDBACK_LIST = d.feedback;
   if(typeof d.feedbackSeq === "number") feedbackSeq = Math.max(feedbackSeq, d.feedbackSeq);
