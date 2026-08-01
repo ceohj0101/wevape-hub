@@ -1033,6 +1033,65 @@
     60%{transform:translateX(-6px);}
     80%{transform:translateX(6px);}
   }
+  
+  /* ================= 🧩 새 업무 검토 (세 번째 메뉴) ================= */
+  .viewnav .vnav{font-size:13px;padding:12px 6px;}
+  @media(max-width:480px){ .viewnav .vnav{font-size:11.5px;padding:11px 3px;letter-spacing:-.6px;} }
+
+  #desk{display:none;max-width:1180px;margin:0 auto;padding:6px 20px 90px;}
+  body.deskview .wrap{display:none !important;}
+  body.deskview #roadmap{display:none !important;}
+  body.deskview #desk{display:block;}
+  body.deskview .searchbar,
+  body.deskview .tabs,
+  body.deskview .stats,
+  body.deskview .topbtns{display:none !important;}
+
+  .dk-hero{background:linear-gradient(135deg,#1b1430 0%,#3a2a5e 100%);color:#fff;border-radius:18px;padding:22px 20px;margin-bottom:16px;}
+  .dk-hero h2{margin:0 0 8px;font-size:20px;font-weight:900;letter-spacing:-.5px;}
+  .dk-hero p{margin:0;font-size:13.5px;line-height:1.75;color:#d5cbeb;}
+  .dk-q{margin-top:14px;display:grid;gap:7px;}
+  .dk-q div{background:rgba(255,255,255,.09);border-radius:11px;padding:9px 12px;font-size:12.5px;font-weight:700;color:#efe9ff;line-height:1.5;}
+
+  .dk-card{background:#fff;border:1px solid #eaecef;border-radius:16px;padding:18px 16px;margin-bottom:14px;}
+  .dk-card h3{margin:0 0 4px;font-size:16px;font-weight:900;color:#191f28;letter-spacing:-.4px;}
+  .dk-card .dk-sub{margin:0 0 14px;font-size:12.5px;color:#8b919c;font-weight:600;line-height:1.6;}
+  .dk-lb{display:block;margin:12px 0 5px;font-size:12.5px;font-weight:900;color:#4a5058;}
+  .dk-card input[type=text], .dk-card textarea{
+    width:100%;box-sizing:border-box;border:1.5px solid #e6e9ed;border-radius:11px;
+    padding:12px;font-family:inherit;font-size:14px;color:#191f28;background:#fafbfc;outline:none;
+  }
+  .dk-card input[type=text]:focus, .dk-card textarea:focus{border-color:#6b4ec7;background:#fff;}
+  .dk-card textarea{min-height:96px;resize:vertical;line-height:1.6;}
+  .dk-send{margin-top:14px;width:100%;height:52px;border:0;border-radius:13px;background:#6b4ec7;color:#fff;
+    font-family:inherit;font-size:15.5px;font-weight:900;cursor:pointer;}
+  .dk-send:active{background:#583fa6;}
+
+  .dk-diag{margin-top:14px;border:1.5px solid #d9cffa;background:#f7f4ff;border-radius:14px;padding:15px 14px;}
+  .dk-diag .dt{font-size:13.5px;font-weight:900;color:#4a2f9e;margin-bottom:9px;}
+  .dk-diag ul{margin:0;padding-left:18px;}
+  .dk-diag li{font-size:13px;line-height:1.75;color:#3d3552;font-weight:600;margin-bottom:4px;}
+  .dk-diag .warn{color:#c0392b;}
+
+  .dk-sec{margin:22px 0 10px;font-size:14.5px;font-weight:900;color:#191f28;}
+  .dk-sec em{font-style:normal;color:#6b4ec7;}
+  .dk-item{background:#fff;border:1px solid #eaecef;border-radius:14px;padding:15px 14px;margin-bottom:11px;}
+  .dk-item .it{display:block;margin-top:7px;font-size:15px;font-weight:900;color:#191f28;letter-spacing:-.3px;line-height:1.45;}
+  .dk-item .iu{margin-top:4px;font-size:12px;color:#6b4ec7;font-weight:700;word-break:break-all;}
+  .dk-item .ix{margin-top:8px;font-size:13px;color:#4a5058;line-height:1.7;white-space:pre-wrap;}
+  .dk-item .im{margin-top:9px;font-size:11.5px;color:#9aa0aa;font-weight:700;}
+  .dk-badge{display:inline-block;padding:3px 9px;border-radius:8px;font-size:11px;font-weight:900;margin-right:5px;}
+  .dk-badge.wait{background:#fff4e0;color:#b57200;}
+  .dk-badge.done{background:#e8f6ec;color:#1d7a3b;}
+  .dk-reply{margin-top:11px;background:#f4f6f8;border-radius:12px;padding:12px;font-size:13px;line-height:1.75;color:#2b3138;font-weight:600;white-space:pre-wrap;}
+  .dk-reply b{display:block;margin-bottom:5px;color:#6b4ec7;font-size:12px;}
+  .dk-acts{margin-top:10px;display:flex;gap:6px;}
+  .dk-acts button{flex:1;height:40px;border:1px solid #e6e9ed;background:#fff;border-radius:10px;
+    font-family:inherit;font-size:12.5px;font-weight:800;color:#4a5058;cursor:pointer;}
+  .dk-acts button.del{color:#e0483c;}
+  .dk-empty{background:#fff;border:1px dashed #d8dce1;border-radius:14px;padding:26px 16px;text-align:center;
+    font-size:13px;color:#9aa0aa;font-weight:700;line-height:1.7;}
+  .dk-foot{margin-top:22px;font-size:11.5px;color:#9aa0aa;font-weight:700;text-align:center;line-height:1.8;}
   </style>
 </head>
 <body>
@@ -1073,6 +1132,7 @@
     <div class="viewnav">
       <button type="button" class="vnav on" id="vnavHub" onclick="setView('hub')">📋 업무 모음</button>
       <button type="button" class="vnav" id="vnavMap" onclick="setView('map')">🧭 성장 로드맵</button>
+      <button type="button" class="vnav" id="vnavDesk" onclick="setView('desk')">🧩 새 업무 검토</button>
     </div>
     <div class="toprow">
       <div>
@@ -1392,6 +1452,50 @@
   <div class="rm-foot">
     이 로드맵은 현재 등록된 시스템과 운영 상황을 근거로 작성됐습니다.<br>
     상황이 바뀌면 갱신됩니다 · 최종 정리 2026-08-01
+  </div>
+
+</section>
+
+<section id="desk">
+
+  <div class="dk-hero">
+    <h2>🧩 새 업무 검토</h2>
+    <p>진행 중인 업무나 링크를 여기에 올리면, 지금 우리가 짜고 있는 판에<br>
+       어떻게 붙여야 하는지 방향을 잡아드립니다. 올리면 바로 1차 진단이 뜨고,<br>
+       매일 <b>오전 11시</b>에 감독관 검토 의견이 아래에 붙습니다.</p>
+    <div class="dk-q">
+      <div>① 이게 어떤 <b>판단</b>을 가능하게 하나? (숫자만 쌓이면 일이 늘 뿐입니다)</div>
+      <div>② 데이터가 <b>어디에</b> 쌓이나? (개인 엑셀·브라우저에 쌓이면 회사 자산이 아닙니다)</div>
+      <div>③ 이미 있는 것과 <b>겹치나</b>? (겹치면 붙이지 말고 합쳐야 합니다)</div>
+    </div>
+  </div>
+
+  <div class="dk-card">
+    <h3>검토 올리기</h3>
+    <p class="dk-sub">짧아도 됩니다. 다만 "이걸로 뭘 정하고 싶은지"는 꼭 적어주세요.</p>
+
+    <label class="dk-lb">무슨 업무인가요? (제목)</label>
+    <input type="text" id="dkTitle" placeholder="예) 매장별 재고 실사 엑셀 정리" autocomplete="off">
+
+    <label class="dk-lb">링크 (있으면)</label>
+    <input type="text" id="dkUrl" placeholder="https://..." autocomplete="off">
+
+    <label class="dk-lb">지금 어디까지 됐고, 뭘 하려는 건가요?</label>
+    <textarea id="dkText" placeholder="예) 매장에서 주 1회 재고를 세서 구글시트에 넣고 있음. 본사에서 한눈에 보고 발주에 연결하고 싶음."></textarea>
+
+    <label class="dk-lb">올린 사람</label>
+    <input type="text" id="dkAuthor" placeholder="이름" autocomplete="off">
+
+    <button type="button" class="dk-send" onclick="submitReview()">검토 요청 보내기</button>
+    <div id="dkDiag"></div>
+  </div>
+
+  <div class="dk-sec">올라온 검토 <em id="dkCount">0</em>건</div>
+  <div id="dkList"></div>
+
+  <div class="dk-foot">
+    감독관 검토 의견은 매일 오전 11시에 갱신됩니다.<br>
+    급하면 팀장에게 바로 말하세요 — 여기는 "판에 어떻게 붙일지"를 정하는 자리입니다.
   </div>
 
 </section>
@@ -1877,6 +1981,8 @@ async function tryOpenLocked(url){
 // ---------------------------------------------------------------
 let FEEDBACK_LIST = [];      // [{id, url, text, time, status, reply}]
 let feedbackSeq = 0;
+let REVIEW_LIST = [];   // 🧩 새 업무 검토 [{id,title,url,text,author,time,date,status,reply}]
+let reviewSeq = 0;
 let openFeedbackPanels = new Set();
 let editingFeedbackIds = new Set();
 const FB_STATUS_OPTIONS = ["접수됨","업데이트 예정","업데이트 완료"];
@@ -2368,14 +2474,21 @@ function setFilter(mode){
 // ===== 🧭 성장 로드맵 (두 번째 메뉴) =====
 let currentView = 'hub';
 function setView(v){
-  currentView = (v === 'map') ? 'map' : 'hub';
+  currentView = (v === 'map' || v === 'desk') ? v : 'hub';
   document.body.classList.toggle('mapview', currentView === 'map');
-  const a = document.getElementById('vnavHub'), b = document.getElementById('vnavMap');
+  document.body.classList.toggle('deskview', currentView === 'desk');
+  const a = document.getElementById('vnavHub'), b = document.getElementById('vnavMap'), d = document.getElementById('vnavDesk');
   if(a) a.classList.toggle('on', currentView === 'hub');
   if(b) b.classList.toggle('on', currentView === 'map');
+  if(d) d.classList.toggle('on', currentView === 'desk');
   const h = document.querySelector('header.top h1');
   const s = document.getElementById('headSub');
-  if(currentView === 'map'){
+  if(currentView === 'desk'){
+    document.body.classList.remove('detailopen');
+    if(h) h.textContent = '새 업무 검토';
+    if(s) s.textContent = '링크나 진행 중인 업무를 올리면, 지금 판에 어떻게 붙일지 잡아드립니다.';
+    try{ renderDesk(); }catch(err){}
+  } else if(currentView === 'map'){
     document.body.classList.remove('detailopen');
     if(h) h.textContent = '성장 로드맵';
     if(s) s.textContent = '지금 뭐가 부족하고, 무슨 순서로 만들어야 하는지.';
@@ -2761,7 +2874,7 @@ function render(){
   setTxt('tabWip', wipEntries.length);
   setTxt('tabNoown', noOwnCount);
   const hs = document.getElementById('headSub');
-  if(hs && !document.body.classList.contains('mapview')) hs.textContent = `사용가능 ${liveEntries.length} · 만드는중 ${wipEntries.length} · 담당자없음 ${noOwnCount}`;
+  if(hs && !document.body.classList.contains('mapview') && !document.body.classList.contains('deskview')) hs.textContent = `사용가능 ${liveEntries.length} · 만드는중 ${wipEntries.length} · 담당자없음 ${noOwnCount}`;
 
   // ---- 묶음별 목록 ----
   const root = document.getElementById('layers');
@@ -3169,6 +3282,8 @@ function snapshot(){
     status: STATUS,
     feedback: FEEDBACK_LIST,
     feedbackSeq: feedbackSeq,
+    reviews: REVIEW_LIST,
+    reviewSeq: reviewSeq,
     savedAt: new Date().toISOString()
   };
 }
@@ -3211,6 +3326,9 @@ function applyData(d){
   }
   if(Array.isArray(d.feedback)) FEEDBACK_LIST = d.feedback;
   if(typeof d.feedbackSeq === "number") feedbackSeq = Math.max(feedbackSeq, d.feedbackSeq);
+  if(Array.isArray(d.reviews)) REVIEW_LIST = d.reviews;
+  if(typeof d.reviewSeq === "number") reviewSeq = Math.max(reviewSeq, d.reviewSeq);
+  try{ renderDesk(); }catch(err){}
 
   if(Array.isArray(d.stores) && d.stores.length){
     const byStore = new Map(d.stores.filter(s => s && s.store).map(s => [s.store, s]));
@@ -3709,6 +3827,157 @@ function showUpdate(force){
 }
 
 window.addEventListener('load', function(){ setTimeout(function(){ if(!gateOpen()) return; showUpdate(false); }, 600); });
+/* ============================================================
+   🧩 새 업무 검토 (세 번째 메뉴)
+   - 직원이 링크/진행 업무를 올린다
+   - 올리는 즉시 규칙 기반 1차 진단이 뜬다 (브라우저 안에서 계산)
+   - 감독관 최종 의견은 매일 오전 11시 점검 때 아래에 붙는다
+   ============================================================ */
+const DESK_BRANCHES = [
+  {k:'돈',   t:'돈 — 매출·원가·손익', w:['매출','원가','마진','손익','정산','비용','매입','단가','세금','카드','결제','포스','객단가','할인','수익']},
+  {k:'물건', t:'물건 — 재고·발주',   w:['재고','발주','입고','출고','실사','창고','배송','물류','반품','폐기','유통기한','상품']},
+  {k:'사람', t:'사람 — 인사·근태',   w:['근무','근태','스케줄','휴무','급여','채용','인사','교육','출근','알바','직원','면접','평가','인건비']},
+  {k:'고객', t:'고객 — 회원·마케팅', w:['회원','고객','가입','재방문','쿠폰','광고','마케팅','리뷰','프로모션','인스타','블로그','단골','설문','이벤트']},
+  {k:'매장', t:'매장 — 운영·점검',   w:['매장','오픈','점검','청소','시설','인테리어','임대','위생','간판','장비','지점']},
+  {k:'관리', t:'관리 — 보고·문서',   w:['보고','문서','결재','공지','규정','매뉴얼','회의','일지','양식','기록']}
+];
+const DESK_FRAGILE = ['구글시트','구글 시트','스프레드시트','엑셀','시트','카톡','카카오톡','수기','종이','노트','브라우저','개인 컴퓨터','내 컴퓨터','개인'];
+const DESK_TOP4 = [
+  {t:'원가',            w:['원가','매입가','단가','마진']},
+  {t:'매장별 인건비',    w:['인건비','급여','시급','노무']},
+  {t:'재방문 고객 식별', w:['재방문','단골','재구매','고객 식별','회원 식별']},
+  {t:'재고 실사',        w:['재고','실사']}
+];
+
+function dkNorm(u){
+  return String(u||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/\/+$/,'');
+}
+function dkHas(hay, words){
+  return words.filter(w => hay.indexOf(w) >= 0);
+}
+
+// 규칙 기반 1차 진단 — AI가 아니라 "체크리스트"입니다. 최종 판단은 11시 감독관 검토.
+function deskDiagnose(it){
+  const hay = ((it.title||'') + ' ' + (it.text||'') + ' ' + (it.url||'')).toLowerCase();
+  const out = [];
+
+  // 1) 어느 갈래에 붙는가
+  let best = null, bestHit = [];
+  DESK_BRANCHES.forEach(b => {
+    const hit = dkHas(hay, b.w);
+    if(hit.length > bestHit.length){ best = b; bestHit = hit; }
+  });
+  if(best) out.push({w:false, t:'붙일 자리 → <b>' + best.t + '</b> (걸린 단어: ' + bestHit.slice(0,4).join(', ') + ')'});
+  else out.push({w:true, t:'어느 갈래에 붙는지 글만으로는 안 잡힙니다. 매출/재고/근무/회원 중 무엇을 움직이는 일인지 한 줄만 더 적어주세요.'});
+
+  // 2) 이미 있는 것과 겹치나
+  const list = Array.isArray(entries) ? entries : [];
+  const nu = dkNorm(it.url);
+  const same = nu ? list.filter(e => dkNorm(e.url) === nu) : [];
+  if(same.length){
+    out.push({w:true, t:'이 주소는 이미 허브에 등록돼 있습니다 → <b>' + escapeHtml(same[0].title||'') + '</b>. 새로 만들지 말고 그걸 고치는 쪽으로 가세요.'});
+  } else if(bestHit.length){
+    const near = list.filter(e => dkHas(((e.title||'')+' '+(e.dept||'')+' '+(e.note||'')).toLowerCase(), bestHit).length > 0).slice(0,3);
+    if(near.length) out.push({w:false, t:'비슷한 게 이미 있습니다 → ' + near.map(e=>escapeHtml(e.title||'')).join(' / ') + '. 먼저 겹치는지 확인하세요.'});
+    else out.push({w:false, t:'겹치는 시스템은 안 보입니다. 새로 만들 자리가 맞습니다.'});
+  }
+
+  // 3) 데이터가 어디에 쌓이나
+  const fr = dkHas(hay, DESK_FRAGILE);
+  if(fr.length) out.push({w:true, t:'데이터가 <b>' + fr[0] + '</b>에 쌓입니다. 담당자가 바뀌면 그대로 사라집니다. 나중에 한 곳으로 모을 수 있게 지금부터 항목 이름을 통일해두세요.'});
+  else if(!it.url) out.push({w:true, t:'링크가 없습니다. 어디에 쌓이는지 모르면 회사 자산으로 못 씁니다. 링크나 저장 위치를 알려주세요.'});
+
+  // 4) 지금 제일 급한 것과 겹치나
+  const hot = DESK_TOP4.filter(x => dkHas(hay, x.w).length > 0).map(x => x.t);
+  if(hot.length) out.push({w:false, t:'지금 제일 급한 4가지 중 <b>' + hot.join(', ') + '</b>에 해당합니다. 우선순위 올려서 가져가세요.'});
+
+  // 5) 판단 연결
+  if((it.text||'').length < 20) out.push({w:true, t:'설명이 너무 짧습니다. "이걸로 무슨 결정을 하고 싶은지" 한 줄만 더 적어주세요. 그게 없으면 그냥 입력 일만 늘어납니다.'});
+  else out.push({w:false, t:'다음 단계: ① 이 화면 하나로 어떤 결정을 하는지 ② 그 숫자를 누가 언제 넣는지 ③ 안 넣으면 어떻게 티가 나는지 — 이 셋을 정하면 바로 붙일 수 있습니다.'});
+
+  return out;
+}
+
+function deskDiagHtml(it){
+  const rows = deskDiagnose(it);
+  return '<div class="dk-diag"><div class="dt">🤖 1차 진단 (자동 · 체크리스트)</div><ul>' +
+    rows.map(r => '<li class="' + (r.w ? 'warn' : '') + '">' + r.t + '</li>').join('') +
+    '</ul></div>';
+}
+
+async function submitReview(){
+  const g = id => document.getElementById(id);
+  const title = (g('dkTitle') ? g('dkTitle').value : '').trim();
+  const url   = (g('dkUrl')   ? g('dkUrl').value   : '').trim();
+  const text  = (g('dkText')  ? g('dkText').value  : '').trim();
+  const author= (g('dkAuthor')? g('dkAuthor').value: '').trim();
+  if(!title){ customAlert('무슨 업무인지 제목을 넣어주세요.'); return; }
+  if(!author){ customAlert('올린 사람 이름을 넣어주세요.'); return; }
+  REVIEW_LIST.unshift({
+    id: 'rv' + (reviewSeq++),
+    title, url, text, author,
+    time: new Date().toLocaleString('ko-KR', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}),
+    date: todayStr(),
+    status: '검토중',
+    reply: ''
+  });
+  if(g('dkTitle')) g('dkTitle').value = '';
+  if(g('dkUrl')) g('dkUrl').value = '';
+  if(g('dkText')) g('dkText').value = '';
+  const d = g('dkDiag');
+  if(d) d.innerHTML = deskDiagHtml(REVIEW_LIST[0]);
+  renderDesk();
+  saveLocal();
+  try{ if(!canSave()) await askEmpPasswordThenSave(); else await saveShared({silent:true}); }catch(err){}
+}
+
+async function deskReply(id){
+  const it = REVIEW_LIST.find(r => r.id === id);
+  if(!it) return;
+  const v = await customPrompt('감독관 검토 의견을 적어주세요.', 'text', it.reply || '');
+  if(v === null) return;
+  it.reply = String(v).trim();
+  it.status = it.reply ? '검토완료' : '검토중';
+  renderDesk();
+  saveLocal();
+  try{ await saveShared({silent:true}); }catch(err){}
+}
+
+async function deskDelete(id){
+  if(!(await customConfirm('이 검토 건을 지울까요? (되돌릴 수 없어요)', true))) return;
+  REVIEW_LIST = REVIEW_LIST.filter(r => r.id !== id);
+  renderDesk();
+  saveLocal();
+  try{ await saveShared({silent:true}); }catch(err){}
+}
+
+function renderDesk(){
+  const box = document.getElementById('dkList');
+  const cnt = document.getElementById('dkCount');
+  if(cnt) cnt.textContent = REVIEW_LIST.length;
+  if(!box) return;
+  if(!REVIEW_LIST.length){
+    box.innerHTML = '<div class="dk-empty">아직 올라온 검토가 없습니다.<br>위에 진행 중인 업무나 링크를 올려보세요.</div>';
+    return;
+  }
+  const admin = (function(){ try{ return isAdmin(); }catch(e){ return false; } })();
+  box.innerHTML = REVIEW_LIST.map(function(r){
+    const done = r.status === '검토완료';
+    return '<div class="dk-item">' +
+      '<span class="dk-badge ' + (done ? 'done' : 'wait') + '">' + (done ? '검토완료' : '검토중') + '</span>' +
+      '<span class="it">' + escapeHtml(r.title) + '</span>' +
+      (r.url ? '<div class="iu">' + escapeHtml(r.url) + '</div>' : '') +
+      (r.text ? '<div class="ix">' + escapeHtml(r.text) + '</div>' : '') +
+      '<div class="im">' + escapeHtml(r.author || '이름없음') + ' · ' + escapeHtml(r.time || '') + '</div>' +
+      deskDiagHtml(r) +
+      (r.reply ? '<div class="dk-reply"><b>🧭 감독관 검토 의견</b>' + escapeHtml(r.reply) + '</div>' : '') +
+      '<div class="dk-acts">' +
+        (admin ? '<button type="button" onclick="deskReply(\'' + r.id + '\')">✍️ 검토 의견 달기</button>' : '') +
+        '<button type="button" class="del" onclick="deskDelete(\'' + r.id + '\')">삭제</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
 /* ============================================================
    들어가기 비밀번호 — 창을 완전히 닫기 전까지 한 번만 묻는다
    ★ 비밀번호를 바꾸려면 ENTRY_PASSWORD 값만 고치면 끝.
