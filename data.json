@@ -117,6 +117,15 @@
       "status": "개발중",
       "owner": "장대운 주임",
       "sensitive": true
+    },
+    {
+      "dept": "CX",
+      "title": "W-Voice — 매장 고객 응대 녹음 시스템",
+      "url": "https://w-voice.vercel.app/app/",
+      "note": "고객 응대 상황을 녹음하여 메인 저장소로 일괄 저장 및 텍스트 전환 후 데이터활용",
+      "status": "개발중",
+      "owner": "개발자:장현진",
+      "sensitive": false
     }
   ],
   "stores": [
@@ -736,6 +745,6 @@
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
     "https://janghj201-cyber.github.io/-/"
   ],
-  "savedAt": "2026-08-02T12:35:52.722Z",
+  "savedAt": "2026-08-02T12:38:43.304Z",
   "savedBy": "employee"
 }
