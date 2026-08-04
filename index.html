@@ -1136,6 +1136,52 @@
   .dk-vb button.n{border-color:#e0483c;color:#e0483c;}
   .dk-warn{margin-top:11px;background:#fdeceb;border:1px solid #f7c9c4;border-radius:12px;padding:11px 12px;
     font-size:12.5px;font-weight:800;color:#c0392b;line-height:1.65;}
+  /* ⚖️ 가치 판정 — 할 일인지부터 정한다 */
+  .dk-jd{margin-top:11px;border-radius:12px;padding:11px 12px;font-size:12.5px;line-height:1.7;border:1px solid;font-weight:700;}
+  .dk-jd b{display:block;font-size:13.5px;font-weight:900;margin-bottom:4px;}
+  .dk-jd .cr{margin-top:6px;font-size:11.5px;font-weight:800;opacity:.92;}
+  .dk-jd .mt{margin-top:6px;font-size:11.5px;color:#8b929c;font-weight:700;}
+  .dk-jd.stop{background:#fdeceb;border-color:#f0b7b0;color:#c0392b;}
+  .dk-jd.hold{background:#fff7e6;border-color:#f2d9a0;color:#8a5f14;}
+  .dk-jd.go{background:#eaf6ee;border-color:#b9e0c6;color:#1d7a3b;}
+  .dk-jd.non{background:#f4f6f8;border-color:#dfe3e8;color:#4a5058;}
+  .dk-jd .cf{margin-top:9px;display:flex;gap:6px;flex-wrap:wrap;}
+  .dk-jd .cf button{border:1px solid currentColor;background:#fff;border-radius:9px;font-family:inherit;
+    font-size:11.5px;font-weight:800;color:inherit;padding:8px 12px;cursor:pointer;}
+  .dk-badge.jstop{background:#fdeceb;color:#c0392b;}
+  .dk-badge.jhold{background:#fff7e6;color:#8a5f14;}
+  .dk-acts button.jd{border-color:#6b4ec7;color:#6b4ec7;}
+  #jdPop{position:fixed;inset:0;background:rgba(15,18,22,.55);z-index:9600;display:none;
+    align-items:center;justify-content:center;padding:16px;}
+  #jdPop.on{display:flex;}
+  #jdPop .jd{background:#fff;border-radius:18px;width:100%;max-width:470px;max-height:90vh;overflow:auto;
+    padding:20px 18px 0;box-sizing:border-box;position:relative;}
+  #jdPop .ft{position:sticky;bottom:0;background:#fff;padding:11px 0 15px;margin-top:10px;
+    border-top:1px solid #eef0f3;box-shadow:0 -10px 14px -10px rgba(0,0,0,.12);}
+  #jdPop h3{margin:0;font-size:17.5px;font-weight:900;color:#191f28;}
+  #jdPop .q{background:#f4f6f8;border-radius:12px;padding:12px;font-size:12.5px;font-weight:800;
+    color:#3d444d;line-height:1.75;margin:11px 0 15px;}
+  #jdPop .q i{font-style:normal;color:#6b4ec7;}
+  #jdPop .lb{font-size:12px;font-weight:900;color:#8b929c;margin:0 0 7px;}
+  #jdPop .ck{display:flex;gap:9px;align-items:flex-start;border:1px solid #e6e9ed;border-radius:11px;
+    padding:10px 11px;margin-bottom:7px;cursor:pointer;font-size:12px;font-weight:700;color:#4a5058;line-height:1.6;}
+  #jdPop .ck.on{border-color:#e0483c;background:#fdeceb;color:#c0392b;}
+  #jdPop .ck b{color:#191f28;font-weight:900;font-size:12.5px;}
+  #jdPop .ck.on b{color:#c0392b;}
+  #jdPop .ck input{margin:2px 0 0;width:17px;height:17px;flex:0 0 auto;}
+  #jdPop textarea{width:100%;min-height:84px;border:1px solid #e6e9ed;border-radius:12px;padding:11px;
+    font-family:inherit;font-size:13px;font-weight:700;color:#191f28;box-sizing:border-box;resize:vertical;}
+  #jdPop .vb{display:flex;gap:7px;margin:0;}
+  #jdPop .vb button{flex:1;padding:11px 4px;border-radius:12px;border:2px solid #e6e9ed;background:#fff;
+    font-family:inherit;font-size:12.5px;font-weight:900;color:#4a5058;cursor:pointer;line-height:1.5;}
+  #jdPop .vb button span{font-weight:700;font-size:10.5px;opacity:.85;}
+  #jdPop .vb button.on.go{border-color:#1d7a3b;background:#1d7a3b;color:#fff;}
+  #jdPop .vb button.on.hold{border-color:#c98a17;background:#c98a17;color:#fff;}
+  #jdPop .vb button.on.stop{border-color:#e0483c;background:#e0483c;color:#fff;}
+  #jdPop .fb{display:flex;gap:7px;margin-top:8px;}
+  #jdPop .fb button{flex:1;height:47px;border-radius:12px;border:1px solid #e6e9ed;background:#fff;
+    font-family:inherit;font-size:13.5px;font-weight:800;color:#4a5058;cursor:pointer;}
+  #jdPop .fb button.ok{background:#6b4ec7;border-color:#6b4ec7;color:#fff;}
   .dk-empty{background:#fff;border:1px dashed #d8dce1;border-radius:14px;padding:26px 16px;text-align:center;
     font-size:13px;color:#9aa0aa;font-weight:700;line-height:1.7;}
   /* 📚 업무가 쌓여도 한눈에 — 접기 + 필터 + 찾기 */
@@ -3966,9 +4012,12 @@ if ('serviceWorker' in navigator) {
    ★ 다음에 또 업데이트하면 UPDATE_ID 날짜만 바꾸고
      UPDATE_ITEMS 내용을 갈아끼우면 끝. 다른 건 건드릴 필요 없음.
    ============================================================ */
-const UPDATE_ID   = '2026-08-02';
+const UPDATE_ID   = '2026-08-04';
 const UPDATE_SEEN = 'wevape_hub_upd_seen';
 const UPDATE_ITEMS = [
+  ['⚖️', '업무마다 「할 가치가 있나」를 먼저 판정합니다', '검토 화면에 「⚖️ 가치 판정」이 생겼습니다. ✅ 유지 / 🟡 축소·동결 / ⛔ 중단 셋 중 하나를 고르고 근거를 적습니다. 판정 전에는 보완 지시도 검토 통과도 안 됩니다.'],
+  ['⛔', '중단 기준 5개를 화면에 깔았습니다', '① 측정 수단이 없다 ② 담당자 한 명이 빠지면 같이 죽는다 ③ 쓰는 사람이 없다 ④ 1급 요구 4개를 하나도 안 건드린다 ⑤ 법·규제를 열어놓고 시작한다. 기분이 아니라 기준으로 잠니다.'],
+  ['🏁', '⛔ 중단은 대표가 확정합니다', '감독관은 「중단 판정」까지만 합니다. 사람이 이미 시간을 쓴 일을 실제로 멈추는 건 대표 비밀번호로 확정해야 됩니다.'],
   ['📷', '지시 항목마다 사진(캡처)을 붙일 수 있습니다', '「업무 검토」에서 감독관 보완 지시 하나하나 아래에 「📷 사진 올리기」 버튼이 생겼습니다. 항목당 4장까지. 사진은 자동으로 작게 줄여서 저장되니 용량 걱정 안 하셔도 됩니다.'],
   ['⚠️', '「캡처·사진」을 요구한 지시는 사진 없이 완료가 안 됩니다', '지시문에 캡처·스크린샷·사진·화면확인 같은 말이 있으면, 사진을 올려야만 체크와 「재검토 요청」이 됩니다. 말로만 했다는 보고는 이제 안 넘어갑니다.'],
   ['🔍', '감독관이 사진을 눌러 크게 봅니다', '올라온 사진은 누르면 전체화면으로 커집니다. 누가 언제 올렸는지도 같이 남습니다.'],
@@ -4605,6 +4654,17 @@ async function dkVerify(id, n, ok){
 async function deskTodos(id){
   const r = REVIEW_LIST.find(x => x.id === id);
   if(!r) return;
+  // ⚖️ 할 필요 없는 일에 보완 지시를 주는 게 가장 나쁘다
+  const j0 = jdOf(r);
+  if(j0 && j0.v === 'stop'){
+    await customAlert('⛔ 중단 판정된 업무입니다.\n할 필요 없는 일에 보완 지시를 주는 게 제일 나쁘습니다.\n계속하려면 먼저 「✏️ 판정 고치기」로 판정을 바꿔주세요.');
+    return;
+  }
+  if(!j0){
+    await customAlert('아직 가치 판정을 안 했습니다.\n「할 가치가 있나」부터 정하는 게 순서입니다.\n판정 창을 열겠습니다.');
+    jdOpen(id);
+    return;
+  }
   const cur = (Array.isArray(r.todos) ? r.todos : []).map(x => x.t).join(' / ');
   const v = await customPrompt('보완·수정 지시를 적어주세요.\n여러 개면 슬래시( / )로 나눠주세요.', 'text', cur);
   if(v === null) return;
@@ -4651,6 +4711,13 @@ async function deskResubmit(id){
 async function deskPass(id){
   const r = REVIEW_LIST.find(x => x.id === id);
   if(!r) return;
+  const jp = jdOf(r);
+  if(jp && jp.v === 'stop'){ await customAlert('⛔ 중단 판정된 업무는 통과시킬 수 없습니다.'); return; }
+  if(!jp){
+    await customAlert('아직 가치 판정을 안 했습니다.\n먼저 「⚖️ 가치 판정」으로 할 가치가 있는지 정해주세요.');
+    jdOpen(id);
+    return;
+  }
   const list = Array.isArray(r.todos) ? r.todos : [];
   if(!list.length){
     await customAlert('보완 지시가 하나도 없습니다.\n먼저 「📋 보완 지시」로 뭘 고쳐야 하는지 적어주세요.\n지시 없이 통과시킬 수 없습니다.');
@@ -4721,6 +4788,153 @@ async function deskDelete(id){
   try{ await saveShared({silent:true}); }catch(err){}
 }
 
+/* ============================================================
+   ⚖️ 가치 판정 — 「보완 지시」보다 먼저 「할 일인가」를 정한다
+   ★ 왜 만들었나 — 할 필요 없는 일에 보완 지시를 주는 게 가장 나쁘다.
+     고치라고 시키는 순간, 안 해도 될 일에 사람 시간이 계속 들어간다.
+   ★ 판정 모양: r.jd = {v:'go'|'hold'|'stop', c:[기준번호], w:'근거',
+                        by:'적은사람', t:'시각', ok:대표확정여부, okT:'확정시각'}
+   ★ ⛔ 중단은 감독관이 「판정」하고, 실제로 멈추는 건 대표가 「확정」한다.
+   ★ 반드시 function 선언만 쓴다 (위쪽 applyData 가 먼저 돌기 때문 — TDZ)
+   ============================================================ */
+function jdCrit(){
+  return [
+    ['1', '측정 수단이 없다', '잘 됐는지 안 됐는지를 숫자로 확인할 방법이 아예 없다.'],
+    ['2', '담당자 한 명이 빠지면 같이 죽는다', '그 사람 손을 떠나면 아무도 못 돌린다. 문서도 인수인계도 없다.'],
+    ['3', '쓰는 사람이 없다', '만들어 놓았는데 실제로 여는 사람이 없거나, 쌓이는 건수가 0이다.'],
+    ['4', '1급 요구 4개를 하나도 안 건드린다', '원가 / 매장별 인건비 / 재방문 고객 식별 / BIGLUCKY 백업 — 이 중 뭐 하나에도 안 닿는다.'],
+    ['5', '법·규제를 열어놓고 시작한다', '고지·동의·보관기간 같은 걸 안 갖춘 채로 먼저 돌리려 한다.']
+  ];
+}
+function jdMeta(v){
+  const m = {go:['go','✅ 유지','그대로 간다'],
+             hold:['hold','🟡 축소·동결','범위를 줄이고 멈춘다'],
+             stop:['stop','⛔ 중단','여기서 그만한다']};
+  return m[v] || null;
+}
+function jdOf(r){ return (r && r.jd && r.jd.v) ? r.jd : null; }
+
+function jdOpen(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const p = document.getElementById('jdPop');
+  if(!p) return;
+  const cur = jdOf(r) || {v:'', c:[], w:''};
+  p.setAttribute('data-id', id);
+  const t = document.getElementById('jdTitle');
+  if(t) t.textContent = r.title || '';
+  const box = document.getElementById('jdCrits');
+  if(box){
+    box.innerHTML = jdCrit().map(function(c){
+      const on = (Array.isArray(cur.c) ? cur.c : []).indexOf(c[0]) >= 0;
+      return '<label class="ck' + (on ? ' on' : '') + '" data-k="' + c[0] + '" onclick="jdTick(this)">' +
+        '<input type="checkbox" ' + (on ? 'checked' : '') + '>' +
+        '<span><b>⛔' + c[0] + ' ' + escapeHtml(c[1]) + '</b><br>' + escapeHtml(c[2]) + '</span></label>';
+    }).join('');
+  }
+  const w = document.getElementById('jdWhy');
+  if(w) w.value = cur.w || '';
+  jdPaintV(cur.v || '');
+  p.classList.add('on');
+}
+function jdClose(){
+  const p = document.getElementById('jdPop');
+  if(p) p.classList.remove('on');
+}
+function jdTick(el){
+  if(!el) return;
+  const i = el.querySelector('input');
+  setTimeout(function(){ el.classList.toggle('on', !!(i && i.checked)); }, 0);
+}
+function jdPaintV(v){
+  const p = document.getElementById('jdPop');
+  if(p) p.setAttribute('data-v', v || '');
+  ['go','hold','stop'].forEach(function(k){
+    const b = document.getElementById('jdV_' + k);
+    if(b) b.classList.toggle('on', k === v);
+  });
+}
+function jdPick(v){ jdPaintV(v); }
+
+async function jdSave(){
+  const p = document.getElementById('jdPop');
+  if(!p) return;
+  const id = p.getAttribute('data-id');
+  const v  = p.getAttribute('data-v');
+  const r  = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  if(!v){ await customAlert('먼저 판정을 골라주세요.\n✅ 유지 / 🟡 축소·동결 / ⛔ 중단 중 하나입니다.'); return; }
+  const w = document.getElementById('jdWhy');
+  const why = w ? String(w.value || '').trim() : '';
+  if(!why){ await customAlert('판정 근거를 적어주세요.\n왜 그렇게 보았는지가 남아야 나중에 뒤집을 수 있습니다.'); return; }
+  const cs = [];
+  const box = document.getElementById('jdCrits');
+  if(box) Array.prototype.forEach.call(box.querySelectorAll('label'), function(l){
+    const i = l.querySelector('input');
+    if(i && i.checked) cs.push(l.getAttribute('data-k'));
+  });
+  const m = jdMeta(v);
+  r.jd = {v:v, c:cs, w:why, by:'감독관', t:dkNow(), ok:false, okT:''};
+  dkLog(r, '감독관', '가치 판정 ' + m[1] +
+    (cs.length ? ' (기준 ' + cs.map(function(k){ return '⛔' + k; }).join('·') + ')' : '') + ' — ' + why);
+  jdClose();
+  await dkSaveReview();
+  if(v === 'stop') await customAlert('⛔ 중단 판정을 기록했습니다.\n실제로 멈추려면 대표 확정이 필요합니다.\n카드 안의 「🏁 대표 중단 확정」을 눌러주세요.');
+}
+
+async function jdConfirm(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r || !jdOf(r)) return;
+  const pw = await customPrompt('⛔ 중단 확정입니다.\n이 업무는 여기서 멈추고, 결과와 배운 것만 글로 남깁니다.\n대표 비밀번호를 입력해주세요.', 'password', '');
+  if(pw === null) return;
+  if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다.'); return; }
+  r.jd.ok = true; r.jd.okT = dkNow();
+  dkSetStage(r, '반려');
+  dkLog(r, '대표', '⛔ 중단 확정 — ' + (r.jd.w || ''));
+  await dkSaveReview();
+  await customAlert('중단이 확정되었습니다.\n산출물은 버리고, 무엇을 배웠는지만 남겨주세요.');
+}
+
+async function jdClear(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  if(!(await customConfirm('판정을 지우고 다시 판정할까요?'))) return;
+  delete r.jd;
+  dkLog(r, '감독관', '가치 판정 취소 — 다시 판정');
+  await dkSaveReview();
+}
+
+function jdHtml(r, admin){
+  const j = jdOf(r);
+  if(!j){
+    return admin
+      ? '<div class="dk-jd non"><b>⚖️ 아직 가치 판정 전</b>이 업무를 <u>할 가치가 있는지</u>부터 정해주세요. 보완 지시는 그다음입니다.' +
+        '<div class="cf"><button type="button" onclick="jdOpen(\'' + r.id + '\')">⚖️ 지금 판정하기</button></div></div>'
+      : '';
+  }
+  const m = jdMeta(j.v);
+  if(!m) return '';
+  const cs = Array.isArray(j.c) ? j.c : [];
+  const names = jdCrit();
+  let h = '<div class="dk-jd ' + m[0] + '"><b>' + m[1] + ' — ' + m[2] + '</b>' + escapeHtml(j.w || '');
+  if(cs.length){
+    h += '<div class="cr">걸린 기준: ' + cs.map(function(k){
+      const f = names.find(function(n){ return n[0] === k; });
+      return '⛔' + k + ' ' + escapeHtml(f ? f[1] : '');
+    }).join(' · ') + '</div>';
+  }
+  h += '<div class="mt">' + escapeHtml(j.by || '감독관') + ' · ' + escapeHtml(j.t || '') +
+       (j.ok ? ' · 🏁 대표 중단 확정 ' + escapeHtml(j.okT || '') : '') + '</div>';
+  if(admin){
+    h += '<div class="cf">' +
+      ((j.v === 'stop' && !j.ok) ? '<button type="button" onclick="jdConfirm(\'' + r.id + '\')">🏁 대표 중단 확정</button>' : '') +
+      '<button type="button" onclick="jdOpen(\'' + r.id + '\')">✏️ 판정 고치기</button>' +
+      '<button type="button" onclick="jdClear(\'' + r.id + '\')">판정 취소</button></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
 function renderDesk(){
   const box = document.getElementById('dkList');
   const cnt = document.getElementById('dkCount');
@@ -4748,6 +4962,8 @@ function renderDesk(){
   box.innerHTML = list.map(function(r){
     const st = dkStage(r);
     const bg = dkBadge(st);
+    const jj = jdOf(r);
+    const jm = (jj && jj.v !== 'go') ? jdMeta(jj.v) : null;   // ✅ 유지는 목록에 굳이 표시 안 한다
     const canFix = (st === '보완필요' || st === '재검토요청');
     const isNew = (function(){ try{ return dkIsNew(r); }catch(e){ return false; } })();
     const mine = (function(){ try{ return dkNeedsMe(r); }catch(e){ return false; } })();
@@ -4767,6 +4983,7 @@ function renderDesk(){
         '<div class="hb">' +
           (isNew ? '<span class="dk-new">🆕 새 소식</span>' : '') +
           '<span class="dk-badge ' + bg[0] + '">' + bg[1] + '</span>' +
+          (jm ? '<span class="dk-badge j' + jm[0] + '">' + jm[1] + '</span>' : '') +
           '<span class="it">' + escapeHtml(r.title) + '</span>' +
           '<div class="dk-sum">' +
             (mine ? '<span class="mine">지금 내 차례</span>' : '') +
@@ -4784,6 +5001,7 @@ function renderDesk(){
         ((r.author && r.author !== (r.dev || r.author)) ? ' <span>· 올린 사람 ' + escapeHtml(r.author) + '</span>' : '') + '</div>' +
       (r.url ? '<div class="iu">' + escapeHtml(r.url) + '</div>' : '') +
       dkFlowHtml(r) +
+      jdHtml(r, admin) +
       (txt ? dkClip('<div class="ix">' + escapeHtml(txt) + '</div>', txt.length > 260, '내용 더 보기') : '') +
       '<div class="im">올린 사람 ' + escapeHtml(r.author || '이름없음') + ' · ' + escapeHtml(r.time || '') +
         (r.approvedAt ? ' · 🏁 대표 최종승인 ' + escapeHtml(r.approvedAt) : '') + '</div>' +
@@ -4795,6 +5013,7 @@ function renderDesk(){
       ((!admin && st === '보완필요') ? '<div class="dk-warn">📋 고쳐야 할 지시가 있습니다. 하나씩 처리하고 체크할 때 뭘 했는지 적어주세요.</div>' : '') +
       dkClip(dkLogHtml(r), logn > 5, '진행 이력 전체 보기') +
       '<div class="dk-acts">' +
+        (admin ? '<button type="button" class="jd" onclick="jdOpen(\'' + r.id + '\')">⚖️ 가치 판정</button>' : '') +
         (admin ? '<button type="button" onclick="deskReply(\'' + r.id + '\')">✍️ 검토 의견</button>' : '') +
         (admin ? '<button type="button" onclick="deskTodos(\'' + r.id + '\')">📋 보완 지시</button>' : '') +
         (canFix ? '<button type="button" class="go" onclick="deskResubmit(\'' + r.id + '\')">🔁 수정 완료 · 재검토 요청</button>' : '') +
@@ -4863,6 +5082,30 @@ function gateTry(){
   try{ dkPaintBadge(); }catch(e){}
 })();
 </script>
+
+<div id="jdPop" onclick="if(event.target===this) jdClose()">
+  <div class="jd">
+    <h3>⚖️ 이 업무, 할 가치가 있나?</h3>
+    <div class="q">🧭 하나만 묻습니다 —<br><i>「대표가 결정을 내릴 때 보는 숫자」를 하나라도 늘리거나, 그 숫자의 신뢰도를 올리는가?</i><br>아니면 ⛔ 입니다.</div>
+    <p class="lb">대상 업무</p>
+    <div class="q" id="jdTitle" style="margin:0 0 15px"></div>
+    <p class="lb">해당되는 게 있으면 눌러주세요 — 중단 기준 5개</p>
+    <div id="jdCrits"></div>
+    <p class="lb" style="margin-top:14px">판정 근거 — 왜 그렇게 봤는지</p>
+    <textarea id="jdWhy" placeholder="예) 경쟁사·브랜드 탭 둘 다 수집 0건. 채워져도 우리 매출 숫자로 번역이 안 된다."></textarea>
+    <div class="ft">
+    <div class="vb">
+      <button type="button" class="go"   id="jdV_go"   onclick="jdPick('go')">✅ 유지<br><span>그대로 간다</span></button>
+      <button type="button" class="hold" id="jdV_hold" onclick="jdPick('hold')">🟡 축소·동결<br><span>줄이고 멈춘다</span></button>
+      <button type="button" class="stop" id="jdV_stop" onclick="jdPick('stop')">⛔ 중단<br><span>그만한다</span></button>
+    </div>
+    <div class="fb">
+      <button type="button" onclick="jdClose()">취소</button>
+      <button type="button" class="ok" onclick="jdSave()">판정 기록</button>
+    </div>
+    </div>
+  </div>
+</div>
 
 <div id="instGuide" onclick="if(event.target===this) closeInstGuide()">
   <div class="ig">
