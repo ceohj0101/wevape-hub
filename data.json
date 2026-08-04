@@ -2,7 +2,7 @@
   "entries": [
     {
       "dept": "HR",
-      "title": "브이플로우(스케줄 앱)",
+      "title": "브이플로우(일/월 업무)",
       "url": "https://vflow.kr",
       "note": "",
       "status": "운영중",
@@ -777,6 +777,6 @@
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
     "https://janghj201-cyber.github.io/-/"
   ],
-  "savedAt": "2026-08-03T02:54:17.679Z",
+  "savedAt": "2026-08-04T02:01:11.398Z",
   "savedBy": "employee"
 }
