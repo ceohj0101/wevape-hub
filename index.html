@@ -1296,6 +1296,29 @@
   .ck-done.stop{color:#f04452;}
   .ck-none{font-size:12.7px;color:#a0a6b0;font-weight:700;line-height:1.75;}
   .ck-note{margin-top:10px;font-size:11.3px;color:#a0a6b0;font-weight:700;line-height:1.7;}
+
+  /* ---------- 💬 이 시스템 피드백 (누구나 한 줄 남기기) ---------- */
+  .ck-fb{margin-top:14px;border-top:1px solid #f0f2f5;padding-top:13px;}
+  .ck-fb>i{font-style:normal;display:block;font-size:11.5px;font-weight:900;color:#a0a6b0;margin-bottom:9px;}
+  .ck-fb>i b{color:#3182f6;}
+  .ck-fbl{list-style:none;margin:0 0 11px;padding:0;}
+  .ck-fbl li{background:#f7f8fa;border:1px solid #eef0f4;border-radius:11px;padding:10px 11px;margin-bottom:7px;}
+  .ck-fbl .hd{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+  .ck-fbl .w{font-size:12px;font-weight:900;color:#191f28;}
+  .ck-fbl .t{font-size:10.8px;font-weight:700;color:#a0a6b0;}
+  .ck-fbx{margin-left:auto;border:0;background:transparent;cursor:pointer;font-size:12.5px;color:#c2c7cf;padding:2px 3px;line-height:1;}
+  .ck-fbx:active{opacity:.6;}
+  .ck-fbl p{margin:0;font-size:13px;line-height:1.72;color:#3c434f;font-weight:600;white-space:pre-wrap;word-break:break-word;}
+  .ck-fbnone{font-size:12.3px;color:#b0b5be;font-weight:700;margin:0 0 11px;}
+  .ck-fbf{display:flex;flex-direction:column;gap:7px;}
+  .ck-fbf input,.ck-fbf textarea{width:100%;box-sizing:border-box;font-family:inherit;font-size:13.5px;font-weight:600;color:#191f28;background:#fff;border:1px solid #e3e7ee;border-radius:11px;padding:11px 12px;outline:none;}
+  .ck-fbf input:focus,.ck-fbf textarea:focus{border-color:#3182f6;}
+  .ck-fbf input::placeholder,.ck-fbf textarea::placeholder{color:#b8bdc6;font-weight:600;}
+  .ck-fbf textarea{min-height:76px;resize:vertical;line-height:1.7;}
+  .ck-fbs{height:46px;border:0;border-radius:11px;background:#3182f6;color:#fff;font-family:inherit;font-size:13.5px;font-weight:900;cursor:pointer;}
+  .ck-fbs:active{opacity:.8;}
+  .ck-fbs[disabled]{background:#dfe3e9;color:#9aa0a9;cursor:default;}
+  .ck-fbhelp{margin-top:8px;font-size:11.3px;color:#a0a6b0;font-weight:700;line-height:1.7;}
   </style>
 </head>
 <body>
@@ -3083,6 +3106,7 @@ function chkCard(url){
     return '<div class="ck">'
       + '<div class="ck-h"><span class="ck-ttl">🩺 오늘의 점검</span></div>'
       + '<div class="ck-none">아직 점검 기록이 없습니다.<br>매일 오전 11시에 감독관이 이 시스템을 직접 열어보고, 고쳐야 할 것과 나중에 연동하려면 지금 맞춰놔야 할 것을 여기에 채웁니다.</div>'
+      + chkFbBlock(url, null)
       + '</div>';
   }
   var h = '<div class="ck">';
@@ -3092,6 +3116,7 @@ function chkCard(url){
   h += '<div class="ck-s"><i>감독관 소견</i><p>' + escapeHtml(c.s || '') + '</p></div>';
   h += '<div class="ck-s"><i>⚠️ 고쳐야 할 것</i><ul>' + chkList(c.f) + '</ul></div>';
   h += '<div class="ck-s"><i>🔗 나중에 연동하려면 지금 맞춰놔야 할 것</i><ul>' + chkList(c.l) + '</ul></div>';
+  h += chkFbBlock(url, c);
   if(c.ok){
     h += '<div class="ck-done ' + escapeHtml(c.okV || '') + '">' + chkLabel(c.okV)
        + ' — 대표 확정 · ' + escapeHtml(c.okT || '') + '</div>';
@@ -3134,8 +3159,124 @@ function chkSet(url, obj){
   if(!url || !obj) return false;
   var old = CHECKS[url];
   if(old && old.ok && old.d === obj.d) return false;   // 같은 날 이미 대표가 확정했으면 덮지 않는다
+  // ★ 직원이 남긴 피드백은 새 점검이 들어와도 살려둔다 (매일 11시 점검이 덮어쓰면 다 날아감)
+  if(old && old.fb && old.fb.length && !obj.fb) obj.fb = old.fb;
   CHECKS[url] = obj;
   return true;
+}
+
+/* ============================================================
+   💬 이 시스템 피드백 — 직원도 대표도 한 줄씩 남긴다
+   · 저장 위치: CHECKS[url].fb = [{w:작성자, m:내용, t:시각}]
+   · 판정(감독관)과 확정(대표)과는 완전히 별개. 비밀번호 없이 누구나 남길 수 있다.
+   · 저장 전에 공용 장부를 한 번 당겨서 합친다 → 두 사람이 동시에 써도 안 사라짐.
+   ============================================================ */
+var FB_NAME_KEY = "wevape_hub_fb_name_v1";
+
+function fbKey(o){
+  return String((o && o.t) || '') + '|' + String((o && o.w) || '') + '|' + String((o && o.m) || '');
+}
+function fbName(){
+  try{ return (lsGet(FB_NAME_KEY) || '').trim(); }catch(e){ return ''; }
+}
+function chkFbBlock(url, c){
+  var uq   = String(url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  var list = (c && c.fb && c.fb.length) ? c.fb : [];
+  var h = '<div class="ck-fb"><i>💬 이 시스템 쓰면서 불편한 점 · 고쳐야 할 점';
+  if(list.length) h += ' <b>(' + list.length + ')</b>';
+  h += '</i>';
+  if(!list.length){
+    h += '<p class="ck-fbnone">아직 남긴 피드백이 없습니다. 첫 줄을 적어주세요.</p>';
+  }else{
+    h += '<ul class="ck-fbl">';
+    for(var i = 0; i < list.length; i++){
+      var it = list[i] || {};
+      h += '<li><div class="hd"><span class="w">' + escapeHtml(String(it.w || '익명'))
+         + '</span><span class="t">' + escapeHtml(String(it.t || '')) + '</span>'
+         + '<button type="button" class="ck-fbx" title="지우기" onclick="chkFbDel(\'' + uq + '\',' + i + ')">🗑</button>'
+         + '</div><p>' + escapeHtml(String(it.m || '')) + '</p></li>';
+    }
+    h += '</ul>';
+  }
+  h += '<div class="ck-fbf">'
+     + '<input type="text" id="ckFbName" maxlength="20" placeholder="이름 (예: 강남점 홍길동)" value="' + escapeHtml(fbName()) + '">'
+     + '<textarea id="ckFbMsg" maxlength="500" placeholder="어떤 점이 불편했는지, 뭐가 있으면 편해질지 그대로 적어주세요."></textarea>'
+     + '<button type="button" class="ck-fbs" id="ckFbBtn" onclick="chkFbAdd(\'' + uq + '\')">피드백 남기기</button>'
+     + '</div>';
+  h += '<div class="ck-fbhelp">남기면 전직원에게 바로 보입니다. 감독관이 매일 오전 11시 점검할 때 이걸 먼저 읽고 개선 방향을 잡습니다.</div>';
+  h += '</div>';
+  return h;
+}
+
+/* 공용 장부에 있는 피드백을 내 화면 것과 합친다 (남이 먼저 쓴 게 사라지는 거 방지) */
+async function chkFbPull(){
+  try{
+    var R = ghRepo();
+    var res = await fetch('https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + R.path + '?ref=' + R.branch,
+                          { headers: { "Accept": "application/vnd.github.raw" }, cache: "no-store" });
+    if(!res.ok) return false;
+    var d = await res.json();
+    if(!d || !d.checks || typeof d.checks !== 'object') return false;
+    for(var k in d.checks){
+      if(!Object.prototype.hasOwnProperty.call(d.checks, k)) continue;
+      var rf = d.checks[k] && d.checks[k].fb;
+      if(!rf || !rf.length) continue;
+      if(!CHECKS[k]){ CHECKS[k] = d.checks[k]; continue; }
+      var mine = CHECKS[k].fb || [];
+      var seen = {};
+      for(var i = 0; i < mine.length; i++) seen[fbKey(mine[i])] = 1;
+      for(var j = 0; j < rf.length; j++){ if(!seen[fbKey(rf[j])]) mine.push(rf[j]); }
+      mine.sort(function(a, b){ return String((a && a.t) || '') < String((b && b.t) || '') ? -1 : 1; });
+      CHECKS[k].fb = mine;
+    }
+    return true;
+  }catch(e){ return false; }
+}
+
+async function chkFbAdd(url){
+  var elN = document.getElementById('ckFbName');
+  var elM = document.getElementById('ckFbMsg');
+  var elB = document.getElementById('ckFbBtn');
+  var w = elN ? String(elN.value || '').trim() : '';
+  var m = elM ? String(elM.value || '').trim() : '';
+  if(!m){ await customAlert('피드백 내용을 적어주세요.'); if(elM) elM.focus(); return; }
+  if(!w){ await customAlert('이름을 적어주세요. 누가 불편했는지 알아야 고칠 수 있습니다.'); if(elN) elN.focus(); return; }
+  if(elB){ elB.disabled = true; elB.textContent = '올리는 중...'; }
+  try{
+    try{ lsSet(FB_NAME_KEY, w); }catch(e){}
+    await chkFbPull();
+    if(!CHECKS[url]) CHECKS[url] = { d: '', by: '', v: '', s: '', f: [], l: [] };
+    if(!CHECKS[url].fb) CHECKS[url].fb = [];
+    CHECKS[url].fb.push({ w: w, m: m, t: new Date().toLocaleString('ko-KR', { hour12: false }) });
+    if(elM) elM.value = '';
+    try{ detailHtml(); }catch(e){}
+    await saveShared({ silent: true });
+  }catch(e){
+    await customAlert('피드백을 올리다 문제가 생겼습니다.\n내용은 이 기기에 남아 있으니 잠시 뒤 다시 해보세요.');
+  }finally{
+    var b2 = document.getElementById('ckFbBtn');
+    if(b2){ b2.disabled = false; b2.textContent = '피드백 남기기'; }
+  }
+}
+
+async function chkFbDel(url, i){
+  var c = CHECKS[url];
+  if(!c || !c.fb || !c.fb[i]) return;
+  var it = c.fb[i];
+  if(!(await customConfirm('이 피드백을 지울까요?\n\n「' + String(it.w || '') + ' · ' + String(it.m || '').slice(0, 40) + '」\n\n지우면 전직원 화면에서도 사라집니다.', true))) return;
+  try{
+    await chkFbPull();
+    var arr = (CHECKS[url] && CHECKS[url].fb) ? CHECKS[url].fb : [];
+    var k = fbKey(it);
+    for(var j = 0; j < arr.length; j++){
+      if(fbKey(arr[j]) === k){ arr.splice(j, 1); break; }
+    }
+    CHECKS[url].fb = arr;
+    try{ detailHtml(); }catch(e){}
+    await saveShared({ silent: true });
+  }catch(e){
+    await customAlert('지우다 문제가 생겼습니다. 잠시 뒤 다시 해보세요.');
+  }
 }
 function chkStat(){
   var n = 0, ok = 0, stop = 0;
