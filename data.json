@@ -110,15 +110,6 @@
       "owner": "안태민 주임"
     },
     {
-      "dept": "HR",
-      "title": "스케줄 생성기",
-      "url": "https://znsl132-lang.github.io/BIGLUCKY/schedule.html",
-      "note": "",
-      "status": "개발중",
-      "owner": "장대운 주임",
-      "sensitive": true
-    },
-    {
       "dept": "CX",
       "title": "W-Voice — 매장 고객 응대 녹음 시스템",
       "url": "https://w-voice.vercel.app/app/",
@@ -790,7 +781,8 @@
   "reviewSeq": 2,
   "deleted": [
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
-    "https://janghj201-cyber.github.io/-/"
+    "https://janghj201-cyber.github.io/-/",
+    "https://znsl132-lang.github.io/BIGLUCKY/schedule.html"
   ],
   "checks": {
     "https://vflow.kr": {
@@ -1006,5 +998,6 @@
       ]
     }
   },
-  "savedAt": "2026-08-05T05:27:44.172Z"
+  "savedAt": "2026-08-05T09:14:50.847Z",
+  "savedBy": "employee"
 }
