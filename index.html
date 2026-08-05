@@ -1269,6 +1269,33 @@
   @media(max-width:640px){
     .ub-row .t{max-width:38%;}
   }
+
+  /* ---------- 🩺 오늘의 점검 카드 (링크 상세 · 밝은 테마) ---------- */
+  .ck{margin-top:14px;background:#fff;border:1px solid #e8ebf0;border-radius:14px;padding:16px 16px 14px;}
+  .ck-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:13px;}
+  .ck-ttl{font-size:14.5px;font-weight:900;color:#191f28;}
+  .ck-d{font-size:11.5px;font-weight:800;color:#8b919c;background:#f2f4f6;border-radius:8px;padding:3px 8px;}
+  .ck-v{font-size:11.5px;font-weight:900;border-radius:8px;padding:3px 9px;background:#f2f4f6;color:#8b919c;}
+  .ck-v.go{background:#e8f6ee;color:#1a8a4a;}
+  .ck-v.hold{background:#fff4e0;color:#d97a00;}
+  .ck-v.stop{background:#ffeef0;color:#f04452;}
+  .ck-s{margin-bottom:13px;}
+  .ck-s:last-of-type{margin-bottom:0;}
+  .ck-s i{font-style:normal;display:block;font-size:11.5px;font-weight:900;color:#a0a6b0;margin-bottom:5px;}
+  .ck-s p{margin:0;font-size:13.5px;line-height:1.78;color:#3c434f;font-weight:600;}
+  .ck-s ul{margin:0;padding-left:17px;}
+  .ck-s li{font-size:13px;line-height:1.78;color:#3c434f;font-weight:600;margin-bottom:4px;}
+  .ck-btns{display:flex;gap:8px;margin-top:14px;border-top:1px solid #f0f2f5;padding-top:13px;}
+  .ck-b{flex:1;height:46px;border-radius:11px;font-family:inherit;font-size:13px;font-weight:900;cursor:pointer;border:1px solid #e3e7ee;background:#fff;color:#5b626d;}
+  .ck-b.go{border-color:#bfe6d0;color:#1a8a4a;background:#f4fbf7;}
+  .ck-b.hold{border-color:#ffdfae;color:#d97a00;background:#fffaf2;}
+  .ck-b.stop{border-color:#ffc9cf;color:#f04452;background:#fff7f8;}
+  .ck-b:active{opacity:.7;}
+  .ck-done{margin-top:13px;border-top:1px solid #f0f2f5;padding-top:12px;font-size:12.8px;font-weight:900;color:#1a8a4a;}
+  .ck-done.hold{color:#d97a00;}
+  .ck-done.stop{color:#f04452;}
+  .ck-none{font-size:12.7px;color:#a0a6b0;font-weight:700;line-height:1.75;}
+  .ck-note{margin-top:10px;font-size:11.3px;color:#a0a6b0;font-weight:700;line-height:1.7;}
   </style>
 </head>
 <body>
@@ -2174,6 +2201,12 @@ let feedbackSeq = 0;
 let REVIEW_LIST = [];   // 🧩 새 업무 검토 [{id,title,url,text,author,time,date,status,reply}]
 let reviewSeq = 0;
 let DELETED_URLS = [];  // 🗑 지운 시스템 주소 목록 (기본 목록에서 되살아나지 않게 기록해 둠)
+/* 🩺 링크별 「오늘의 점검」 저장소
+   CHECKS[url] = { d:'날짜', s:'감독관 소견', f:['고쳐야 할 것'], l:['연동 대비'],
+                   v:'go|hold|stop', by:'감독관',
+                   ok:대표확정여부, okV:'go|hold|stop', okT:'확정시각', okBy:'대표' }
+   ★ var 로 선언한다 — applyData() 가 파일 중간에서 먼저 돌기 때문에 let/const 는 죽는다. */
+var CHECKS = {};
 let openFeedbackPanels = new Set();
 let editingFeedbackIds = new Set();
 const FB_STATUS_OPTIONS = ["접수됨","업데이트 예정","업데이트 완료"];
@@ -3023,6 +3056,93 @@ function rowHtml(e){
 }
 
 // 상세 화면
+/* ============================================================
+   🩺 오늘의 점검 — 링크마다 하루 한 번 점검 결과를 붙인다
+   · 소견 / 고쳐야 할 것 / 나중에 연동하려면 지금 맞춰놔야 할 것
+   · 판정(감독관)과 확정(대표)을 분리한다. 확정은 대표 비밀번호로만 된다.
+   ============================================================ */
+function chkOf(url){
+  try{ return (CHECKS && CHECKS[url]) ? CHECKS[url] : null; }catch(e){ return null; }
+}
+function chkLabel(v){
+  if(v === 'go')   return '✅ 유지';
+  if(v === 'hold') return '🟡 보완·보류';
+  if(v === 'stop') return '⛔ 중단 검토';
+  return '판정 없음';
+}
+function chkList(arr){
+  if(!arr || !arr.length) return '<li>없음</li>';
+  var out = '';
+  for(var i = 0; i < arr.length; i++) out += '<li>' + escapeHtml(String(arr[i])) + '</li>';
+  return out;
+}
+function chkCard(url){
+  var c  = chkOf(url);
+  var uq = String(url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  if(!c){
+    return '<div class="ck">'
+      + '<div class="ck-h"><span class="ck-ttl">🩺 오늘의 점검</span></div>'
+      + '<div class="ck-none">아직 점검 기록이 없습니다.<br>매일 오전 11시에 감독관이 이 시스템을 직접 열어보고, 고쳐야 할 것과 나중에 연동하려면 지금 맞춰놔야 할 것을 여기에 채웁니다.</div>'
+      + '</div>';
+  }
+  var h = '<div class="ck">';
+  h += '<div class="ck-h"><span class="ck-ttl">🩺 오늘의 점검</span>'
+     + '<span class="ck-d">' + escapeHtml(c.d || '') + '</span>'
+     + '<span class="ck-v ' + escapeHtml(c.v || '') + '">' + chkLabel(c.v) + '</span></div>';
+  h += '<div class="ck-s"><i>감독관 소견</i><p>' + escapeHtml(c.s || '') + '</p></div>';
+  h += '<div class="ck-s"><i>⚠️ 고쳐야 할 것</i><ul>' + chkList(c.f) + '</ul></div>';
+  h += '<div class="ck-s"><i>🔗 나중에 연동하려면 지금 맞춰놔야 할 것</i><ul>' + chkList(c.l) + '</ul></div>';
+  if(c.ok){
+    h += '<div class="ck-done ' + escapeHtml(c.okV || '') + '">' + chkLabel(c.okV)
+       + ' — 대표 확정 · ' + escapeHtml(c.okT || '') + '</div>';
+    h += '<div class="ck-btns"><button type="button" class="ck-b" onclick="chkUndo(\'' + uq + '\')">↩︎ 확정 되돌리기 (대표)</button></div>';
+  }else{
+    h += '<div class="ck-btns">'
+       + '<button type="button" class="ck-b go"   onclick="chkDecide(\'' + uq + '\',\'go\')">✅ 대표 승인</button>'
+       + '<button type="button" class="ck-b hold" onclick="chkDecide(\'' + uq + '\',\'hold\')">🟡 보류</button>'
+       + '<button type="button" class="ck-b stop" onclick="chkDecide(\'' + uq + '\',\'stop\')">⛔ 중단</button>'
+       + '</div>';
+    h += '<div class="ck-note">최종 결정은 대표만 누를 수 있습니다. (누르면 대표 비밀번호를 물어봅니다)</div>';
+  }
+  h += '</div>';
+  return h;
+}
+async function chkDecide(url, v){
+  var c = chkOf(url);
+  if(!c){ await customAlert('점검 기록이 아직 없습니다.'); return; }
+  var pw = await customPrompt('대표 최종 결정입니다.\n「' + chkLabel(v) + '」 로 확정합니다.\n대표 비밀번호를 입력해주세요.', 'password', '');
+  if(pw === null) return;
+  if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다.'); return; }
+  c.ok = true; c.okV = v; c.okBy = '대표';
+  c.okT = new Date().toLocaleString('ko-KR', { hour12: false });
+  try{ await saveShared({ silent: true }); }catch(e){}
+  try{ detailHtml(); }catch(e){}
+  await customAlert('「' + chkLabel(v) + '」 로 확정되었습니다.');
+}
+async function chkUndo(url){
+  var c = chkOf(url);
+  if(!c) return;
+  var pw = await customPrompt('대표 확정을 되돌립니다.\n대표 비밀번호를 입력해주세요.', 'password', '');
+  if(pw === null) return;
+  if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다.'); return; }
+  c.ok = false; c.okV = ''; c.okT = ''; c.okBy = '';
+  try{ await saveShared({ silent: true }); }catch(e){}
+  try{ detailHtml(); }catch(e){}
+}
+/* 감독관(자동 점검)이 결과를 채워 넣을 때 쓰는 입구 */
+function chkSet(url, obj){
+  if(!url || !obj) return false;
+  var old = CHECKS[url];
+  if(old && old.ok && old.d === obj.d) return false;   // 같은 날 이미 대표가 확정했으면 덮지 않는다
+  CHECKS[url] = obj;
+  return true;
+}
+function chkStat(){
+  var n = 0, ok = 0, stop = 0;
+  for(var k in CHECKS){ if(!CHECKS.hasOwnProperty(k)) continue; n++; if(CHECKS[k].ok) ok++; if(CHECKS[k].v === 'stop') stop++; }
+  return { n: n, ok: ok, stop: stop };
+}
+
 function detailHtml(){
   const host = document.getElementById('detail');
   if(!host) return;
@@ -3054,6 +3174,7 @@ function detailHtml(){
       <div class="br-u">${locked ? (ok ? '🔒 잠긴 시스템입니다. 열 때 비밀번호를 물어봅니다.' : '🔒 아직 만드는 중이라 주소는 가려져 있습니다. 비밀번호를 넣으면 열립니다.') : escapeHtml(e.url || '주소가 없습니다')}</div>
       ${e.note ? `<div class="br-u" style="margin-top:6px;color:#5b626d">${escapeHtml(e.note)}</div>` : ''}
       <button type="button" class="br-open" onclick="${locked ? `tryOpenLocked('${uq}')` : `stGo('${uq}')`}">${locked ? '🔒 비밀번호 넣고 열기 →' : '열기 →'}</button>
+      ${chkCard(e.url || '')}
 
       <div class="br-grid">
         <div class="br-f">
@@ -3538,6 +3659,7 @@ function snapshot(){
     reviews: reviewsForSave(),
     reviewSeq: reviewSeq,
     deleted: DELETED_URLS,
+    checks: CHECKS,
     savedAt: new Date().toISOString()
   };
 }
@@ -3586,6 +3708,7 @@ function applyData(d){
   if(typeof d.feedbackSeq === "number") feedbackSeq = Math.max(feedbackSeq, d.feedbackSeq);
   if(Array.isArray(d.reviews)) REVIEW_LIST = d.reviews;
   if(typeof d.reviewSeq === "number") reviewSeq = Math.max(reviewSeq, d.reviewSeq);
+  if(d.checks && typeof d.checks === "object") CHECKS = d.checks;
   try{ renderDesk(); }catch(err){}
 
   if(Array.isArray(d.stores) && d.stores.length){
@@ -4049,6 +4172,8 @@ if ('serviceWorker' in navigator) {
 const UPDATE_ID   = '2026-08-05';
 const UPDATE_SEEN = 'wevape_hub_upd_seen';
 const UPDATE_ITEMS = [
+  ['🩺', '링크마다 「오늘의 점검」이 붙습니다', '시스템을 눌러서 들어가면 「열기」 버튼 바로 밑에 오늘 점검 결과가 나옵니다. 감독관 소견 · 고쳐야 할 것 · 나중에 연동하려면 지금 뭘 맞춰놔야 하는지 세 가지를 매일 오전 11시에 채웁니다.'],
+  ['🏁', '점검 결과의 최종 결정은 대표가 합니다', '점검 카드 아래 「✅ 대표 승인 / 🟡 보류 / ⛔ 중단」 버튼이 있습니다. 대표 비밀번호를 넣어야만 눌립니다. 감독관은 판정까지, 확정은 대표입니다.'],
   ['⚡', '사이트가 빨라졌습니다', '사진을 따로 보관하도록 바꿔서, 들어올 때 받는 데이터가 297KB → 약 70KB 로 76% 줄었습니다. 사진은 이제 「볼 때만」 받습니다. 기존 사진은 그대로 다 보입니다.'],
   ['📊', '오늘 몇 명이 쓰고 있는지 위에 보입니다', '맨 위에 「오늘 N대 접속 · N번 열림 · N번 클릭」이 실시간으로 뜹니다. 누르면 오늘 어떤 링크를 많이 눌렀는지, 최근 7일 아무도 안 쓴 링크는 뭔지까지 나옵니다.'],
   ['🔒', '아이피(IP)나 이름은 안 모읍니다', '기기마다 붙는 익명 번호로 「몇 대가 들어왔는지」만 셉니다. 누가 뭘 눌렀는지는 기록되지 않고, 14일이 지나면 자동으로 지워집니다.'],
