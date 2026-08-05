@@ -3741,23 +3741,70 @@ function loadLocal(){
   localSavedAt = saved.savedAt || "";
 }
 
+/* ────────────────────────────────────────────────────────────────
+   📡 헛걸음 줄이기 (조건부 요청 / ETag)   ※ 2026-08-05 추가
+
+   무엇이 문제였나
+     창을 켜둔 채로 두면 10분마다 공용 장부를 다시 읽는다.
+     그런데 깃허브 API는 이 파일을 압축 없이 보내서 한 번에 81KB다.
+     내용이 하나도 안 바뀌었어도 똑같이 81KB를 통째로 다시 받았다.
+     하루 8시간 켜두면 기기 하나가 48번 × 81KB = 약 3.9MB를 헛되이 쓴다.
+
+   어떻게 고쳤나
+     서버가 파일마다 붙여주는 "지문"(ETag)을 기억해 뒀다가,
+     다음에 물어볼 때 "나 이 지문 갖고 있는데 바뀐 거 있어?" 하고 같이 보낸다.
+     안 바뀌었으면 서버가 304 = "그대로임" 이라고만 답한다 → 받는 양 0바이트.
+     바뀌었으면 예전처럼 전체를 받는다. (실측 확인: 81,442 bytes → 0 bytes)
+
+   왜 안전한가
+     ① 지문은 메모리에만 둔다. 브라우저에 저장하지 않는다.
+        → 새로고침하거나 창을 새로 열면 지문이 없으므로 항상 전체를 받는다.
+          "빈 화면이 뜬다" 같은 사고가 구조적으로 불가능하다.
+     ② 304를 받아도 「아직 못 올린 내 수정분(dirty) 다시 올리기」 그물은 그대로 돈다.
+     ③ 지문 방식이 안 통하면 그냥 200으로 전체가 오므로, 최악이라도 예전과 똑같다.
+   ──────────────────────────────────────────────────────────────── */
+var GH_ETAG = "";   // 마지막으로 받은 공용 장부의 지문. 메모리에만 산다.
+
 // ---------------- 공용 장부 읽기 (누구나) ----------------
 async function loadRemote(){
   const R = ghRepo();
   const bust = "?t=" + Date.now();
   // raw.githubusercontent.com 은 중간 서버가 옛날 내용을 최대 수십 분까지 물고 있어서
   // "다른 직원이 내 수정을 못 보는" 원인이었음 → 항상 최신인 깃허브 API를 먼저 읽고, 실패할 때만 raw 사용
+  // (API 쪽은 cache:"no-store" 로 이미 브라우저 캐시를 건너뛰므로 ?t= 군더더기는 뺐다.
+  //  그래야 지문 비교가 실측 확인된 형태 그대로 동작한다.)
   const urls = [
-    `https://api.github.com/repos/${R.owner}/${R.repo}/contents/${R.path}?ref=${R.branch}&t=${Date.now()}`,
+    `https://api.github.com/repos/${R.owner}/${R.repo}/contents/${R.path}?ref=${R.branch}`,
     `https://raw.githubusercontent.com/${R.owner}/${R.repo}/${R.branch}/${R.path}` + bust
   ];
   for(let i = 0; i < urls.length; i++){
     try{
-      const opt = i === 0 ? { headers: { "Accept": "application/vnd.github.raw" }, cache: "no-store" } : { cache: "no-store" };
+      let opt;
+      if(i === 0){
+        const h = { "Accept": "application/vnd.github.raw" };
+        // 이미 한 번 제대로 받아본 적이 있을 때만 지문을 보낸다.
+        if(GH_ETAG && remoteLoaded) h["If-None-Match"] = GH_ETAG;
+        opt = { headers: h, cache: "no-store" };
+      } else {
+        opt = { cache: "no-store" };
+      }
       const res = await fetch(urls[i], opt);
+
+      // 304 = "지난번이랑 똑같음". 받을 게 없으니 화면을 그대로 두고 끝낸다.
+      // ★ 여기서 81KB 가 0바이트가 된다. 단, 못 올린 수정분 재시도는 그대로 유지한다.
+      if(res.status === 304){
+        remoteLoaded = true;
+        if(dirty && canSave()) scheduleAutoSave();
+        updateSyncBadge();
+        return;
+      }
+
       if(!res.ok) continue;
       const data = await res.json();
       if(!data || typeof data !== "object") continue;
+
+      // 제대로 받았을 때만 지문을 갱신한다 (API 경로에서만 의미가 있다)
+      if(i === 0){ GH_ETAG = res.headers.get("etag") || ""; }
 
       remoteLoaded  = true;
       remoteSavedAt = data.savedAt || "";
