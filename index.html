@@ -1240,6 +1240,35 @@
     font-weight:800;text-align:center;line-height:1.6;}
   .dk-size{font-size:11px;font-weight:800;color:#9aa0aa;padding:6px 2px;width:100%;}
   .dk-size.hi{color:#c0392b;}
+  /* ================================================================
+     📊 실시간 이용 현황 (usebar) — 헤더 아래 한 줄 + 펼치면 상세
+     ★ 아이피(IP)는 모으지 않는다. 기기마다 붙는 익명 번호로만 센다.
+     ================================================================ */
+  .usebar{width:100%;margin-top:8px;}
+  .ub-bar{
+    display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-family:inherit;
+    background:#f2f4f6;border:0;color:#3c434f;border-radius:999px;
+    padding:9px 15px;font-size:12.5px;font-weight:800;white-space:nowrap;
+  }
+  .ub-bar b{color:#191f28;font-size:13.5px;}
+  .ub-bar .dot{color:#12b886;font-size:9px;animation:ubPulse 1.8s infinite;}
+  @keyframes ubPulse{0%,100%{opacity:1}50%{opacity:.25}}
+  .ub-body{display:none;margin-top:9px;background:#f7f8fa;border-radius:13px;padding:13px 14px;}
+  .ub-body.on{display:block;}
+  .ub-sec{margin-bottom:13px;}
+  .ub-sec:last-of-type{margin-bottom:0;}
+  .ub-sec h4{margin:0 0 7px;font-size:12.5px;font-weight:900;color:#191f28;}
+  .ub-row{display:flex;align-items:center;gap:9px;padding:4px 0;font-size:12.5px;color:#3c434f;}
+  .ub-row .t{flex:0 0 auto;max-width:44%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800;}
+  .ub-row .g{flex:1 1 auto;height:8px;background:#e5e8ec;border-radius:999px;overflow:hidden;}
+  .ub-row .g i{display:block;height:100%;background:#191f28;border-radius:999px;}
+  .ub-row b{flex:0 0 auto;font-size:12.5px;color:#191f28;min-width:28px;text-align:right;}
+  .ub-none{font-size:12.3px;color:#8b919c;font-weight:700;}
+  .ub-cold{font-size:12.3px;color:#8b919c;line-height:1.9;font-weight:700;}
+  .ub-note{font-size:11.3px;color:#a0a6b0;line-height:1.7;border-top:1px solid #e5e8ec;padding-top:9px;font-weight:700;}
+  @media(max-width:640px){
+    .ub-row .t{max-width:38%;}
+  }
   </style>
 </head>
 <body>
@@ -1331,6 +1360,10 @@
       <div class="stat"><b id="statWip">0</b> 만드는중</div>
       <div class="stat" style="display:none"><b id="statDepts">0</b></div>
       <span class="syncBadge off" id="syncBadge" onclick="syncBadgeClick()" title="누르면 저장 상태를 확인할 수 있습니다">🔧 공용 데이터 연결 대기중</span>
+    </div>
+    <div class="usebar">
+      <button type="button" class="ub-bar" id="ubBar" onclick="stToggle()"><b class="dot">●</b> 오늘 이용 현황 불러오는 중…</button>
+      <div class="ub-body" id="ubBody"></div>
     </div>
   </div>
 </header>
@@ -2130,7 +2163,7 @@ async function tryOpenLocked(url){
     btn.classList.add('on');
   }
   renderUI();
-  if(url) window.open(url, '_blank');
+  if(url) stGo(url);
 }
 
 // ---------------------------------------------------------------
@@ -2831,7 +2864,7 @@ function mmOpen(u){
   try{
     if(typeof isLocked === 'function' && isLocked(e)){ tryOpenLocked(e.url); return; }
   }catch(err){}
-  window.open(e.url, '_blank');
+  stGo(e.url);
 }
 
 function renderMindmap(){
@@ -3020,7 +3053,7 @@ function detailHtml(){
       <div class="br-t">${escapeHtml(e.title)} <small>· ${g.t}</small> <button type="button" class="br-ren" onclick="editEntryTitle('${kq}')">✏️ 이름 수정</button></div>
       <div class="br-u">${locked ? (ok ? '🔒 잠긴 시스템입니다. 열 때 비밀번호를 물어봅니다.' : '🔒 아직 만드는 중이라 주소는 가려져 있습니다. 비밀번호를 넣으면 열립니다.') : escapeHtml(e.url || '주소가 없습니다')}</div>
       ${e.note ? `<div class="br-u" style="margin-top:6px;color:#5b626d">${escapeHtml(e.note)}</div>` : ''}
-      <button type="button" class="br-open" onclick="${locked ? `tryOpenLocked('${uq}')` : `window.open('${uq}','_blank')`}">${locked ? '🔒 비밀번호 넣고 열기 →' : '열기 →'}</button>
+      <button type="button" class="br-open" onclick="${locked ? `tryOpenLocked('${uq}')` : `stGo('${uq}')`}">${locked ? '🔒 비밀번호 넣고 열기 →' : '열기 →'}</button>
 
       <div class="br-grid">
         <div class="br-f">
@@ -3502,7 +3535,7 @@ function snapshot(){
     status: STATUS,
     feedback: FEEDBACK_LIST,
     feedbackSeq: feedbackSeq,
-    reviews: REVIEW_LIST,
+    reviews: reviewsForSave(),
     reviewSeq: reviewSeq,
     deleted: DELETED_URLS,
     savedAt: new Date().toISOString()
@@ -3769,6 +3802,7 @@ async function saveViaWorker(opts){
 
 // 관리자면 자기 열쇠로 바로 깃허브에, 직원이면 저장 서버를 거쳐서 저장
 async function saveShared(opts){
+  try{ await savePhotosIfNeeded(); }catch(e){}   // 사진이 바뀌었으면 photos.json 부터
   if(isAdmin()) return saveToGithub(opts);
   if(empPassword()) return saveViaWorker(opts);
   const silent = !!(opts && opts.silent);
@@ -4012,9 +4046,12 @@ if ('serviceWorker' in navigator) {
    ★ 다음에 또 업데이트하면 UPDATE_ID 날짜만 바꾸고
      UPDATE_ITEMS 내용을 갈아끼우면 끝. 다른 건 건드릴 필요 없음.
    ============================================================ */
-const UPDATE_ID   = '2026-08-04';
+const UPDATE_ID   = '2026-08-05';
 const UPDATE_SEEN = 'wevape_hub_upd_seen';
 const UPDATE_ITEMS = [
+  ['⚡', '사이트가 빨라졌습니다', '사진을 따로 보관하도록 바꿔서, 들어올 때 받는 데이터가 297KB → 약 70KB 로 76% 줄었습니다. 사진은 이제 「볼 때만」 받습니다. 기존 사진은 그대로 다 보입니다.'],
+  ['📊', '오늘 몇 명이 쓰고 있는지 위에 보입니다', '맨 위에 「오늘 N대 접속 · N번 열림 · N번 클릭」이 실시간으로 뜹니다. 누르면 오늘 어떤 링크를 많이 눌렀는지, 최근 7일 아무도 안 쓴 링크는 뭔지까지 나옵니다.'],
+  ['🔒', '아이피(IP)나 이름은 안 모읍니다', '기기마다 붙는 익명 번호로 「몇 대가 들어왔는지」만 셉니다. 누가 뭘 눌렀는지는 기록되지 않고, 14일이 지나면 자동으로 지워집니다.'],
   ['⚖️', '업무마다 「할 가치가 있나」를 먼저 판정합니다', '검토 화면에 「⚖️ 가치 판정」이 생겼습니다. ✅ 유지 / 🟡 축소·동결 / ⛔ 중단 셋 중 하나를 고르고 근거를 적습니다. 판정 전에는 보완 지시도 검토 통과도 안 됩니다.'],
   ['⛔', '중단 기준 5개를 화면에 깔았습니다', '① 측정 수단이 없다 ② 담당자 한 명이 빠지면 같이 죽는다 ③ 쓰는 사람이 없다 ④ 1급 요구 4개를 하나도 안 건드린다 ⑤ 법·규제를 열어놓고 시작한다. 기분이 아니라 기준으로 잠니다.'],
   ['🏁', '⛔ 중단은 대표가 확정합니다', '감독관은 「중단 판정」까지만 합니다. 사람이 이미 시간을 쓴 일을 실제로 멈추는 건 대표 비밀번호로 확정해야 됩니다.'],
@@ -4243,6 +4280,393 @@ function dkTodoHtml(r){
      아래쪽에 const/let 을 선언하면 부팅 때 터진다 — TDZ)
    ★ 항목 모양: todos[n].p = [{u:'data:image/jpeg;base64,...', w:'올린사람', t:'시각'}]
    ============================================================ */
+/* ============================================================
+   📦 사진 따로 보관 (photos.json)  —  로딩 속도용
+   ────────────────────────────────────────────────────────────
+   왜: 사진(base64 글자)이 data.json 안에 같이 들어 있어서,
+       사이트를 열 때마다 안 볼 사진까지 전부 내려받고 있었다.
+       (297KB 중 227KB가 사진이었음)
+   어떻게: 사진 알맹이는 photos.json 으로 빼고, data.json 에는
+       열쇠(k)만 남긴다. 사진은 「볼 때만」 따로 받는다.
+   ★ 옛날 사진({u:...} 로 그대로 박혀 있는 것)도 계속 보인다.
+     p.u 가 있으면 그걸 쓰고, 없으면 열쇠로 찾는다.
+   ★ 반드시 var / function 선언만 쓴다 (TDZ).
+   ============================================================ */
+var PHOTO_FILE  = 'photos.json';
+var PHOTO_MAP   = (typeof PHOTO_MAP   !== 'undefined' && PHOTO_MAP)   ? PHOTO_MAP : {};
+var PHOTO_READY = (typeof PHOTO_READY !== 'undefined') ? PHOTO_READY : false;
+var PHOTO_DIRTY = (typeof PHOTO_DIRTY !== 'undefined') ? PHOTO_DIRTY : false;
+var PHOTO_WAIT  = (typeof PHOTO_WAIT  !== 'undefined') ? PHOTO_WAIT  : null;
+var PHOTO_WARM  = false;
+var PHOTO_SEQ   = 0;
+
+function picKey(){
+  PHOTO_SEQ++;
+  return 'p' + Date.now().toString(36) + PHOTO_SEQ.toString(36) + Math.random().toString(36).slice(2, 7);
+}
+/* 사진 한 장의 실제 그림 주소 — 옛날 방식(u)도, 새 방식(k)도 다 받는다 */
+function picSrc(p){
+  if(!p) return '';
+  if(p.u) return p.u;
+  if(p.k && PHOTO_MAP && PHOTO_MAP[p.k]) return PHOTO_MAP[p.k];
+  return '';
+}
+/* photos.json 을 딱 한 번만 받아온다. 파일이 아직 없으면(404) 그것도 정상. */
+function ensurePhotos(){
+  if(PHOTO_READY) return Promise.resolve(true);
+  if(PHOTO_WAIT)  return PHOTO_WAIT;
+  if(!PHOTO_MAP) PHOTO_MAP = {};
+  var R = ghRepo();
+  PHOTO_WAIT = (async function(){
+    var urls = [
+      'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + PHOTO_FILE + '?ref=' + R.branch + '&t=' + Date.now(),
+      'https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + PHOTO_FILE + '?t=' + Date.now()
+    ];
+    var saw404 = false;
+    for(var i = 0; i < urls.length; i++){
+      try{
+        var opt = (i === 0) ? { headers: { 'Accept': 'application/vnd.github.raw' }, cache: 'no-store' } : { cache: 'no-store' };
+        var res = await fetch(urls[i], opt);
+        if(res.status === 404){ saw404 = true; continue; }
+        if(!res.ok) continue;
+        var d = await res.json();
+        var pics = (d && d.pics && typeof d.pics === 'object') ? d.pics : {};
+        Object.keys(pics).forEach(function(k){ PHOTO_MAP[k] = pics[k]; });
+        PHOTO_READY = true; PHOTO_WAIT = null;
+        return true;
+      }catch(e){}
+    }
+    PHOTO_WAIT = null;
+    if(saw404){ PHOTO_READY = true; return true; }   // 아직 사진이 하나도 없는 상태
+    return false;                                     // 네트워크 문제 — 다음에 다시 시도
+  })();
+  return PHOTO_WAIT;
+}
+/* 화면에 「불러오는 중」이 떠 있을 때 뒤에서 조용히 받아오고 다시 그린다 */
+function picWarm(){
+  if(PHOTO_WARM || PHOTO_READY) return;
+  PHOTO_WARM = true;
+  ensurePhotos().then(function(ok){
+    PHOTO_WARM = false;
+    if(ok){ try{ renderDesk(); }catch(e){} }
+  }, function(){ PHOTO_WARM = false; });
+}
+/* 공용 장부(data.json)에 넣을 때는 사진 알맹이를 빼고 열쇠만 남긴다.
+   ★ 열쇠(k)가 없는 옛날 사진은 절대 건드리지 않는다 — 지우면 복구 불가. */
+function reviewsForSave(){
+  try{
+    return REVIEW_LIST.map(function(r){
+      if(!r || !Array.isArray(r.todos)) return r;
+      var o = Object.assign({}, r);
+      o.todos = r.todos.map(function(x){
+        if(!x || !Array.isArray(x.p) || !x.p.length) return x;
+        var y = Object.assign({}, x);
+        y.p = x.p.map(function(p){ return (p && p.k) ? { k: p.k, w: p.w, t: p.t } : p; });
+        return y;
+      });
+      return o;
+    });
+  }catch(e){ return REVIEW_LIST; }
+}
+/* 지금 실제로 쓰이고 있는 사진만 모은다 — 지워진 사진은 자동으로 빠진다 */
+function photoSnapshot(){
+  var m = {};
+  try{
+    REVIEW_LIST.forEach(function(r){
+      (Array.isArray(r.todos) ? r.todos : []).forEach(function(x){
+        dkPics(x).forEach(function(p){
+          if(!p || !p.k) return;
+          var u = p.u || (PHOTO_MAP ? PHOTO_MAP[p.k] : '');
+          if(u) m[p.k] = u;
+        });
+      });
+    });
+  }catch(e){}
+  return m;
+}
+/* 깃허브에 아무 파일이나 올린다 — 관리자는 자기 열쇠로, 직원은 저장 서버로 */
+async function putJsonFile(path, obj){
+  var R = ghRepo();
+  var txt = JSON.stringify(obj);
+  if(isAdmin()){
+    var head = { "Authorization": "token " + ghToken(), "Accept": "application/vnd.github+json", "Content-Type": "application/json" };
+    var api  = 'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + path;
+    async function readSha(){
+      try{
+        var r = await fetch(api + '?ref=' + R.branch + '&t=' + Date.now(), { headers: head, cache: 'no-store' });
+        if(r.ok){ var j = await r.json(); return j.sha || null; }
+      }catch(e){}
+      return null;
+    }
+    var sha = await readSha();
+    for(var a = 0; a < 3; a++){
+      var body = { message: path + ' 업데이트 ' + new Date().toISOString(), content: utf8ToBase64(txt), branch: R.branch };
+      if(sha) body.sha = sha;
+      try{
+        var put = await fetch(api, { method: 'PUT', headers: head, body: JSON.stringify(body) });
+        if(put.ok) return true;
+        if((put.status === 409 || put.status === 422) && a < 2){ sha = await readSha(); continue; }
+      }catch(e){}
+      return false;
+    }
+    return false;
+  }
+  var pw = empPassword();
+  if(!pw) return false;
+  try{
+    var resp = await fetch(SAVE_WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: pw, owner: R.owner, repo: R.repo, branch: R.branch, path: path, data: obj })
+    });
+    var json = {};
+    try{ json = await resp.json(); }catch(e){}
+    return !!(resp.ok && json.ok);
+  }catch(e){ return false; }
+}
+/* 사진이 바뀐 게 있을 때만 photos.json 을 올린다.
+   ★ 사진 파일을 아직 못 받아온 기기는 절대 못 올린다 —
+     안 그러면 그 기기가 photos.json 을 통째로 비워버린다. */
+async function savePhotosIfNeeded(){
+  if(!PHOTO_DIRTY) return true;
+  if(!PHOTO_READY) return false;
+  var m = photoSnapshot();
+  var ok = await putJsonFile(PHOTO_FILE, { v: 1, pics: m });
+  if(ok){
+    PHOTO_DIRTY = false;
+    Object.keys(m).forEach(function(k){ PHOTO_MAP[k] = m[k]; });
+  }
+  return ok;
+}
+/* 관리자용 1회성: 이미 data.json 안에 박혀 있는 옛날 사진을 photos.json 으로 옮긴다.
+   자동으로 안 돌린다 — 직원 기기가 전부 동시에 올리면 충돌난다. */
+async function dkPicMigrate(){
+  await ensurePhotos();
+  var n = 0;
+  REVIEW_LIST.forEach(function(r){
+    (Array.isArray(r.todos) ? r.todos : []).forEach(function(x){
+      dkPics(x).forEach(function(p){
+        if(p && p.u && !p.k){ p.k = picKey(); PHOTO_MAP[p.k] = p.u; n++; }
+      });
+    });
+  });
+  if(n){ PHOTO_DIRTY = true; }
+  return n;
+}
+
+/* ============================================================
+   📊 이용 현황 집계 (stats.json)
+   ────────────────────────────────────────────────────────────
+   무엇을 세나: ① 오늘 몇 대가 들어왔나 ② 몇 번 열렸나 ③ 어떤 링크를 몇 번 눌렀나
+   ★ 아이피(IP)는 안 쓴다. 이유 3가지 —
+     ① 매장 와이파이는 여러 명이 아이피 하나를 같이 써서 사람 수가 안 맞는다
+     ② 아이피를 알아내려면 바깥 서버에 한 번 더 물어봐야 해서 로딩이 느려진다
+     ③ 아이피는 개인정보라, 직원 접속기록으로 쓰려면 별도 고지가 필요하다
+     대신 기기마다 익명 번호를 하나 붙여서 「몇 대」만 센다. 이름도 위치도 안 남는다.
+   ★ 집계는 이 기기에 먼저 쌓아두고(버퍼) 잠시 뒤 한 번에 올린다.
+     올리기 실패해도 버퍼는 안 지운다 → 숫자를 잃지 않는다.
+   ============================================================ */
+var ST_FILE    = 'stats.json';
+var ST_DEV_KEY = 'wevape_hub_dev_v1';
+var ST_BUF_KEY = 'wevape_hub_statbuf_v1';
+var ST_KEEP    = 14;                 // 최근 14일치만 보관
+var ST_DATA    = null;
+var ST_TIMER   = null;
+var ST_BUSY    = false;
+var ST_SHOW    = false;
+
+function stWait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function stToday(){
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function stDevId(){
+  var v = '';
+  try{ v = lsGet(ST_DEV_KEY) || ''; }catch(e){}
+  if(!v){
+    v = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    try{ lsSet(ST_DEV_KEY, v); }catch(e){}
+  }
+  return v;
+}
+function stBuf(){
+  try{
+    var o = JSON.parse(lsGet(ST_BUF_KEY) || '{}');
+    return (o && typeof o === 'object') ? o : {};
+  }catch(e){ return {}; }
+}
+function stBufSet(o){ try{ lsSet(ST_BUF_KEY, JSON.stringify(o)); }catch(e){} }
+function stDay(o, day){
+  if(!o.days) o.days = {};
+  if(!o.days[day]) o.days[day] = { dev: {}, hit: 0, clk: {} };
+  var d = o.days[day];
+  if(!d.dev) d.dev = {};
+  if(typeof d.hit !== 'number') d.hit = 0;
+  if(!d.clk) d.clk = {};
+  return d;
+}
+function stBump(kind, url){
+  try{
+    var b = stBuf();
+    var d = stDay(b, stToday());
+    d.dev[stDevId()] = 1;
+    if(kind === 'hit') d.hit++;
+    else if(kind === 'clk' && url){ d.clk[url] = (d.clk[url] || 0) + 1; }
+    stBufSet(b);
+    stPaint();
+    stSchedule();
+  }catch(e){}
+}
+function stSchedule(){
+  if(ST_TIMER) return;
+  ST_TIMER = setTimeout(function(){ ST_TIMER = null; stFlush(); }, 8000 + Math.floor(Math.random() * 7000));
+}
+async function stRead(){
+  var R = ghRepo();
+  var urls = [
+    'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + ST_FILE + '?ref=' + R.branch + '&t=' + Date.now(),
+    'https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + ST_FILE + '?t=' + Date.now()
+  ];
+  for(var i = 0; i < urls.length; i++){
+    try{
+      var opt = (i === 0) ? { headers: { 'Accept': 'application/vnd.github.raw' }, cache: 'no-store' } : { cache: 'no-store' };
+      var res = await fetch(urls[i], opt);
+      if(res.status === 404) return { v: 1, days: {} };
+      if(!res.ok) continue;
+      var d = await res.json();
+      if(d && typeof d === 'object'){ if(!d.days) d.days = {}; return d; }
+    }catch(e){}
+  }
+  return null;
+}
+/* 합치기는 무조건 「더하기」 — 다른 기기가 올린 숫자를 덮어쓰지 않는다 */
+function stMerge(dst, src){
+  if(!src || !src.days) return dst;
+  Object.keys(src.days).forEach(function(day){
+    var s = src.days[day] || {}, t = stDay(dst, day);
+    Object.keys(s.dev || {}).forEach(function(k){ t.dev[k] = 1; });
+    t.hit += (s.hit || 0);
+    Object.keys(s.clk || {}).forEach(function(u){ t.clk[u] = (t.clk[u] || 0) + (s.clk[u] || 0); });
+  });
+  return dst;
+}
+function stPrune(o){
+  var ks = Object.keys(o.days || {}).sort();
+  while(ks.length > ST_KEEP){ delete o.days[ks.shift()]; }
+  return o;
+}
+async function stFlush(){
+  if(ST_BUSY) return false;
+  var b = stBuf();
+  if(!b.days || !Object.keys(b.days).length) return true;
+  ST_BUSY = true;
+  try{
+    for(var a = 0; a < 3; a++){
+      var cur = await stRead();
+      if(cur){
+        var merged = stPrune(stMerge(cur, b));
+        var ok = await putJsonFile(ST_FILE, merged);
+        if(ok){
+          ST_DATA = merged;
+          stBufSet({});          // 올라갔으니 버퍼를 비운다
+          stPaint();
+          ST_BUSY = false;
+          return true;
+        }
+      }
+      await stWait(1200 + Math.floor(Math.random() * 2200));
+    }
+  }catch(e){}
+  ST_BUSY = false;
+  return false;   // 실패해도 버퍼는 그대로 → 다음 기회에 다시 올라간다
+}
+async function stRefresh(){
+  var d = await stRead();
+  if(d){ ST_DATA = d; stPaint(); }
+}
+/* 화면에 보여줄 값 = 서버에 있는 값 + 아직 못 올린 내 것 (내 클릭이 즉시 보이게) */
+function stView(){
+  var o = { v: 1, days: {} };
+  if(ST_DATA) stMerge(o, ST_DATA);
+  stMerge(o, stBuf());
+  return { all: o, d: stDay(o, stToday()) };
+}
+function stTitle(u){
+  try{
+    for(var i = 0; i < entries.length; i++){ if(entries[i].url === u) return entries[i].title; }
+  }catch(e){}
+  return u;
+}
+function stPaint(){
+  var bar = document.getElementById('ubBar');
+  if(!bar) return;
+  var v, d;
+  try{ v = stView(); d = v.d; }catch(e){ return; }
+  var dev = Object.keys(d.dev || {}).length;
+  var clk = 0;
+  Object.keys(d.clk || {}).forEach(function(u){ clk += (d.clk[u] || 0); });
+  bar.innerHTML = '<b class="dot">●</b> 오늘 <b>' + dev + '</b>대 접속 · <b>' + d.hit + '</b>번 열림 · <b>' + clk + '</b>번 클릭 ' + (ST_SHOW ? '▲' : '▼');
+
+  var body = document.getElementById('ubBody');
+  if(!body) return;
+  if(!ST_SHOW){ body.classList.remove('on'); return; }
+  body.classList.add('on');
+
+  var rows = Object.keys(d.clk || {}).map(function(u){ return { u: u, n: d.clk[u] }; })
+                   .sort(function(a, b){ return b.n - a.n; });
+  var mx = rows.length ? rows[0].n : 1;
+  var h = '<div class="ub-sec"><h4>🔥 오늘 많이 누른 링크</h4>';
+  if(!rows.length){
+    h += '<div class="ub-none">아직 오늘 누른 링크가 없습니다.</div>';
+  }else{
+    rows.slice(0, 8).forEach(function(r){
+      h += '<div class="ub-row"><span class="t">' + escapeHtml(stTitle(r.u)) + '</span>' +
+           '<span class="g"><i style="width:' + Math.max(6, Math.round(r.n / mx * 100)) + '%"></i></span>' +
+           '<b>' + r.n + '</b></div>';
+    });
+  }
+  h += '</div>';
+
+  var days = Object.keys(v.all.days || {}).sort().slice(-7);
+  var used = {};
+  days.forEach(function(dy){
+    var dd = v.all.days[dy] || {};
+    Object.keys(dd.clk || {}).forEach(function(u){ used[u] = 1; });
+  });
+  var cold = [];
+  try{
+    entries.forEach(function(e){ if(e.url && !used[e.url]) cold.push(e.title); });
+  }catch(e){}
+  h += '<div class="ub-sec"><h4>💤 최근 7일 한 번도 안 눌린 링크 (' + cold.length + '개)</h4>';
+  h += cold.length
+     ? '<div class="ub-cold">' + cold.map(function(t){ return escapeHtml(t); }).join(' · ') + '</div>'
+     : '<div class="ub-none">전부 한 번씩은 눌렸습니다.</div>';
+  h += '</div>';
+  h += '<div class="ub-note">※ 아이피(IP)·이름·위치는 모으지 않습니다. 기기마다 붙는 익명 번호로 「몇 대가 들어왔는지」만 셉니다. 최근 ' + ST_KEEP + '일치만 보관하고 그 전 것은 자동으로 지워집니다.</div>';
+  body.innerHTML = h;
+}
+function stToggle(){
+  ST_SHOW = !ST_SHOW;
+  stPaint();
+  if(ST_SHOW) stRefresh();
+}
+/* 링크 열기 = 클릭 1회 기록 + 새 창 */
+function stGo(u){
+  try{ stBump('clk', u); }catch(e){}
+  window.open(u, '_blank');
+}
+function stStart(){
+  try{
+    stBump('hit', '');
+    stRefresh();
+    setTimeout(function(){ stFlush(); }, 15000);
+    setInterval(function(){
+      if(document.visibilityState === 'visible') stRefresh();
+    }, 60000);
+    window.addEventListener('beforeunload', function(){ try{ stFlush(); }catch(e){} });
+  }catch(e){}
+}
+
 function dkPics(x){ return (x && Array.isArray(x.p)) ? x.p : []; }
 
 /* 지시문에 「캡처·사진」 같은 말이 있으면 사진 없이는 완료 못 하게 막는다 */
@@ -4256,7 +4680,7 @@ function dkPicStat(){
   try{
     REVIEW_LIST.forEach(function(r){
       (Array.isArray(r.todos) ? r.todos : []).forEach(function(x){
-        dkPics(x).forEach(function(p){ n++; b += String(p.u || '').length; });
+        dkPics(x).forEach(function(p){ n++; b += String(picSrc(p) || '').length; });
       });
     });
   }catch(e){}
@@ -4321,6 +4745,7 @@ async function dkPicAdd(id, n, files){
   const t = r.todos[n];
   if(!Array.isArray(t.p)) t.p = [];
   if(t.v === 'ok'){ await customAlert('감독관이 이미 확인한 항목이라 사진을 바꿀 수 없습니다.'); return; }
+  try{ await ensurePhotos(); }catch(e){}   // 올리기 전에 기존 사진을 먼저 받아둔다
   const room = 4 - t.p.length;
   if(room <= 0){ await customAlert('사진은 항목마다 4장까지만 올릴 수 있습니다.\n지우고 다시 올려주세요.'); return; }
   const list = Array.prototype.slice.call(files, 0, room);
@@ -4340,7 +4765,8 @@ async function dkPicAdd(id, n, files){
         await customAlert('사진 용량이 꽉 찼습니다.\n끝난 업무(최종승인·반려)의 사진을 관리자가 정리해야 더 올릴 수 있습니다.');
         break;
       }
-      t.p.push({u:u, w:who, t:ts});
+      t.p.push({u:u, k:picKey(), w:who, t:ts});
+      PHOTO_DIRTY = true;
       add++;
     }catch(e){
       await customAlert('사진을 올리지 못했습니다.\n' + (e && e.message ? e.message : e));
@@ -4359,6 +4785,7 @@ async function dkPicDel(id, n, k){
   if(t.v === 'ok'){ await customAlert('감독관이 이미 확인한 항목이라 사진을 지울 수 없습니다.'); return; }
   if(!(await customConfirm('이 사진을 지울까요?', true))) return;
   t.p.splice(k, 1);
+  PHOTO_DIRTY = true;
   dkLog(r, (r.dev || '담당자'), '사진 1장 삭제 — ' + t.t);
   await dkSaveReview();
 }
@@ -4380,8 +4807,10 @@ function dkPicOpen(id, n, k){
   if(!r || !Array.isArray(r.todos) || !r.todos[n]) return;
   const p = dkPics(r.todos[n])[k];
   if(!p) return;
+  const src = picSrc(p);
+  if(!src){ picWarm(); return; }              // 아직 안 받아졌으면 받아오고 다시 그린다
   const b = dkPicBox();
-  b.querySelector('img').src = p.u;
+  b.querySelector('img').src = src;
   b.querySelector('.cp').textContent = (p.w || '담당자') + ' · ' + (p.t || '') + '  —  ' + r.todos[n].t;
   b.classList.add('on');
 }
@@ -4404,11 +4833,14 @@ function dkPicHtml(r, n, x, lock, admin, open){
   let h = '<div class="dk-pics">';
   if(ps.length && !open){
     h += '<div class="hint">📷 사진 ' + ps.length + '장 — 카드를 펼치면 보입니다</div>';
+  } else if(ps.length && ps.some(function(p){ return !picSrc(p); })){
+    picWarm();
+    h += '<div class="hint">📷 사진 ' + ps.length + '장 — 불러오는 중…</div>';
   } else {
     ps.forEach(function(p, k){
       h += '<div class="th" onclick="dkPicOpen(\'' + r.id + '\',' + n + ',' + k + ')" title="' +
         escapeHtml((p.w || '담당자') + ' · ' + (p.t || '') + ' — 눌러서 크게 보기') + '">' +
-        '<img src="' + p.u + '" alt="첨부 사진">' +
+        '<img src="' + picSrc(p) + '" alt="첨부 사진">' +
         (canEdit ? '<button type="button" class="x" title="사진 지우기" onclick="event.stopPropagation();dkPicDel(\'' +
           r.id + '\',' + n + ',' + k + ')">✕</button>' : '') +
         '</div>';
@@ -4450,7 +4882,7 @@ async function dkPicPurge(){
   const yes = await customConfirm('끝난 업무 ' + hit.length + '건에 붙은 사진 ' + n + '장을 지웁니다.\n되돌릴 수 없습니다. 진행할까요?', true);
   REVIEW_LIST.forEach(function(r){
     (Array.isArray(r.todos) ? r.todos : []).forEach(function(x){
-      if(x.__purge){ if(yes) x.p = []; delete x.__purge; }
+      if(x.__purge){ if(yes){ x.p = []; PHOTO_DIRTY = true; } delete x.__purge; }
     });
   });
   if(!yes){ renderDesk(); return; }
@@ -5080,6 +5512,11 @@ function gateTry(){
    ★ 실패해도 사이트는 그냥 돌아간다(뱃지만 안 보임). */
 (function initDeskBadge(){
   try{ dkPaintBadge(); }catch(e){}
+})();
+
+/* 📊 이용 현황 집계 시작 — 반드시 맨 끝(위쪽은 TDZ 때문에 안 됨) */
+(function initStats(){
+  try{ stStart(); }catch(e){}
 })();
 </script>
 
