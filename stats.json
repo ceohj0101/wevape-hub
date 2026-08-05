@@ -14,11 +14,12 @@
       "hit": 15,
       "clk": {
         "https://order-hub-dfni.onrender.com/": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-05T09:22:43.511Z",
+  "savedAt": "2026-08-05T09:30:32.355Z",
   "savedBy": "employee"
 }
