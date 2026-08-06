@@ -38,11 +38,12 @@
       "hit": 8,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
+        "https://vflow.kr": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-06T01:59:47.628Z",
+  "savedAt": "2026-08-06T02:00:08.279Z",
   "savedBy": "employee"
 }
