@@ -5057,7 +5057,10 @@ async function dkPicAdd(id, n, files){
   if(!r || !Array.isArray(r.todos) || !r.todos[n]) return;
   const t = r.todos[n];
   if(!Array.isArray(t.p)) t.p = [];
-  if(t.v === 'ok'){ await customAlert('감독관이 이미 확인한 항목이라 사진을 바꿀 수 없습니다.'); return; }
+  const _st = dkStage(r);
+  if(_st === '최종승인' || _st === '반려'){ await customAlert('이미 끝난 업무라 사진을 올릴 수 없습니다.'); return; }
+  // ★ 감독관이 확인 완료(v==='ok')한 항목에도 근거 사진은 올릴 수 있다.
+  //    빠진 증거를 나중에 채우는 건 막을 이유가 없다. (지우는 것만 막는다 → dkPicDel)
   try{ await ensurePhotos(); }catch(e){}   // 올리기 전에 기존 사진을 먼저 받아둔다
   const room = 4 - t.p.length;
   if(room <= 0){ await customAlert('사진은 항목마다 4장까지만 올릴 수 있습니다.\n지우고 다시 올려주세요.'); return; }
@@ -5086,7 +5089,7 @@ async function dkPicAdd(id, n, files){
     }
   }
   if(!add){ renderDesk(); return; }
-  dkLog(r, who, '사진 ' + add + '장 첨부 — ' + t.t);
+  dkLog(r, who, (t.v === 'ok' ? '확인 완료 후 근거 사진 ' : '사진 ') + add + '장 첨부 — ' + t.t);
   await dkSaveReview();
 }
 
@@ -5141,8 +5144,10 @@ function dkPicHtml(r, n, x, lock, admin, open){
   const ps = dkPics(x);
   const need = dkNeedsPic(x.t);
   const done = (x.v === 'ok');
-  const canEdit = !lock && !done && (function(){ try{ return canSave(); }catch(e){ return false; } })();
-  if(!ps.length && !need && !canEdit) return '';
+  const able   = (function(){ try{ return canSave(); }catch(e){ return false; } })();
+  const canAdd = !lock && able;            // ★ 감독관이 확인 완료했어도 근거 사진은 나중에 올릴 수 있다
+  const canDel = !lock && !done && able;   //   다만 확인 완료된 항목의 사진은 못 지운다 (증거 보존)
+  if(!ps.length && !need && !canAdd) return '';
   let h = '<div class="dk-pics">';
   if(ps.length && !open){
     h += '<div class="hint">📷 사진 ' + ps.length + '장 — 카드를 펼치면 보입니다</div>';
@@ -5154,18 +5159,21 @@ function dkPicHtml(r, n, x, lock, admin, open){
       h += '<div class="th" onclick="dkPicOpen(\'' + r.id + '\',' + n + ',' + k + ')" title="' +
         escapeHtml((p.w || '담당자') + ' · ' + (p.t || '') + ' — 눌러서 크게 보기') + '">' +
         '<img src="' + picSrc(p) + '" alt="첨부 사진">' +
-        (canEdit ? '<button type="button" class="x" title="사진 지우기" onclick="event.stopPropagation();dkPicDel(\'' +
+        (canDel ? '<button type="button" class="x" title="사진 지우기" onclick="event.stopPropagation();dkPicDel(\'' +
           r.id + '\',' + n + ',' + k + ')">✕</button>' : '') +
         '</div>';
     });
   }
-  if(canEdit && ps.length < 4){
+  if(canAdd && ps.length < 4){
     h += '<button type="button" class="ad' + ((need && !ps.length) ? ' need' : '') +
-      '" onclick="dkPicPick(\'' + r.id + '\',' + n + ')">📷 ' + (ps.length ? '사진 더 올리기' : '사진 올리기') + '</button>';
+      '" onclick="dkPicPick(\'' + r.id + '\',' + n + ')">📷 ' +
+      (ps.length ? '사진 더 올리기' : (done ? '근거 사진 올리기' : '사진 올리기')) + '</button>';
   }
-  if(need && !ps.length){
+  if(need && !ps.length && !done){
     h += '<div class="hint need">⚠ 이 지시는 <b>사진(캡처)</b>이 있어야 완료로 넘길 수 있습니다.</div>';
-  } else if(!ps.length && canEdit){
+  } else if(need && !ps.length && done){
+    h += '<div class="hint need">📷 근거 사진이 빠진 채로 확인 완료됐습니다. 지금이라도 올려주세요.</div>';
+  } else if(!ps.length && canAdd){
     h += '<div class="hint">사진을 올리면 감독관이 바로 확인할 수 있습니다.</div>';
   }
   h += '</div>';
