@@ -39,7 +39,7 @@
       },
       "hit": 20,
       "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1": 2,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 3,
         "https://vflow.kr": 7,
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 1,
@@ -52,6 +52,6 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-06T05:30:01.688Z",
+  "savedAt": "2026-08-06T05:31:15.894Z",
   "savedBy": "employee"
 }
