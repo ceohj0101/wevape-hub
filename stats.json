@@ -67,12 +67,12 @@
         "dmsfjm49ci6i8at": 6,
         "dmsg28t0xzmp6x4": 1,
         "dmsilsmcbv88i3a": 1,
-        "dmsio4plqb8e2ts": 1,
+        "dmsio4plqb8e2ts": 2,
         "dmsfoaypgl2c1d8": 2,
         "dmsiy5nzph0lrhf": 2,
         "dmsfk5gma6n6doq": 3
       },
-      "hit": 39,
+      "hit": 40,
       "clk": {
         "https://vflow.kr": 8,
         "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 5,
@@ -83,9 +83,18 @@
         "https://forms.gle/gVSBo4eeU4Bev561A": 2,
         "https://znsl132-lang.github.io/BIGLUCKY/": 4
       }
+    },
+    "2026-08-08": {
+      "dev": {
+        "dmsio4plqb8e2ts": 1
+      },
+      "hit": 1,
+      "clk": {
+        "https://vflow.kr": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-07T13:10:40.646Z",
+  "savedAt": "2026-08-07T15:08:39.605Z",
   "savedBy": "employee"
 }
