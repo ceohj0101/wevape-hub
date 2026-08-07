@@ -1591,6 +1591,46 @@
   .hm-i:hover{background:var(--ap-fill2); color:var(--ap-blue);}
   .hm-f{font-size:11.5px; color:var(--ap-l2); padding:9px 4px 0; line-height:1.6;}
 
+  /* ── 🛠 고친 내역 / 📊 접속 현황 (별도 화면) ── */
+  #fixv, #statv{display:none; max-width:1000px; margin:0 auto; padding:0 16px 90px;}
+  body.fixview #fixv{display:block;}
+  body.statview #statv{display:block;}
+  body.fixview .wrap, body.fixview #roadmap, body.fixview #desk, body.fixview #board, body.fixview #home,
+  body.statview .wrap, body.statview #roadmap, body.statview #desk, body.statview #board, body.statview #home{display:none !important;}
+  body.fixview .searchbar, body.fixview .tabs, body.fixview .stats, body.fixview .topbtns,
+  body.statview .searchbar, body.statview .tabs, body.statview .stats, body.statview .topbtns{display:none !important;}
+  body.fixview h1, body.fixview .lead, body.statview h1, body.statview .lead{display:none !important;}
+  #statv .usebar{margin-top:8px;}
+  body.statview .ub-body{display:block !important;}
+
+  /* ── 좌측 메뉴 (넓은 화면) ── */
+  .vn-t{display:none;}
+  @media (min-width:1000px){
+    body{padding-left:236px;}
+    .viewnav{
+      position:fixed; left:0; top:0; bottom:0; width:236px; z-index:90;
+      display:block; overflow-y:auto; padding:16px 12px 30px; margin:0; border-radius:0;
+      background:rgba(246,246,248,.92);
+      -webkit-backdrop-filter:saturate(180%) blur(24px); backdrop-filter:saturate(180%) blur(24px);
+      border-right:.5px solid var(--ap-sep);
+    }
+    .vn-t{display:block; font-size:11.5px; font-weight:600; color:var(--ap-l3); padding:16px 12px 5px;}
+    .viewnav > .vn-t:first-child{padding-top:2px;}
+    .vnav{
+      display:flex !important; align-items:center; width:100%; text-align:left;
+      padding:9px 12px !important; border-radius:9px !important; font-size:14px !important;
+      margin-bottom:2px; position:relative;
+    }
+    .vnav.on{background:var(--ap-blue) !important; color:#fff !important; box-shadow:none !important;}
+    .nv-dot{position:static !important; margin-left:auto !important;}
+    .vnav.on .nv-dot{box-shadow:0 0 0 2px rgba(255,255,255,.35) !important;}
+    /* ★ 헤더에 backdrop-filter 가 걸려 있으면 그 안의 position:fixed 가
+       화면이 아니라 「헤더」 기준이 된다. 넓은 화면에서는 흐림 효과를 끈다. */
+    header.top{padding-left:26px !important; -webkit-backdrop-filter:none !important;
+      backdrop-filter:none !important; background:#f7f7f9 !important;}
+    .bbot{left:236px !important;}
+  }
+
   /* 📊 접속 현황 */
   .ub-days{display:flex; gap:4px; align-items:flex-end; overflow-x:auto; padding:6px 0 2px;}
   .ub-days::-webkit-scrollbar{display:none;}
@@ -1684,11 +1724,16 @@
 <header class="top">
   <div class="inner">
     <div class="viewnav">
-      <button type="button" class="vnav on" id="vnavHome" onclick="setView('home')">🏠 홈<span class="nv-dot" id="vnavHomeDot" style="display:none">0</span></button>
-      <button type="button" class="vnav" id="vnavBoard" onclick="setView('board')">🗂️ 현황 보드</button>
+      <div class="vn-t">바로가기</div>
+      <button type="button" class="vnav on" id="vnavHome" onclick="setView('home')">🏠 홈 · 바로가기</button>
       <button type="button" class="vnav" id="vnavHub" onclick="setView('hub')">📋 업무 모음</button>
-      <button type="button" class="vnav" id="vnavMap" onclick="setView('map')">🧭 성장 로드맵</button>
+      <div class="vn-t">업무</div>
+      <button type="button" class="vnav" id="vnavBoard" onclick="setView('board')">🗂️ 업무 현황</button>
       <button type="button" class="vnav" id="vnavDesk" onclick="setView('desk')">🧩 새 업무 검토<span class="nv-dot" id="vnavDeskDot" style="display:none">0</span></button>
+      <button type="button" class="vnav" id="vnavMap" onclick="setView('map')">🧭 성장 로드맵</button>
+      <div class="vn-t">기록</div>
+      <button type="button" class="vnav" id="vnavFix" onclick="setView('fix')">🛠 고친 내역<span class="nv-dot" id="vnavFixDot" style="display:none">0</span></button>
+      <button type="button" class="vnav" id="vnavStat" onclick="setView('stat')">📊 접속 현황</button>
     </div>
     <div class="toprow">
       <div>
@@ -1740,18 +1785,11 @@
       <div class="stat" style="display:none"><b id="statDepts">0</b></div>
       <span class="syncBadge off" id="syncBadge" onclick="syncBadgeClick()" title="누르면 저장 상태를 확인할 수 있습니다">🔧 공용 데이터 연결 대기중</span>
     </div>
-    <div class="usebar">
-      <button type="button" class="ub-bar" id="ubBar" onclick="stToggle()"><b class="dot">●</b> 오늘 이용 현황 불러오는 중…</button>
-      <div class="ub-body" id="ubBody"></div>
-    </div>
   </div>
 </header>
 
 <section id="home">
   <div class="hm-hi" id="hmHi"></div>
-  <div class="hm-wg" id="hmWg"></div>
-  <div class="fx-hd" id="fxHd"></div>
-  <div id="fxBox"></div>
   <div class="hm-h">자주 여는 것 <em id="hmFavN"></em></div>
   <div class="hm-fav" id="hmFav"></div>
   <div class="hm-h">전체 시스템 <em id="hmAllN"></em></div>
@@ -1760,7 +1798,25 @@
     🔒 는 만드는 중이거나 민감한 것 — 비밀번호를 넣어야 주소가 보입니다.</div>
 </section>
 
+<section id="fixv">
+  <div class="hm-hi"><h2>고친 내역</h2><p>언제 · 무엇을 · 누구 신고로 고쳤는지 전부 남습니다.</p></div>
+  <div class="fx-hd" id="fxHd"></div>
+  <div id="fxBox"></div>
+  <div class="hm-f">🛠 고장 수리 · ✨ 기능 추가 · 💬 의견 답변 세 가지로 나눠 기록합니다.<br>
+    새 기록이 생기면 왼쪽 메뉴에 빨간 숫자가 붙습니다. 「모두 확인」을 누르면 사라집니다(내 기기에만 적용).</div>
+</section>
+
+<section id="statv">
+  <div class="hm-hi"><h2>접속 현황</h2><p>어느 컴퓨터가 며칠에 몇 번 들어왔는지.</p></div>
+  <div class="usebar" id="ubWrap">
+    <button type="button" class="ub-bar" id="ubBar" onclick="stToggle()"><b class="dot">●</b> 오늘 이용 현황 불러오는 중…</button>
+    <div class="ub-body" id="ubBody"></div>
+  </div>
+</section>
+
 <section id="board">
+
+  <div class="hm-wg" id="hmWg"></div>
 
   <div class="bd-hero">
     <h2>🗂️ 현황 보드</h2>
@@ -3145,19 +3201,25 @@ function setFilter(mode){
 // ===== 🧭 성장 로드맵 (두 번째 메뉴) =====
 let currentView = 'hub';
 function setView(v){
-  currentView = (v === 'map' || v === 'desk' || v === 'board' || v === 'home') ? v : 'hub';
+  currentView = (v === 'map' || v === 'desk' || v === 'board' || v === 'home' || v === 'fix' || v === 'stat') ? v : 'hub';
   document.body.classList.toggle('mapview', currentView === 'map');
   document.body.classList.toggle('deskview', currentView === 'desk');
   document.body.classList.toggle('boardview', currentView === 'board');
   document.body.classList.toggle('homeview', currentView === 'home');
+  document.body.classList.toggle('fixview', currentView === 'fix');
+  document.body.classList.toggle('statview', currentView === 'stat');
   const a = document.getElementById('vnavHub'), b = document.getElementById('vnavMap'), d = document.getElementById('vnavDesk');
   const bd = document.getElementById('vnavBoard');
   const hm = document.getElementById('vnavHome');
+  const fx = document.getElementById('vnavFix');
+  const stv = document.getElementById('vnavStat');
   if(a) a.classList.toggle('on', currentView === 'hub');
   if(b) b.classList.toggle('on', currentView === 'map');
   if(d) d.classList.toggle('on', currentView === 'desk');
   if(bd) bd.classList.toggle('on', currentView === 'board');
   if(hm) hm.classList.toggle('on', currentView === 'home');
+  if(fx) fx.classList.toggle('on', currentView === 'fix');
+  if(stv) stv.classList.toggle('on', currentView === 'stat');
   const h = document.querySelector('header.top h1');
   const s = document.getElementById('headSub');
   if(currentView === 'desk'){
@@ -3171,10 +3233,21 @@ function setView(v){
     if(h) h.textContent = '위베이프 허브';
     if(s) s.textContent = '누르면 바로 열립니다.';
     try{ renderHome(); }catch(err){}
+  } else if(currentView === 'fix'){
+    document.body.classList.remove('detailopen');
+    if(h) h.textContent = '고친 내역';
+    if(s) s.textContent = '언제 무엇을 고쳤는지 전부 남습니다.';
+    try{ renderFixlog(); fxPaintBadge(); }catch(err){}
+  } else if(currentView === 'stat'){
+    document.body.classList.remove('detailopen');
+    if(h) h.textContent = '접속 현황';
+    if(s) s.textContent = '어느 컴퓨터가 며칠에 몇 번 들어왔는지.';
+    try{ ST_SHOW = true; stPaint(); stRefresh(); }catch(err){}
   } else if(currentView === 'board'){
     document.body.classList.remove('detailopen');
-    if(h) h.textContent = '현황 보드';
+    if(h) h.textContent = '업무 현황';
     if(s) s.textContent = '지금 뭐가 막혀 있고, 뭐가 돌아가고 있는지 한 화면에서 봅니다.';
+    try{ renderWidgets(); }catch(err){}
     try{ renderBoard(); }catch(err){}
   } else if(currentView === 'map'){
     document.body.classList.remove('detailopen');
@@ -6589,7 +6662,7 @@ function fxMarkSeen(){
   try{ renderFixlog(); }catch(e){}
 }
 function fxPaintBadge(){
-  var el = document.getElementById('vnavHomeDot');
+  var el = document.getElementById('vnavFixDot');
   if(!el) return;
   var n = 0;
   try{ n = fxUnread(); }catch(e){ n = 0; }
@@ -6764,18 +6837,8 @@ function hmRow(e, clk){
       '<span class="hm-i" onclick="hmInfo(\'' + uq + '\',event)" title="담당 · 점검 · 의견">ⓘ</span>' +
     '</span></button>';
 }
-function renderHome(){
-  var wrapEl = document.getElementById('hmAll');
-  if(!wrapEl) return;
-  var list = [];
-  try{ list = (entries || []).slice(); }catch(e){}
-
-  try{ renderFixlog(); fxPaintBadge(); }catch(e){}
-
-  /* 인사 */
-  var hi = document.getElementById('hmHi');
-  if(hi) hi.innerHTML = '<h2>' + hmGreet() + '</h2><p>' + hmDate() + '</p>';
-
+/* 위젯 3개 — 홈에서 「업무 현황」으로 옮김. 두 화면에서 같이 쓴다. */
+function renderWidgets(){
   /* 위젯 3개 */
   var judge = hmJudge(), wait = hmWait();
   var bad = [];
@@ -6825,6 +6888,21 @@ function renderHome(){
   w += '<button type="button" class="wl" onclick="openSiteFbFromDock()">의견 모두 보기 ›</button></div>';
   var wg = document.getElementById('hmWg');
   if(wg) wg.innerHTML = w;
+}
+
+function renderHome(){
+  var wrapEl = document.getElementById('hmAll');
+  if(!wrapEl) return;
+  var list = [];
+  try{ list = (entries || []).slice(); }catch(e){}
+
+  try{ fxPaintBadge(); }catch(e){}
+
+  /* 인사 */
+  var hi = document.getElementById('hmHi');
+  if(hi) hi.innerHTML = '<h2>' + hmGreet() + '</h2><p>' + hmDate() + '</p>';
+
+  try{ renderWidgets(); }catch(e){}
 
   /* 자주 여는 것 — 실제 클릭 수 기준, 잠기지 않은 것만 */
   var clk = hmClk();
