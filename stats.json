@@ -55,9 +55,18 @@
         "https://wevape-pos-app.vercel.app/": 2,
         "https://forms.gle/gVSBo4eeU4Bev561A": 2
       }
+    },
+    "2026-08-07": {
+      "dev": {
+        "dmsgukyv4zr4ekv": 1
+      },
+      "hit": 1,
+      "clk": {
+        "https://vflow.kr": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-06T12:59:59.115Z",
+  "savedAt": "2026-08-07T01:21:39.070Z",
   "savedBy": "employee"
 }
