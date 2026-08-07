@@ -1591,6 +1591,24 @@
   .hm-i:hover{background:var(--ap-fill2); color:var(--ap-blue);}
   .hm-f{font-size:11.5px; color:var(--ap-l2); padding:9px 4px 0; line-height:1.6;}
 
+  /* 📊 접속 현황 */
+  .ub-days{display:flex; gap:4px; align-items:flex-end; overflow-x:auto; padding:6px 0 2px;}
+  .ub-days::-webkit-scrollbar{display:none;}
+  .ub-d{flex:1 0 26px; min-width:26px; display:flex; flex-direction:column; align-items:center; gap:3px;}
+  .ub-d .v{font-size:10.5px; font-weight:700; color:var(--ap-l2);}
+  .ub-d .b{width:100%; height:52px; background:var(--ap-fill); border-radius:5px;
+    display:flex; align-items:flex-end; overflow:hidden;}
+  .ub-d .b i{display:block; width:100%; background:var(--ap-blue); border-radius:5px;}
+  .ub-d.now .b i{background:var(--ap-green);}
+  .ub-d .x{font-size:9.5px; color:var(--ap-l3);}
+  .ub-note2{font-size:10.5px; color:var(--ap-l3); line-height:1.6; margin-top:6px;}
+  .ub-row .t em.mine{font-style:normal; background:rgba(0,122,255,.14); color:var(--ap-blue);
+    font-size:10px; font-weight:700; border-radius:5px; padding:1px 6px; margin-left:6px;}
+  .ub-row .t em.noname{font-style:normal; color:var(--ap-l3); font-size:10px; margin-left:6px;}
+  .ub-name{margin-top:8px; width:100%; background:var(--ap-fill); border:0; border-radius:10px;
+    padding:9px 0; font-size:12.5px; font-weight:600; color:var(--ap-blue);
+    font-family:inherit; cursor:pointer;}
+
   /* 🛠 고친 내역 */
   .fx-hd{display:flex; align-items:center; gap:8px; padding:22px 4px 8px;}
   .fx-hd .ti{font-size:12.5px; color:var(--ap-l2);}
@@ -5195,9 +5213,12 @@ function stBump(kind, url){
   try{
     var b = stBuf();
     var d = stDay(b, stToday());
-    d.dev[stDevId()] = 1;
-    if(kind === 'hit') d.hit++;
-    else if(kind === 'clk' && url){ d.clk[url] = (d.clk[url] || 0) + 1; }
+    var id = stDevId();
+    /* dev[기기] = 그 기기가 오늘 사이트를 연 횟수.
+       클릭만 한 경우에도 「대수」에는 잡히도록 최소 1 은 채운다. */
+    if(kind === 'hit'){ d.dev[id] = (d.dev[id] || 0) + 1; d.hit++; }
+    else { if(!d.dev[id]) d.dev[id] = 1; }
+    if(kind === 'clk' && url){ d.clk[url] = (d.clk[url] || 0) + 1; }
     stBufSet(b);
     stPaint();
     stSchedule();
@@ -5227,10 +5248,18 @@ async function stRead(){
 }
 /* 합치기는 무조건 「더하기」 — 다른 기기가 올린 숫자를 덮어쓰지 않는다 */
 function stMerge(dst, src){
-  if(!src || !src.days) return dst;
+  if(!src) return dst;
+  if(src.names){
+    if(!dst.names) dst.names = {};
+    Object.keys(src.names).forEach(function(k){ dst.names[k] = src.names[k]; });   // 나중 것이 이긴다
+  }
+  if(!src.days) return dst;
   Object.keys(src.days).forEach(function(day){
     var s = src.days[day] || {}, t = stDay(dst, day);
-    Object.keys(s.dev || {}).forEach(function(k){ t.dev[k] = 1; });
+    Object.keys(s.dev || {}).forEach(function(k){
+      var n = s.dev[k];
+      t.dev[k] = (t.dev[k] || 0) + (typeof n === 'number' ? n : 1);               // 옛 자료(=1)도 그대로 흡수
+    });
     t.hit += (s.hit || 0);
     Object.keys(s.clk || {}).forEach(function(u){ t.clk[u] = (t.clk[u] || 0) + (s.clk[u] || 0); });
   });
@@ -5272,10 +5301,44 @@ async function stRefresh(){
 }
 /* 화면에 보여줄 값 = 서버에 있는 값 + 아직 못 올린 내 것 (내 클릭이 즉시 보이게) */
 function stView(){
-  var o = { v: 1, days: {} };
+  var o = { v: 1, days: {}, names: {} };
   if(ST_DATA) stMerge(o, ST_DATA);
   stMerge(o, stBuf());
   return { all: o, d: stDay(o, stToday()) };
+}
+/* 기기 이름 — 안 붙였으면 「컴퓨터 A · B · C…」 로 자동 표시 */
+function stNames(){
+  try{ return stView().all.names || {}; }catch(e){ return {}; }
+}
+function stDevLabels(all){
+  var ids = {};
+  Object.keys(all.days || {}).forEach(function(dy){
+    Object.keys((all.days[dy] || {}).dev || {}).forEach(function(k){ ids[k] = 1; });
+  });
+  var list = Object.keys(ids).sort();          // 기기 번호에 시각이 들어 있어 대략 등록 순서
+  var AB = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var out = {};
+  list.forEach(function(k, i){
+    out[k] = '컴퓨터 ' + (i < 26 ? AB[i] : (i + 1));
+  });
+  return out;
+}
+function stSetName(){
+  var me = stDevId();
+  var cur = (stNames()[me] || '');
+  try{
+    customPrompt('이 컴퓨터(기기)에 이름을 붙여주세요.\n예) 논현점 카운터 PC / 장대운 노트북\n\n※ 비워두면 이름을 지웁니다.', 'text', cur)
+      .then(function(v){
+        if(v === null) return;
+        var nm = String(v).trim().slice(0, 20);
+        var b = stBuf();
+        if(!b.names) b.names = {};
+        b.names[me] = nm;
+        stBufSet(b);
+        stPaint();
+        stFlush();
+      });
+  }catch(e){}
 }
 function stTitle(u){
   try{
@@ -5298,10 +5361,63 @@ function stPaint(){
   if(!ST_SHOW){ body.classList.remove('on'); return; }
   body.classList.add('on');
 
+  var me = stDevId();
+  var labels = stDevLabels(v.all);
+  var names = v.all.names || {};
+
+  /* ① 날짜별 — 최근 14일 */
+  var dayKeys = Object.keys(v.all.days || {}).sort().slice(-ST_KEEP);
+  var dmax = 1;
+  dayKeys.forEach(function(dy){
+    var n = Object.keys((v.all.days[dy] || {}).dev || {}).length;
+    if(n > dmax) dmax = n;
+  });
+  var h = '<div class="ub-sec"><h4>📅 날짜별 접속 (최근 ' + dayKeys.length + '일)</h4>';
+  if(!dayKeys.length){
+    h += '<div class="ub-none">아직 기록이 없습니다.</div>';
+  } else {
+    h += '<div class="ub-days">';
+    dayKeys.forEach(function(dy){
+      var dd = v.all.days[dy] || {};
+      var nd = Object.keys(dd.dev || {}).length;
+      var hh = dd.hit || 0;
+      var mm = dy.split('-');
+      h += '<div class="ub-d' + (dy === stToday() ? ' now' : '') + '" title="' + dy + ' · ' + nd + '대 · ' + hh + '번 열림">' +
+           '<span class="v">' + nd + '</span>' +
+           '<span class="b"><i style="height:' + Math.max(8, Math.round(nd / dmax * 100)) + '%"></i></span>' +
+           '<span class="x">' + (+mm[1]) + '/' + (+mm[2]) + '</span></div>';
+    });
+    h += '</div><div class="ub-note2">막대 = 그날 들어온 <b>컴퓨터 대수</b>. 막대에 손을 올리면 열린 횟수도 보입니다.</div>';
+  }
+  h += '</div>';
+
+  /* ② 컴퓨터별 — 오늘 */
+  var devRows = Object.keys(d.dev || {}).map(function(k){
+    return { k: k, n: (typeof d.dev[k] === 'number' ? d.dev[k] : 1) };
+  }).sort(function(a, b){ return b.n - a.n; });
+  var dmx = devRows.length ? devRows[0].n : 1;
+  h += '<div class="ub-sec"><h4>💻 오늘 컴퓨터별 접속 (' + devRows.length + '대)</h4>';
+  if(!devRows.length){
+    h += '<div class="ub-none">오늘 접속한 기기가 없습니다.</div>';
+  } else {
+    devRows.forEach(function(r){
+      var nm = (names[r.k] || '').trim();
+      var lb = nm || labels[r.k] || '컴퓨터';
+      h += '<div class="ub-row"><span class="t">' + escapeHtml(lb) +
+           (r.k === me ? '<em class="mine">이 컴퓨터</em>' : '') +
+           ((!nm && r.k !== me) ? '<em class="noname">이름 없음</em>' : '') + '</span>' +
+           '<span class="g"><i style="width:' + Math.max(6, Math.round(r.n / dmx * 100)) + '%"></i></span>' +
+           '<b>' + r.n + '번</b></div>';
+    });
+  }
+  h += '<button type="button" class="ub-name" onclick="stSetName()">✏️ 이 컴퓨터 이름 정하기</button>';
+  h += '<div class="ub-note2">이름을 붙이면 모든 화면에서 그 이름으로 보입니다. 안 붙이면 컴퓨터 A·B·C로만 나옵니다.</div>';
+  h += '</div>';
+
   var rows = Object.keys(d.clk || {}).map(function(u){ return { u: u, n: d.clk[u] }; })
                    .sort(function(a, b){ return b.n - a.n; });
   var mx = rows.length ? rows[0].n : 1;
-  var h = '<div class="ub-sec"><h4>🔥 오늘 많이 누른 링크</h4>';
+  h += '<div class="ub-sec"><h4>🔥 오늘 많이 누른 링크</h4>';
   if(!rows.length){
     h += '<div class="ub-none">아직 오늘 누른 링크가 없습니다.</div>';
   }else{
