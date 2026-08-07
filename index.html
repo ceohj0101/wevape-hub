@@ -1319,6 +1319,63 @@
   .ck-fbs:active{opacity:.8;}
   .ck-fbs[disabled]{background:#dfe3e9;color:#9aa0a9;cursor:default;}
   .ck-fbhelp{margin-top:8px;font-size:11.3px;color:#a0a6b0;font-weight:700;line-height:1.7;}
+  /* ===== 🗂️ 현황 보드 (4단계) ===== */
+  #board{display:none;max-width:1180px;margin:0 auto;padding:0 14px 60px;}
+  body.boardview #board{display:block;}
+  body.boardview .wrap{display:none !important;}
+  body.boardview #roadmap{display:none !important;}
+  body.boardview #desk{display:none !important;}
+  body.boardview .searchbar,
+  body.boardview .tabs,
+  body.boardview .stats,
+  body.boardview .topbtns{display:none !important;}
+  .bd-hero{padding:18px 2px 6px;}
+  .bd-hero h2{margin:0 0 6px;font-size:20px;font-weight:800;letter-spacing:-.5px;color:#191f28;}
+  .bd-hero p{margin:0;font-size:13px;line-height:1.7;color:#6b7684;font-weight:600;}
+  .bd-kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:14px 0 14px;}
+  .bd-kpi .k{background:#fff;border:1px solid #e5e8eb;border-radius:12px;padding:11px 10px;text-align:center;}
+  .bd-kpi .k b{display:block;font-size:21px;font-weight:900;letter-spacing:-.7px;color:#191f28;line-height:1.2;}
+  .bd-kpi .k span{display:block;font-size:10.5px;color:#6b7684;font-weight:800;margin-top:3px;}
+  .bd-kpi .k.hot b{color:#f04452;}
+  .bd-seg{display:none;background:#e5e8eb;border-radius:12px;padding:3px;margin-bottom:12px;}
+  .bd-seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:9px 0;font-size:12.5px;
+    font-weight:800;color:#6b7684;font-family:inherit;cursor:pointer;}
+  .bd-seg button.on{background:#fff;color:#191f28;box-shadow:0 1px 3px rgba(0,0,0,.1);}
+  .bd-kan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:start;}
+  .bd-col{background:#eef0f3;border-radius:14px;padding:10px;}
+  .bd-col .ch{display:flex;align-items:center;gap:7px;padding:2px 4px 10px;font-size:12.5px;font-weight:800;color:#191f28;}
+  .bd-col .ch .cd{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
+  .bd-col .ch .cc{margin-left:auto;font-size:11px;color:#6b7684;background:#fff;border-radius:999px;padding:1px 8px;}
+  .bd-col .cw{font-size:10.5px;color:#8b95a1;font-weight:700;padding:0 4px 8px;margin-top:-6px;}
+  .bd-card{background:#fff;border:1px solid #e5e8eb;border-radius:12px;padding:11px 12px;margin-bottom:8px;}
+  .bd-card .bt{font-size:13px;font-weight:800;letter-spacing:-.3px;line-height:1.4;color:#191f28;
+    word-break:keep-all;overflow-wrap:anywhere;}
+  .bd-card .bw{font-size:11.5px;color:#6b7684;margin-top:4px;font-weight:700;}
+  .bd-card .bs{font-size:11.5px;color:#8b95a1;margin-top:4px;line-height:1.55;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .bd-card .bar{height:5px;border-radius:3px;background:#eef0f3;margin-top:9px;overflow:hidden;}
+  .bd-card .bar i{display:block;height:100%;border-radius:3px;background:#3182f6;}
+  .bd-card .bb{display:flex;gap:5px;margin-top:9px;}
+  .bd-card .bb button{flex:1;border:1px solid #e5e8eb;background:#fff;border-radius:9px;padding:7px 0;
+    font-size:11px;font-weight:800;color:#4e5968;font-family:inherit;cursor:pointer;}
+  .bd-card .bb button:hover{background:#f2f4f6;}
+  .bd-card .bb button.p{background:#3182f6;border-color:#3182f6;color:#fff;}
+  .bd-more{width:100%;background:#fff;border:1px dashed #d7dce3;border-radius:11px;padding:9px 0;
+    font-size:11.5px;font-weight:800;color:#6b7684;font-family:inherit;cursor:pointer;}
+  .bd-empty{background:#fff;border:1px dashed #d7dce3;border-radius:11px;padding:16px 10px;text-align:center;
+    font-size:11.5px;color:#8b95a1;font-weight:700;}
+  .bd-foot{margin-top:18px;padding:14px 16px;background:#fff;border:1px solid #e5e8eb;border-radius:12px;
+    font-size:12px;line-height:1.8;color:#6b7684;font-weight:600;}
+  .bd-foot b{color:#191f28;}
+  @media (max-width:820px){
+    #board{padding:0 12px 70px;}
+    .bd-kpi{grid-template-columns:repeat(3,1fr);}
+    .bd-seg{display:flex;}
+    .bd-kan{grid-template-columns:1fr;gap:0;}
+    .bd-col{display:none;background:transparent;padding:0;}
+    .bd-col.on{display:block;}
+    .bd-col .ch{padding-left:2px;}
+  }
   </style>
 </head>
 <body>
@@ -1357,7 +1414,8 @@
 <header class="top">
   <div class="inner">
     <div class="viewnav">
-      <button type="button" class="vnav on" id="vnavHub" onclick="setView('hub')">📋 업무 모음</button>
+      <button type="button" class="vnav on" id="vnavBoard" onclick="setView('board')">🗂️ 현황 보드</button>
+      <button type="button" class="vnav" id="vnavHub" onclick="setView('hub')">📋 업무 모음</button>
       <button type="button" class="vnav" id="vnavMap" onclick="setView('map')">🧭 성장 로드맵</button>
       <button type="button" class="vnav" id="vnavDesk" onclick="setView('desk')">🧩 새 업무 검토<span class="nv-dot" id="vnavDeskDot" style="display:none">0</span></button>
     </div>
@@ -1417,6 +1475,26 @@
     </div>
   </div>
 </header>
+
+<section id="board">
+
+  <div class="bd-hero">
+    <h2>🗂️ 현황 보드</h2>
+    <p>지금 우리 판 전체입니다. 왼쪽으로 갈수록 아직 손 안 댄 것, 오른쪽으로 갈수록 현장에서 돌아가고 있는 것.<br>
+       숫자와 카드는 <b>등록된 시스템 · 올라온 검토 · 오늘의 점검</b>에서 자동으로 읽어옵니다.</p>
+  </div>
+
+  <div class="bd-kpi" id="bdKpi"></div>
+  <div class="bd-seg" id="bdSeg"></div>
+  <div class="bd-kan" id="bdKan"></div>
+
+  <div class="bd-foot">
+    <b>대기</b> = 로드맵에는 있는데 아직 안 만든 것 &nbsp;·&nbsp; <b>진행</b> = 만드는 중인 시스템<br>
+    <b>검토·승인</b> = 올라와서 판정을 기다리는 건 &nbsp;·&nbsp; <b>운영중</b> = 현장에서 쓰고 있는 시스템<br>
+    카드의 <b>→ 이동</b>은 만드는중 ↔ 운영중을 바꿉니다. 최종 승인은 대표만 할 수 있습니다.
+  </div>
+
+</section>
 
 <section id="roadmap">
 
@@ -2777,13 +2855,16 @@ function setFilter(mode){
 // ===== 🧭 성장 로드맵 (두 번째 메뉴) =====
 let currentView = 'hub';
 function setView(v){
-  currentView = (v === 'map' || v === 'desk') ? v : 'hub';
+  currentView = (v === 'map' || v === 'desk' || v === 'board') ? v : 'hub';
   document.body.classList.toggle('mapview', currentView === 'map');
   document.body.classList.toggle('deskview', currentView === 'desk');
+  document.body.classList.toggle('boardview', currentView === 'board');
   const a = document.getElementById('vnavHub'), b = document.getElementById('vnavMap'), d = document.getElementById('vnavDesk');
+  const bd = document.getElementById('vnavBoard');
   if(a) a.classList.toggle('on', currentView === 'hub');
   if(b) b.classList.toggle('on', currentView === 'map');
   if(d) d.classList.toggle('on', currentView === 'desk');
+  if(bd) bd.classList.toggle('on', currentView === 'board');
   const h = document.querySelector('header.top h1');
   const s = document.getElementById('headSub');
   if(currentView === 'desk'){
@@ -2792,6 +2873,11 @@ function setView(v){
     if(s) s.textContent = '링크나 진행 중인 업무를 올리면, 지금 판에 어떻게 붙일지 잡아드립니다.';
     try{ renderDesk(); }catch(err){}
     try{ dkMarkSeen(); dkPaintBadge(); }catch(err){}
+  } else if(currentView === 'board'){
+    document.body.classList.remove('detailopen');
+    if(h) h.textContent = '현황 보드';
+    if(s) s.textContent = '지금 뭐가 막혀 있고, 뭐가 돌아가고 있는지 한 화면에서 봅니다.';
+    try{ renderBoard(); }catch(err){}
   } else if(currentView === 'map'){
     document.body.classList.remove('detailopen');
     if(h) h.textContent = '성장 로드맵';
@@ -3866,6 +3952,9 @@ function applyData(d){
   if(d.status && typeof d.status === "object"){
     Object.keys(d.status).forEach(k => { STATUS[k] = d.status[k]; });
   }
+  // 🗂️ 공용 장부를 새로 받으면 현황 보드도 같이 다시 그린다.
+  //    (보드는 저장하는 게 없고 읽어서 줄만 세우므로, 실패해도 다른 화면엔 영향 없음)
+  try{ if(typeof currentView !== "undefined" && currentView === "board") renderBoard(); }catch(err){}
 }
 
 function loadLocal(){
@@ -5827,6 +5916,234 @@ function gateTry(){
   i.addEventListener('keydown', function(ev){ if (ev.key === 'Enter') gateTry(); });
 })();
 
+
+/* ===================== 🗂️ 현황 보드 (4단계) =====================
+   ★ 새로 저장하는 데이터가 하나도 없다. 이미 있는 세 가지에서 읽어서 줄만 세운다.
+     ① entries  — 등록된 시스템 (운영중 / 개발중)
+     ② REVIEW_LIST — 올라온 검토 (제출됨 ~ 승인대기)
+     ③ MM_SPEC  — 로드맵 지도에서 아직 링크가 없는 항목 = 아직 안 만든 것
+   ★ 그래서 이 화면이 깨져도 기존 화면은 아무 영향이 없다. */
+var BD_COLS = [
+  {n:1, t:'대기',      c:'#8b95a1', d:'로드맵엔 있는데 아직 안 만듦'},
+  {n:2, t:'진행',      c:'#3182f6', d:'지금 만들고 있는 것'},
+  {n:3, t:'검토·승인', c:'#f59e0b', d:'판정을 기다리는 것'},
+  {n:4, t:'운영중',    c:'#00b26a', d:'현장에서 쓰고 있는 것'}
+];
+var BD_CKV = {go:['🟢','정상'], hold:['🟡','보류'], stop:['⛔','중단검토']};
+var BD_CACHE = [];
+var bdCol = 3;
+var bdAll = {};
+
+function bdPct(r){
+  var t = (r && Array.isArray(r.todos)) ? r.todos : [];
+  if(!t.length) return null;
+  var ok = 0;
+  t.forEach(function(x){ if(x && x.v === 'ok') ok++; });
+  return Math.round(ok * 100 / t.length);
+}
+
+function bdItems(){
+  var out = [], seen = {};
+  try{
+    (REVIEW_LIST || []).forEach(function(r){
+      var st = '제출됨';
+      try{ st = dkStage(r); }catch(e){}
+      if(st === '최종승인' || st === '반려') return;
+      if(r.url) seen[r.url] = 1;
+      var lb = st;
+      try{ lb = (dkBadge(st) || [])[1] || st; }catch(e){}
+      out.push({k:'rv', col:3, id:r.id, t:(r.title || '(제목 없음)'),
+                who:(r.dev || r.author || '담당 미지정'), url:(r.url || ''),
+                sub:lb, pct:bdPct(r)});
+    });
+  }catch(e){}
+  try{
+    (entries || []).forEach(function(e){
+      if(!e || seen[e.url]) return;
+      var wip = (e.status === '개발중');
+      var c = null;
+      try{ c = (CHECKS || {})[e.url]; }catch(err){}
+      var sub;
+      if(c){
+        var mk = BD_CKV[c.v] || ['⚪','판정 없음'];
+        sub = mk[0] + ' ' + mk[1] + (c.d ? ' · ' + c.d + ' 점검' : '');
+      } else {
+        sub = '아직 점검 기록이 없습니다';
+      }
+      var lk = false;
+      try{ lk = isLocked(e); }catch(err){}
+      out.push({k:'en', col:(wip ? 2 : 4), t:(e.title || ''), who:(e.owner || '담당 미지정'),
+                url:(e.url || ''), sub:sub, pct:null,
+                key:entryKey(e), lock:lk, st:e.status});
+    });
+  }catch(e){}
+  try{
+    (MM_SPEC || []).forEach(function(b){
+      (b.items || []).forEach(function(it){
+        if(!it || it.u) return;
+        out.push({k:'mm', col:1, t:(it.n || ''), who:'담당 미지정', url:'',
+                  sub:String(b.t || '').replace(/^\S+\s*/, ''), pct:null});
+      });
+    });
+  }catch(e){}
+  return out;
+}
+
+function bdCardHtml(x, i){
+  var h = '<div class="bd-card"><div class="bt">' + escapeHtml(x.t) + '</div>';
+  if(x.k !== 'mm') h += '<div class="bw">' + escapeHtml(x.who) + '</div>';
+  h += '<div class="bs">' + escapeHtml(x.sub) + '</div>';
+  if(x.pct !== null && x.pct !== undefined){
+    h += '<div class="bar"><i style="width:' + x.pct + '%"></i></div>';
+  }
+  h += '<div class="bb">';
+  if(x.k === 'mm'){
+    h += '<button type="button" onclick="bdAct(' + i + ',\'map\')">🗺️ 지도에서 보기</button>';
+  } else if(x.k === 'rv'){
+    h += '<button type="button" class="p" onclick="bdAct(' + i + ',\'desk\')">📄 검토 열기</button>';
+    if(x.url) h += '<button type="button" onclick="bdAct(' + i + ',\'link\')">↗ 링크</button>';
+  } else {
+    if(x.lock){
+      h += '<button type="button" class="p" onclick="bdAct(' + i + ',\'open\')">🔒 자세히</button>';
+    } else {
+      h += '<button type="button" class="p" onclick="bdAct(' + i + ',\'link\')">↗ 열기</button>';
+    }
+    h += '<button type="button" onclick="bdAct(' + i + ',\'open\')">💬 의견</button>';
+    h += '<button type="button" onclick="bdAct(' + i + ',\'move\')">→ 이동</button>';
+  }
+  return h + '</div></div>';
+}
+
+function bdAct(i, what){
+  var x = BD_CACHE[i];
+  if(!x) return;
+  if(what === 'map'){ setView('map'); return; }
+  if(what === 'link'){
+    if(!x.url) return;
+    try{ window.open(x.url, '_blank', 'noopener'); }catch(e){}
+    return;
+  }
+  if(what === 'open'){
+    setView('hub');
+    try{ openDetail(x.key); }catch(e){}
+    return;
+  }
+  if(what === 'desk'){
+    setView('desk');
+    setTimeout(function(){
+      try{ dkUI().open[x.id] = true; renderDesk(); }catch(e){}
+      try{
+        var el = document.getElementById('dkList');
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+      }catch(e){}
+    }, 80);
+    return;
+  }
+  if(what === 'move'){ bdMove(x.url); return; }
+}
+
+async function bdMove(url){
+  var e = null;
+  try{ e = findEntry(url); }catch(err){}
+  if(!e){ try{ await customAlert('이 카드는 아직 업무 모음에 등록되지 않았습니다.'); }catch(err){} return; }
+  if(e.status === '개발중'){
+    if(!(await customConfirm('"' + e.title + '"을(를) 이제 다 만들어서 「운영중」으로 옮길까요?'))) return;
+    e.status = '운영중';
+  } else {
+    if(!(await customConfirm('"' + e.title + '"을(를) 다시 「만드는중」으로 되돌릴까요?'))) return;
+    e.status = '개발중';
+  }
+  try{ render(); }catch(err){}
+  try{ renderBoard(); }catch(err){}
+  try{ syncUpdate(e); }catch(err){}
+  try{ if(!canSave()) await askEmpPasswordThenSave(); }catch(err){}
+}
+
+function bdSetCol(n){
+  bdCol = n;
+  var cols = document.querySelectorAll('#bdKan .bd-col');
+  for(var i = 0; i < cols.length; i++){
+    cols[i].classList.toggle('on', cols[i].getAttribute('data-c') === String(n));
+  }
+  var bs = document.querySelectorAll('#bdSeg button');
+  for(var j = 0; j < bs.length; j++){
+    bs[j].classList.toggle('on', bs[j].getAttribute('data-c') === String(n));
+  }
+}
+function bdToggleAll(n){ bdAll[n] = !bdAll[n]; renderBoard(); }
+
+function renderBoard(){
+  var kan = document.getElementById('bdKan');
+  if(!kan) return;
+  try{
+    if(currentView === 'board'){
+      var hs = document.getElementById('headSub');
+      if(hs) hs.textContent = '지금 뭐가 막혀 있고, 뭐가 돌아가고 있는지 한 화면에서 봅니다.';
+    }
+  }catch(e){}
+  var items = bdItems();
+  BD_CACHE = items;
+  var by = {1:[], 2:[], 3:[], 4:[]};
+  items.forEach(function(x, i){ x.__i = i; if(by[x.col]) by[x.col].push(x); });
+
+  /* --- 위 숫자 5개 --- */
+  var ent = [];
+  try{ ent = entries || []; }catch(e){}
+  var wip = 0;
+  ent.forEach(function(e){ if(e && e.status === '개발중') wip++; });
+  var stop = 0, wait = 0;
+  try{
+    Object.keys(CHECKS || {}).forEach(function(u){
+      var c = CHECKS[u]; if(!c) return;
+      if(c.v === 'stop') stop++;
+      if(Array.isArray(c.fb)) wait += c.fb.length;
+    });
+  }catch(e){}
+  try{
+    (FEEDBACK_LIST || []).forEach(function(f){ if(f && !f.reply) wait++; });
+  }catch(e){}
+  var kp = document.getElementById('bdKpi');
+  if(kp){
+    kp.innerHTML =
+      '<div class="k"><b>' + ent.length + '</b><span>전체 시스템</span></div>' +
+      '<div class="k"><b>' + wip + '</b><span>만드는중</span></div>' +
+      '<div class="k' + (by[3].length ? ' hot' : '') + '"><b>' + by[3].length + '</b><span>검토·승인</span></div>' +
+      '<div class="k' + (wait ? ' hot' : '') + '"><b>' + wait + '</b><span>답변 대기</span></div>' +
+      '<div class="k' + (stop ? ' hot' : '') + '"><b>' + stop + '</b><span>⛔ 막힘</span></div>';
+  }
+
+  /* --- 모바일용 단계 전환 --- */
+  var sg = document.getElementById('bdSeg');
+  if(sg){
+    sg.innerHTML = BD_COLS.map(function(c){
+      return '<button type="button" data-c="' + c.n + '"' + (c.n === bdCol ? ' class="on"' : '') +
+             ' onclick="bdSetCol(' + c.n + ')">' + c.t + ' ' + by[c.n].length + '</button>';
+    }).join('');
+  }
+
+  /* --- 4단계 --- */
+  var CAP = 8;
+  kan.innerHTML = BD_COLS.map(function(c){
+    var list = by[c.n];
+    var open = !!bdAll[c.n];
+    var show = open ? list : list.slice(0, CAP);
+    var h = '<div class="bd-col' + (c.n === bdCol ? ' on' : '') + '" data-c="' + c.n + '">' +
+            '<div class="ch"><span class="cd" style="background:' + c.c + '"></span>' + c.t +
+            '<span class="cc">' + list.length + '</span></div>' +
+            '<div class="cw">' + c.d + '</div>';
+    if(!list.length){
+      h += '<div class="bd-empty">여기 있는 건 지금 없습니다.</div>';
+    } else {
+      show.forEach(function(x){ h += bdCardHtml(x, x.__i); });
+      if(list.length > CAP){
+        h += '<button type="button" class="bd-more" onclick="bdToggleAll(' + c.n + ')">' +
+             (open ? '접기 ▲' : '나머지 ' + (list.length - CAP) + '개 더 보기 ▼') + '</button>';
+      }
+    }
+    return h + '</div>';
+  }).join('');
+}
+
 /* 🔔 알림 뱃지 첫 표시
    ★ 반드시 스크립트 맨 끝에서 돌린다. 위쪽 applyData() 는 파일 중간에서
      실행되기 때문에 그 시점엔 아래쪽 상수들이 아직 준비 전이다(TDZ).
@@ -5838,6 +6155,14 @@ function gateTry(){
 /* 📊 이용 현황 집계 시작 — 반드시 맨 끝(위쪽은 TDZ 때문에 안 됨) */
 (function initStats(){
   try{ stStart(); }catch(e){}
+})();
+
+/* 🗂️ 현황 보드를 첫 화면으로 — 반드시 맨 끝.
+   ★ 실패하면 그냥 예전 「업무 모음」 화면이 뜬다. 직원이 못 쓰는 일은 없다. */
+(function initBoard(){
+  try{ setView('board'); }catch(e){
+    try{ setView('hub'); }catch(e2){}
+  }
 })();
 </script>
 
