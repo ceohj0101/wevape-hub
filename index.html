@@ -1376,6 +1376,229 @@
     .bd-col.on{display:block;}
     .bd-col .ch{padding-left:2px;}
   }
+
+  /* ================================================================
+     🍎 애플 스킨 (C안) — 2026-08-07
+     아래 규칙이 위의 모든 규칙을 덮어쓴다. 되돌리려면 이 블록만 지우면 된다.
+     ================================================================ */
+  :root{
+    --ap-bg:#f2f2f7; --ap-card:#fff; --ap-win:#fff;
+    --ap-l1:#000; --ap-l2:rgba(60,60,67,.6); --ap-l3:rgba(60,60,67,.32);
+    --ap-sep:rgba(60,60,67,.16); --ap-fill:rgba(120,120,128,.12); --ap-fill2:rgba(120,120,128,.2);
+    --ap-blue:#007aff; --ap-green:#34c759; --ap-orange:#ff9500; --ap-red:#ff3b30;
+    --ap-purple:#af52de; --ap-teal:#30b0c7; --ap-indigo:#5856d6; --ap-gray:#8e8e93;
+    --ap-r:12px;
+  }
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--ap-bg) !important; color:var(--ap-l1);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Apple SD Gothic Neo","Pretendard","Malgun Gothic",sans-serif !important;
+    letter-spacing:-.01em;
+  }
+  .wrap{max-width:1000px;}
+
+  /* ── 헤더 ── */
+  header.top{
+    background:rgba(249,249,249,.86) !important;
+    -webkit-backdrop-filter:saturate(180%) blur(20px); backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:.5px solid var(--ap-sep); padding:10px 20px 0 !important;
+    position:sticky; top:0; z-index:70;
+  }
+  header.top .inner{max-width:1000px;}
+  h1{font-size:30px !important; font-weight:700 !important; letter-spacing:-1px !important; color:var(--ap-l1) !important;}
+  .lead{color:var(--ap-l2) !important; font-size:13.5px !important;}
+  .wordmark{color:var(--ap-l1) !important;}
+  .subword{color:var(--ap-l3) !important;}
+
+  /* ── 상단 메뉴 = 세그먼티드 컨트롤 ── */
+  .viewnav{
+    display:flex; gap:2px; background:var(--ap-fill); border-radius:9px; padding:2px;
+    margin:0 0 12px; overflow-x:auto; -webkit-overflow-scrolling:touch; max-width:100%;
+  }
+  .viewnav::-webkit-scrollbar{display:none;}
+  .vnav{
+    flex:0 0 auto; border:0 !important; background:transparent !important; border-radius:7px !important;
+    padding:6px 14px !important; font-size:13px !important; font-weight:500 !important;
+    color:var(--ap-l1) !important; white-space:nowrap; box-shadow:none !important; position:relative;
+  }
+  .vnav.on{background:var(--ap-card) !important; font-weight:600 !important;
+    box-shadow:0 3px 8px rgba(0,0,0,.12),0 3px 1px rgba(0,0,0,.04) !important;}
+  .nv-dot{
+    background:var(--ap-red) !important; color:#fff !important; font-size:10px !important;
+    border-radius:9px !important; padding:0 5px !important; margin-left:5px !important;
+    min-width:16px; display:inline-flex; align-items:center; justify-content:center; height:16px;
+  }
+
+  /* ── 버튼 ── */
+  .adminBtn,.addBtn{
+    background:var(--ap-fill) !important; color:var(--ap-blue) !important; border-radius:9px !important;
+    font-weight:600 !important; font-size:12.5px !important; padding:8px 14px !important;
+  }
+  .adminBtn.on{background:var(--ap-blue) !important; color:#fff !important;}
+  .addBtn{background:var(--ap-blue) !important; color:#fff !important;}
+
+  /* ── 검색 / 입력 ── */
+  #search, .dk-search, input[type=text], input[type=password], input[type=url], textarea, select{
+    border-radius:10px !important; border:0 !important; background:var(--ap-fill) !important;
+    font-family:inherit !important; color:var(--ap-l1) !important;
+  }
+  #search::placeholder, textarea::placeholder, input::placeholder{color:var(--ap-l3) !important;}
+
+  /* ── 필터 탭 ── */
+  .tab{background:var(--ap-fill) !important; color:var(--ap-l1) !important; border-radius:999px !important;
+    font-weight:500 !important; font-size:13px !important;}
+  .tab.on{background:var(--ap-blue) !important; color:#fff !important; font-weight:600 !important;}
+
+  /* ── 목록 ── */
+  .hintbar{background:var(--ap-card) !important; border-radius:var(--ap-r) !important; color:var(--ap-l2) !important;
+    font-size:12.5px !important; line-height:1.7 !important;}
+  .hintbar b{color:var(--ap-l1) !important;}
+  #layers .sec{color:var(--ap-l2) !important; font-weight:400 !important; font-size:12.5px !important;
+    padding:20px 20px 7px !important;}
+  #layers .sec em{color:var(--ap-l3) !important;}
+  .row{background:var(--ap-card) !important; border-radius:var(--ap-r) !important; margin:0 16px 8px !important;
+    padding:10px 14px !important; gap:12px !important;}
+  .row:active{background:var(--ap-fill2) !important;}
+  .row.on{background:#e8f2ff !important;}
+  .r-i{width:34px !important; height:34px !important; border-radius:8.5px !important; font-size:17px !important;}
+  .r-t{font-size:15.5px !important; font-weight:600 !important; letter-spacing:-.3px !important; color:var(--ap-l1) !important;}
+  .r-s{font-size:12px !important; color:var(--ap-l2) !important;}
+  .r-st{font-size:11px !important; font-weight:600 !important; border-radius:6px !important; padding:3px 8px !important;}
+  .r-st.ok{background:rgba(52,199,89,.14) !important; color:#1a8a3d !important;}
+  .r-st.wip{background:rgba(255,149,0,.16) !important; color:#a15c00 !important;}
+  .r-more{color:var(--ap-l3) !important;}
+  .r-more .fbn{color:var(--ap-blue) !important;}
+  .divl{display:none !important;}
+  .badd{border:1px dashed var(--ap-l3) !important; border-radius:var(--ap-r) !important; margin:8px 16px 0 !important;}
+  .badd b{color:var(--ap-l2) !important;}
+
+  /* ── 하단 고정 버튼 ── */
+  .bbot{background:rgba(249,249,249,.9) !important;
+    -webkit-backdrop-filter:blur(20px); backdrop-filter:blur(20px);
+    border-top:.5px solid var(--ap-sep) !important;}
+  .bb{border-radius:12px !important; font-weight:600 !important; font-size:15px !important; height:48px !important;}
+  .bb.p{background:var(--ap-blue) !important; color:#fff !important;}
+  .bb.s{background:var(--ap-fill) !important; color:var(--ap-blue) !important;}
+
+  /* ── 상세 ── */
+  .br{background:var(--ap-bg) !important;}
+  .br-back{background:transparent !important; color:var(--ap-blue) !important; padding:6px 0 !important;
+    font-weight:400 !important; font-size:15px !important;}
+  .br-t{font-size:28px !important; font-weight:700 !important; letter-spacing:-1px !important;}
+  .br-tag{border-radius:6px !important; font-weight:600 !important; font-size:11.5px !important;
+    background:rgba(52,199,89,.14) !important; color:#1a8a3d !important;}
+  .br-tag.wip{background:rgba(255,149,0,.16) !important; color:#a15c00 !important;}
+  .br-open{background:var(--ap-blue) !important; border-radius:12px !important; height:50px !important;
+    font-weight:600 !important; font-size:16px !important;}
+  .br-f,.br-fb,.br-danger,.fb-devbox,.fb-newform{
+    background:var(--ap-card) !important; border:0 !important; border-radius:var(--ap-r) !important;}
+  .br-f i{color:var(--ap-l2) !important; font-weight:400 !important;}
+  .br-f b{font-weight:600 !important;}
+  .br-f u{color:var(--ap-blue) !important; font-weight:600 !important;}
+  .br-u{color:var(--ap-l2) !important;}
+
+  /* ── 공통 카드류 ── */
+  .layer,.wip-card,.addPanel,.contact-panel,.rm-card,.rm-hero,.rm-step,.rm-ask,
+  .dk-card,.dk-item,.dk-hero,.dk-q,.dk-diag,.ck-card,.bd-card,.mm-wrap,.ub-wrap{
+    border-radius:var(--ap-r) !important;
+  }
+  .dk-card,.dk-item{background:var(--ap-card) !important; border:0 !important;
+    box-shadow:0 1px 3px rgba(0,0,0,.06) !important;}
+  .bd-card,.bd-kpi .k{border:0 !important; box-shadow:0 1px 3px rgba(0,0,0,.06) !important;}
+  .bd-col{background:transparent !important;}
+  .bd-kan{gap:14px !important;}
+  .bd-hero h2{font-size:26px !important; font-weight:700 !important; letter-spacing:-.9px !important;}
+  .syncBadge{border-radius:999px !important;}
+  .ub-wrap,.ub-row{border-radius:999px !important;}
+
+  /* ── 어두운 히어로 → 애플 카드로 ── */
+  .dk-hero,.rm-hero{background:var(--ap-card) !important; color:var(--ap-l1) !important;
+    box-shadow:0 1px 3px rgba(0,0,0,.06) !important; border:0 !important;}
+  .dk-hero h2,.rm-hero h2,.rm-hero h1{color:var(--ap-l1) !important; font-size:24px !important;
+    font-weight:700 !important; letter-spacing:-.8px !important;}
+  .dk-hero p,.rm-hero p{color:var(--ap-l2) !important;}
+  .dk-hero b,.rm-hero b{color:var(--ap-l1) !important;}
+  .dk-q,.dk-q>div,.rm-ai{background:var(--ap-fill) !important; color:var(--ap-l1) !important;
+    border-radius:10px !important; border:0 !important;}
+  .dk-q b,.rm-ai b{color:var(--ap-l1) !important;}
+  .dk-sec,.rm-num{color:var(--ap-l2) !important;}
+  .rm-card,.rm-step,.rm-flow,.rm-ask,.mm-wrap{background:var(--ap-card) !important; border:0 !important;
+    box-shadow:0 1px 3px rgba(0,0,0,.06) !important;}
+  .dk-foot,.rm-foot,.bd-foot{background:var(--ap-card) !important; border:0 !important;
+    border-radius:var(--ap-r) !important; color:var(--ap-l2) !important;}
+
+  /* ── 🏠 홈 (C안) ── */
+  #home{display:none; max-width:1000px; margin:0 auto; padding:0 16px 90px;}
+  body.homeview #home{display:block;}
+  body.homeview .wrap,
+  body.homeview #roadmap,
+  body.homeview #desk,
+  body.homeview #board{display:none !important;}
+  body.homeview .searchbar,
+  body.homeview .tabs,
+  body.homeview .stats,
+  body.homeview .topbtns{display:none !important;}
+  body.mapview #home,body.deskview #home,body.boardview #home{display:none !important;}
+
+  body.homeview h1, body.homeview .lead{display:none !important;}
+  body.homeview header.top{padding-bottom:4px !important;}
+  .hm-hi{padding:14px 4px 2px;}
+  .hm-hi h2{margin:0; font-size:30px; font-weight:700; letter-spacing:-1px; color:var(--ap-l1);}
+  .hm-hi p{margin:5px 0 0; font-size:13.5px; color:var(--ap-l2);}
+  .hm-wg{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:16px;}
+  .hm-w{background:var(--ap-card); border-radius:16px; padding:15px 17px; min-height:136px;
+    display:flex; flex-direction:column;}
+  .hm-w .wt{font-size:12px; color:var(--ap-l2); font-weight:500;}
+  .hm-w .wb{font-size:30px; font-weight:700; letter-spacing:-1px; margin:4px 0 2px;}
+  .hm-w .ws{font-size:12.5px; color:var(--ap-l2); line-height:1.55;}
+  .hm-w .wi{display:flex; align-items:flex-start; gap:7px; font-size:12.5px; padding:3px 0; line-height:1.4;}
+  .hm-w .wi b{font-weight:600; color:var(--ap-l1);}
+  .hm-w .wl{margin-top:auto; padding-top:10px; font-size:12.5px; color:var(--ap-blue); font-weight:600;
+    background:none; border:0; font-family:inherit; cursor:pointer; text-align:left;}
+  .hm-w.acc{background:linear-gradient(160deg,#007aff,#0056d6); color:#fff;}
+  .hm-w.acc .wt,.hm-w.acc .ws{color:rgba(255,255,255,.85);}
+  .hm-w.acc .wl{color:#fff;}
+  .hm-dot{width:8px; height:8px; border-radius:50%; flex:0 0 auto; margin-top:5px; display:inline-block;}
+  .hm-h{font-size:12.5px; color:var(--ap-l2); padding:22px 4px 8px; display:flex; align-items:center; gap:8px;}
+  .hm-h em{font-style:normal; color:var(--ap-l3);}
+  .hm-fav{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px;}
+  .hm-fv{background:var(--ap-card); border-radius:13px; padding:13px 14px; display:flex; align-items:center;
+    gap:11px; text-align:left; border:0; font-family:inherit; cursor:pointer; width:100%;}
+  .hm-fv:active{background:var(--ap-fill2);}
+  .hm-ic{width:34px; height:34px; border-radius:8.5px; flex:0 0 auto; display:flex; align-items:center;
+    justify-content:center; font-size:17px;}
+  .hm-fv .n{display:block; font-size:14px; font-weight:600; letter-spacing:-.3px; color:var(--ap-l1);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .hm-fv .s{display:block; font-size:11.5px; color:var(--ap-l2); margin-top:1px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .hm-list{background:var(--ap-card); border-radius:var(--ap-r); overflow:hidden;}
+  .hm-r{display:flex; align-items:center; gap:11px; width:100%; padding:9px 13px; min-height:46px;
+    position:relative; background:none; border:0; font-family:inherit; cursor:pointer; text-align:left;}
+  .hm-r + .hm-r::before{content:""; position:absolute; left:48px; right:0; top:0; height:.5px; background:var(--ap-sep);}
+  .hm-r:active{background:var(--ap-fill);}
+  .hm-r .m{flex:1; min-width:0;}
+  .hm-r .t{display:block; font-size:14.5px; font-weight:500; letter-spacing:-.3px; color:var(--ap-l1);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .hm-r .s{display:block; font-size:11.5px; color:var(--ap-l2); margin-top:1px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .hm-r .rt{flex:0 0 auto; display:flex; align-items:center; gap:8px;}
+  .hm-bd{background:var(--ap-red); color:#fff; font-size:11px; font-weight:600; border-radius:9px;
+    min-width:19px; height:19px; display:flex; align-items:center; justify-content:center; padding:0 5px;}
+  .hm-go{color:var(--ap-blue); font-size:12px; font-weight:600; opacity:0; transition:.12s; white-space:nowrap;}
+  .hm-r:hover .hm-go{opacity:1;}
+  .hm-i{width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    color:var(--ap-l3); font-size:15px; background:none; border:0; cursor:pointer; flex:0 0 auto;}
+  .hm-i:hover{background:var(--ap-fill2); color:var(--ap-blue);}
+  .hm-f{font-size:11.5px; color:var(--ap-l2); padding:9px 4px 0; line-height:1.6;}
+  @media (max-width:820px){
+    #home{padding:0 12px 90px;}
+    .hm-wg{grid-template-columns:1fr; gap:10px;}
+    .hm-w{min-height:0;}
+    .hm-fav{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .hm-hi h2{font-size:26px;}
+    h1{font-size:25px !important;}
+    .hm-go{display:none;}
+  }
   </style>
 </head>
 <body>
@@ -1414,7 +1637,8 @@
 <header class="top">
   <div class="inner">
     <div class="viewnav">
-      <button type="button" class="vnav on" id="vnavBoard" onclick="setView('board')">🗂️ 현황 보드</button>
+      <button type="button" class="vnav on" id="vnavHome" onclick="setView('home')">🏠 홈</button>
+      <button type="button" class="vnav" id="vnavBoard" onclick="setView('board')">🗂️ 현황 보드</button>
       <button type="button" class="vnav" id="vnavHub" onclick="setView('hub')">📋 업무 모음</button>
       <button type="button" class="vnav" id="vnavMap" onclick="setView('map')">🧭 성장 로드맵</button>
       <button type="button" class="vnav" id="vnavDesk" onclick="setView('desk')">🧩 새 업무 검토<span class="nv-dot" id="vnavDeskDot" style="display:none">0</span></button>
@@ -1475,6 +1699,17 @@
     </div>
   </div>
 </header>
+
+<section id="home">
+  <div class="hm-hi" id="hmHi"></div>
+  <div class="hm-wg" id="hmWg"></div>
+  <div class="hm-h">자주 여는 것 <em id="hmFavN"></em></div>
+  <div class="hm-fav" id="hmFav"></div>
+  <div class="hm-h">전체 시스템 <em id="hmAllN"></em></div>
+  <div class="hm-list" id="hmAll"></div>
+  <div class="hm-f">이름을 누르면 그 시스템이 <b>새 창으로 바로</b> 열립니다. 오른쪽 ⓘ 를 누르면 담당·점검·의견이 열립니다.<br>
+    🔒 는 만드는 중이거나 민감한 것 — 비밀번호를 넣어야 주소가 보입니다.</div>
+</section>
 
 <section id="board">
 
@@ -2855,16 +3090,19 @@ function setFilter(mode){
 // ===== 🧭 성장 로드맵 (두 번째 메뉴) =====
 let currentView = 'hub';
 function setView(v){
-  currentView = (v === 'map' || v === 'desk' || v === 'board') ? v : 'hub';
+  currentView = (v === 'map' || v === 'desk' || v === 'board' || v === 'home') ? v : 'hub';
   document.body.classList.toggle('mapview', currentView === 'map');
   document.body.classList.toggle('deskview', currentView === 'desk');
   document.body.classList.toggle('boardview', currentView === 'board');
+  document.body.classList.toggle('homeview', currentView === 'home');
   const a = document.getElementById('vnavHub'), b = document.getElementById('vnavMap'), d = document.getElementById('vnavDesk');
   const bd = document.getElementById('vnavBoard');
+  const hm = document.getElementById('vnavHome');
   if(a) a.classList.toggle('on', currentView === 'hub');
   if(b) b.classList.toggle('on', currentView === 'map');
   if(d) d.classList.toggle('on', currentView === 'desk');
   if(bd) bd.classList.toggle('on', currentView === 'board');
+  if(hm) hm.classList.toggle('on', currentView === 'home');
   const h = document.querySelector('header.top h1');
   const s = document.getElementById('headSub');
   if(currentView === 'desk'){
@@ -2873,6 +3111,11 @@ function setView(v){
     if(s) s.textContent = '링크나 진행 중인 업무를 올리면, 지금 판에 어떻게 붙일지 잡아드립니다.';
     try{ renderDesk(); }catch(err){}
     try{ dkMarkSeen(); dkPaintBadge(); }catch(err){}
+  } else if(currentView === 'home'){
+    document.body.classList.remove('detailopen');
+    if(h) h.textContent = '위베이프 허브';
+    if(s) s.textContent = '누르면 바로 열립니다.';
+    try{ renderHome(); }catch(err){}
   } else if(currentView === 'board'){
     document.body.classList.remove('detailopen');
     if(h) h.textContent = '현황 보드';
@@ -3955,6 +4198,7 @@ function applyData(d){
   // 🗂️ 공용 장부를 새로 받으면 현황 보드도 같이 다시 그린다.
   //    (보드는 저장하는 게 없고 읽어서 줄만 세우므로, 실패해도 다른 화면엔 영향 없음)
   try{ if(typeof currentView !== "undefined" && currentView === "board") renderBoard(); }catch(err){}
+  try{ if(typeof currentView !== "undefined" && currentView === "home") renderHome(); }catch(err){}
 }
 
 function loadLocal(){
@@ -6144,6 +6388,207 @@ function renderBoard(){
   }).join('');
 }
 
+
+/* ===================== 🏠 홈 (애플 C안) =====================
+   ★ 저장하는 데이터가 없다. entries · CHECKS · FEEDBACK_LIST · REVIEW_LIST 를 읽어서 보여줄 뿐이다.
+   ★ 이름을 누르면 상세를 거치지 않고 그 시스템이 새 창으로 바로 열린다.
+     다만 잠긴 것(만드는중·민감)은 기존 규칙대로 상세로 보내 비밀번호를 받는다. */
+var HM_DOT = {go:'#34c759', hold:'#ff9500', stop:'#ff3b30'};
+var HM_TXT = {go:'정상', hold:'확인 필요', stop:'멈춤'};
+
+function hmGreet(){
+  var h = 0;
+  try{ h = new Date().getHours(); }catch(e){}
+  if(h < 6)  return '늦으셨습니다';
+  if(h < 11) return '좋은 아침입니다';
+  if(h < 14) return '점심 드셨습니까';
+  if(h < 18) return '오후도 힘내시죠';
+  return '오늘도 고생하셨습니다';
+}
+function hmDate(){
+  try{
+    var d = new Date(), w = ['일','월','화','수','목','금','토'][d.getDay()];
+    return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + w + '요일';
+  }catch(e){ return ''; }
+}
+function hmClk(){
+  var m = {};
+  try{
+    var v = stView();
+    Object.keys(v.all.days || {}).forEach(function(day){
+      var c = v.all.days[day].clk || {};
+      Object.keys(c).forEach(function(u){ m[u] = (m[u] || 0) + c[u]; });
+    });
+  }catch(e){}
+  return m;
+}
+function hmOpen(url){
+  var e = null;
+  try{ e = findEntry(url); }catch(err){}
+  if(!e) return;
+  var lk = false;
+  try{ lk = isLocked(e); }catch(err){}
+  if(lk){ hmInfo(url); return; }
+  try{ stBump('clk', url); }catch(err){}
+  try{ window.open(url, '_blank', 'noopener'); }catch(err){}
+  try{ renderHome(); }catch(err){}
+}
+function hmInfo(url, ev){
+  if(ev){ try{ ev.stopPropagation(); }catch(e){} }
+  var e = null;
+  try{ e = findEntry(url); }catch(err){}
+  if(!e) return;
+  setView('hub');
+  try{ openDetail(entryKey(e)); }catch(err){}
+}
+function hmWait(){
+  var n = 0;
+  try{ (FEEDBACK_LIST || []).forEach(function(f){ if(f && !f.reply) n++; }); }catch(e){}
+  try{
+    Object.keys(CHECKS || {}).forEach(function(u){
+      var c = CHECKS[u];
+      if(c && Array.isArray(c.fb)) n += c.fb.length;
+    });
+  }catch(e){}
+  return n;
+}
+function hmJudge(){
+  var n = 0;
+  try{
+    Object.keys(CHECKS || {}).forEach(function(u){
+      var c = CHECKS[u];
+      if(c && c.v === 'stop' && !c.ok) n++;
+    });
+  }catch(e){}
+  try{
+    (REVIEW_LIST || []).forEach(function(r){
+      var st = '';
+      try{ st = dkStage(r); }catch(e){}
+      if(st === '승인대기') n++;
+    });
+  }catch(e){}
+  return n;
+}
+function hmRow(e, clk){
+  var g = groupOf(e.dept);
+  var c = null;
+  try{ c = (CHECKS || {})[e.url]; }catch(err){}
+  var lk = false;
+  try{ lk = isLocked(e); }catch(err){}
+  var fb = 0;
+  try{ (FEEDBACK_LIST || []).forEach(function(f){ if(f && f.url === e.url) fb++; }); }catch(err){}
+  if(c && Array.isArray(c.fb)) fb += c.fb.length;
+  var uq = String(e.url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  var sub = (e.owner || '담당 미지정') + (e.status === '개발중' ? ' · 만드는 중' : '');
+  if(c && c.v) sub += ' · ' + HM_TXT[c.v];
+  return '<button type="button" class="hm-r" onclick="hmOpen(\'' + uq + '\')">' +
+    '<span class="hm-ic" style="background:' + g.c + '">' + g.e + '</span>' +
+    '<span class="m"><span class="t">' + escapeHtml(e.title) + (lk ? ' 🔒' : '') + '</span>' +
+    '<span class="s">' + escapeHtml(sub) + '</span></span>' +
+    '<span class="rt">' +
+      '<span class="hm-go">' + (lk ? '비밀번호' : '열기 ↗') + '</span>' +
+      (fb ? '<span class="hm-bd">' + fb + '</span>' : '') +
+      (c && c.v ? '<span class="hm-dot" style="background:' + HM_DOT[c.v] + ';margin-top:0"></span>' : '') +
+      '<span class="hm-i" onclick="hmInfo(\'' + uq + '\',event)" title="담당 · 점검 · 의견">ⓘ</span>' +
+    '</span></button>';
+}
+function renderHome(){
+  var wrapEl = document.getElementById('hmAll');
+  if(!wrapEl) return;
+  var list = [];
+  try{ list = (entries || []).slice(); }catch(e){}
+
+  /* 인사 */
+  var hi = document.getElementById('hmHi');
+  if(hi) hi.innerHTML = '<h2>' + hmGreet() + '</h2><p>' + hmDate() + '</p>';
+
+  /* 위젯 3개 */
+  var judge = hmJudge(), wait = hmWait();
+  var bad = [];
+  try{
+    Object.keys(CHECKS || {}).forEach(function(u){
+      var c = CHECKS[u];
+      if(!c || (c.v !== 'stop' && c.v !== 'hold')) return;
+      var e = null;
+      try{ e = findEntry(u); }catch(err){}
+      if(!e) return;                       // 등록 목록에 없는 주소는 위젯에 안 띄운다
+      bad.push({u:u, v:c.v, t:e.title, s:String(c.s || '').replace(/\s+/g, ' ').slice(0, 38)});
+    });
+  }catch(e){}
+  bad.sort(function(a, b){ return (a.v === 'stop' ? 0 : 1) - (b.v === 'stop' ? 0 : 1); });
+
+  var fbs = [];
+  try{ fbs = (FEEDBACK_LIST || []).slice().reverse().slice(0, 2); }catch(e){}
+
+  var w = '<div class="hm-w acc"><div class="wt">오늘 할 일</div>' +
+    '<div class="wb">' + (judge + wait) + '건</div>' +
+    '<div class="ws">대표 판단 ' + judge + ' · 답변 대기 ' + wait + '</div>' +
+    '<button type="button" class="wl" onclick="setView(\'board\')">현황 보드에서 보기 ›</button></div>';
+
+  w += '<div class="hm-w"><div class="wt">오늘의 점검</div>';
+  if(!bad.length){
+    w += '<div class="ws" style="margin-top:6px">지적된 것이 없습니다.</div>';
+  } else {
+    bad.slice(0, 3).forEach(function(b){
+      var uq = String(b.u).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      w += '<div class="wi" onclick="hmInfo(\'' + uq + '\')" style="cursor:pointer">' +
+        '<span class="hm-dot" style="background:' + HM_DOT[b.v] + '"></span>' +
+        '<span><b>' + escapeHtml(b.t) + '</b>' + (b.s ? ' — ' + escapeHtml(b.s) : '') + '</span></div>';
+    });
+  }
+  w += '<button type="button" class="wl" onclick="setView(\'hub\')">전체 점검 보기 ›</button></div>';
+
+  w += '<div class="hm-w"><div class="wt">받은 의견</div>';
+  if(!fbs.length){
+    w += '<div class="ws" style="margin-top:6px">새로 온 의견이 없습니다.</div>';
+  } else {
+    fbs.forEach(function(f){
+      w += '<div class="ws" style="margin-top:7px"><b style="color:var(--ap-l1)">' +
+        escapeHtml(String(f.author || '익명').slice(0, 18)) + '</b><br>' +
+        escapeHtml(String(f.text || '').replace(/\n/g, ' ').slice(0, 40)) + '</div>';
+    });
+  }
+  w += '<button type="button" class="wl" onclick="openSiteFbFromDock()">의견 모두 보기 ›</button></div>';
+  var wg = document.getElementById('hmWg');
+  if(wg) wg.innerHTML = w;
+
+  /* 자주 여는 것 — 실제 클릭 수 기준, 잠기지 않은 것만 */
+  var clk = hmClk();
+  var open4 = list.filter(function(e){
+    try{ return !isLocked(e); }catch(err){ return false; }
+  });
+  open4.sort(function(a, b){ return (clk[b.url] || 0) - (clk[a.url] || 0); });
+  var fav = open4.slice(0, 6);
+  var favSet = {};
+  fav.forEach(function(e){ favSet[e.url] = 1; });
+
+  var fh = '';
+  fav.forEach(function(e){
+    var g = groupOf(e.dept);
+    var c = null;
+    try{ c = (CHECKS || {})[e.url]; }catch(err){}
+    var uq = String(e.url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    fh += '<button type="button" class="hm-fv" onclick="hmOpen(\'' + uq + '\')">' +
+      '<span class="hm-ic" style="background:' + g.c + '">' + g.e + '</span>' +
+      '<span style="flex:1;min-width:0;display:block"><span class="n">' + escapeHtml(e.title) + '</span>' +
+      '<span class="s">' + escapeHtml(e.owner || '담당 미지정') + '</span></span>' +
+      (c && c.v ? '<span class="hm-dot" style="background:' + HM_DOT[c.v] + ';margin-top:0"></span>' : '') +
+      '</button>';
+  });
+  var fe = document.getElementById('hmFav');
+  if(fe) fe.innerHTML = fh || '<div class="hm-f">아직 열 수 있는 시스템이 없습니다.</div>';
+  var fn = document.getElementById('hmFavN');
+  if(fn) fn.textContent = fav.length ? '· 많이 누른 순서' : '';
+
+  /* 전체 목록 */
+  var rest = list.filter(function(e){ return !favSet[e.url]; });
+  var rh = '';
+  rest.forEach(function(e){ rh += hmRow(e, clk); });
+  wrapEl.innerHTML = rh || '<div class="hm-f" style="padding:16px">등록된 시스템이 없습니다.</div>';
+  var an = document.getElementById('hmAllN');
+  if(an) an.textContent = '· ' + rest.length + '개';
+}
+
 /* 🔔 알림 뱃지 첫 표시
    ★ 반드시 스크립트 맨 끝에서 돌린다. 위쪽 applyData() 는 파일 중간에서
      실행되기 때문에 그 시점엔 아래쪽 상수들이 아직 준비 전이다(TDZ).
@@ -6159,8 +6604,8 @@ function renderBoard(){
 
 /* 🗂️ 현황 보드를 첫 화면으로 — 반드시 맨 끝.
    ★ 실패하면 그냥 예전 「업무 모음」 화면이 뜬다. 직원이 못 쓰는 일은 없다. */
-(function initBoard(){
-  try{ setView('board'); }catch(e){
+(function initHome(){
+  try{ setView('home'); }catch(e){
     try{ setView('hub'); }catch(e2){}
   }
 })();
