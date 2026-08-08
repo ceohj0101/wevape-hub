@@ -320,6 +320,27 @@
   "feedbackSeq": 6,
   "reviews": [
     {
+      "id": "rv2",
+      "title": "ai챗봇을 활용한 제품 추천 프로그램",
+      "url": "file:///C:/Users/pyj04/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/local-agent-mode-sessions/8e418d86-7ab6-47d1-9412-5779df3aa78a/642bb8aa-0fed-406e-a722-6143285d1bcf/local_73264696-a310-4bd0-b176-5174c191e1e4/outputs/wevape_%EC%B1%97%EB%B4%87_v1.html",
+      "text": "첫번째로 위베이프 직영 각 지점 페이지 or 블로그 접속 시에 고객들에게 ai 챗봇을 이용해 간단한 제품 추천을 하기 위함. 페이지나 블로그에는 제품 뿐만 아니라 제품 추천이 상세히 되어있지 않음. 너무 자세한 추천보다는 ai챗봇을 활용해 간단한 제품 추천 드리고 각 지점 제품 문의 후 방문까지 유도하기 위함. 두번째로는 각 지점 관리자들이 손님 응대할 때에 손님이 몰리는 경우가 있음. 그럴 때에 이 프로그램을 태블릿으로 띄워 간단히 추천 후 스스로 시연시키기 위함도 있음. 손님이 몰린 상황에 기다릴 상황을 줄여주기 위함. 이 프로그램을 통해 전자담배 제품을 가볍게 추천 받고 문의 후 방문까지 유도하기 위한 목적이 가장 큼.",
+      "author": "안태민",
+      "dev": "안태민",
+      "time": "08. 08. 오전 10:44",
+      "date": "2026-08-08",
+      "status": "제출됨",
+      "stage": "제출됨",
+      "reply": "",
+      "todos": [],
+      "log": [
+        {
+          "w": "안태민",
+          "a": "검토 요청 제출",
+          "t": "08. 08. 오전 10:44"
+        }
+      ]
+    },
+    {
       "id": "rv1",
       "title": "위베이프 이슈 모니터링",
       "url": "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
@@ -807,7 +828,7 @@
       "dev": "장현진"
     }
   ],
-  "reviewSeq": 2,
+  "reviewSeq": 3,
   "deleted": [
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
     "https://janghj201-cyber.github.io/-/",
@@ -1121,5 +1142,6 @@
       "src": "대표 지시"
     }
   ],
-  "savedAt": "2026-08-07T11:32:57.568Z"
+  "savedAt": "2026-08-08T01:44:39.776Z",
+  "savedBy": "employee"
 }
