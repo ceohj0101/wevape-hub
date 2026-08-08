@@ -320,6 +320,37 @@
   "feedbackSeq": 6,
   "reviews": [
     {
+      "id": "rv5",
+      "title": "네이버 리뷰 답글 자동화",
+      "url": "",
+      "text": "수동 로그인만 사이해주면 자동으로 답글을 달아주는 네이버 리뷰답글 자동화",
+      "author": "김형진",
+      "dev": "김형진",
+      "files": [
+        {
+          "k": "pmsjwfgio1v2p1f",
+          "n": "위베이프_리뷰봇_설치패키지.zip",
+          "s": 14225,
+          "m": "application/x-zip-compressed",
+          "i": 0,
+          "w": "김형진"
+        }
+      ],
+      "time": "08. 08. 오후 01:54",
+      "date": "2026-08-08",
+      "status": "제출됨",
+      "stage": "제출됨",
+      "reply": "",
+      "todos": [],
+      "log": [
+        {
+          "w": "김형진",
+          "a": "검토 요청 제출",
+          "t": "08. 08. 오후 01:54"
+        }
+      ]
+    },
+    {
       "id": "rv4",
       "title": "블로그 자동화 글",
       "url": "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2",
@@ -870,7 +901,7 @@
       "dev": "장현진"
     }
   ],
-  "reviewSeq": 5,
+  "reviewSeq": 6,
   "deleted": [
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
     "https://janghj201-cyber.github.io/-/",
@@ -1264,5 +1295,6 @@
       "src": "대표 지시"
     }
   ],
-  "savedAt": "2026-08-08T04:39:51.200Z"
+  "savedAt": "2026-08-08T04:54:05.274Z",
+  "savedBy": "employee"
 }
