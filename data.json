@@ -320,6 +320,27 @@
   "feedbackSeq": 6,
   "reviews": [
     {
+      "id": "rv4",
+      "title": "블로그 자동화 글",
+      "url": "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2",
+      "text": "매일 오전 9시 자동으로 블로그 글 10개 생성 중 (매장계정 3개 + 직원계정 7개). 8개 지점 순환 방식으로 노션 블로그 초안 보관함에 자동 저장됨.\n\n글 기준: 2000자 이상, 모바일 최적화 문단, 사진 12개 위치 표시, 지점별 지역 SEO 키워드 자연스럽게 포함.\n\n현재 검토 대기 글 159개 쌓여 있음. 앞으로 지점별 키워드 최적화 고도화 + 검토→발행 프로세스 정리 예정.",
+      "author": "김형진",
+      "dev": "김형진",
+      "time": "08. 08. 오후 12:34",
+      "date": "2026-08-08",
+      "status": "제출됨",
+      "stage": "제출됨",
+      "reply": "",
+      "todos": [],
+      "log": [
+        {
+          "w": "김형진",
+          "a": "검토 요청 제출",
+          "t": "08. 08. 오후 12:34"
+        }
+      ]
+    },
+    {
       "id": "rv3",
       "title": "출퇴근 기록 qr 프로그램(출퇴근 기록을 위함)",
       "url": "1. (출퇴근시간입력)https://script.google.com/macros/s/AKfycbxYfSaipzTmvtiE66fj_D9ILNu8hwUuYmxepbC6bT7gGYLvLFk0QPErqIt6uPM1tj9B/exec  2. (관리자 전용)https://script.google.com/macros/s/AKfycbxYfSaipzTmvtiE66fj_D9ILNu8hwUuYmxepbC6bT7gGYLvLFk0QPErqIt6uPM1tj9B/exec?page=admin  3. (qr생성기 - 한 번 생성하면 이 링크는 쓸 필요 없음) file:///C:/Users/pyj04/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/local-agent-mode-sessions/8e418d86-7ab6-47d1-9412-5779df3aa78a/642bb8aa-0fed-406e-a722-6143285d1bcf/local_74b5231d-3b73-4b04-ac8a-aab265e4f8e8/outputs/QR%EC%BD%94%EB%93%9C_%EC%83%9D%EC%84%B1%EA%B8%B0.html",
@@ -849,7 +870,7 @@
       "dev": "장현진"
     }
   ],
-  "reviewSeq": 4,
+  "reviewSeq": 5,
   "deleted": [
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
     "https://janghj201-cyber.github.io/-/",
@@ -1193,5 +1214,6 @@
       "src": "대표 지시"
     }
   ],
-  "savedAt": "2026-08-08T03:17:52.317Z"
+  "savedAt": "2026-08-08T03:34:50.458Z",
+  "savedBy": "employee"
 }
