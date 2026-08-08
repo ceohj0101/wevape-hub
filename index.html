@@ -2691,8 +2691,13 @@ async function customPrompt(message, inputType, prefill){
 async function customSelect(message, options, selected){
   return await openModal({message, withSelect:true, options, selected});
 }
-async function customConfirm(message, danger){
-  return await openModal({message, withInput:false, confirmText: danger ? '삭제' : '확인', danger});
+/* 확인창의 오른쪽 버튼 글자.
+   ★ danger 를 붙이면 무조건 「삭제」라고 뜨던 게 문제였다 —
+     승인·되살리기처럼 안 지우는 동작에도 「삭제」가 떠서 사람을 헷갈리게 했다.
+     이제 세 번째 값으로 버튼 글자를 직접 정할 수 있다. */
+async function customConfirm(message, danger, okText){
+  return await openModal({message, withInput:false,
+    confirmText: (okText || (danger ? '삭제' : '확인')), danger});
 }
 async function customAlert(message){
   return await openModal({message, withInput:false, onlyOk:true, confirmText:'확인'});
@@ -4268,7 +4273,7 @@ async function chkFbDel(url, i){
   var c = CHECKS[url];
   if(!c || !c.fb || !c.fb[i]) return;
   var it = c.fb[i];
-  if(!(await customConfirm('이 피드백을 지울까요?\n\n「' + String(it.w || '') + ' · ' + String(it.m || '').slice(0, 40) + '」\n\n지우면 전직원 화면에서도 사라집니다.', true))) return;
+  if(!(await customConfirm('이 피드백을 지울까요?\n\n「' + String(it.w || '') + ' · ' + String(it.m || '').slice(0, 40) + '」\n\n지우면 전직원 화면에서도 사라집니다.', true, '지우기'))) return;
   try{
     await chkFbPull();
     var arr = (CHECKS[url] && CHECKS[url].fb) ? CHECKS[url].fb : [];
@@ -5261,7 +5266,7 @@ async function syncBadgeClick(){
 
 // 이 기기에 저장된 임시 수정분을 지우고 공용 장부 내용으로 되돌리기
 async function resetLocal(){
-  if(!(await customConfirm("이 기기에만 저장된 수정 내용을 지우고, 전직원 공용 데이터로 되돌릴까요?\n(관리자 열쇠는 지워지지 않습니다)", true))) return;
+  if(!(await customConfirm("이 기기에만 저장된 수정 내용을 지우고, 전직원 공용 데이터로 되돌릴까요?\n(관리자 열쇠는 지워지지 않습니다)", true, '되돌리기'))) return;
   lsDel(LOCAL_KEY);
   location.reload();
 }
@@ -6558,7 +6563,7 @@ async function dkPicPurge(){
     await customAlert('정리할 사진이 없습니다.\n(끝난 업무 — 최종승인·반려 — 에 붙은 사진만 정리합니다)');
     return;
   }
-  const yes = await customConfirm('끝난 업무 ' + hit.length + '건에 붙은 사진 ' + n + '장을 지웁니다.\n되돌릴 수 없습니다. 진행할까요?', true);
+  const yes = await customConfirm('끝난 업무 ' + hit.length + '건에 붙은 사진 ' + n + '장을 지웁니다.\n되돌릴 수 없습니다. 진행할까요?', true, '정리하기');
   REVIEW_LIST.forEach(function(r){
     (Array.isArray(r.todos) ? r.todos : []).forEach(function(x){
       if(x.__purge){ if(yes){ x.p = []; PHOTO_DIRTY = true; } delete x.__purge; }
@@ -6755,7 +6760,7 @@ async function dkVerify(id, n, ok){
   if(ok){
     // 📷 사진을 요구한 지시인데 사진이 없으면 한 번 물어본다 (감독관은 그래도 통과시킬 수 있다)
     if(dkNeedsPic(t.t) && !dkPics(t).length){
-      const go = await customConfirm('이 지시는 사진(캡처)을 요구했는데 붙은 사진이 없습니다.\n그래도 확인 완료로 처리할까요?\n\n· ' + t.t, false);
+      const go = await customConfirm('이 지시는 사진(캡처)을 요구했는데 붙은 사진이 없습니다.\n그래도 확인 완료로 처리할까요?\n\n· ' + t.t, false, '확인 완료');
       if(!go) return;
     }
     const v = await customPrompt('이 항목을 확인 완료로 표시합니다.\n뭘 보고 확인했는지 적어주세요. (화면 확인 / 캡처 받음 / 문서 확인 등)\n\n· ' + t.t, 'text', '');
@@ -7011,7 +7016,7 @@ async function deskFastPass(id){
     ? ('건너뛰는 것\n· ' + skip.join('\n· ') + '\n\n')
     : ('건너뛰는 것 없음 — 확인이 다 끝난 건입니다.\n\n');
   body += '승인하면 업무 모음에 「만드는중」으로 자동 등록되고,\n무엇을 건너뛰었는지 진행 이력에 그대로 남습니다.\n\n계속할까요?';
-  if(!(await customConfirm(body, true))) return;
+  if(!(await customConfirm(body, false, '🚀 승인'))) return;
 
   /* 대표 본인 확인 — 이 비밀번호를 아는 사람만 통과시킬 수 있다 */
   var pw = await customPrompt('대표 비밀번호를 입력해주세요.\n\n이 버튼은 대표 본인만 쓰는 버튼입니다.\n비밀번호를 모르면 그냥 창을 닫아주세요.', 'password', '');
@@ -7118,7 +7123,7 @@ async function deskDelete(id){
   if(!r) return;
   const ok = await customConfirm(
     '「' + String(r.title || '') + '」\n이 검토 건을 지울까요?\n\n' +
-    '바로 없어지지 않습니다. 「🗑 지운 것」 칸으로 들어가고,\n거기서 언제든 되살릴 수 있습니다.', true);
+    '바로 없어지지 않습니다. 「🗑 지운 것」 칸으로 들어가고,\n거기서 언제든 되살릴 수 있습니다.', true, '지우기');
   if(!ok) return;
   let why = '';
   try{ why = await customPrompt('왜 지우는지 한 줄만 적어주세요. (안 적어도 됩니다)\n예) 중복 등록, 잘못 올림, 취소된 업무', 'text', ''); }catch(e){}
@@ -7134,7 +7139,7 @@ async function deskDelete(id){
 async function dkRestore(id){
   const r = REVIEW_LIST.find(x => x.id === id);
   if(!r) return;
-  if(!(await customConfirm('「' + String(r.title || '') + '」\n이 업무를 되살릴까요?\n지시·검토 의견·첨부가 그대로 돌아옵니다.', true))) return;
+  if(!(await customConfirm('「' + String(r.title || '') + '」\n이 업무를 되살릴까요?\n지시·검토 의견·첨부가 그대로 돌아옵니다.', false, '되살리기'))) return;
   delete r.del;
   try{ dkLog(r, dkWho(), '지운 것을 되살림'); }catch(e){}
   await dkSaveReview();
