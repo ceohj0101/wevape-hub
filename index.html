@@ -1613,6 +1613,23 @@
   .ck-repsave{width:100%; border:0; background:var(--ap-blue); color:#fff; border-radius:11px;
     padding:11px 0; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer;}
   .ck-repsave:disabled{opacity:.6;}
+  .ck-nore .own{background:rgba(0,122,255,.14); color:var(--ap-blue); font-size:10.5px; font-weight:700;
+    border-radius:6px; padding:2px 7px;}
+  .ck-nore .noown{background:rgba(255,149,0,.18); color:#a35a00; font-size:10.5px; font-weight:700;
+    border-radius:6px; padding:2px 7px;}
+  .ck-repbtns{display:flex; gap:7px;}
+  .ck-repbtns .ck-repsave{flex:1; min-width:0;}
+  .ck-repsave.ok{background:var(--ap-green);}
+  .ck-repsave.go{background:var(--ap-orange);}
+  .ck-rephelp{font-size:11px; color:var(--ap-l2); line-height:1.6; margin-top:8px;}
+  .ck-warn2{background:rgba(255,149,0,.14); color:#8a4b00; font-size:11.5px; font-weight:600;
+    border-radius:9px; padding:9px 11px; margin-bottom:10px; line-height:1.6;}
+  .ck-gm{margin-top:8px; background:var(--ap-fill); border-radius:11px; padding:10px 12px;}
+  .ck-gm .rh{font-size:12px; font-weight:700; color:var(--ap-l2);}
+  .ck-gm .rh span{font-weight:500; color:var(--ap-l3); font-size:11px; margin-left:4px;}
+  .ck-gm p{margin:5px 0 0; font-size:12.5px; line-height:1.65; color:var(--ap-l1); white-space:pre-wrap;}
+  .ck-rep.go{background:rgba(255,149,0,.12);}
+  .ck-rep.go .rh{color:#8a4b00;}
   .ck-rep{margin-top:8px; background:rgba(52,199,89,.1); border-radius:11px; padding:10px 12px;}
   .ck-rep .rh{font-size:12px; font-weight:700; color:#146b31;}
   .ck-rep .rh b{font-weight:800;}
@@ -2938,12 +2955,16 @@ function pendingCount(fbs){
   return fbs.filter(f => f.status === "접수됨").length;
 }
 /* 🔴 아직 답 안 한 의견 수 — 점검 카드 의견(미답변) + 사이트 의견(접수됨) */
+/* 이 의견이 「담당자가 완료 처리」한 것인가.
+   ★ 이름만 적혀 있는 것으로는 안 된다. 완료 버튼을 눌러야 done 이 된다.
+      감독관 메모(gm)로도 절대 사라지지 않는다. */
+function ckFbDone(it){ return String((it || {}).st || '') === 'done'; }
 function ckFbOpenCnt(url){
   var n = 0;
   try{
     var c = CHECKS[url];
     if(c && Array.isArray(c.fb)){
-      for(var i = 0; i < c.fb.length; i++){ if(!String((c.fb[i] || {}).rw || '').trim()) n++; }
+      for(var i = 0; i < c.fb.length; i++){ if(!ckFbDone(c.fb[i])) n++; }
     }
   }catch(e){}
   try{
@@ -3996,36 +4017,91 @@ function ckOwnerOf(url){
   try{ var e = findEntry(url); if(e && String(e.owner || '').trim()) return String(e.owner).trim(); }catch(e){}
   return '';
 }
+/* 이름 대조 — 「장현진」과 「장현진 팀장」은 같은 사람으로 본다 */
+function ckNameNorm(x){
+  return String(x || '').replace(/\s+/g, '')
+    .replace(/(팀장|실장|점장|매니저|대리|과장|차장|부장|사원|주임|이사|대표|님)$/g, '');
+}
+function ckNameOk(url, w){
+  var own = ckNameNorm(ckOwnerOf(url));
+  var me  = ckNameNorm(w);
+  if(!own || !me) return false;
+  return (own === me) || (own.indexOf(me) >= 0) || (me.indexOf(own) >= 0);
+}
 function ckFbReplyHtml(url, uq, it, i){
-  var rw = String((it && it.rw) || '').trim();
-  if(rw){
-    return '<div class="ck-rep"><div class="rh">✅ 담당자 확인 — <b>' + escapeHtml(rw) + '</b>' +
+  var st  = String((it && it.st) || '').trim();
+  var rw  = String((it && it.rw) || '').trim();
+  var own = ckOwnerOf(url);
+  var h = '';
+
+  /* 담당자가 남긴 처리 기록 */
+  if(rw && st === 'done'){
+    h += '<div class="ck-rep"><div class="rh">✅ 처리 완료 — <b>' + escapeHtml(rw) + '</b>' +
+      (it.rt ? ' <span>' + escapeHtml(String(it.rt)) + '</span>' : '') + '</div>' +
+      (it.rm ? '<p>' + escapeHtml(String(it.rm)) + '</p>' : '') + '</div>';
+  } else if(rw && st === 'doing'){
+    h += '<div class="ck-rep go"><div class="rh">🔧 진행중 — <b>' + escapeHtml(rw) + '</b>' +
       (it.rt ? ' <span>' + escapeHtml(String(it.rt)) + '</span>' : '') + '</div>' +
       (it.rm ? '<p>' + escapeHtml(String(it.rm)) + '</p>' : '') + '</div>';
   }
+  /* 감독관 메모 — 참고용일 뿐, 이걸로는 🔴 가 사라지지 않는다 */
+  if(it && it.gm){
+    h += '<div class="ck-gm"><div class="rh">🧭 감독관 메모' +
+      (it.gt ? ' <span>' + escapeHtml(String(it.gt)) + '</span>' : '') + '</div>' +
+      '<p>' + escapeHtml(String(it.gm)) + '</p></div>';
+  }
+  if(st === 'done') return h;
+
   var open = (ckRState().k === (url + '#' + i));
-  var h = '<div class="ck-nore">🔴 아직 담당자가 확인하지 않았습니다.' +
+  h += '<div class="ck-nore">🔴 담당자 처리 대기' +
+    (own ? ' <b class="own">담당 ' + escapeHtml(own) + '</b>' : ' <b class="noown">담당자 미지정</b>') +
     '<button type="button" class="ck-repbtn" onclick="ckFbReplyOpen(\'' + uq + '\',' + i + ')">' +
-    (open ? '닫기' : '✍️ 확인하고 답하기') + '</button></div>';
+    (open ? '닫기' : '✍️ 담당자 처리하기') + '</button></div>';
   if(open){
     h += '<div class="ck-repf">' +
-      '<label>내 이름 <em>(꼭 적어주세요 — 이걸 적어야 🔴 표시가 사라집니다)</em></label>' +
-      '<input type="text" id="ckRwName" maxlength="20" placeholder="예) 장대운" value="' + escapeHtml(ckOwnerOf(url)) + '">' +
-      '<label>확인 결과 · 언제까지 어떻게 할지</label>' +
-      '<textarea id="ckRwMsg" maxlength="400" placeholder="예) 확인했습니다. 이번 주 안에 버튼 크기를 키우겠습니다."></textarea>' +
-      '<button type="button" class="ck-repsave" id="ckRwBtn" onclick="ckFbReply(\'' + uq + '\',' + i + ')">확인 완료로 저장</button>' +
+      (own ? '' : '<div class="ck-warn2">이 시스템은 담당자가 지정돼 있지 않습니다. 상세 화면에서 담당자를 먼저 지정해야 처리할 수 있습니다.</div>') +
+      '<label>담당 개발자 이름 <em>' + (own ? '(담당자 ' + escapeHtml(own) + ' 본인만 처리할 수 있습니다)' : '(담당자 지정 먼저)') + '</em></label>' +
+      '<input type="text" id="ckRwName" maxlength="20" placeholder="담당 개발자 본인 이름" value="' + escapeHtml(ckMyName()) + '">' +
+      '<label>무엇을 했는지 · 언제까지 할지</label>' +
+      '<textarea id="ckRwMsg" maxlength="400" placeholder="예) 버튼 크기 키워서 오늘 올렸습니다. 확인 부탁드립니다."></textarea>' +
+      '<div class="ck-repbtns">' +
+        '<button type="button" class="ck-repsave ok" id="ckRwBtn" onclick="ckFbReply(\'' + uq + '\',' + i + ',\'done\')">✅ 완료 처리</button>' +
+        '<button type="button" class="ck-repsave go" id="ckRwBtn2" onclick="ckFbReply(\'' + uq + '\',' + i + ',\'doing\')">🔧 진행중으로 답변</button>' +
+      '</div>' +
+      '<div class="ck-rephelp">🔴 표시는 <b>완료 처리</b>를 눌러야 사라집니다. 진행중으로 답변하면 내용은 남고 🔴 는 그대로 있습니다.</div>' +
       '</div>';
   }
   return h;
 }
-async function ckFbReply(url, i){
+/* 내 이름 — 담당자 이름을 미리 채워주지 않는다. 본인이 직접 적어야 의미가 있다. */
+function ckMyName(){
+  try{ return String(lsGet(FB_NAME_KEY) || '').trim(); }catch(e){ return ''; }
+}
+async function ckFbReply(url, i, mode){
   var elN = document.getElementById('ckRwName');
   var elM = document.getElementById('ckRwMsg');
   var elB = document.getElementById('ckRwBtn');
+  var elB2 = document.getElementById('ckRwBtn2');
   var w = elN ? String(elN.value || '').trim() : '';
   var m = elM ? String(elM.value || '').trim() : '';
-  if(!w){ await customAlert('이름을 꼭 적어주세요.\n누가 확인했는지 남아야 🔴 표시가 사라집니다.'); if(elN) elN.focus(); return; }
+  var st = (mode === 'doing') ? 'doing' : 'done';
+  var own = ckOwnerOf(url);
+
+  /* ★ 담당자 본인만 처리할 수 있다 — 이게 이 기능의 핵심이다 */
+  if(!own){
+    await customAlert('이 시스템은 담당자가 지정돼 있지 않습니다.\n\n상세 화면에서 담당자를 먼저 지정한 뒤에 처리해주세요.\n담당자가 없으면 누가 처리했는지 보증할 수가 없습니다.');
+    return;
+  }
+  if(!w){ await customAlert('담당 개발자 본인 이름을 적어주세요.\n누가 처리했는지 남아야 합니다.'); if(elN) elN.focus(); return; }
+  if(!ckNameOk(url, w)){
+    await customAlert('이 시스템의 담당 개발자만 처리할 수 있습니다.\n\n담당: ' + own + '\n적으신 이름: ' + w + '\n\n담당자 본인 이름을 정확히 적어주세요.\n담당이 바뀌었으면 상세 화면에서 담당자부터 바꿔주세요.');
+    if(elN) elN.focus();
+    return;
+  }
+  if(!m){ await customAlert('무엇을 했는지 한 줄이라도 적어주세요.\n신고한 직원이 그걸 보고 확인합니다.'); if(elM) elM.focus(); return; }
+
   if(elB){ elB.disabled = true; elB.textContent = '저장하는 중...'; }
+  if(elB2){ elB2.disabled = true; }
   try{
     try{ lsSet(FB_NAME_KEY, w); }catch(e){}
     await chkFbPull();
@@ -4033,6 +4109,7 @@ async function ckFbReply(url, i){
     if(!c || !Array.isArray(c.fb) || !c.fb[i]){ await customAlert('그 사이 의견이 바뀌었습니다. 화면을 새로고침해주세요.'); return; }
     c.fb[i].rw = w;
     c.fb[i].rm = m;
+    c.fb[i].st = st;
     c.fb[i].rt = new Date().toLocaleString('ko-KR', { hour12: false });
     ckRState().k = '';
     try{ render(); }catch(e){}
@@ -4042,7 +4119,9 @@ async function ckFbReply(url, i){
     await customAlert('저장하다 문제가 생겼습니다. 잠시 뒤 다시 해보세요.');
   }finally{
     var b2 = document.getElementById('ckRwBtn');
-    if(b2){ b2.disabled = false; b2.textContent = '확인 완료로 저장'; }
+    if(b2){ b2.disabled = false; b2.textContent = '✅ 완료 처리'; }
+    var b3 = document.getElementById('ckRwBtn2');
+    if(b3){ b3.disabled = false; }
   }
 }
 
@@ -4050,7 +4129,7 @@ function chkFbBlock(url, c){
   var uq   = String(url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   var list = (c && c.fb && c.fb.length) ? c.fb : [];
   var _wait = 0;
-  for(var _i = 0; _i < list.length; _i++){ if(!String((list[_i] || {}).rw || '').trim()) _wait++; }
+  for(var _i = 0; _i < list.length; _i++){ if(!ckFbDone(list[_i])) _wait++; }
   var h = '<div class="ck-fb"><i>💬 이 시스템 쓰면서 불편한 점 · 고쳐야 할 점';
   if(list.length) h += ' <b>(' + list.length + ')</b>';
   if(_wait) h += ' <span class="ck-wait">🔴 담당자 확인 대기 ' + _wait + '</span>';
