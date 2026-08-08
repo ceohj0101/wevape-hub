@@ -4087,8 +4087,18 @@ function chkFbBlock(url, c){
 async function chkFbPull(){
   try{
     var R = ghRepo();
+    var hd = { "Accept": "application/vnd.github.raw" };
+    try{ var _t = ghToken(); if(_t) hd["Authorization"] = "Bearer " + _t; }catch(e){}
     var res = await fetch('https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + R.path + '?ref=' + R.branch,
-                          { headers: { "Accept": "application/vnd.github.raw" }, cache: "no-store" });
+                          { headers: hd, cache: "no-store" });
+    /* API 가 막히면(한 시간 60번 제한) raw 로 한 번 더 — 여기서 포기하면
+       남이 먼저 남긴 피드백을 못 읽고 그대로 덮어써 지워버린다. */
+    if(!res.ok){
+      try{
+        res = await fetch('https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + R.path + '?t=' + Date.now(),
+                          { cache: "no-store" });
+      }catch(e2){ return false; }
+    }
     if(!res.ok) return false;
     var d = await res.json();
     if(!d || !d.checks || typeof d.checks !== 'object') return false;
@@ -4818,6 +4828,10 @@ async function loadRemote(){
       let opt;
       if(i === 0){
         const h = { "Accept": "application/vnd.github.raw" };
+        // ★ 관리자 열쇠가 있으면 같이 보낸다.
+        //   로그인 없이 부르면 한 시간에 60번뿐이라, 사무실 여러 대가 금방 막힌다.
+        //   열쇠를 보내면 5000번으로 올라가서 「옛날 사본으로 넘어가는」 일이 거의 없어진다.
+        try{ const _t = ghToken(); if(_t) h["Authorization"] = "Bearer " + _t; }catch(e){}
         // 이미 한 번 제대로 받아본 적이 있을 때만 지문을 보낸다.
         if(GH_ETAG && remoteLoaded) h["If-None-Match"] = GH_ETAG;
         opt = { headers: h, cache: "no-store" };
@@ -4838,6 +4852,21 @@ async function loadRemote(){
       if(!res.ok) continue;
       const data = await res.json();
       if(!data || typeof data !== "object") continue;
+
+      // ★★ 옛날 사본 차단 ★★
+      //  raw.githubusercontent.com 은 최대 5분까지 옛날 내용을 준다.
+      //  그걸 그대로 덮어쓰면 방금 저장한 피드백·수정이 화면에서 사라진다.
+      //  「내가 이미 아는 것보다 옛날 자료」면 조용히 버린다. 깃허브 원본은 그대로 두므로 안전하다.
+      const _inSA   = String(data.savedAt || "");
+      const _known  = String(remoteSavedAt || "");
+      const _mine   = String(localSavedAt  || "");
+      const _newest = (_known > _mine) ? _known : _mine;
+      if(_newest && _inSA && _inSA < _newest){
+        remoteLoaded = true;
+        if(dirty && canSave()) scheduleAutoSave();
+        updateSyncBadge();
+        return;   // 옛날 사본 — 화면을 건드리지 않는다
+      }
 
       // 제대로 받았을 때만 지문을 갱신한다 (API 경로에서만 의미가 있다)
       if(i === 0){ GH_ETAG = res.headers.get("etag") || ""; }
@@ -5711,7 +5740,9 @@ function ensurePhotos(){
     var saw404 = false;
     for(var i = 0; i < urls.length; i++){
       try{
-        var opt = (i === 0) ? { headers: { 'Accept': 'application/vnd.github.raw' }, cache: 'no-store' } : { cache: 'no-store' };
+        var _hh = { 'Accept': 'application/vnd.github.raw' };
+        try{ var _tk = ghToken(); if(_tk) _hh['Authorization'] = 'Bearer ' + _tk; }catch(e){}
+        var opt = (i === 0) ? { headers: _hh, cache: 'no-store' } : { cache: 'no-store' };
         var res = await fetch(urls[i], opt);
         if(res.status === 404){ saw404 = true; continue; }
         if(!res.ok) continue;
