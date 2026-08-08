@@ -86,13 +86,13 @@
     },
     "2026-08-08": {
       "dev": {
-        "dmsio4plqb8e2ts": 1,
+        "dmsio4plqb8e2ts": 2,
         "dmsfub5jac8mrsb": 2,
         "dmsi9gx13iapjg0": 3,
         "dmshit48eeidz5j": 2,
         "dmsfk5gma6n6doq": 1
       },
-      "hit": 5,
+      "hit": 6,
       "clk": {
         "https://vflow.kr": 3,
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 2,
@@ -101,6 +101,6 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-08T01:46:56.382Z",
+  "savedAt": "2026-08-08T01:58:10.014Z",
   "savedBy": "employee"
 }
