@@ -1902,6 +1902,41 @@
     h1{font-size:25px !important;}
     .hm-go{display:none;}
   }
+
+  /* ── 📎 새 업무 검토 · 파일 첨부 ── */
+  .dkf-box{margin:8px 0 2px;}
+  .dkf-h{font-size:11px; font-weight:700; color:var(--ap-l2); margin-bottom:7px;}
+  .dkf-wrap{display:flex; gap:7px; flex-wrap:wrap; align-items:flex-start;}
+  .dkf-pend{background:var(--ap-fill); border-radius:11px; padding:9px 11px; margin-top:8px;}
+  .dkf-th{position:relative; display:inline-block;}
+  .dkf-th img{width:64px; height:64px; object-fit:cover; border-radius:9px; display:block;
+    cursor:zoom-in; background:#fff;}
+  .dkf-th img.big{width:auto; max-width:100%; height:auto; cursor:zoom-out;}
+  .dkf-th > button{position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:50%;
+    border:0; background:rgba(30,30,32,.85); color:#fff; font-size:11px; cursor:pointer; line-height:1; z-index:2;}
+  .dkf-f{display:inline-flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--ap-sep);
+    border-radius:10px; padding:7px 10px; max-width:100%; text-decoration:none;}
+  .dkf-f .ic{font-size:17px; line-height:1; flex:0 0 auto;}
+  .dkf-f .bd{min-width:0;}
+  .dkf-f .nm{display:block; font-size:12px; font-weight:600; color:var(--ap-l1);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:160px;}
+  .dkf-f .sz{display:block; font-size:10.5px; color:var(--ap-l3); margin-top:1px;}
+  .dkf-f.load{opacity:.6;}
+  .dkf-none{font-size:11.5px; color:var(--ap-l3);}
+
+  /* ── 🆕 맨 위 「마지막 업데이트」 줄 ── */
+  .updline{display:flex; align-items:center; gap:9px; width:100%; text-align:left;
+    background:var(--ap-fill); border:0; border-radius:11px; padding:9px 13px; margin:0 0 13px;
+    font-family:inherit; cursor:pointer; color:var(--ap-l1); overflow:hidden;}
+  .updline:hover{background:rgba(120,120,128,.2);}
+  .updline .dt{flex:0 0 auto; font-size:11.5px; font-weight:800; color:var(--ap-blue); letter-spacing:-.2px;}
+  .updline .nu{flex:0 0 auto; background:var(--ap-red); color:#fff; font-size:9.5px; font-weight:800;
+    border-radius:5px; padding:1px 5px; line-height:1.5;}
+  .updline .tx{flex:1; min-width:0; font-size:12px; color:var(--ap-l2);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .updline .go{flex:0 0 auto; font-size:11.5px; font-weight:700; color:var(--ap-blue);}
+  @media (max-width:560px){ .updline .go{display:none;} .updline{padding:8px 11px;} }
+
   </style>
 </head>
 <body>
@@ -1951,6 +1986,12 @@
       <button type="button" class="vnav" id="vnavFix" onclick="setView('fix')">🛠 고친 내역<span class="nv-dot" id="vnavFixDot" style="display:none">0</span></button>
       <button type="button" class="vnav" id="vnavStat" onclick="setView('stat')">📊 접속 현황</button>
     </div>
+    <button type="button" class="updline" id="updLine" onclick="setView('fix')" title="누르면 고친 내역이 열립니다">
+      <span class="dt" id="updLineDt">—</span>
+      <span class="nu" id="updLineNu" style="display:none">NEW</span>
+      <span class="tx" id="updLineTx">업데이트 기록을 불러오는 중…</span>
+      <span class="go">고친 내역 ›</span>
+    </button>
     <div class="toprow">
       <div>
         <div class="brandRow">
@@ -2355,6 +2396,11 @@
 
     <label class="dk-lb">올린 사람</label>
     <input type="text" id="dkAuthor" placeholder="이름" autocomplete="off">
+
+    <div id="dkFilePend"></div>
+    <button type="button" class="ck-fbcam" id="dkFileBtn" onclick="dkfPick()">
+      <span class="ic">📎</span><span class="tx">파일 첨부하기</span>
+      <span class="sub">화면 캡처 · 사진 · 엑셀 · PDF · 한글 — 뭐든 됩니다<br>3개까지 · 1개당 2MB 이내 (사진은 자동으로 줄여줍니다)</span></button>
 
     <button type="button" class="dk-send" onclick="submitReview()">검토 요청 보내기</button>
     <div id="dkDiag"></div>
@@ -4798,6 +4844,7 @@ async function loadRemote(){
 
       remoteLoaded  = true;
       remoteSavedAt = data.savedAt || "";
+      try{ paintUpdLine(); }catch(err){}
 
       // 아직 안 올린 수정분이 있고, 올릴 권한도 있고, 내 것이 공용 장부보다 최신일 때만 내 것을 지킨다.
       // 공용 장부가 더 최신이면 내 dirty는 옛날 찌꺼기 → 그걸로 덮어쓰면 남의 수정을 지워버린다.
@@ -5335,6 +5382,138 @@ function deskDiagHtml(it){
     '</ul></div>';
 }
 
+
+/* ============================================================
+   📎 새 업무 검토 · 파일 첨부
+   ------------------------------------------------------------
+   · 사진은 자동으로 줄여서 넣는다(dkShrink) — 용량 걱정 없음
+   · 사진이 아닌 파일(엑셀·PDF·한글 등)은 2MB 까지 그대로 넣는다
+   · 알맹이는 전부 photos.json 으로 간다. data.json 에는 열쇠만 남는다.
+   · 올리기 전 파일은 이 기기 메모리에만 잠깐 들고 있는다.
+   ★ 반드시 function 선언 / var 만 쓴다 (applyData 가 파일 중간에서 먼저 돌기 때문)
+   ============================================================ */
+var DKF_MAX   = 3;
+var DKF_LIMIT = 2 * 1024 * 1024;   /* 사진 아닌 파일 1개당 최대 크기 */
+
+function dkfPend(){ if(!window.__DKF) window.__DKF = []; return window.__DKF; }
+function dkfIsImg(t){ return /^image\//.test(String(t || '')); }
+function dkfSize(n){
+  n = Number(n) || 0;
+  if(n >= 1024 * 1024) return (n / 1024 / 1024).toFixed(1) + 'MB';
+  if(n >= 1024) return Math.round(n / 1024) + 'KB';
+  return n + 'B';
+}
+function dkfIcon(name, mime){
+  var n = String(name || '').toLowerCase();
+  if(dkfIsImg(mime)) return '🖼';
+  if(/\.pdf$/.test(n)) return '📕';
+  if(/\.(xlsx|xls|csv)$/.test(n)) return '📊';
+  if(/\.(docx|doc|hwp|hwpx)$/.test(n)) return '📝';
+  if(/\.(pptx|ppt)$/.test(n)) return '📽';
+  if(/\.(zip|rar|7z)$/.test(n)) return '🗜';
+  return '📄';
+}
+/* 파일을 통째로 dataURL 로 읽는다 (사진이 아닌 것) */
+function dkfRead(file){
+  return new Promise(function(res, rej){
+    var fr = new FileReader();
+    fr.onerror = function(){ rej(new Error('파일을 읽지 못했습니다.')); };
+    fr.onload  = function(){ res(String(fr.result || '')); };
+    fr.readAsDataURL(file);
+  });
+}
+function dkfPick(){
+  var inp = document.createElement('input');
+  inp.type = 'file'; inp.multiple = true;
+  inp.onchange = function(){ dkfAdd(inp.files); };
+  inp.click();
+}
+async function dkfAdd(files){
+  var a = dkfPend();
+  var room = DKF_MAX - a.length;
+  if(room <= 0){ await customAlert('파일은 ' + DKF_MAX + '개까지만 붙일 수 있습니다.'); return; }
+  var list = Array.prototype.slice.call(files, 0, room);
+  if(files.length > room) await customAlert('파일은 ' + DKF_MAX + '개까지입니다. 앞에서 ' + room + '개만 붙입니다.');
+  var b = document.getElementById('dkFileBtn'), t0 = b ? b.querySelector('.tx') : null;
+  if(b){ b.disabled = true; if(t0) t0.textContent = '파일 읽는 중\u2026'; }
+  for(var i = 0; i < list.length; i++){
+    var f = list[i];
+    try{
+      if(dkfIsImg(f.type)){
+        var u = await dkShrink(f);
+        a.push({ u:u, n:(f.name || '사진.jpg'), s:u.length, m:'image/jpeg', i:1 });
+      } else {
+        if(f.size > DKF_LIMIT){
+          await customAlert('「' + (f.name || '파일') + '」은(는) ' + dkfSize(f.size) + ' 라서 못 붙입니다.\n' +
+            '사진이 아닌 파일은 2MB 까지만 됩니다.\n\n' +
+            '※ 큰 파일은 구글 드라이브에 올리고 그 주소를 「링크」 칸에 넣어주세요.');
+          continue;
+        }
+        var u2 = await dkfRead(f);
+        a.push({ u:u2, n:(f.name || '파일'), s:f.size, m:(f.type || ''), i:0 });
+      }
+    }catch(e){ await customAlert(String((e && e.message) || '파일을 읽지 못했습니다.')); }
+  }
+  if(b) b.disabled = false;
+  dkfPaint();
+}
+function dkfDel(i){ dkfPend().splice(i, 1); dkfPaint(); }
+function dkfPendHtml(){
+  var a = dkfPend();
+  if(!a.length) return '';
+  var h = '<div class="dkf-pend"><div class="dkf-h">붙일 파일 ' + a.length + '개</div><div class="dkf-wrap">';
+  for(var i = 0; i < a.length; i++){
+    var f = a[i];
+    h += '<span class="dkf-th">' +
+      (f.i ? '<img src="' + f.u + '" alt="붙일 사진" onclick="this.classList.toggle(\'big\')">'
+           : '<span class="dkf-f"><span class="ic">' + dkfIcon(f.n, f.m) + '</span><span class="bd">' +
+             '<span class="nm">' + escapeHtml(f.n) + '</span>' +
+             '<span class="sz">' + dkfSize(f.s) + '</span></span></span>') +
+      '<button type="button" onclick="dkfDel(' + i + ')" title="빼기">✕</button></span>';
+  }
+  return h + '</div></div>';
+}
+function dkfPaint(){
+  var el = document.getElementById('dkFilePend');
+  if(el) el.innerHTML = dkfPendHtml();
+  var b = document.getElementById('dkFileBtn');
+  if(b){
+    var n = dkfPend().length, tx = b.querySelector('.tx');
+    if(tx) tx.textContent = n ? ('파일 ' + n + '개 \u00b7 더 넣기') : '파일 첨부하기';
+  }
+}
+/* 올라간 검토 건에 붙은 파일 보여주기 */
+function dkFiles(r){ return (r && Array.isArray(r.files)) ? r.files : []; }
+function dkFileHtml(r){
+  var fs = dkFiles(r);
+  if(!fs.length) return '';
+  var miss = false;
+  var h = '<div class="dkf-box"><div class="dkf-h">📎 첨부 파일 ' + fs.length + '개</div><div class="dkf-wrap">';
+  for(var i = 0; i < fs.length; i++){
+    var f = fs[i] || {}, src = '';
+    try{ src = picSrc(f); }catch(e){}
+    if(!src){
+      miss = true;
+      h += '<span class="dkf-f load"><span class="ic">' + dkfIcon(f.n, f.m) + '</span><span class="bd">' +
+           '<span class="nm">' + escapeHtml(String(f.n || '파일')) + '</span>' +
+           '<span class="sz">불러오는 중\u2026</span></span></span>';
+      continue;
+    }
+    if(f.i){
+      h += '<span class="dkf-th"><img src="' + src + '" alt="' + escapeHtml(String(f.n || '사진')) +
+           '" onclick="this.classList.toggle(\'big\')"></span>';
+    } else {
+      h += '<a class="dkf-f" href="' + src + '" download="' + escapeHtml(String(f.n || '파일')) + '">' +
+           '<span class="ic">' + dkfIcon(f.n, f.m) + '</span><span class="bd">' +
+           '<span class="nm">' + escapeHtml(String(f.n || '파일')) + '</span>' +
+           '<span class="sz">' + dkfSize(f.s) + ' \u00b7 눌러서 받기</span></span></a>';
+    }
+  }
+  h += '</div></div>';
+  if(miss){ try{ picWarm(); }catch(e){} }
+  return h;
+}
+
 async function submitReview(){
   const g = id => document.getElementById(id);
   const title = (g('dkTitle') ? g('dkTitle').value : '').trim();
@@ -5345,9 +5524,23 @@ async function submitReview(){
   if(!title){ customAlert('무슨 업무인지 제목을 넣어주세요.'); return; }
   if(!dev){ customAlert('담당 개발자(이 업무를 실제로 만들고 고칠 사람) 이름을 넣어주세요.\n누가 고쳐야 하는지 없으면 보완 지시를 줄 수가 없습니다.'); return; }
   if(!author){ customAlert('올린 사람 이름을 넣어주세요.'); return; }
+
+  /* 📎 붙인 파일 — 알맹이는 photos.json 으로, 검토 건에는 열쇠만 남긴다 */
+  var _files = [], _fp = dkfPend();
+  if(_fp.length){
+    try{ await ensurePhotos(); }catch(e){}
+    for(var _i = 0; _i < _fp.length; _i++){
+      var _k = picKey();
+      PHOTO_MAP[_k] = _fp[_i].u;
+      _files.push({ k:_k, n:_fp[_i].n, s:_fp[_i].s, m:_fp[_i].m, i:_fp[_i].i, w:author });
+    }
+    PHOTO_DIRTY = true;
+  }
+
   REVIEW_LIST.unshift({
     id: 'rv' + (reviewSeq++),
     title, url, text, author, dev,
+    files: _files,
     time: new Date().toLocaleString('ko-KR', {month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit'}),
     date: todayStr(),
     status: '제출됨',
@@ -5360,6 +5553,8 @@ async function submitReview(){
   if(g('dkUrl')) g('dkUrl').value = '';
   if(g('dkText')) g('dkText').value = '';
   if(g('dkDev')) g('dkDev').value = '';
+  window.__DKF = [];
+  try{ dkfPaint(); }catch(e){}
   try{ dkUI().open[REVIEW_LIST[0].id] = true; }catch(e){}   // 방금 올린 건은 펼쳐서 보여준다
   const d = g('dkDiag');
   if(d) d.innerHTML = deskDiagHtml(REVIEW_LIST[0]);
@@ -5547,8 +5742,21 @@ function picWarm(){
 function reviewsForSave(){
   try{
     return REVIEW_LIST.map(function(r){
-      if(!r || !Array.isArray(r.todos)) return r;
+      if(!r) return r;
+      if(!Array.isArray(r.todos)){
+        if(!Array.isArray(r.files) || !r.files.length) return r;
+        var o0 = Object.assign({}, r);
+        o0.files = r.files.map(function(f){
+          return (f && f.k) ? { k:f.k, n:f.n, s:f.s, m:f.m, i:f.i, w:f.w } : f;
+        });
+        return o0;
+      }
       var o = Object.assign({}, r);
+      if(Array.isArray(r.files) && r.files.length){
+        o.files = r.files.map(function(f){
+          return (f && f.k) ? { k:f.k, n:f.n, s:f.s, m:f.m, i:f.i, w:f.w } : f;
+        });
+      }
       o.todos = r.todos.map(function(x){
         if(!x || !Array.isArray(x.p) || !x.p.length) return x;
         var y = Object.assign({}, x);
@@ -5562,15 +5770,24 @@ function reviewsForSave(){
 /* 지금 실제로 쓰이고 있는 사진만 모은다 — 지워진 사진은 자동으로 빠진다 */
 function photoSnapshot(){
   var m = {};
+  var take = function(p){
+    if(!p || !p.k) return;
+    var u = p.u || (PHOTO_MAP ? PHOTO_MAP[p.k] : '');
+    if(u) m[p.k] = u;
+  };
   try{
     REVIEW_LIST.forEach(function(r){
-      (Array.isArray(r.todos) ? r.todos : []).forEach(function(x){
-        dkPics(x).forEach(function(p){
-          if(!p || !p.k) return;
-          var u = p.u || (PHOTO_MAP ? PHOTO_MAP[p.k] : '');
-          if(u) m[p.k] = u;
-        });
-      });
+      (Array.isArray(r.todos) ? r.todos : []).forEach(function(x){ dkPics(x).forEach(take); });
+      /* 📎 새 업무에 붙인 파일 */
+      (Array.isArray(r.files) ? r.files : []).forEach(take);
+    });
+  }catch(e){}
+  /* 🩺 점검 의견에 붙인 사진 — 이게 빠져 있어서 저장할 때마다 사라졌다 */
+  try{
+    Object.keys(CHECKS || {}).forEach(function(u){
+      var c = CHECKS[u];
+      if(!c || !Array.isArray(c.fb)) return;
+      c.fb.forEach(function(it){ (it && Array.isArray(it.p) ? it.p : []).forEach(take); });
     });
   }catch(e){}
   return m;
@@ -6976,6 +7193,7 @@ function renderDesk(){
       dkFlowHtml(r) +
       jdHtml(r, admin) +
       dkBrief(r) +
+      dkFileHtml(r) +
       dkTodoHtml(r) +
       '<div class="dk-src">원문 보기</div>' +
       dkFold(r.id + '_tx', '📄 담당자가 올린 내용',
@@ -7323,7 +7541,62 @@ function fxMarkSeen(){
   try{ fxPaintBadge(); }catch(e){}
   try{ renderFixlog(); }catch(e){}
 }
+
+/* ============================================================
+   🆕 맨 위 「마지막 업데이트」 줄
+   · 직원 누구나 화면 맨 위에서 「이 허브가 언제 마지막으로 바뀌었나」를 본다
+   · 출처 ① 고친 내역의 맨 윗줄  ② 없으면 공용 장부 저장 시각
+   · 누르면 🛠 고친 내역 화면으로 간다
+   ============================================================ */
+function updDayWord(ds){
+  try{
+    var p = String(ds || '').split('-');
+    if(p.length < 3) return '';
+    var a = new Date(+p[0], (+p[1]) - 1, +p[2]);
+    var n = new Date(); n = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+    var diff = Math.round((n - a) / 86400000);
+    if(diff <= 0) return '오늘';
+    if(diff === 1) return '어제';
+    if(diff < 7)  return diff + '일 전';
+    if(diff < 31) return Math.floor(diff / 7) + '주 전';
+    return '';
+  }catch(e){ return ''; }
+}
+function paintUpdLine(){
+  var el = document.getElementById('updLine');
+  if(!el) return;
+  var dEl = document.getElementById('updLineDt');
+  var tEl = document.getElementById('updLineTx');
+  var nEl = document.getElementById('updLineNu');
+
+  var top = null;
+  try{ top = fxSorted()[0]; }catch(e){}
+
+  var ds = '', tm = '', word = '';
+  if(top){
+    ds = String(top.d || '');
+    tm = String(top.tm || '');
+    var ti = String(top.t || '');
+    var k = (top.k === 'new') ? '✨ ' : (top.k === 'ans' ? '💬 ' : '🛠 ');
+    /* 제목이 이미 그림글자로 시작하면 앞에 또 붙이지 않는다 */
+    if(/^[\u2190-\u2BFF\u2600-\u27BF\uD800-\uDBFF\uFE0F]/.test(ti)) k = '';
+    word = k + ti;
+  } else {
+    try{ if(typeof remoteSavedAt === 'string' && remoteSavedAt) ds = remoteSavedAt.slice(0, 10); }catch(e){}
+    word = '아직 고친 기록이 없습니다.';
+  }
+
+  var ago = updDayWord(ds);
+  if(dEl) dEl.textContent = ds ? (ds + (ago ? ' (' + ago + ')' : '')) : '—';
+  if(tEl) tEl.textContent = '마지막 업데이트 \u00b7 ' + word + (tm ? ' (' + tm + ')' : '');
+
+  var un = 0;
+  try{ un = fxUnread(); }catch(e){}
+  if(nEl) nEl.style.display = un > 0 ? '' : 'none';
+}
+
 function fxPaintBadge(){
+  try{ paintUpdLine(); }catch(e){}
   var el = document.getElementById('vnavFixDot');
   if(!el) return;
   var n = 0;
