@@ -118,13 +118,15 @@
     "2026-08-09": {
       "dev": {
         "dmsjynqt9eg0kax": 1,
-        "dmsjshztbutzxa6": 1
+        "dmsjshztbutzxa6": 2
       },
       "hit": 2,
-      "clk": {}
+      "clk": {
+        "https://vflow.kr": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-08T16:00:03.911Z",
+  "savedAt": "2026-08-08T16:00:41.624Z",
   "savedBy": "employee"
 }
