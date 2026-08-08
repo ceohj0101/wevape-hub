@@ -1591,6 +1591,27 @@
   .hm-i:hover{background:var(--ap-fill2); color:var(--ap-blue);}
   .hm-f{font-size:11.5px; color:var(--ap-l2); padding:9px 4px 0; line-height:1.6;}
 
+  /* ── 📷 점검 피드백 사진 ── */
+  .ck-fbcam{width:100%; display:flex; flex-direction:column; align-items:center; gap:2px;
+    border:1.5px dashed var(--ap-blue); background:rgba(0,122,255,.06); border-radius:12px;
+    padding:13px 12px; margin:9px 0 8px; font-family:inherit; cursor:pointer; color:var(--ap-blue);}
+  .ck-fbcam:hover{background:rgba(0,122,255,.11);}
+  .ck-fbcam:disabled{opacity:.55; cursor:default;}
+  .ck-fbcam .ic{font-size:20px; line-height:1.1;}
+  .ck-fbcam .tx{font-size:14.5px; font-weight:700; letter-spacing:-.3px;}
+  .ck-fbcam .sub{font-size:11px; color:var(--ap-l2); font-weight:500; text-align:center; line-height:1.5;}
+  .ck-pend{background:var(--ap-fill); border-radius:11px; padding:9px 11px; margin-top:8px;}
+  .ck-pend .pl{font-size:11px; color:var(--ap-l2); font-weight:700; margin-bottom:7px;}
+  .ck-pend .pr, .ck-fbpic{display:flex; gap:7px; flex-wrap:wrap; align-items:flex-start;}
+  .ck-pend .th, .ck-fbpic .th{position:relative; display:inline-block;}
+  .ck-pend .th img, .ck-fbpic .th img{width:64px; height:64px; object-fit:cover; border-radius:9px;
+    display:block; cursor:zoom-in; background:#fff;}
+  .ck-pend .th img.big, .ck-fbpic .th img.big{width:auto; max-width:100%; height:auto; cursor:zoom-out;}
+  .ck-pend .th button{position:absolute; top:-6px; right:-6px; width:20px; height:20px; border-radius:50%;
+    border:0; background:rgba(30,30,32,.85); color:#fff; font-size:11px; cursor:pointer; line-height:1;}
+  .ck-fbpic{margin-top:8px;}
+  .ck-fbpic .ld{font-size:11px; color:var(--ap-l3); align-self:center;}
+
   /* ── 📋 보완 지시 편집창 ── */
   #tdPop{position:fixed; inset:0; z-index:520; background:rgba(0,0,0,.4); display:none;
     align-items:center; justify-content:center; padding:20px;
@@ -3803,6 +3824,72 @@ function fbKey(o){
 function fbName(){
   try{ return (lsGet(FB_NAME_KEY) || '').trim(); }catch(e){ return ''; }
 }
+
+/* ============================================================
+   📷 점검 피드백에 사진 붙이기
+   · 사진 알맹이는 photos.json 으로 간다 (data.json 은 가볍게 유지)
+   · 올리기 전 사진은 이 기기 메모리에만 잠깐 들고 있는다
+   ============================================================ */
+function ckPend(){ if(!window.__CKP) window.__CKP = []; return window.__CKP; }
+function ckPendHtml(){
+  var a = ckPend();
+  if(!a.length) return '';
+  var h = '<div class="ck-pend"><div class="pl">올릴 사진 ' + a.length + '장</div><div class="pr">';
+  for(var i = 0; i < a.length; i++){
+    h += '<span class="th"><img src="' + a[i] + '" alt="첨부할 사진" onclick="this.classList.toggle(\'big\')">' +
+         '<button type="button" onclick="ckPicDel(' + i + ')" title="빼기">✕</button></span>';
+  }
+  return h + '</div></div>';
+}
+function ckPendPaint(){
+  var el = document.getElementById('ckFbPics');
+  if(el) el.innerHTML = ckPendHtml();
+  var b = document.getElementById('ckFbCam');
+  if(b){
+    var n = ckPend().length;
+    var tx = b.querySelector('.tx');
+    if(tx) tx.textContent = n ? ('사진 ' + n + '장 · 더 넣기') : '사진 첨부하기';
+  }
+}
+function ckPicDel(i){ ckPend().splice(i, 1); ckPendPaint(); }
+function ckPicPick(){
+  var inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+  inp.onchange = function(){ ckPicAdd(inp.files); };
+  inp.click();
+}
+async function ckPicAdd(files){
+  var a = ckPend();
+  var room = 3 - a.length;
+  if(room <= 0){ await customAlert('사진은 3장까지만 붙일 수 있습니다.'); return; }
+  var list = Array.prototype.slice.call(files, 0, room);
+  if(files.length > room) await customAlert('사진은 3장까지입니다. 앞에서 ' + room + '장만 붙입니다.');
+  var b = document.getElementById('ckFbCam');
+  if(b){ b.disabled = true; var t0 = b.querySelector('.tx'); if(t0) t0.textContent = '사진 줄이는 중…'; }
+  for(var i = 0; i < list.length; i++){
+    var f = list[i];
+    if(!/^image\//.test(f.type || '')){ await customAlert('사진 파일만 올릴 수 있습니다: ' + f.name); continue; }
+    try{ a.push(await dkShrink(f)); }
+    catch(e){ await customAlert(String((e && e.message) || '사진을 읽지 못했습니다.')); }
+  }
+  if(b) b.disabled = false;
+  ckPendPaint();
+}
+/* 이미 올라간 피드백에 붙은 사진 */
+function ckFbPicHtml(it){
+  var ps = (it && Array.isArray(it.p)) ? it.p : [];
+  if(!ps.length) return '';
+  var miss = false, h = '<div class="ck-fbpic">';
+  for(var i = 0; i < ps.length; i++){
+    var src = '';
+    try{ src = picSrc(ps[i]); }catch(e){}
+    if(!src){ miss = true; continue; }
+    h += '<span class="th"><img src="' + src + '" alt="피드백 사진" onclick="this.classList.toggle(\'big\')"></span>';
+  }
+  if(miss){ try{ picWarm(); }catch(e){} h += '<span class="ld">📷 사진 ' + ps.length + '장 — 불러오는 중…</span>'; }
+  return h + '</div>';
+}
+
 function chkFbBlock(url, c){
   var uq   = String(url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   var list = (c && c.fb && c.fb.length) ? c.fb : [];
@@ -3818,13 +3905,18 @@ function chkFbBlock(url, c){
       h += '<li><div class="hd"><span class="w">' + escapeHtml(String(it.w || '익명'))
          + '</span><span class="t">' + escapeHtml(String(it.t || '')) + '</span>'
          + '<button type="button" class="ck-fbx" title="지우기" onclick="chkFbDel(\'' + uq + '\',' + i + ')">🗑</button>'
-         + '</div><p>' + escapeHtml(String(it.m || '')) + '</p></li>';
+         + '</div><p>' + escapeHtml(String(it.m || '')) + '</p>'
+         + ckFbPicHtml(it) + '</li>';
     }
     h += '</ul>';
   }
   h += '<div class="ck-fbf">'
      + '<input type="text" id="ckFbName" maxlength="20" placeholder="이름 (예: 강남점 홍길동)" value="' + escapeHtml(fbName()) + '">'
      + '<textarea id="ckFbMsg" maxlength="500" placeholder="어떤 점이 불편했는지, 뭐가 있으면 편해질지 그대로 적어주세요."></textarea>'
+     + '<div id="ckFbPics">' + ckPendHtml() + '</div>'
+     + '<button type="button" class="ck-fbcam" id="ckFbCam" onclick="ckPicPick()">'
+     +   '<span class="ic">📷</span><span class="tx">사진 첨부하기</span>'
+     +   '<span class="sub">화면을 캡처해서 올리면 훨씬 빨리 고쳐집니다 · 3장까지</span></button>'
      + '<button type="button" class="ck-fbs" id="ckFbBtn" onclick="chkFbAdd(\'' + uq + '\')">피드백 남기기</button>'
      + '</div>';
   h += '<div class="ck-fbhelp">남기면 전직원에게 바로 보입니다. 감독관이 매일 오전 11시 점검할 때 이걸 먼저 읽고 개선 방향을 잡습니다.</div>';
@@ -3871,7 +3963,20 @@ async function chkFbAdd(url){
     await chkFbPull();
     if(!CHECKS[url]) CHECKS[url] = { d: '', by: '', v: '', s: '', f: [], l: [] };
     if(!CHECKS[url].fb) CHECKS[url].fb = [];
-    CHECKS[url].fb.push({ w: w, m: m, t: new Date().toLocaleString('ko-KR', { hour12: false }) });
+    var _ts = new Date().toLocaleString('ko-KR', { hour12: false });
+    var _pics = [];
+    var _pend = ckPend();
+    if(_pend.length){
+      try{ await ensurePhotos(); }catch(e){}
+      for(var _i = 0; _i < _pend.length; _i++){
+        var _k = picKey();
+        PHOTO_MAP[_k] = _pend[_i];
+        _pics.push({ k: _k, w: w, t: _ts });
+      }
+      PHOTO_DIRTY = true;
+    }
+    CHECKS[url].fb.push({ w: w, m: m, t: _ts, p: _pics });
+    window.__CKP = [];
     if(elM) elM.value = '';
     try{ detailHtml(); }catch(e){}
     await saveShared({ silent: true });
