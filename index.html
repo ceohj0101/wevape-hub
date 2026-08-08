@@ -1109,6 +1109,23 @@
   .dk-acts button{flex:1 1 44%;min-width:104px;height:40px;border:1px solid #e6e9ed;background:#fff;border-radius:10px;
     font-family:inherit;font-size:12.5px;font-weight:800;color:#4a5058;cursor:pointer;}
   .dk-acts button.del{color:#e0483c;}
+  /* 🗑 지우기 — 다른 버튼과 줄을 나눠서 실수로 누르지 않게 한다 */
+  .dk-danger{margin-top:9px; padding-top:9px; border-top:1px dashed #e6e9ed;
+    display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;}
+  .dk-danger button{height:34px; padding:0 13px; border-radius:9px; font-family:inherit;
+    font-size:12px; font-weight:800; cursor:pointer; background:#fff;}
+  .dk-danger button.trash{border:1px solid #f0c9c5; color:#c0392b;}
+  .dk-danger button.trash:hover{background:#fdeceb;}
+  .dk-danger button.back{border:1px solid #bcd4f5; color:#2a55b5;}
+  .dk-danger button.hard{border:1px solid #e0483c; background:#e0483c; color:#fff;}
+  .dk-item.gone{opacity:.72;}
+  .dk-item.gone .it{text-decoration:line-through; color:#8b919c;}
+  .dk-badge.gone{background:#eceef1; color:#6b727c;}
+  .dk-chip.tr.on{background:#6b727c; border-color:#6b727c;}
+  .dk-gone{margin-top:10px; background:#f4f5f7; border-radius:11px; padding:10px 12px;
+    font-size:12px; color:#5a616b; line-height:1.65;}
+  .dk-gone b{display:block; font-weight:800; color:#3d434b; margin-top:3px;}
+  .dk-gone span{display:block; color:#8b919c; font-size:11px; margin-top:4px;}
   .dk-acts button.go{background:#6b4ec7;color:#fff;border-color:#6b4ec7;}
   .dk-acts button.fin{background:#1d7a3b;color:#fff;border-color:#1d7a3b;}
   .dk-badge.re{background:#e8eefb;color:#2a55b5;}
@@ -6564,7 +6581,7 @@ function dkNeedsMe(r){
   return (st === '보완필요');
 }
 function dkAlertCount(){
-  try{ return REVIEW_LIST.filter(r => dkNeedsMe(r) || dkIsNew(r)).length; }catch(e){ return 0; }
+  try{ return dkAlive().filter(r => dkNeedsMe(r) || dkIsNew(r)).length; }catch(e){ return 0; }
 }
 function dkMarkSeen(){
   try{
@@ -6614,6 +6631,10 @@ function dkOpenAll(v){
   else u.open = {};
   renderDesk();
 }
+/* 지워진 건인가 — r.del = {w:지운사람, t:시각, why:이유} */
+function dkDeleted(r){ return !!(r && r.del); }
+function dkAlive(){ try{ return REVIEW_LIST.filter(function(r){ return !dkDeleted(r); }); }catch(e){ return []; } }
+function dkTrash(){ try{ return REVIEW_LIST.filter(dkDeleted); }catch(e){ return []; } }
 function dkTabOf(r){
   const st = dkStage(r);
   if(st === '최종승인' || st === '반려') return 'done';
@@ -6623,7 +6644,10 @@ function dkTabOf(r){
 function dkVisible(){
   const u = dkUI();
   return REVIEW_LIST.filter(function(r){
-    if(u.tab === 'mine'){ if(!dkNeedsMe(r)) return false; }
+    /* 🗑 지운 것은 「지운 것」 칸에서만 보인다 */
+    if(u.tab === 'trash'){ if(!dkDeleted(r)) return false; }
+    else if(dkDeleted(r)) return false;
+    else if(u.tab === 'mine'){ if(!dkNeedsMe(r)) return false; }
     else if(u.tab !== 'all'){ if(dkTabOf(r) !== u.tab) return false; }
     if(u.q){
       const s = ((r.title||'') + ' ' + (r.dev||'') + ' ' + (r.author||'') + ' ' + (r.url||'')).toLowerCase();
@@ -6636,14 +6660,17 @@ function dkVisible(){
 }
 function dkToolsHtml(){
   const u = dkUI();
-  const n = function(f){ try{ return REVIEW_LIST.filter(f).length; }catch(e){ return 0; } };
+  const AL = dkAlive();
+  const n = function(f){ try{ return AL.filter(f).length; }catch(e){ return 0; } };
+  const tn = dkTrash().length;
   const tabs = [
     ['mine', '🔴 지금 내 차례', n(dkNeedsMe), ' mn'],
-    ['all',  '전체', REVIEW_LIST.length, ''],
+    ['all',  '전체', AL.length, ''],
     ['wait', '검토 진행중', n(function(r){ return dkTabOf(r) === 'wait'; }), ''],
     ['fix',  '보완 필요', n(function(r){ return dkTabOf(r) === 'fix'; }), ''],
     ['done', '끝난 것', n(function(r){ return dkTabOf(r) === 'done'; }), '']
   ];
+  if(tn) tabs.push(['trash', '🗑 지운 것', tn, ' tr']);
   return tabs.map(function(t){
     return '<button type="button" class="dk-chip' + t[3] + (u.tab === t[0] ? ' on' : '') +
       '" onclick="dkSetTab(\'' + t[0] + '\')">' + t[1] + '<em>' + t[2] + '</em></button>';
@@ -7026,12 +7053,61 @@ async function deskReply(id){
   try{ await saveShared({silent:true}); }catch(err){}
 }
 
+/* 🗑 지우기 — 바로 없애지 않는다. 「지운 것」 칸으로 옮긴다. */
 async function deskDelete(id){
-  if(!(await customConfirm('이 검토 건을 지울까요? (되돌릴 수 없어요)', true))) return;
-  REVIEW_LIST = REVIEW_LIST.filter(r => r.id !== id);
-  renderDesk();
-  saveLocal();
-  try{ await saveShared({silent:true}); }catch(err){}
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const ok = await customConfirm(
+    '「' + String(r.title || '') + '」\n이 검토 건을 지울까요?\n\n' +
+    '바로 없어지지 않습니다. 「🗑 지운 것」 칸으로 들어가고,\n거기서 언제든 되살릴 수 있습니다.', true);
+  if(!ok) return;
+  let why = '';
+  try{ why = await customPrompt('왜 지우는지 한 줄만 적어주세요. (안 적어도 됩니다)\n예) 중복 등록, 잘못 올림, 취소된 업무', 'text', ''); }catch(e){}
+  if(why === null) why = '';
+  r.del = { w: dkWho(), t: dkNow(), why: String(why || '').trim().slice(0, 60) };
+  try{ dkLog(r, dkWho(), '검토 건을 지움' + (r.del.why ? ' — ' + r.del.why : '')); }catch(e){}
+  try{ dkUI().tab = 'all'; }catch(e){}
+  await dkSaveReview();
+  try{ closeModal(true); }catch(e){}
+  try{ await customAlert('지웠습니다.\n\n「🗑 지운 것」 칸에서 다시 볼 수 있고, 거기서 되살릴 수 있습니다.'); }catch(e){}
+}
+/* ↩ 되살리기 */
+async function dkRestore(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  if(!(await customConfirm('「' + String(r.title || '') + '」\n이 업무를 되살릴까요?\n지시·검토 의견·첨부가 그대로 돌아옵니다.', true))) return;
+  delete r.del;
+  try{ dkLog(r, dkWho(), '지운 것을 되살림'); }catch(e){}
+  await dkSaveReview();
+  try{ closeModal(true); }catch(e){}
+}
+/* ⛔ 완전히 지우기 — 제목을 그대로 적어야 확정된다 */
+async function dkPurge(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const t = String(r.title || '');
+  const nf = (Array.isArray(r.files) ? r.files.length : 0);
+  const np = (function(){ let n = 0; (Array.isArray(r.todos) ? r.todos : []).forEach(function(x){ n += dkPics(x).length; }); return n; })();
+  const v = await customPrompt(
+    '⛔ 이건 되돌릴 수 없습니다.\n\n「' + t + '」\n' +
+    '검토 의견, 보완 지시, 진행 이력' + (nf ? ', 첨부 파일 ' + nf + '개' : '') + (np ? ', 사진 ' + np + '장' : '') +
+    ' 이 전부 사라집니다.\n\n정말 없애려면 아래에 제목을 그대로 적어주세요.\n' + t, 'text', '');
+  if(v === null) return;
+  if(String(v).trim() !== t.trim()){
+    await customAlert('제목이 달라서 그냥 두었습니다.\n아무것도 지우지 않았습니다.');
+    return;
+  }
+  REVIEW_LIST = REVIEW_LIST.filter(x => x.id !== id);
+  try{ PHOTO_DIRTY = true; }catch(e){}   // 딸린 사진도 사진 창고에서 함께 정리된다
+  await dkSaveReview();
+  try{ closeModal(true); }catch(e){}
+  try{ await customAlert('완전히 지웠습니다.'); }catch(e){}
+}
+/* 지금 이 사람 이름 — 관리자면 「대표」, 아니면 기억해 둔 이름 */
+function dkWho(){
+  try{ if(isAdmin()) return '대표'; }catch(e){}
+  try{ var n = String(lsGet(FB_NAME_KEY) || '').trim(); if(n) return n; }catch(e){}
+  return '관리자';
 }
 
 /* ============================================================
@@ -7270,11 +7346,12 @@ function renderDesk(){
   const cnt = document.getElementById('dkCount');
   const tools = document.getElementById('dkTools');
   const sch = document.getElementById('dkSearch');
-  if(cnt) cnt.textContent = REVIEW_LIST.length;
+  const ALIVE = dkAlive();
+  if(cnt) cnt.textContent = ALIVE.length;
   if(!box) return;
   // 업무가 2건 이상일 때만 필터, 4건 이상일 때만 찾기창을 보여준다
-  if(tools) tools.innerHTML = (REVIEW_LIST.length >= 2) ? dkToolsHtml() : '';
-  if(sch) sch.style.display = ((REVIEW_LIST.length >= 4) || dkUI().q) ? 'block' : 'none';
+  if(tools) tools.innerHTML = ((ALIVE.length >= 2) || dkTrash().length) ? dkToolsHtml() : '';
+  if(sch) sch.style.display = ((ALIVE.length >= 4) || dkUI().q) ? 'block' : 'none';
   if(!REVIEW_LIST.length){
     box.innerHTML = '<div class="dk-empty">아직 올라온 검토가 없습니다.<br>위에 진행 중인 업무나 링크를 올려보세요.</div>';
     try{ dkPaintBadge(); }catch(e){}
@@ -7284,7 +7361,9 @@ function renderDesk(){
   const u = dkUI();
   const list = dkVisible();
   if(!list.length){
-    box.innerHTML = '<div class="dk-none">여기에 맞는 업무가 없습니다.<br>위에서 「전체」를 눌러보세요.</div>';
+    box.innerHTML = (u.tab === 'trash')
+      ? '<div class="dk-none">지운 업무가 없습니다.</div>'
+      : '<div class="dk-none">여기에 맞는 업무가 없습니다.<br>위에서 「전체」를 눌러보세요.</div>';
     try{ dkPaintBadge(); }catch(e){}
     return;
   }
@@ -7308,10 +7387,12 @@ function renderDesk(){
     const rep = String(r.reply || '');
     const txt = String(r.text || '');
     const logn = Array.isArray(r.log) ? r.log.length : 0;
-    return '<div class="dk-item' + (op ? ' op' : '') + (mine ? ' mine' : '') + '" id="dki_' + r.id + '">' +
+    const gone = dkDeleted(r);
+    return '<div class="dk-item' + (op ? ' op' : '') + (mine ? ' mine' : '') + (gone ? ' gone' : '') + '" id="dki_' + r.id + '">' +
       '<div class="dk-head" onclick="dkToggleOpen(\'' + r.id + '\')">' +
         '<div class="hb">' +
-          (isNew ? '<span class="dk-new">🆕 새 소식</span>' : '') +
+          (gone ? '<span class="dk-badge gone">🗑 지운 것</span>' : '') +
+          (isNew && !gone ? '<span class="dk-new">🆕 새 소식</span>' : '') +
           '<span class="dk-badge ' + bg[0] + '">' + bg[1] + '</span>' +
           (jm ? '<span class="dk-badge j' + jm[0] + '">' + jm[1] + '</span>' : '') +
           '<span class="it">' + escapeHtml(r.title) + '</span>' +
@@ -7347,6 +7428,11 @@ function renderDesk(){
       ((admin && st === '재검토요청') ? '<div class="dk-warn">🔍 담당자가 수정 완료를 보고했습니다. 항목마다 「✅ 확인 완료」를 눌러 하나씩 확인해야 통과시킬 수 있습니다.</div>' : '') +
       ((!admin && st === '보완필요') ? '<div class="dk-warn">📋 고쳐야 할 지시가 있습니다. 하나씩 처리하고 체크할 때 뭘 했는지 적어주세요.</div>' : '') +
       dkFold(r.id + '_lg', '🧾 진행 이력', dkLogHtml(r), logn + '건') +
+      (gone ? '<div class="dk-gone">🗑 ' + escapeHtml(String((r.del && r.del.w) || '')) + ' 님이 ' +
+                escapeHtml(String((r.del && r.del.t) || '')) + ' 에 지웠습니다.' +
+                ((r.del && r.del.why) ? '<b>사유 ' + escapeHtml(String(r.del.why)) + '</b>' : '') +
+                '<span>되살리면 지시·의견·첨부까지 그대로 돌아옵니다.</span></div>' : '') +
+      (gone ? '' :
       '<div class="dk-acts">' +
         (admin ? '<button type="button" class="jd" onclick="jdOpen(\'' + r.id + '\')">⚖️ 가치 판정</button>' : '') +
         (admin ? '<button type="button" onclick="deskReply(\'' + r.id + '\')">✍️ 검토 의견</button>' : '') +
@@ -7356,8 +7442,13 @@ function renderDesk(){
         ((admin && st === '승인대기') ? '<button type="button" class="fin" onclick="deskApprove(\'' + r.id + '\')">🏁 대표 최종 승인</button>' : '') +
         ((admin && st !== '최종승인' && st !== '반려') ? '<button type="button" class="del" onclick="deskReject(\'' + r.id + '\')">반려</button>' : '') +
         ((admin && (st === '최종승인' || st === '반려')) ? '<button type="button" onclick="deskReopen(\'' + r.id + '\')">되돌리기</button>' : '') +
-        (admin ? '<button type="button" class="del" onclick="deskDelete(\'' + r.id + '\')">삭제</button>' : '') +
-      '</div>' +
+      '</div>') +
+      (admin ? '<div class="dk-danger">' +
+        (gone
+          ? '<button type="button" class="back" onclick="dkRestore(\'' + r.id + '\')">↩ 되살리기</button>' +
+            '<button type="button" class="hard" onclick="dkPurge(\'' + r.id + '\')">⛔ 완전히 지우기</button>'
+          : '<button type="button" class="trash" onclick="deskDelete(\'' + r.id + '\')">🗑 이 업무 지우기</button>') +
+        '</div>' : '') +
       '</div>' +
     '</div>';
   }).join('');
