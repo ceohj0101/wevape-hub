@@ -1591,6 +1591,58 @@
   .hm-i:hover{background:var(--ap-fill2); color:var(--ap-blue);}
   .hm-f{font-size:11.5px; color:var(--ap-l2); padding:9px 4px 0; line-height:1.6;}
 
+  /* ── 📋 보완 지시 편집창 ── */
+  #tdPop{position:fixed; inset:0; z-index:520; background:rgba(0,0,0,.4); display:none;
+    align-items:center; justify-content:center; padding:20px;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);}
+  #tdPop.on{display:flex;}
+  #tdPop .td{background:var(--ap-card); border-radius:18px; width:100%; max-width:660px;
+    max-height:88vh; display:flex; flex-direction:column; overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.3);}
+  .td-h{padding:18px 20px 14px; border-bottom:.5px solid var(--ap-sep);}
+  .td-h h3{margin:0 0 6px; font-size:20px; font-weight:700; letter-spacing:-.6px; color:var(--ap-l1);}
+  .td-h p{margin:0; font-size:12.5px; line-height:1.65; color:var(--ap-l2);}
+  .td-h p b{color:var(--ap-l1);}
+  .td-l{flex:1; overflow-y:auto; padding:14px 20px 4px;}
+  .td-r{display:flex; gap:10px; align-items:flex-start; margin-bottom:10px;}
+  .td-n{flex:0 0 auto; width:22px; height:22px; border-radius:50%; background:var(--ap-fill);
+    color:var(--ap-l2); font-size:11.5px; font-weight:700; display:flex; align-items:center;
+    justify-content:center; margin-top:8px;}
+  .td-m{flex:1; min-width:0;}
+  .td-b{display:flex; gap:5px; flex-wrap:wrap; margin-bottom:5px;}
+  .td-b .b{font-size:10.5px; font-weight:700; border-radius:6px; padding:2px 7px;}
+  .td-b .b.ok{background:rgba(52,199,89,.16); color:#1a8a3d;}
+  .td-b .b.wait{background:rgba(0,122,255,.14); color:#0060df;}
+  .td-b .b.old{background:var(--ap-fill); color:var(--ap-l2);}
+  .td-b .b.new{background:rgba(175,82,222,.14); color:#7b2fb5;}
+  .td-b .b.pic{background:rgba(255,149,0,.16); color:#a15c00;}
+  .td-m textarea{width:100%; border:1px solid var(--ap-sep) !important; border-radius:11px !important;
+    padding:10px 12px !important; font-family:inherit; font-size:14px; line-height:1.6;
+    resize:vertical; outline:none; background:var(--ap-card) !important; color:var(--ap-l1) !important;}
+  .td-m textarea:focus{border-color:var(--ap-blue) !important;}
+  .td-x{flex:0 0 auto; display:flex; flex-direction:column; gap:3px; margin-top:26px;}
+  .td-x button{width:26px; height:22px; border:0; background:var(--ap-fill); border-radius:6px;
+    color:var(--ap-l2); font-size:10px; cursor:pointer; font-family:inherit;}
+  .td-x button:hover{background:var(--ap-fill2);}
+  .td-x button.dl{color:var(--ap-red);}
+  .td-f{padding:6px 20px 14px;}
+  .td-f .ad{width:100%; border:1px dashed var(--ap-l3); background:none; border-radius:11px;
+    padding:11px 0; font-family:inherit; font-size:13.5px; font-weight:600; color:var(--ap-blue); cursor:pointer;}
+  .td-f .ad:hover{background:var(--ap-fill);}
+  .td-t{display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-top:11px;}
+  .td-t span{font-size:11px; color:var(--ap-l3); font-weight:600;}
+  .td-t button{border:0; background:var(--ap-fill); border-radius:999px; padding:5px 11px;
+    font-family:inherit; font-size:11.5px; color:var(--ap-l2); cursor:pointer;}
+  .td-t button:hover{background:var(--ap-fill2); color:var(--ap-l1);}
+  .td-a{display:flex; gap:10px; padding:14px 20px; border-top:.5px solid var(--ap-sep); background:var(--ap-bg);}
+  .td-a button{flex:1; border:0; border-radius:12px; padding:13px 0; font-family:inherit;
+    font-size:15px; font-weight:600; cursor:pointer; background:var(--ap-fill); color:var(--ap-l1);}
+  .td-a button.ok{flex:2; background:var(--ap-blue); color:#fff;}
+  @media (max-width:600px){
+    #tdPop{padding:0;}
+    #tdPop .td{max-width:none; max-height:100vh; height:100vh; border-radius:0;}
+  }
+
   /* ── ⚖️ 새 업무 검토 — 대표 요약 ── */
   .dkb{background:var(--ap-card); border-radius:14px; padding:14px 16px; margin:12px 0 14px;
     box-shadow:0 1px 3px rgba(0,0,0,.06);}
@@ -6125,20 +6177,142 @@ async function deskTodos(id){
     jdOpen(id);
     return;
   }
-  const cur = (Array.isArray(r.todos) ? r.todos : []).map(x => x.t).join(' / ');
-  const v = await customPrompt('보완·수정 지시를 적어주세요.\n여러 개면 슬래시( / )로 나눠주세요.', 'text', cur);
-  if(v === null) return;
-  const arr = String(v).split('/').map(s => s.trim()).filter(Boolean);
-  if(!arr.length){ await customAlert('지시 내용이 비어 있습니다.'); return; }
-  const old = Array.isArray(r.todos) ? r.todos : [];
-  r.todos = arr.map(function(t){
-    // ★ q 로 이름을 바꾼 이유: p 는 이제 「사진 목록」 이름으로 쓴다
-    const q = old.find(o => o.t === t);
-    return q ? {t:t, d:!!q.d, n:q.n||'', v:q.v||'', c:q.c||'', p:Array.isArray(q.p)?q.p:[]}
+  tdOpen(id);
+}
+
+/* ============================================================
+   📋 보완 지시 편집창
+   ★ 왜 새로 만들었나 — 예전에는 한 줄 입력창에 지시를 슬래시(/)로
+     이어 붙였다. 지시문 안에 「인천/경기」처럼 슬래시가 들어가면
+     한 지시가 두 개로 쪼개졌고, 지시 하나만 고치려 해도 전체를
+     다시 써야 했다. 순서도 못 바꿨다.
+   ★ 이제는 줄 단위로 편집한다. 기존 항목은 「원본 객체」를 그대로
+     들고 다니므로, 글자를 고쳐도 담당자 메모·사진·확인 기록이
+     날아가지 않는다.
+   ============================================================ */
+function tdState(){ if(!window.__TD) window.__TD = {id:'', rows:[]}; return window.__TD; }
+function tdOpen(id){
+  const r = REVIEW_LIST.find(x => x.id === id);
+  if(!r) return;
+  const T = tdState();
+  T.id = id;
+  T.rows = (Array.isArray(r.todos) ? r.todos : []).map(function(o){ return {t:String(o.t || ''), o:o}; });
+  if(!T.rows.length) T.rows.push({t:'', o:null});
+  const p = document.getElementById('tdPop');
+  if(p) p.classList.add('on');
+  /* 자주 쓰는 지시 버튼 — 팝업 마크업이 스크립트보다 뒤에 있어서 여기서 만든다 */
+  try{
+    const tp = document.getElementById('tdTpl');
+    if(tp && !tp.children.length){
+      tp.innerHTML = '<span>자주 쓰는 지시</span>' + TD_TPL.map(function(t){
+        return '<button type="button" onclick="tdAdd(\'' + t.replace(/'/g, "\\'") + '\')">' + t + '</button>';
+      }).join('');
+    }
+  }catch(e){}
+  tdRender();
+  setTimeout(function(){ try{ document.querySelector('#tdList textarea').focus(); }catch(e){} }, 120);
+}
+function tdClose(){ const p = document.getElementById('tdPop'); if(p) p.classList.remove('on'); }
+function tdSync(){
+  const T = tdState();
+  const els = document.querySelectorAll('#tdList textarea');
+  for(let i = 0; i < els.length && i < T.rows.length; i++) T.rows[i].t = els[i].value;
+}
+function tdAdd(txt){
+  tdSync();
+  tdState().rows.push({t:String(txt || ''), o:null});
+  tdRender();
+  setTimeout(function(){
+    try{ const e = document.querySelectorAll('#tdList textarea'); e[e.length - 1].focus(); }catch(e){}
+  }, 60);
+}
+async function tdDel(i){
+  tdSync();
+  const T = tdState(), row = T.rows[i];
+  if(row && row.o && (row.o.d || row.o.v)){
+    if(!(await customConfirm('이 지시는 담당자가 이미 손을 댔습니다.\n지우면 적어둔 내용과 사진도 같이 사라집니다.\n그래도 지울까요?', true))) return;
+  }
+  T.rows.splice(i, 1);
+  if(!T.rows.length) T.rows.push({t:'', o:null});
+  tdRender();
+}
+function tdMove(i, d){
+  tdSync();
+  const T = tdState(), j = i + d;
+  if(j < 0 || j >= T.rows.length) return;
+  const x = T.rows[i]; T.rows[i] = T.rows[j]; T.rows[j] = x;
+  tdRender();
+}
+var TD_TPL = ['고친 뒤 화면을 캡처로 보고할 것',
+              '담당자를 정해서 이름을 적을 것',
+              '결과를 숫자로 보고할 것',
+              '이미 있는 것과 겹치는지 확인할 것',
+              '데이터가 어디에 쌓이는지 적을 것'];
+function tdRender(){
+  const T = tdState();
+  const box = document.getElementById('tdList');
+  if(!box) return;
+  box.innerHTML = T.rows.map(function(row, i){
+    const o = row.o;
+    let badge = '';
+    if(o && o.v === 'ok') badge = '<span class="b ok">✅ 확인 완료</span>';
+    else if(o && o.d)     badge = '<span class="b wait">⏳ 담당자 완료</span>';
+    else if(o)            badge = '<span class="b old">기존 지시</span>';
+    else                  badge = '<span class="b new">새 지시</span>';
+    const pic = dkNeedsPic(row.t) ? '<span class="b pic">📷 사진 필수</span>' : '';
+    return '<div class="td-r">' +
+      '<div class="td-n">' + (i + 1) + '</div>' +
+      '<div class="td-m">' +
+        '<div class="td-b">' + badge + pic + '</div>' +
+        '<textarea rows="2" placeholder="무엇을 어떻게 고쳐야 하는지 한 문장으로" ' +
+          'oninput="tdTouch()">' + escapeHtml(row.t) + '</textarea>' +
+      '</div>' +
+      '<div class="td-x">' +
+        '<button type="button" onclick="tdMove(' + i + ',-1)" title="위로">▲</button>' +
+        '<button type="button" onclick="tdMove(' + i + ',1)" title="아래로">▼</button>' +
+        '<button type="button" class="dl" onclick="tdDel(' + i + ')" title="지우기">✕</button>' +
+      '</div></div>';
+  }).join('');
+  const c = document.getElementById('tdCnt');
+  if(c) c.textContent = T.rows.filter(function(x){ return String(x.t || '').trim(); }).length;
+}
+function tdTouch(){
+  tdSync();
+  const c = document.getElementById('tdCnt');
+  if(c) c.textContent = tdState().rows.filter(function(x){ return String(x.t || '').trim(); }).length;
+  /* 사진 필수 배지는 글자에 따라 바뀌므로 배지만 다시 칠한다 */
+  const rows = document.querySelectorAll('#tdList .td-r');
+  const T = tdState();
+  for(let i = 0; i < rows.length && i < T.rows.length; i++){
+    const bb = rows[i].querySelector('.td-b');
+    if(!bb) continue;
+    const has = !!bb.querySelector('.b.pic');
+    const need = dkNeedsPic(T.rows[i].t);
+    if(need && !has) bb.insertAdjacentHTML('beforeend', '<span class="b pic">📷 사진 필수</span>');
+    if(!need && has) bb.querySelector('.b.pic').remove();
+  }
+}
+async function tdSave(){
+  tdSync();
+  const T = tdState();
+  const r = REVIEW_LIST.find(x => x.id === T.id);
+  if(!r){ tdClose(); return; }
+  const rows = T.rows.filter(function(x){ return String(x.t || '').trim(); });
+  if(!rows.length){ await customAlert('지시 내용이 비어 있습니다.'); return; }
+  const before = (Array.isArray(r.todos) ? r.todos : []).length;
+  r.todos = rows.map(function(row){
+    const o = row.o;
+    const t = String(row.t).trim();
+    return o ? {t:t, d:!!o.d, n:o.n || '', v:o.v || '', c:o.c || '', p:Array.isArray(o.p) ? o.p : []}
              : {t:t, d:false, n:'', v:'', c:'', p:[]};
   });
+  const add = rows.filter(function(x){ return !x.o; }).length;
+  const del = Math.max(0, before - rows.filter(function(x){ return x.o; }).length);
   dkSetStage(r, '보완필요');
-  dkLog(r, '감독관', '보완 지시 ' + arr.length + '개 등록 → 담당자 수정 요청');
+  dkLog(r, '감독관', '보완 지시 ' + rows.length + '개 등록' +
+    (add ? ' (새로 ' + add + '개' + (del ? ', 지움 ' + del + '개' : '') + ')' : (del ? ' (지움 ' + del + '개)' : '')) +
+    ' → 담당자 수정 요청');
+  tdClose();
   await dkSaveReview();
 }
 
@@ -7217,6 +7391,25 @@ function renderHome(){
       <button type="button" onclick="jdClose()">취소</button>
       <button type="button" class="ok" onclick="jdSave()">판정 기록</button>
     </div>
+    </div>
+  </div>
+</div>
+
+<div id="tdPop" onclick="if(event.target===this) tdClose()">
+  <div class="td">
+    <div class="td-h">
+      <h3>📋 보완 지시</h3>
+      <p>한 줄에 지시 하나씩. 담당자는 이걸 하나씩 체크하면서 <b>뭘 했는지</b>를 적어야 합니다.<br>
+         「캡처 · 스크린샷 · 사진」 같은 말이 들어가면 <b>사진 없이는 재검토 요청이 안 나갑니다.</b></p>
+    </div>
+    <div class="td-l" id="tdList"></div>
+    <div class="td-f">
+      <button type="button" class="ad" onclick="tdAdd('')">＋ 지시 추가</button>
+      <div class="td-t" id="tdTpl"></div>
+    </div>
+    <div class="td-a">
+      <button type="button" onclick="tdClose()">취소</button>
+      <button type="button" class="ok" onclick="tdSave()">지시 <b id="tdCnt">0</b>개 보내기</button>
     </div>
   </div>
 </div>
