@@ -5725,7 +5725,7 @@ async function submitReview(){
    ★ 모든 동작은 r.log 에 [누가·언제·뭘] 로 남는다 = 개발자와 대표가
      같은 화면에서 진행 과정을 확인할 수 있다.
    ============================================================ */
-const CEO_PASSWORD = "0638";
+const CEO_PASSWORD = "0425";
 const DK_STAGES = ['제출됨','보완필요','재검토요청','승인대기','최종승인'];
 const DK_STEPS = [['제출됨','① 제출'],['보완필요','② 보완지시'],['재검토요청','③ 재검토'],['승인대기','④ 감독관통과'],['최종승인','⑤ 대표승인']];
 
@@ -7014,7 +7014,7 @@ async function deskFastPass(id){
   if(!(await customConfirm(body, true))) return;
 
   /* 대표 본인 확인 — 이 비밀번호를 아는 사람만 통과시킬 수 있다 */
-  var pw = await customPrompt('대표 비밀번호를 입력해주세요.\n(대표 본인만 누르는 버튼입니다)', 'password', '');
+  var pw = await customPrompt('대표 비밀번호를 입력해주세요.\n\n이 버튼은 대표 본인만 쓰는 버튼입니다.\n비밀번호를 모르면 그냥 창을 닫아주세요.', 'password', '');
   if(pw === null) return;
   if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다.'); return; }
 
@@ -7502,10 +7502,11 @@ function renderDesk(){
         ((admin && st !== '최종승인' && st !== '반려') ? '<button type="button" class="del" onclick="deskReject(\'' + r.id + '\')">반려</button>' : '') +
         ((admin && (st === '최종승인' || st === '반려')) ? '<button type="button" onclick="deskReopen(\'' + r.id + '\')">되돌리기</button>' : '') +
       '</div>' +
-      /* 🚀 대표 직권 통과 — 관리자 화면에만 그려지고, 누르면 대표 비밀번호를 받는다 */
-      ((admin && st !== '최종승인' && st !== '반려')
+      /* 🚀 대표 직권 통과 — 화면에는 누구나 보이지만, 대표 비밀번호를 넣어야만 실제로 통과된다.
+         (관리자 열쇠가 없는 폰이나 매장 PC 에서도 대표가 바로 쓸 수 있게 하려고 이렇게 열어 두었다) */
+      ((st !== '최종승인' && st !== '반려')
         ? '<div class="dk-ceo"><button type="button" onclick="deskFastPass(\'' + r.id + '\')">' +
-            '<b>🚀 대표 직권 통과</b><span>검토 절차를 건너뛰고 바로 최종 승인' +
+            '<b>🚀 대표 직권 통과</b><span>검토 절차를 건너뛰고 바로 최종 승인 · 대표 비밀번호 필요' +
             (function(){ var k = []; try{ k = dkSkipInfo(r); }catch(e){} return k.length ? ' · 건너뛸 것 ' + k.length + '가지' : ' · 건너뛸 것 없음'; })() +
           '</span></button></div>'
         : '')) +
