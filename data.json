@@ -125,6 +125,15 @@
       "note": "",
       "status": "개발중",
       "owner": "김형진"
+    },
+    {
+      "dept": "CX",
+      "title": "고객 AS/예약 현황",
+      "url": "https://wevape-reservation.vercel.app/",
+      "note": "",
+      "status": "개발중",
+      "owner": "개발자:김형진;서포터:정희경",
+      "sensitive": false
     }
   ],
   "stores": [
@@ -1692,5 +1701,6 @@
       "src": "대표 지적"
     }
   ],
-  "savedAt": "2026-08-08T12:08:27.224Z"
+  "savedAt": "2026-08-08T12:43:23.690Z",
+  "savedBy": "employee"
 }
