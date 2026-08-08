@@ -320,6 +320,27 @@
   "feedbackSeq": 6,
   "reviews": [
     {
+      "id": "rv3",
+      "title": "출퇴근 기록 qr 프로그램(출퇴근 기록을 위함)",
+      "url": "1. (출퇴근시간입력)https://script.google.com/macros/s/AKfycbxYfSaipzTmvtiE66fj_D9ILNu8hwUuYmxepbC6bT7gGYLvLFk0QPErqIt6uPM1tj9B/exec  2. (관리자 전용)https://script.google.com/macros/s/AKfycbxYfSaipzTmvtiE66fj_D9ILNu8hwUuYmxepbC6bT7gGYLvLFk0QPErqIt6uPM1tj9B/exec?page=admin  3. (qr생성기 - 한 번 생성하면 이 링크는 쓸 필요 없음) file:///C:/Users/pyj04/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/local-agent-mode-sessions/8e418d86-7ab6-47d1-9412-5779df3aa78a/642bb8aa-0fed-406e-a722-6143285d1bcf/local_74b5231d-3b73-4b04-ac8a-aab265e4f8e8/outputs/QR%EC%BD%94%EB%93%9C_%EC%83%9D%EC%84%B1%EA%B8%B0.html",
+      "text": "성장 로드맵을 확인해본 결과 출 퇴근을 기록 할 수 있는 페이지가 필요하다고 함. 현재는 카카오톡으로 보고만 올리고 있는데, qr을 이용해서 출퇴근 시간을 기록하여 관리자가 한눈에 볼 수 있게 하기 위한 프로그램. 현재 qr 생성까지는 마무리 되어있음. 각 지점 qr을 인식하면 자동으로 그 지점으로 설정되고 qr입력 시간도 자동으로 설정이 되고 있음. 각 직원들의 이름, 직급 설정 가능하고 입사자, 퇴사자 기능까지 입혀 놓음. qr을 늦게 입력했을 시에 시간 수정까지 가능. 성장 로드맵을 보고 만들어 봤는데 이 프로그램이 실질적으로 쓰일 수 있을 지가 의문. 각 직원의 근태를 확인하고 정확히 기록하기 위함. 조금 더 사용이나 기록 확인이 편리해졌으면 함.",
+      "author": "안태민",
+      "dev": "안태민",
+      "time": "08. 08. 오전 10:57",
+      "date": "2026-08-08",
+      "status": "제출됨",
+      "stage": "제출됨",
+      "reply": "",
+      "todos": [],
+      "log": [
+        {
+          "w": "안태민",
+          "a": "검토 요청 제출",
+          "t": "08. 08. 오전 10:57"
+        }
+      ]
+    },
+    {
       "id": "rv2",
       "title": "ai챗봇을 활용한 제품 추천 프로그램",
       "url": "file:///C:/Users/pyj04/AppData/Local/Packages/Claude_pzs8sxrjxfjjc/LocalCache/Roaming/Claude/local-agent-mode-sessions/8e418d86-7ab6-47d1-9412-5779df3aa78a/642bb8aa-0fed-406e-a722-6143285d1bcf/local_73264696-a310-4bd0-b176-5174c191e1e4/outputs/wevape_%EC%B1%97%EB%B4%87_v1.html",
@@ -828,7 +849,7 @@
       "dev": "장현진"
     }
   ],
-  "reviewSeq": 3,
+  "reviewSeq": 4,
   "deleted": [
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
     "https://janghj201-cyber.github.io/-/",
@@ -1001,13 +1022,6 @@
       ],
       "l": [
         "매장·직원 명단 표준화에 맞춰 표기 통일"
-      ],
-      "fb": [
-        {
-          "w": "김형진",
-          "m": "스케줄표를 켜면 당일 날짜에 강조되어 전직원 당일 근무자 파악이 수월할수있도록 매일 강조되게 업데이트 부탁드립니다.",
-          "t": "2026. 8. 8. 10시 55분 22초"
-        }
       ]
     },
     "https://order-hub-dfni.onrender.com/sales?month=2026-06": {
@@ -1149,6 +1163,6 @@
       "src": "대표 지시"
     }
   ],
-  "savedAt": "2026-08-08T01:56:32.800Z",
+  "savedAt": "2026-08-08T01:57:59.288Z",
   "savedBy": "employee"
 }
