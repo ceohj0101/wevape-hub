@@ -1591,6 +1591,121 @@
   .hm-i:hover{background:var(--ap-fill2); color:var(--ap-blue);}
   .hm-f{font-size:11.5px; color:var(--ap-l2); padding:9px 4px 0; line-height:1.6;}
 
+  /* ── ⚖️ 새 업무 검토 — 대표 요약 ── */
+  .dkb{background:var(--ap-card); border-radius:14px; padding:14px 16px; margin:12px 0 14px;
+    box-shadow:0 1px 3px rgba(0,0,0,.06);}
+  .dkb-none{font-size:13px; color:var(--ap-l2); text-align:center; padding:8px 0;}
+  .dkb-top{display:flex; align-items:center; gap:16px; padding-bottom:13px;
+    border-bottom:.5px solid var(--ap-sep); margin-bottom:13px;}
+  .dkb-num{flex:0 0 auto; text-align:center; min-width:74px;}
+  .dkb-num b{display:block; font-size:28px; font-weight:700; letter-spacing:-1px; color:var(--ap-blue); line-height:1.1;}
+  .dkb-num span{display:block; font-size:11px; color:var(--ap-l2); margin-top:2px;}
+  .dkb-barwrap{flex:1; min-width:0;}
+  .dkb-bar{height:9px; border-radius:5px; background:var(--ap-fill); overflow:hidden;}
+  .dkb-bar i{display:block; height:100%; border-radius:5px;
+    background:linear-gradient(90deg,#34c759,#007aff);}
+  .dkb-cap{font-size:12.5px; color:var(--ap-l2); margin-top:7px; line-height:1.55;}
+  .dkb-cap b{color:var(--ap-l1); font-weight:600;}
+  .dkb-g{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px;}
+  .dkb-c{background:var(--ap-fill); border-radius:11px; padding:11px 12px;}
+  .dkb-c h5{margin:0 0 8px; font-size:12px; font-weight:700; letter-spacing:-.2px; color:var(--ap-l1);
+    display:flex; align-items:center; gap:6px;}
+  .dkb-c h5 em{font-style:normal; margin-left:auto; font-size:12px; font-weight:700;
+    border-radius:8px; padding:1px 8px; background:#fff;}
+  .dkb-c.p h5 em{color:#a15c00;} .dkb-c.d h5 em{color:#1a8a3d;} .dkb-c.w h5 em{color:var(--ap-blue);}
+  .dkb-c ul{margin:0; padding:0; list-style:none;}
+  .dkb-c li{font-size:12.5px; line-height:1.5; color:var(--ap-l1); padding:4px 0 4px 12px; position:relative;
+    word-break:keep-all;}
+  .dkb-c li::before{content:""; position:absolute; left:0; top:10px; width:5px; height:5px; border-radius:50%;}
+  .dkb-c.p li::before{background:#ff9500;}
+  .dkb-c.d li::before{background:#34c759;}
+  .dkb-c.w li::before{background:#8e8e93;}
+  .dkb-c li.mo{color:var(--ap-l3); font-size:11.5px;}
+  .dkb-c li.mo::before{display:none;}
+  .dkb-c li i{display:block; font-style:normal; font-size:11px; margin-top:2px;}
+  .dkb-c li i.w1{color:var(--ap-blue);} .dkb-c li i.w2{color:var(--ap-l3);}
+  .dkb-act{display:flex; gap:9px; margin-top:13px;}
+  .dkb-act button{flex:1; border:0; border-radius:11px; padding:12px 0; font-family:inherit;
+    font-size:14.5px; font-weight:600; cursor:pointer;}
+  .dkb-act .fin{background:var(--ap-blue); color:#fff;}
+  .dkb-act .no{background:var(--ap-fill); color:var(--ap-red); flex:0 0 110px;}
+
+  /* 원문 접기 */
+  .dk-src{font-size:11.5px; color:var(--ap-l3); font-weight:600; margin:16px 0 6px 2px;}
+  .dk-fold{background:var(--ap-card); border-radius:11px; margin-bottom:7px; overflow:hidden;
+    box-shadow:0 1px 2px rgba(0,0,0,.05);}
+  .dk-fold .fh{display:flex; align-items:center; gap:9px; width:100%; border:0; background:none;
+    padding:11px 13px; font-family:inherit; cursor:pointer; text-align:left;}
+  .dk-fold .fh:hover{background:var(--ap-fill);}
+  .dk-fold .ft{font-size:13px; font-weight:600; color:var(--ap-l1);}
+  .dk-fold .fn{font-size:11.5px; color:var(--ap-l3);}
+  .dk-fold .fc{margin-left:auto; font-size:12px; color:var(--ap-blue); font-weight:600; white-space:nowrap;}
+  .dk-fold .fb{display:none; padding:0 13px 13px;}
+  .dk-fold.on .fb{display:block;}
+  .dk-fold .fb .ix, .dk-fold .fb .dk-reply{background:var(--ap-fill) !important; border-radius:10px;
+    padding:12px 13px; font-size:13px; line-height:1.75; white-space:pre-wrap; color:var(--ap-l1);
+    max-height:none; border:0;}
+  .dk-fold .fb .dk-log{background:transparent; border:0; padding:0;}
+
+  /* 담당자 메모 — 3줄까지만 */
+  .dk-todo .nt.clamp{cursor:pointer; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+    overflow:hidden; line-height:1.65;}
+  .dk-todo .nt.clamp.full{-webkit-line-clamp:unset; display:block;}
+  .dk-todo .nt.clamp b{color:var(--ap-l1);}
+
+  @media (max-width:820px){
+    .dkb-g{grid-template-columns:1fr;}
+    .dkb-top{gap:12px;}
+    .dkb-num b{font-size:24px;}
+  }
+
+  /* 지시 항목 카드 */
+  .dk-todo{background:transparent !important; border:0 !important; padding:0 !important; margin-top:14px;}
+  .dk-todo > .tt{font-size:12.5px !important; font-weight:600 !important; color:var(--ap-l2) !important;
+    padding:0 2px 9px !important; background:none !important; display:block;}
+  .dk-todo > .tt .th{display:block; font-size:11px; color:var(--ap-l3); font-weight:400; margin-top:3px;}
+  .tdi{background:var(--ap-card); border-radius:12px; margin-bottom:8px; overflow:hidden;
+    box-shadow:0 1px 2px rgba(0,0,0,.05); border-left:3px solid var(--ap-l3);}
+  .tdi.ok{border-left-color:#34c759;}
+  .tdi.wait{border-left-color:#007aff;}
+  .tdi.no{border-left-color:#ff3b30;}
+  .tdi.todo{border-left-color:#c7c7cc;}
+  .tdh{display:flex; align-items:flex-start; gap:10px; padding:11px 13px; cursor:pointer;}
+  .tdh:hover{background:var(--ap-fill);}
+  .tn{flex:0 0 auto; width:20px; height:20px; border-radius:50%; background:var(--ap-fill);
+    color:var(--ap-l2); font-size:11px; font-weight:700; display:flex; align-items:center;
+    justify-content:center; margin-top:1px;}
+  .tdi.ok .tn{background:rgba(52,199,89,.16); color:#1a8a3d;}
+  .tdi.wait .tn{background:rgba(0,122,255,.14); color:#0060df;}
+  .tdi.no .tn{background:rgba(255,59,48,.14); color:#c22;}
+  .tdh .tx{flex:1; min-width:0; font-size:13.5px; font-weight:600; letter-spacing:-.2px;
+    line-height:1.5; color:var(--ap-l1); word-break:keep-all;}
+  .tdh .tst{flex:0 0 auto; font-size:11px; font-weight:700; border-radius:7px; padding:3px 8px; margin-top:1px;
+    white-space:nowrap;}
+  .tdi.ok .tst{background:rgba(52,199,89,.16); color:#1a8a3d;}
+  .tdi.wait .tst{background:rgba(0,122,255,.14); color:#0060df;}
+  .tdi.no .tst{background:rgba(255,59,48,.14); color:#c22;}
+  .tdi.todo .tst{background:var(--ap-fill); color:var(--ap-l2);}
+  .tdh .tcv{flex:0 0 auto; color:var(--ap-l3); font-size:12px; transition:.15s; margin-top:2px;}
+  .tdi.op .tdh .tcv{transform:rotate(180deg);}
+  .tdb{display:none; padding:0 13px 13px 43px;}
+  .tdi.op .tdb{display:block;}
+  .tck{display:flex; align-items:center; gap:8px; font-size:12px; color:var(--ap-l2);
+    background:var(--ap-fill); border-radius:9px; padding:8px 11px; margin-bottom:8px; cursor:pointer;}
+  .tck.done{opacity:.6; cursor:default;}
+  .tck input{width:16px; height:16px; accent-color:var(--ap-green);}
+  .dk-todo .nt{background:var(--ap-fill) !important; border:0 !important; border-radius:10px !important;
+    padding:10px 12px !important; font-size:12.5px !important; line-height:1.7 !important;
+    color:var(--ap-l1) !important; margin:0 0 8px !important;}
+  .dk-todo .nt.clamp{cursor:pointer; display:-webkit-box !important; -webkit-line-clamp:3;
+    -webkit-box-orient:vertical; overflow:hidden;}
+  .dk-todo .nt.clamp.full{-webkit-line-clamp:unset; display:block !important;}
+  .dk-todo .nt b{color:var(--ap-l2); font-weight:700; font-size:11.5px;}
+  .vres{border-radius:10px; padding:9px 12px; font-size:12.5px; line-height:1.65; margin-bottom:8px;}
+  .vres.y{background:rgba(52,199,89,.12); color:#146b31;}
+  .vres.n{background:rgba(255,59,48,.1); color:#a3231b;}
+  .vres b{font-weight:700;}
+
   /* ── 🛠 고친 내역 / 📊 접속 현황 (별도 화면) ── */
   #fixv, #statv{display:none; max-width:1000px; margin:0 auto; padding:0 16px 90px;}
   body.fixview #fixv{display:block;}
@@ -5031,20 +5146,49 @@ function dkTodoHtml(r){
   const dn = list.filter(x => x.d).length;
   const ok = list.filter(x => x.v === 'ok').length;
   const open = (function(){ try{ return !!dkUI().open[r.id]; }catch(e){ return false; } })();
-  return '<div class="dk-todo"><div class="tt">📋 감독관 보완 지시 ' + list.length + '개 — 담당자 완료 ' + dn + '개 · 감독관 확인 ' + ok + '개</div>' +
+  const U = (function(){ try{ return dkUI(); }catch(e){ return {fold:{}}; } })();
+
+  return '<div class="dk-todo"><div class="tt">📋 감독관 보완 지시 ' + list.length +
+    '개 — 담당자 완료 ' + dn + '개 · 감독관 확인 ' + ok + '개' +
+    '<span class="th">확인 완료된 항목은 접혀 있습니다. 제목을 누르면 내용이 펼쳐집니다.</span></div>' +
     list.map(function(x, n){
-      let h = '<label class="' + (x.v === 'ok' ? 'ok' : '') + '"><input type="checkbox" ' + (x.d ? 'checked ' : '') +
-        ((lock || x.v === 'ok') ? 'disabled ' : '') + 'onchange="dkToggle(\'' + r.id + '\',' + n + ')">' +
-        '<span>' + escapeHtml(x.t) + '</span></label>';
-      if(x.n) h += '<div class="nt">↳ 담당자: ' + escapeHtml(x.n) + '</div>';
+      var cls, lab;
+      if(x.v === 'ok'){ cls = 'ok';   lab = '✅ 확인 완료'; }
+      else if(x.v === 'no'){ cls = 'no'; lab = '↩ 미흡 · 다시'; }
+      else if(x.d){ cls = 'wait';     lab = '⏳ 감독관 확인 대기'; }
+      else { cls = 'todo';            lab = '· 담당자 진행 중'; }
+
+      var key = r.id + '_t' + n;
+      var opened = (U.fold[key] === undefined) ? (cls !== 'ok') : !!U.fold[key];
+
+      var h = '<div class="tdi ' + cls + (opened ? ' op' : '') + '">' +
+        '<div class="tdh" onclick="dkFoldT(\'' + key + '\')">' +
+          '<span class="tn">' + (n + 1) + '</span>' +
+          '<span class="tx">' + escapeHtml(x.t) + '</span>' +
+          '<span class="tst">' + lab + '</span>' +
+          '<span class="tcv">▾</span>' +
+        '</div>' +
+        '<div class="tdb">';
+
+      h += '<label class="tck' + (x.v === 'ok' ? ' done' : '') + '">' +
+        '<input type="checkbox" ' + (x.d ? 'checked ' : '') +
+        ((lock || x.v === 'ok') ? 'disabled ' : '') +
+        'onchange="dkToggle(\'' + r.id + '\',' + n + ')">' +
+        '<span>' + (x.d ? '담당자가 처리했다고 체크함' : '담당자 처리 전 — 다 하면 여기를 체크') + '</span></label>';
+
+      if(x.n) h += '<div class="nt clamp" onclick="this.classList.toggle(\'full\')" title="눌러서 전체 보기">' +
+        '<b>↳ 담당자가 한 일</b> ' + escapeHtml(x.n) + '</div>';
+
       h += dkPicHtml(r, n, x, lock, admin, open);
-      if(x.v === 'ok') h += '<div class="nt"><b>✅ 감독관 확인 완료</b>' + (x.c ? ' — ' + escapeHtml(x.c) : '') + '</div>';
-      if(x.v === 'no') h += '<div class="nt"><i>↩ 미흡 · 다시 해야 함' + (x.c ? ' — ' + escapeHtml(x.c) : '') + '</i></div>';
+
+      if(x.v === 'ok') h += '<div class="vres y"><b>✅ 감독관 확인 완료</b>' + (x.c ? ' — ' + escapeHtml(x.c) : '') + '</div>';
+      if(x.v === 'no') h += '<div class="vres n"><b>↩ 미흡 · 다시 해야 함</b>' + (x.c ? ' — ' + escapeHtml(x.c) : '') + '</div>';
+
       if(admin && !lock && x.d && x.v !== 'ok'){
         h += '<div class="dk-vb"><button type="button" class="y" onclick="dkVerify(\'' + r.id + '\',' + n + ',1)">✅ 확인 완료</button>' +
              '<button type="button" class="n" onclick="dkVerify(\'' + r.id + '\',' + n + ',0)">↩ 미흡 · 다시</button></div>';
       }
-      return h;
+      return h + '</div></div>';
     }).join('') + '</div>';
 }
 
@@ -5814,7 +5958,8 @@ function dkPaintBadge(){
      돌기 때문에 아래쪽에 let/const 를 두면 부팅이 터진다(TDZ).
      함수 선언은 위로 끌어올려지므로 안전하다. */
 function dkUI(){
-  if(!window.__dkUI) window.__dkUI = {open:{}, tab:'all', q:''};
+  if(!window.__dkUI) window.__dkUI = {open:{}, tab:'all', q:'', fold:{}};
+  if(!window.__dkUI.fold) window.__dkUI.fold = {};
   return window.__dkUI;
 }
 function dkToggleOpen(id){
@@ -6250,6 +6395,90 @@ function jdHtml(r, admin){
   return h;
 }
 
+
+/* ============================================================
+   ⚖️ 대표 요약 — 최종 승인자가 볼 것만 위로 올린다
+   · 뭐가 문제였나 = 감독관이 내린 보완 지시 전체
+   · 고쳐진 것    = 감독관이 「확인 완료」 찍은 항목
+   · 남은 것      = 아직 확인 안 된 항목
+   원문(제출 내용 · 검토 의견 전문 · 진행 이력)은 전부 접어 둔다.
+   ============================================================ */
+function dkCut(t, n){
+  t = String(t || '').replace(/\s+/g, ' ').trim();
+  return (t.length > n) ? (t.slice(0, n) + '…') : t;
+}
+function dkBrief(r){
+  var td = Array.isArray(r.todos) ? r.todos : [];
+  var st = '';
+  try{ st = dkStage(r); }catch(e){}
+  if(!td.length){
+    return '<div class="dkb"><div class="dkb-none">아직 보완 지시가 없습니다. 감독관 검토를 기다리는 중입니다.</div></div>';
+  }
+  var done = [], left = [];
+  td.forEach(function(x, i){ (x.v === 'ok' ? done : left).push({i:i, x:x}); });
+  var pct = Math.round(done.length * 100 / td.length);
+  var admin = false;
+  try{ admin = isAdmin(); }catch(e){}
+
+  var h = '<div class="dkb">';
+
+  h += '<div class="dkb-top">' +
+    '<div class="dkb-num"><b>' + pct + '%</b><span>' + done.length + ' / ' + td.length + ' 확인</span></div>' +
+    '<div class="dkb-barwrap"><div class="dkb-bar"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="dkb-cap"><b>감독관이 지적한 문제 ' + td.length + '개 중 ' + done.length + '개 해결.</b> ' +
+        (left.length ? '남은 ' + left.length + '개를 감독관이 확인하면 대표 승인으로 넘어갑니다.'
+                     : '전부 확인됐습니다. 대표 최종 승인만 남았습니다.') +
+      '</div></div></div>';
+
+  h += '<div class="dkb-g">';
+
+  h += '<div class="dkb-c d"><h5>✅ 이렇게 고쳐졌습니다 <em>' + done.length + '</em></h5><ul>';
+  if(!done.length){ h += '<li class="mo">아직 확인 완료된 항목이 없습니다.</li>'; }
+  else{
+    done.slice(0, 5).forEach(function(o){
+      h += '<li>' + escapeHtml(dkCut(o.x.t, 40)) +
+        (o.x.n ? '<i class="w1">' + escapeHtml(dkCut(o.x.n, 46)) + '</i>' : '') + '</li>';
+    });
+    if(done.length > 5) h += '<li class="mo">외 ' + (done.length - 5) + '개 — 아래 목록에서 확인</li>';
+  }
+  h += '</ul></div>';
+
+  h += '<div class="dkb-c w"><h5>⏳ 아직 남은 문제 <em>' + left.length + '</em></h5><ul>';
+  if(!left.length){ h += '<li class="mo">없습니다.</li>'; }
+  else{
+    left.slice(0, 5).forEach(function(o){
+      h += '<li>' + escapeHtml(dkCut(o.x.t, 40)) +
+        (o.x.d ? '<i class="w1">담당자 완료 · 감독관 확인 대기</i>' : '<i class="w2">담당자 진행 중</i>') + '</li>';
+    });
+    if(left.length > 5) h += '<li class="mo">외 ' + (left.length - 5) + '개</li>';
+  }
+  h += '</ul></div>';
+
+  h += '</div>';
+
+  if(admin && st === '승인대기'){
+    h += '<div class="dkb-act"><button type="button" class="fin" onclick="deskApprove(\'' + r.id + '\')">🏁 대표 최종 승인</button>' +
+         '<button type="button" class="no" onclick="deskReject(\'' + r.id + '\')">↩ 반려</button></div>';
+  }
+  return h + '</div>';
+}
+
+/* 접었다 펴는 상자 — 기본은 접힘 */
+function dkFold(key, title, html, note){
+  if(!html) return '';
+  var open = false;
+  try{ open = !!dkUI().fold[key]; }catch(e){}
+  return '<div class="dk-fold' + (open ? ' on' : '') + '">' +
+    '<button type="button" class="fh" onclick="dkFoldT(\'' + key + '\')">' +
+      '<span class="ft">' + title + '</span>' +
+      (note ? '<span class="fn">' + note + '</span>' : '') +
+      '<span class="fc">' + (open ? '접기 ▴' : '보기 ▾') + '</span></button>' +
+    '<div class="fb">' + html + '</div></div>';
+}
+function dkFoldT(k){
+  try{ var u = dkUI(); u.fold[k] = !u.fold[k]; renderDesk(); }catch(e){}
+}
+
 function renderDesk(){
   const box = document.getElementById('dkList');
   const cnt = document.getElementById('dkCount');
@@ -6317,16 +6546,20 @@ function renderDesk(){
       (r.url ? '<div class="iu">' + escapeHtml(r.url) + '</div>' : '') +
       dkFlowHtml(r) +
       jdHtml(r, admin) +
-      (txt ? dkClip('<div class="ix">' + escapeHtml(txt) + '</div>', txt.length > 260, '내용 더 보기') : '') +
+      dkBrief(r) +
+      dkTodoHtml(r) +
+      '<div class="dk-src">원문 보기</div>' +
+      dkFold(r.id + '_tx', '📄 담당자가 올린 내용',
+             txt ? '<div class="ix">' + escapeHtml(txt) + '</div>' : '',
+             escapeHtml(r.author || '') + ' · ' + escapeHtml(r.time || '')) +
+      dkFold(r.id + '_rp', '🧭 감독관 검토 의견 전문',
+             rep ? '<div class="dk-reply">' + escapeHtml(rep) + '</div>' : '', '') +
+      dkFold(r.id + '_dg', '🔎 올릴 때 자동 진단', deskDiagHtml(r), '') +
       '<div class="im">올린 사람 ' + escapeHtml(r.author || '이름없음') + ' · ' + escapeHtml(r.time || '') +
         (r.approvedAt ? ' · 🏁 대표 최종승인 ' + escapeHtml(r.approvedAt) : '') + '</div>' +
-      deskDiagHtml(r) +
-      (rep ? dkClip('<div class="dk-reply"><b>🧭 감독관 검토 의견</b>' + escapeHtml(rep) + '</div>',
-                    rep.length > 300, '검토 의견 전체 보기') : '') +
-      dkTodoHtml(r) +
       ((admin && st === '재검토요청') ? '<div class="dk-warn">🔍 담당자가 수정 완료를 보고했습니다. 항목마다 「✅ 확인 완료」를 눌러 하나씩 확인해야 통과시킬 수 있습니다.</div>' : '') +
       ((!admin && st === '보완필요') ? '<div class="dk-warn">📋 고쳐야 할 지시가 있습니다. 하나씩 처리하고 체크할 때 뭘 했는지 적어주세요.</div>' : '') +
-      dkClip(dkLogHtml(r), logn > 5, '진행 이력 전체 보기') +
+      dkFold(r.id + '_lg', '🧾 진행 이력', dkLogHtml(r), logn + '건') +
       '<div class="dk-acts">' +
         (admin ? '<button type="button" class="jd" onclick="jdOpen(\'' + r.id + '\')">⚖️ 가치 판정</button>' : '') +
         (admin ? '<button type="button" onclick="deskReply(\'' + r.id + '\')">✍️ 검토 의견</button>' : '') +
