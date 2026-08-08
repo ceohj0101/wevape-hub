@@ -4089,17 +4089,20 @@ async function chkFbPull(){
     var R = ghRepo();
     var hd = { "Accept": "application/vnd.github.raw" };
     try{ var _t = ghToken(); if(_t) hd["Authorization"] = "Bearer " + _t; }catch(e){}
-    var res = await fetch('https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + R.path + '?ref=' + R.branch,
-                          { headers: hd, cache: "no-store" });
-    /* API 가 막히면(한 시간 60번 제한) raw 로 한 번 더 — 여기서 포기하면
-       남이 먼저 남긴 피드백을 못 읽고 그대로 덮어써 지워버린다. */
-    if(!res.ok){
+    /* 여기서 못 읽으면 남이 먼저 남긴 피드백을 못 보고 그대로 덮어써 지운다.
+       그래서 세 군데를 차례로 시도한다 — 같은 주소 사본 → API → raw. */
+    var _try = [{u: sameSiteUrl(R.path)},
+                {u: 'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + R.path + '?ref=' + R.branch, h: hd},
+                {u: 'https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + R.path + '?t=' + Date.now()}
+               ].filter(function(x){ return !!x.u; });
+    var res = null;
+    for(var _i = 0; _i < _try.length; _i++){
       try{
-        res = await fetch('https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + R.path + '?t=' + Date.now(),
-                          { cache: "no-store" });
-      }catch(e2){ return false; }
+        var _r = await fetch(_try[_i].u, _try[_i].h ? { headers: _try[_i].h, cache: "no-store" } : { cache: "no-store" });
+        if(_r.ok){ res = _r; break; }
+      }catch(e2){}
     }
-    if(!res.ok) return false;
+    if(!res) return false;
     var d = await res.json();
     if(!d || !d.checks || typeof d.checks !== 'object') return false;
     for(var k in d.checks){
@@ -4681,6 +4684,19 @@ function ghRepo(){
   }catch(err){}
   return GH_DEFAULT;
 }
+
+/* 우리 사이트와 같은 주소에 있는 사본의 주소를 만든다.
+   예) https://ceohj0101.github.io/wevape-hub/  →  .../wevape-hub/data.json?t=…
+   · 깃허브 페이지는 횟수 제한이 없고, 저장(=푸시)할 때마다 새로 고쳐진다.
+   · 파일로 열었거나(file://) 다른 곳에 올린 경우엔 빈 값을 돌려주고,
+     부르는 쪽에서 알아서 다음 방법으로 넘어간다.
+   ★ function 선언 — 파일 중간에서 먼저 불릴 수 있다 (TDZ). */
+function sameSiteUrl(name){
+  try{
+    if(!/^https?:$/.test(location.protocol)) return '';
+    return new URL(String(name) + '?t=' + Date.now(), location.href).href;
+  }catch(e){ return ''; }
+}
 function ghToken(){ return (lsGet(TOKEN_KEY) || "").trim(); }
 function isAdmin(){ return ghToken().length > 0; }
 function empPassword(){ return (lsGet(EMP_PW_KEY) || "").trim() || "8936"; } // 비밀번호 미등록 기기도 기본값으로 저장됨 → 아무나 수정하면 바로 전직원 반영, 따로 등록할 필요 없음
@@ -4819,14 +4835,18 @@ async function loadRemote(){
   // "다른 직원이 내 수정을 못 보는" 원인이었음 → 항상 최신인 깃허브 API를 먼저 읽고, 실패할 때만 raw 사용
   // (API 쪽은 cache:"no-store" 로 이미 브라우저 캐시를 건너뛰므로 ?t= 군더더기는 뺐다.
   //  그래야 지문 비교가 실측 확인된 형태 그대로 동작한다.)
-  const urls = [
-    `https://api.github.com/repos/${R.owner}/${R.repo}/contents/${R.path}?ref=${R.branch}`,
-    `https://raw.githubusercontent.com/${R.owner}/${R.repo}/${R.branch}/${R.path}` + bust
-  ];
+  const apiU = `https://api.github.com/repos/${R.owner}/${R.repo}/contents/${R.path}?ref=${R.branch}`;
+  const rawU = `https://raw.githubusercontent.com/${R.owner}/${R.repo}/${R.branch}/${R.path}` + bust;
+  const pgU  = sameSiteUrl(R.path);
+  // 관리자 = 열쇠가 있어 API 를 시간당 5000번 쓸 수 있다 → 지문(ETag)으로 0바이트 갱신이 되는 API 를 먼저.
+  // 직원   = 열쇠가 없어 API 가 시간당 60번뿐이고 사무실 전체가 그걸 나눠 쓴다 → 같은 주소 사본을 먼저.
+  const urls = (isAdmin() ? [{u: apiU, api: true}, {u: pgU}, {u: rawU}]
+                          : [{u: pgU}, {u: rawU}, {u: apiU, api: true}])
+               .filter(x => !!x.u);
   for(let i = 0; i < urls.length; i++){
     try{
       let opt;
-      if(i === 0){
+      if(urls[i].api){
         const h = { "Accept": "application/vnd.github.raw" };
         // ★ 관리자 열쇠가 있으면 같이 보낸다.
         //   로그인 없이 부르면 한 시간에 60번뿐이라, 사무실 여러 대가 금방 막힌다.
@@ -4838,11 +4858,11 @@ async function loadRemote(){
       } else {
         opt = { cache: "no-store" };
       }
-      const res = await fetch(urls[i], opt);
+      const res = await fetch(urls[i].u, opt);
 
       // 304 = "지난번이랑 똑같음". 받을 게 없으니 화면을 그대로 두고 끝낸다.
       // ★ 여기서 81KB 가 0바이트가 된다. 단, 못 올린 수정분 재시도는 그대로 유지한다.
-      if(res.status === 304){
+      if(res.status === 304 && urls[i].api){
         remoteLoaded = true;
         if(dirty && canSave()) scheduleAutoSave();
         updateSyncBadge();
@@ -4869,7 +4889,7 @@ async function loadRemote(){
       }
 
       // 제대로 받았을 때만 지문을 갱신한다 (API 경로에서만 의미가 있다)
-      if(i === 0){ GH_ETAG = res.headers.get("etag") || ""; }
+      if(urls[i].api){ GH_ETAG = res.headers.get("etag") || ""; }
 
       remoteLoaded  = true;
       remoteSavedAt = data.savedAt || "";
@@ -5733,17 +5753,18 @@ function ensurePhotos(){
   if(!PHOTO_MAP) PHOTO_MAP = {};
   var R = ghRepo();
   PHOTO_WAIT = (async function(){
+    var _hh = { 'Accept': 'application/vnd.github.raw' };
+    try{ var _tk = ghToken(); if(_tk) _hh['Authorization'] = 'Bearer ' + _tk; }catch(e){}
     var urls = [
-      'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + PHOTO_FILE + '?ref=' + R.branch + '&t=' + Date.now(),
-      'https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + PHOTO_FILE + '?t=' + Date.now()
-    ];
+      { u: sameSiteUrl(PHOTO_FILE) },
+      { u: 'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + PHOTO_FILE + '?ref=' + R.branch + '&t=' + Date.now(), h: _hh },
+      { u: 'https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + PHOTO_FILE + '?t=' + Date.now() }
+    ].filter(function(x){ return !!x.u; });
     var saw404 = false;
     for(var i = 0; i < urls.length; i++){
       try{
-        var _hh = { 'Accept': 'application/vnd.github.raw' };
-        try{ var _tk = ghToken(); if(_tk) _hh['Authorization'] = 'Bearer ' + _tk; }catch(e){}
-        var opt = (i === 0) ? { headers: _hh, cache: 'no-store' } : { cache: 'no-store' };
-        var res = await fetch(urls[i], opt);
+        var opt = urls[i].h ? { headers: urls[i].h, cache: 'no-store' } : { cache: 'no-store' };
+        var res = await fetch(urls[i].u, opt);
         if(res.status === 404){ saw404 = true; continue; }
         if(!res.ok) continue;
         var d = await res.json();
@@ -5965,20 +5986,29 @@ function stSchedule(){
 }
 async function stRead(){
   var R = ghRepo();
+  var _h = { 'Accept': 'application/vnd.github.raw' };
+  try{ var _t = ghToken(); if(_t) _h['Authorization'] = 'Bearer ' + _t; }catch(e){}
   var urls = [
-    'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + ST_FILE + '?ref=' + R.branch + '&t=' + Date.now(),
-    'https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + ST_FILE + '?t=' + Date.now()
-  ];
+    { u: sameSiteUrl(ST_FILE) },
+    { u: 'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + ST_FILE + '?ref=' + R.branch + '&t=' + Date.now(), h: _h },
+    { u: 'https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + ST_FILE + '?t=' + Date.now() }
+  ].filter(function(x){ return !!x.u; });
+  var saw404 = false;
   for(var i = 0; i < urls.length; i++){
     try{
-      var opt = (i === 0) ? { headers: { 'Accept': 'application/vnd.github.raw' }, cache: 'no-store' } : { cache: 'no-store' };
-      var res = await fetch(urls[i], opt);
-      if(res.status === 404) return { v: 1, days: {} };
+      var opt = urls[i].h ? { headers: urls[i].h, cache: 'no-store' } : { cache: 'no-store' };
+      var res = await fetch(urls[i].u, opt);
+      /* ★ 404 를 만나도 바로 「빈 장부」로 단정하지 않는다.
+         한 군데만 아직 파일이 없을 수 있는데 그걸 빈 장부로 보면
+         지금까지 쌓인 접속 기록을 통째로 지워버린다.
+         모든 방법이 다 404 일 때만 「아직 파일 없음」으로 본다. */
+      if(res.status === 404){ saw404 = true; continue; }
       if(!res.ok) continue;
       var d = await res.json();
       if(d && typeof d === 'object'){ if(!d.days) d.days = {}; return d; }
     }catch(e){}
   }
+  if(saw404) return { v: 1, days: {} };
   return null;
 }
 /* 합치기는 무조건 「더하기」 — 다른 기기가 올린 숫자를 덮어쓰지 않는다 */
