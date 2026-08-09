@@ -1343,7 +1343,11 @@
           "w": "장현진",
           "m": "https://www.vflow.kr/api/hub-stats?token=ajsd74fvml1234fefsss000\n\n브이플로우 서버가 내주는 데이터 주소 입니다",
           "t": "2026. 8. 9. 17시 38분 29초",
-          "p": []
+          "p": [],
+          "rw": "장현진",
+          "rm": "🔴 설치형 앱은 허브 화면 안에 끼워 넣을 수 없다. 연동은 반드시 브이플로우 서버가 내주는 데이터 주소 / https://www.vflow.kr/api/hub-stats?token=ajsd74fvml1234fefsss000",
+          "st": "done",
+          "rt": "2026. 8. 9. 17시 38분 43초"
         }
       ]
     },
@@ -1770,6 +1774,6 @@
       "src": "대표 지적"
     }
   ],
-  "savedAt": "2026-08-09T08:38:28.828Z",
+  "savedAt": "2026-08-09T08:38:42.977Z",
   "savedBy": "employee"
 }
