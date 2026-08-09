@@ -337,6 +337,53 @@
   "feedbackSeq": 6,
   "reviews": [
     {
+      "id": "rv6",
+      "title": "매장 입출고 관리 웹앱",
+      "url": "https://wjdwkdrn7714.github.io/-/",
+      "text": "매장별로 수기 엑셀에 기록하던 입고(회사주문/매장이동)·출고·시연개봉을 웹앱으로 전환.\n기록추가(다중 품목 선택+검색, 사진첨부 옵션), 기록목록(매장별 잠금+날짜/유형별 그룹핑), \n재고현황(입고/출고/시연 구분, 기간별 조회) 기능 완성. \n현재는 임시저장 상태로 화면·기능 확인 단계이고, 다음 단계로 Google Sheets 연동해서 \n실제 데이터 저장까지 이어갈 예정.",
+      "author": "정희경",
+      "dev": "정희경",
+      "files": [
+        {
+          "k": "pmslgwxht1afwrm",
+          "n": "1.JPG",
+          "s": 57103,
+          "m": "image/jpeg",
+          "i": 1,
+          "w": "정희경"
+        },
+        {
+          "k": "pmslgwxht2jg65q",
+          "n": "2.JPG",
+          "s": 34983,
+          "m": "image/jpeg",
+          "i": 1,
+          "w": "정희경"
+        },
+        {
+          "k": "pmslgwxht3ibimb",
+          "n": "3.JPG",
+          "s": 37983,
+          "m": "image/jpeg",
+          "i": 1,
+          "w": "정희경"
+        }
+      ],
+      "time": "08. 09. 오후 04:15",
+      "date": "2026-08-09",
+      "status": "제출됨",
+      "stage": "제출됨",
+      "reply": "",
+      "todos": [],
+      "log": [
+        {
+          "w": "정희경",
+          "a": "검토 요청 제출",
+          "t": "08. 09. 오후 04:15"
+        }
+      ]
+    },
+    {
       "id": "rv5",
       "title": "네이버 리뷰 답글 자동화",
       "url": "",
@@ -1233,7 +1280,7 @@
       "dev": "장현진"
     }
   ],
-  "reviewSeq": 6,
+  "reviewSeq": 7,
   "deleted": [
     "https://znsl132-lang.github.io/BIGLUCKY/feeds.html",
     "https://janghj201-cyber.github.io/-/",
@@ -1705,6 +1752,6 @@
       "src": "대표 지적"
     }
   ],
-  "savedAt": "2026-08-09T02:05:22.034Z",
+  "savedAt": "2026-08-09T07:15:21.927Z",
   "savedBy": "employee"
 }
