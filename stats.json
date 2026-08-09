@@ -149,11 +149,13 @@
       "dev": {
         "dmshgfhsu6qyqac": 1
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 0,
+      "clk": {
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-09T22:42:18.759Z",
+  "savedAt": "2026-08-09T22:42:38.646Z",
   "savedBy": "employee"
 }
