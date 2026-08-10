@@ -7487,7 +7487,13 @@ function dvOwner(e){
 function dvOwners(e){
   var o = dvOwner(e);
   if(!o) return [];
-  return o.split(/\s*[,\/·&]\s*|\s+및\s+/).map(function(x){ return String(x).trim(); }).filter(Boolean);
+  /* 실제 자료에 「김형진;서포터:정희경」 처럼 적힌 것들이 있다.
+     세미콜론·쉼표·슬래시로 쪼개고, 앞에 붙은 역할 딱지는 떼어낸다. */
+  return o.split(/\s*[,;\/·&]\s*|\s+및\s+/)
+    .map(function(x){
+      return String(x).replace(/^\s*(개발자|담당자|담당|메인|주담당|서포터|보조|지원)\s*[:：]?\s*/, '').trim();
+    })
+    .filter(Boolean);
 }
 function dvDoneCnt(url){
   var n = 0;
