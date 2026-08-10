@@ -630,6 +630,7 @@
     display:flex;align-items:center;gap:5px;
   }
   .r-t .lk{font-size:12px;}
+  .r-t .r-new{background:#ff3b30;color:#fff;font-size:10px;font-weight:900;padding:2px 6px;border-radius:6px;letter-spacing:.3px;vertical-align:middle;}
   .r-s{font-size:12.5px;color:#8b919c;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .r-s .warn{color:#f04452;font-weight:800;}
   .r-r{flex-shrink:0;text-align:right;}
@@ -683,6 +684,11 @@
     color:#fff;font-family:inherit;font-size:16px;font-weight:900;cursor:pointer;
   }
   .br-open:active{opacity:.8;}
+  .br-new{display:inline-block;background:#ff3b30;color:#fff;font-size:12px;font-weight:900;padding:5px 10px;border-radius:7px;margin-left:6px;vertical-align:middle;}
+  .br-note-new{margin-top:10px;background:#eef6ff;border:1px solid #cfe4ff;border-radius:12px;padding:12px 14px;font-size:13px;color:#1f5fae;line-height:1.55;}
+  .br-note-new b{display:block;font-size:11.5px;color:#3182f6;margin-bottom:4px;font-weight:900;}
+  .br-opt{margin-top:9px;height:46px;width:100%;border:1px solid #e3e7ee;border-radius:13px;background:#f7f8fa;color:#3c434f;font-family:inherit;font-size:14px;font-weight:800;cursor:pointer;}
+  .br-opt:active{background:#eef0f3;}
   .br-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:20px;}
   .br-f{background:#fff;border:1px solid #eef0f3;border-radius:13px;padding:14px 15px;}
   .br-f i{font-style:normal;font-size:11.5px;color:#a0a6b0;font-weight:800;}
@@ -1322,11 +1328,17 @@
   .ck-done.stop{color:#f04452;}
   .ck-none{font-size:12.7px;color:#a0a6b0;font-weight:700;line-height:1.75;}
   .ck-note{margin-top:10px;font-size:11.3px;color:#a0a6b0;font-weight:700;line-height:1.7;}
+  .ck-tgl{margin-left:auto;height:28px;padding:0 11px;border-radius:8px;border:1px solid #e3e7ee;background:#f7f8fa;color:#5b626d;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;}
+  .ck-tgl:active{opacity:.7;}
 
   /* ---------- 💬 이 시스템 피드백 (누구나 한 줄 남기기) ---------- */
   .ck-fb{margin-top:14px;border-top:1px solid #f0f2f5;padding-top:13px;}
   .ck-fb>i{font-style:normal;display:block;font-size:11.5px;font-weight:900;color:#a0a6b0;margin-bottom:9px;}
   .ck-fb>i b{color:#3182f6;}
+  .ck-fbtabs{display:flex;gap:6px;margin-bottom:11px;}
+  .ck-fbtab{flex:1;height:32px;border-radius:9px;border:1px solid #e3e7ee;background:#fff;color:#8b919c;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;}
+  .ck-fbtab.on{background:#191f28;border-color:#191f28;color:#fff;}
+  .ck-fbtab:active{opacity:.8;}
   .ck-fbl{list-style:none;margin:0 0 11px;padding:0;}
   .ck-fbl li{background:#f7f8fa;border:1px solid #eef0f4;border-radius:11px;padding:10px 11px;margin-bottom:7px;}
   .ck-fbl .hd{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
@@ -1516,6 +1528,14 @@
   .br-tag.wip{background:rgba(255,149,0,.16) !important; color:#a15c00 !important;}
   .br-open{background:var(--ap-blue) !important; border-radius:12px !important; height:50px !important;
     font-weight:600 !important; font-size:16px !important;}
+  .br-opt{background:var(--ap-fill) !important; border:0 !important; border-radius:12px !important; height:44px !important;
+    font-weight:600 !important; font-size:14px !important; color:var(--ap-l1) !important;}
+  .br-new{border-radius:6px !important; font-weight:600 !important;}
+  .br-note-new{background:rgba(0,122,255,.08) !important; border:0 !important; border-radius:var(--ap-r) !important; color:var(--ap-blue) !important;}
+  .r-t .r-new{border-radius:6px !important; font-weight:600 !important;}
+  .ck-tgl{background:var(--ap-fill) !important; border:0 !important; border-radius:8px !important; font-weight:600 !important; color:var(--ap-l1) !important;}
+  .ck-fbtab{background:var(--ap-fill) !important; border:0 !important; border-radius:9px !important; font-weight:600 !important; color:var(--ap-l2) !important;}
+  .ck-fbtab.on{background:var(--ap-blue) !important; color:#fff !important;}
   .br-f,.br-fb,.br-danger,.fb-devbox,.fb-newform{
     background:var(--ap-card) !important; border:0 !important; border-radius:var(--ap-r) !important;}
   .br-f i{color:var(--ap-l2) !important; font-weight:400 !important;}
@@ -1605,6 +1625,8 @@
   .hm-r .m{flex:1; min-width:0;}
   .hm-r .t{display:block; font-size:14.5px; font-weight:500; letter-spacing:-.3px; color:var(--ap-l1);
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .hm-new{display:inline-block; background:#ff3b30; color:#fff; font-size:9.5px; font-weight:900;
+    padding:1px 5px; border-radius:5px; letter-spacing:.2px; vertical-align:middle;}
   .hm-r .s{display:block; font-size:11.5px; color:var(--ap-l2); margin-top:1px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .hm-r .rt{flex:0 0 auto; display:flex; align-items:center; gap:8px;}
@@ -3014,6 +3036,18 @@ let feedbackSeq = 0;
 let REVIEW_LIST = [];   // 🧩 새 업무 검토 [{id,title,url,text,author,time,date,status,reply}]
 let reviewSeq = 0;
 let DELETED_URLS = [];  // 🗑 지운 시스템 주소 목록 (기본 목록에서 되살아나지 않게 기록해 둠)
+// ⭐ 지운 주소라도 나중에 정식으로 다시 등록(승인·직접등록)하면 무덤에서 꺼내준다.
+//   안 그러면 applyData() 의 dead-필터가 새로 넣은 항목까지 계속 지워버린다.
+//   (2026-08-10 실제 사고: rv1 「위베이프 이슈 모니터링」이 예전에 지운 주소와 같아서
+//    최종 승인 후에도 업무 모음에 절대 안 나타났다.)
+function reviveUrl(url){
+  if(!url) return;
+  const i = DELETED_URLS.indexOf(url);
+  if(i !== -1) DELETED_URLS.splice(i, 1);
+}
+function entryIsNew(e){
+  return !!(e && e.createdAt && (Date.now() - e.createdAt) < 7*24*60*60*1000);
+}
 /* 🩺 링크별 「오늘의 점검」 저장소
    CHECKS[url] = { d:'날짜', s:'감독관 소견', f:['고쳐야 할 것'], l:['연동 대비'],
                    v:'go|hold|stop', by:'감독관',
@@ -3026,6 +3060,11 @@ var CHECKS = {};
    ★ var 로 선언한다 — applyData() 가 파일 중간에서 먼저 돌기 때문에 let/const 는 죽는다. */
 var FIXLOG = [];
 var FX_SEEN_KEY = "wevape_hub_fixlog_seen_v1";
+/* 🩺 점검 카드 펼침 상태 (url -> true/false) — 기본은 접혀있음, 버튼 눌러야 소견/할일 보임
+   💬 피드백 완료/미완료 탭 상태 (url -> 'all'|'wait'|'done')
+   ★ 둘 다 var 로 선언 — CHECKS/FIXLOG 와 같은 이유 (applyData 가 파일 중간에서 먼저 돎) */
+var CK_OPEN = {};
+var CK_FB_FILTER = {};
 let openFeedbackPanels = new Set();
 let editingFeedbackIds = new Set();
 const FB_STATUS_OPTIONS = ["접수됨","업데이트 예정","업데이트 완료"];
@@ -3400,7 +3439,8 @@ async function submitEntry(){
     return;
   }
 
-  const entry = {dept, title, url, note, status: isWip ? "개발중" : "운영중", owner, sensitive: isSensitive};
+  reviveUrl(url);   // ⭐ 예전에 지운 주소를 다시 등록하는 것일 수도 있으니 무덤에서 꺼내준다
+  const entry = {dept, title, url, note, status: isWip ? "개발중" : "운영중", owner, sensitive: isSensitive, createdAt: Date.now()};
   entries.push(entry);
   render();
 
@@ -3505,6 +3545,24 @@ async function moveEntryDept(url){
   render();
   syncUpdate(entry);
   if(!canSave()) await askEmpPasswordThenSave();
+}
+
+// ⚙️ 옵션 버튼 — 부서 이동 / 상태 전환을 한 버튼에서 고르게 한다.
+// (대표 요청: "부서나 만드는중 사용가능 이라고 상태를 바꾸는 옵션 버튼을 만들어 달라" 2026-08-10)
+async function entryOptions(url){
+  const entry = findEntry(url);
+  if(!entry) return;
+  const ok = entry.status !== "개발중";
+  const options = [
+    {value:'dept', label:`🏢 다른 부서로 옮기기 (지금: ${groupLabel(entry.dept)})`},
+    {value:'status', label: ok ? '🔧 만드는중으로 되돌리기' : '✅ 다 만들어졌어요 — 사용가능으로'},
+    {value:'owner', label:'👤 담당자 바꾸기'},
+  ];
+  const picked = await customSelect(`"${entry.title}" 무엇을 바꿀까요?`, options, '');
+  if(!picked) return;
+  if(picked === 'dept') return moveEntryDept(url);
+  if(picked === 'status') return ok ? revertToWip(url) : completeEntryByKey(entryKey(entry));
+  if(picked === 'owner') return editEntryOwner(url);
 }
 
 // ✏️ 시스템 이름(제목) 수정 — 같은 이름이 두 개라 헷갈릴 때 구분해서 붙일 수 있게
@@ -3922,7 +3980,7 @@ function rowHtml(e){
     <div class="row ${selectedKey === key ? 'on' : ''}" data-searchtext="${escapeHtml(searchtext)}" onclick="openDetail('${key.replace(/\\/g,"\\\\").replace(/'/g,"\\'")}')">
       <div class="r-i" style="background:${g.c}">${icon}</div>
       <div class="r-m">
-        <div class="r-t">${escapeHtml(e.title)}${isLockedByRule(e) ? '<span class="lk">🔒</span>' : ''}</div>
+        <div class="r-t">${escapeHtml(e.title)}${entryIsNew(e) ? '<span class="r-new">NEW</span>' : ''}${isLockedByRule(e) ? '<span class="lk">🔒</span>' : ''}</div>
         <div class="r-s">${sub}</div>
       </div>
       <div class="r-r">
@@ -3965,28 +4023,38 @@ function chkCard(url){
       + chkFbBlock(url, null)
       + '</div>';
   }
+  var open = !!CK_OPEN[url];
   var h = '<div class="ck">';
   h += '<div class="ck-h"><span class="ck-ttl">🩺 오늘의 점검</span>'
      + '<span class="ck-d">' + escapeHtml(c.d || '') + '</span>'
-     + '<span class="ck-v ' + escapeHtml(c.v || '') + '">' + chkLabel(c.v) + '</span></div>';
-  h += '<div class="ck-s"><i>감독관 소견</i><p>' + escapeHtml(c.s || '') + '</p></div>';
-  h += '<div class="ck-s"><i>⚠️ 고쳐야 할 것</i><ul>' + chkList(c.f) + '</ul></div>';
-  h += '<div class="ck-s"><i>🔗 나중에 연동하려면 지금 맞춰놔야 할 것</i><ul>' + chkList(c.l) + '</ul></div>';
-  h += chkFbBlock(url, c);
-  if(c.ok){
-    h += '<div class="ck-done ' + escapeHtml(c.okV || '') + '">' + chkLabel(c.okV)
-       + ' — 대표 확정 · ' + escapeHtml(c.okT || '') + '</div>';
-    h += '<div class="ck-btns"><button type="button" class="ck-b" onclick="chkUndo(\'' + uq + '\')">↩︎ 확정 되돌리기 (대표)</button></div>';
-  }else{
-    h += '<div class="ck-btns">'
-       + '<button type="button" class="ck-b go"   onclick="chkDecide(\'' + uq + '\',\'go\')">✅ 대표 승인</button>'
-       + '<button type="button" class="ck-b hold" onclick="chkDecide(\'' + uq + '\',\'hold\')">🟡 보류</button>'
-       + '<button type="button" class="ck-b stop" onclick="chkDecide(\'' + uq + '\',\'stop\')">⛔ 중단</button>'
-       + '</div>';
-    h += '<div class="ck-note">최종 결정은 대표만 누를 수 있습니다. (누르면 대표 비밀번호를 물어봅니다)</div>';
+     + '<span class="ck-v ' + escapeHtml(c.v || '') + '">' + chkLabel(c.v) + '</span>'
+     + '<button type="button" class="ck-tgl" onclick="ckToggle(\'' + uq + '\')">' + (open ? '▲ 접기' : '▼ 소견 · 할일 보기') + '</button>'
+     + '</div>';
+  if(open){
+    h += '<div class="ck-s"><i>감독관 소견</i><p>' + escapeHtml(c.s || '') + '</p></div>';
+    h += '<div class="ck-s"><i>⚠️ 고쳐야 할 것</i><ul>' + chkList(c.f) + '</ul></div>';
+    h += '<div class="ck-s"><i>🔗 나중에 연동하려면 지금 맞춰놔야 할 것</i><ul>' + chkList(c.l) + '</ul></div>';
+    if(c.ok){
+      h += '<div class="ck-done ' + escapeHtml(c.okV || '') + '">' + chkLabel(c.okV)
+         + ' — 대표 확정 · ' + escapeHtml(c.okT || '') + '</div>';
+      h += '<div class="ck-btns"><button type="button" class="ck-b" onclick="chkUndo(\'' + uq + '\')">↩︎ 확정 되돌리기 (대표)</button></div>';
+    }else{
+      h += '<div class="ck-btns">'
+         + '<button type="button" class="ck-b go"   onclick="chkDecide(\'' + uq + '\',\'go\')">✅ 대표 승인</button>'
+         + '<button type="button" class="ck-b hold" onclick="chkDecide(\'' + uq + '\',\'hold\')">🟡 보류</button>'
+         + '<button type="button" class="ck-b stop" onclick="chkDecide(\'' + uq + '\',\'stop\')">⛔ 중단</button>'
+         + '</div>';
+      h += '<div class="ck-note">최종 결정은 대표만 누를 수 있습니다. (누르면 대표 비밀번호를 물어봅니다)</div>';
+    }
   }
+  h += chkFbBlock(url, c);
   h += '</div>';
   return h;
+}
+/* 🩺 점검 카드의 소견·할일·판정버튼을 접었다 폈다 — 개발자들이 스크롤 덜 하게 기본은 접힘 */
+function ckToggle(url){
+  CK_OPEN[url] = !CK_OPEN[url];
+  try{ detailHtml(); }catch(e){}
 }
 async function chkDecide(url, v){
   var c = chkOf(url);
@@ -4229,23 +4297,36 @@ async function ckFbReply(url, i, mode){
 function chkFbBlock(url, c){
   var uq   = String(url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
   var list = (c && c.fb && c.fb.length) ? c.fb : [];
-  var _wait = 0;
-  for(var _i = 0; _i < list.length; _i++){ if(!ckFbDone(list[_i])) _wait++; }
+  var doneList = list.filter(ckFbDone);
+  var waitList = list.filter(function(it){ return !ckFbDone(it); });
+  /* 기본은 미완료만 — 다 스크롤 안 해도 확인해야 할 것부터 보이게. 완료 쌓여도 안 밀림 */
+  var filter = CK_FB_FILTER[url] || (waitList.length ? 'wait' : 'all');
+  var shown = filter === 'wait' ? waitList : (filter === 'done' ? doneList : list);
   var h = '<div class="ck-fb"><i>💬 이 시스템 쓰면서 불편한 점 · 고쳐야 할 점';
   if(list.length) h += ' <b>(' + list.length + ')</b>';
-  if(_wait) h += ' <span class="ck-wait">🔴 담당자 확인 대기 ' + _wait + '</span>';
+  if(waitList.length) h += ' <span class="ck-wait">🔴 담당자 확인 대기 ' + waitList.length + '</span>';
   h += '</i>';
+  if(list.length){
+    h += '<div class="ck-fbtabs">'
+       + '<button type="button" class="ck-fbtab' + (filter === 'wait' ? ' on' : '') + '" onclick="ckFbFilter(\'' + uq + '\',\'wait\')">🔴 미완료 ' + waitList.length + '</button>'
+       + '<button type="button" class="ck-fbtab' + (filter === 'done' ? ' on' : '') + '" onclick="ckFbFilter(\'' + uq + '\',\'done\')">✅ 완료 ' + doneList.length + '</button>'
+       + '<button type="button" class="ck-fbtab' + (filter === 'all'  ? ' on' : '') + '" onclick="ckFbFilter(\'' + uq + '\',\'all\')">전체 ' + list.length + '</button>'
+       + '</div>';
+  }
   if(!list.length){
     h += '<p class="ck-fbnone">아직 남긴 피드백이 없습니다. 첫 줄을 적어주세요.</p>';
+  }else if(!shown.length){
+    h += '<p class="ck-fbnone">' + (filter === 'wait' ? '미완료' : filter === 'done' ? '완료' : '') + ' 피드백이 없습니다.</p>';
   }else{
     h += '<ul class="ck-fbl">';
-    for(var i = 0; i < list.length; i++){
-      var it = list[i] || {};
+    for(var i = 0; i < shown.length; i++){
+      var it = shown[i] || {};
+      var realIdx = list.indexOf(it);   // 🗑 지우기 · 담당자 답글 버튼은 원본 배열 위치를 써야 해서 실제 index 를 다시 찾는다
       h += '<li><div class="hd"><span class="w">' + escapeHtml(String(it.w || '익명'))
          + '</span><span class="t">' + escapeHtml(String(it.t || '')) + '</span>'
-         + '<button type="button" class="ck-fbx" title="지우기" onclick="chkFbDel(\'' + uq + '\',' + i + ')">🗑</button>'
+         + '<button type="button" class="ck-fbx" title="지우기" onclick="chkFbDel(\'' + uq + '\',' + realIdx + ')">🗑</button>'
          + '</div><p>' + escapeHtml(String(it.m || '')) + '</p>'
-         + ckFbPicHtml(it) + ckFbReplyHtml(url, uq, it, i) + '</li>';
+         + ckFbPicHtml(it) + ckFbReplyHtml(url, uq, it, realIdx) + '</li>';
     }
     h += '</ul>';
   }
@@ -4261,6 +4342,11 @@ function chkFbBlock(url, c){
   h += '<div class="ck-fbhelp">남기면 전직원에게 바로 보입니다. 감독관이 매일 오전 11시 점검할 때 이걸 먼저 읽고 개선 방향을 잡습니다.</div>';
   h += '</div>';
   return h;
+}
+/* 💬 피드백 목록 완료/미완료/전체 탭 전환 */
+function ckFbFilter(url, f){
+  CK_FB_FILTER[url] = f;
+  try{ detailHtml(); }catch(e){}
 }
 
 /* 공용 장부에 있는 피드백을 내 화면 것과 합친다 (남이 먼저 쓴 게 사라지는 거 방지) */
@@ -4388,14 +4474,21 @@ function detailHtml(){
   const fbs = feedbackFor(key);
   const fid = safeId(key);
 
+  const isNew = entryIsNew(e);
   return host.innerHTML = `
     <div class="br">
       <button type="button" class="br-back" onclick="closeDetail()">‹ 목록으로</button>
       <span class="br-tag ${ok ? '' : 'wip'}">${ok ? '✅ 지금 사용 가능' : '🔧 아직 만드는 중'}</span>
+      ${isNew ? '<span class="br-new">🆕 NEW</span>' : ''}
       <div class="br-t">${escapeHtml(e.title)} <small>· ${g.t}</small> <button type="button" class="br-ren" onclick="editEntryTitle('${kq}')">✏️ 이름 수정</button></div>
       <div class="br-u">${locked ? (ok ? '🔒 잠긴 시스템입니다. 열 때 비밀번호를 물어봅니다.' : '🔒 아직 만드는 중이라 주소는 가려져 있습니다. 비밀번호를 넣으면 열립니다.') : escapeHtml(e.url || '주소가 없습니다')}</div>
-      ${e.note ? `<div class="br-u" style="margin-top:6px;color:#5b626d">${escapeHtml(e.note)}</div>` : ''}
+      ${e.note
+        ? (isNew
+            ? `<div class="br-note-new"><b>🆕 새로 등록된 시스템입니다 — 무엇인지 간단히 알려드려요</b>${escapeHtml(e.note)}</div>`
+            : `<div class="br-u" style="margin-top:6px;color:#5b626d">${escapeHtml(e.note)}</div>`)
+        : (isNew ? `<div class="br-note-new"><b>🆕 새로 등록된 시스템입니다</b>아직 설명이 안 붙어 있어요. 담당자가 확인 후 채워주세요.</div>` : '')}
       <button type="button" class="br-open" onclick="${locked ? `tryOpenLocked('${uq}')` : `stGo('${uq}')`}">${locked ? '🔒 비밀번호 넣고 열기 →' : '열기 →'}</button>
+      <button type="button" class="br-opt" onclick="entryOptions('${uq}')">⚙️ 부서·상태 바꾸기</button>
       ${chkCard(e.url || '')}
 
       <div class="br-grid">
@@ -7091,7 +7184,7 @@ async function deskFastPass(id){
   body += skip.length
     ? ('건너뛰는 것\n· ' + skip.join('\n· ') + '\n\n')
     : ('건너뛰는 것 없음 — 확인이 다 끝난 건입니다.\n\n');
-  body += '승인하면 업무 모음에 「만드는중」으로 자동 등록되고,\n무엇을 건너뛰었는지 진행 이력에 그대로 남습니다.\n\n계속할까요?';
+  body += '승인하면 업무 모음에 바로 등록되고,\n무엇을 건너뛰었는지 진행 이력에 그대로 남습니다.\n\n계속할까요?';
   if(!(await customConfirm(body, false, '🚀 승인'))) return;
 
   /* 대표 본인 확인 — 이 비밀번호를 아는 사람만 통과시킬 수 있다 */
@@ -7099,16 +7192,50 @@ async function deskFastPass(id){
   if(pw === null) return;
   if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다.'); return; }
 
+  var target = await askDeployTarget(r);
+  if(target === undefined){ await customAlert('부서·상태를 고르지 않아 직권 통과를 멈췄습니다. 다시 눌러서 끝까지 골라주세요.'); return; }
+
   dkSetStage(r, '최종승인');
   r.approvedAt = dkNow();
   r.fastPass = { t: r.approvedAt, skip: skip.slice(0) };
   try{ dkLog(r, '대표', '🚀 직권 통과 — 최종 승인' + (skip.length ? ' (건너뜀: ' + skip.join(', ') + ')' : '')); }catch(e){}
   var msg = '';
-  try{ msg = dkToEntry(r); }catch(e){}
+  try{ msg = dkToEntry(r, target); }catch(e){}
   if(msg){ try{ dkLog(r, '시스템', msg); }catch(e){} }
   await dkSaveReview();
   try{ closeModal(true); }catch(e){}
   await customAlert('🚀 직권 통과 — 최종 승인되었습니다.' + (msg ? '\n\n📋 ' + msg : ''));
+}
+
+/* ⭐ 업무 모음으로 넘기기 전에 부서·상태를 직접 고르게 한다.
+   자동 분류(classifyDept)는 단어 점수가 같으면 그냥 먼저 나오는 부서를 골라버려서
+   실제로 엉뚱한 부서로 등록된 적이 있다(2026-08-10, rv1 「위베이프 이슈 모니터링」).
+   대표에게 「예상 부서」를 보여주고 확인·수정하게 하는 게 안전하다.
+   링크가 없으면(등록할 게 없으면) null 을 돌려주고 dkToEntry 가 알아서 안내만 한다. */
+async function askDeployTarget(r){
+  var url = String(r.url || '').trim();
+  if(!url) return null;
+  var already = null; try{ already = findEntry(url); }catch(e){}
+  var guessDept = already ? already.dept : 'DEV';
+  if(!already){
+    try{ var cd = classifyDept(String(r.title || '') + ' ' + String(r.text || '')); if(cd && cd.code) guessDept = cd.code; }catch(e){}
+  }
+  const deptOptions = GROUPS.flatMap(g => g.depts.filter(c=>DEPTS[c]).map(c => ({
+    value: c, label: `${g.e} ${g.t} › ${DEPTS[c].name}(${c})`
+  })));
+  var gl = ''; try{ gl = groupLabel(guessDept); }catch(e){}
+  const pickedDept = await customSelect(
+    '「' + String(r.title || '') + '」\n업무 모음 어느 부서로 넣을까요?\n(자동 예상: ' + gl + ' — 틀렸으면 직접 골라주세요)',
+    deptOptions, guessDept);
+  if(pickedDept === null) return undefined; // 취소
+  var guessStatus = already ? already.status : '개발중';
+  const pickedStatus = await customSelect(
+    '지금 상태는 어떤가요?',
+    [{value:'개발중', label:'🔧 만드는중 — 아직 완성 전이라 잠겨서 등록됩니다'},
+     {value:'운영중', label:'✅ 사용가능 — 지금 바로 써도 됩니다'}],
+    guessStatus);
+  if(pickedStatus === null) return undefined; // 취소
+  return { dept: pickedDept, status: pickedStatus };
 }
 
 async function deskApprove(id){
@@ -7117,11 +7244,13 @@ async function deskApprove(id){
   const pw = await customPrompt('대표 최종 승인입니다.\n대표 비밀번호를 입력해주세요.', 'password', '');
   if(pw === null) return;
   if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다.'); return; }
+  const target = await askDeployTarget(r);
+  if(target === undefined){ await customAlert('부서·상태를 고르지 않아 최종 승인을 멈췄습니다. 다시 눌러서 끝까지 골라주세요.'); return; }
   dkSetStage(r, '최종승인');
   r.approvedAt = dkNow();
   dkLog(r, '대표', '최종 승인 — 진행 확정');
   var msg = '';
-  try{ msg = dkToEntry(r); }catch(e){}
+  try{ msg = dkToEntry(r, target); }catch(e){}
   if(msg) dkLog(r, '시스템', msg);
   await dkSaveReview();
   await customAlert('최종 승인되었습니다. 이제 진행하세요.' + (msg ? '\n\n📋 ' + msg : ''));
@@ -7129,36 +7258,47 @@ async function deskApprove(id){
 
 /* ★ 대표가 최종 승인하면 그 업무를 「업무 모음」에 자동으로 꽂아 넣는다.
    · 링크가 없으면 등록할 게 없으므로 건너뛴다(제목만으로는 열 수가 없다).
-   · 이미 있으면 담당자만 채운다.
-   · 부서는 제목·내용에서 자동 분류하고, 못 고르면 개발(DEV)로 둔다. 나중에 바꿀 수 있다.
-   · 상태는 「만드는중」으로 넣는다 — 승인은 "만들어라"이지 "다 됐다"가 아니다. */
-function dkToEntry(r){
+   · 이미 있으면 담당자를 채우고, opts 로 부서·상태가 넘어오면 그것도 반영한다.
+   · opts.dept / opts.status 가 있으면 그대로 쓴다 (승인창에서 직접 고른 값).
+     없으면 예전처럼 자동 분류 + 「만드는중」 기본값으로 떨어진다.
+   · ⭐ 이 주소가 예전에 지워진 적이 있어도 무덤에서 꺼내서(reviveUrl) 반드시 살아남게 한다.
+     (2026-08-10: rv1 이 이 버그로 최종 승인 후에도 업무 모음에 영영 안 나타났었다.) */
+function dkToEntry(r, opts){
   if(!r) return '';
   var url = String(r.url || '').trim();
   if(!url) return '링크가 없어서 업무 모음에는 등록하지 못했습니다. 주소가 생기면 「+ 새로 넣기」로 올려주세요.';
+  reviveUrl(url);
   var ex = null;
   try{ ex = findEntry(url); }catch(e){}
   if(ex){
     var chg = '';
-    if(!String(ex.owner || '').trim() && (r.dev || r.author)){ ex.owner = String(r.dev || r.author); chg = ' (담당자 ' + ex.owner + ' 로 채움)'; }
+    if(!String(ex.owner || '').trim() && (r.dev || r.author)){ ex.owner = String(r.dev || r.author); chg += ' (담당자 ' + ex.owner + ' 로 채움)'; }
+    if(opts && opts.dept && opts.dept !== ex.dept){ var og = ''; try{ og = groupLabel(opts.dept); }catch(e){} ex.dept = opts.dept; chg += ' (부서를 ' + og + '로 바꿈)'; }
+    if(opts && opts.status && opts.status !== ex.status){ ex.status = opts.status; chg += ' (상태를 ' + (opts.status === '개발중' ? '만드는중' : '사용가능') + '으로 바꿈)'; }
     try{ render(); }catch(e){}
     try{ syncUpdate(ex); }catch(e){}
     return '이미 업무 모음에 있는 시스템입니다' + chg + '.';
   }
-  var code = 'DEV';
-  try{
-    var cd = classifyDept(String(r.title || '') + ' ' + String(r.text || ''));
-    if(cd && cd.code) code = cd.code;
-  }catch(e){}
-  var ne = { dept: code, title: String(r.title || '새 업무').slice(0, 60), url: url, note: '',
-             status: '개발중', owner: String(r.dev || r.author || '') };
+  var code = (opts && opts.dept) || 'DEV';
+  if(!opts || !opts.dept){
+    try{
+      var cd = classifyDept(String(r.title || '') + ' ' + String(r.text || ''));
+      if(cd && cd.code) code = cd.code;
+    }catch(e){}
+  }
+  var status = (opts && opts.status) || '개발중';
+  // 처음 열어보는 직원이 뭔지 바로 알 수 있게, 제출한 설명 앞부분을 요약으로 넣는다
+  var noteSrc = String(r.text || '').replace(/[#*`>_\n\r]+/g, ' ').replace(/\s+/g, ' ').trim();
+  var note = noteSrc.slice(0, 90) + (noteSrc.length > 90 ? '…' : '');
+  var ne = { dept: code, title: String(r.title || '새 업무').slice(0, 60), url: url, note: note,
+             status: status, owner: String(r.dev || r.author || ''), createdAt: Date.now() };
   try{ entries.push(ne); }catch(e){ return ''; }
   var gl = '';
   try{ gl = groupOf(code).t; }catch(e){}
   try{ render(); }catch(e){}
   try{ syncUpdate(ne); }catch(e){}
-  return '업무 모음 「' + gl + '」에 자동 등록했습니다 — 만드는중 · 담당 ' +
-         (ne.owner || '미지정') + '. 부서가 안 맞으면 상세에서 바꿀 수 있습니다.';
+  return '업무 모음 「' + gl + '」에 ' + (status === '개발중' ? '만드는중' : '사용가능') + ' 상태로 자동 등록했습니다 — 담당 ' +
+         (ne.owner || '미지정') + '. 부서·상태가 안 맞으면 상세의 ⚙️ 옵션에서 바로 바꿀 수 있습니다.';
 }
 
 // 반려 / 되돌리기
@@ -8291,7 +8431,7 @@ function hmRow(e, clk){
   if(c && c.v) sub += ' · ' + HM_TXT[c.v];
   return '<button type="button" class="hm-r" onclick="hmOpen(\'' + uq + '\')">' +
     '<span class="hm-ic" style="background:' + g.c + '">' + g.e + '</span>' +
-    '<span class="m"><span class="t">' + escapeHtml(e.title) + (lk ? ' 🔒' : '') + '</span>' +
+    '<span class="m"><span class="t">' + escapeHtml(e.title) + (entryIsNew(e) ? ' <span class="hm-new">NEW</span>' : '') + (lk ? ' 🔒' : '') + '</span>' +
     '<span class="s">' + escapeHtml(sub) + '</span></span>' +
     '<span class="rt">' +
       '<span class="hm-go">' + (lk ? '비밀번호' : '열기 ↗') + '</span>' +
