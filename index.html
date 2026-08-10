@@ -1850,9 +1850,52 @@
   .vres b{font-weight:700;}
 
   /* ── 🛠 고친 내역 / 📊 접속 현황 (별도 화면) ── */
-  #fixv, #statv{display:none; max-width:1000px; margin:0 auto; padding:0 16px 90px;}
+  #fixv, #statv, #devv{display:none; max-width:1000px; margin:0 auto; padding:0 16px 90px;}
   body.fixview #fixv{display:block;}
   body.statview #statv{display:block;}
+  body.devview #devv{display:block;}
+  body.devview .wrap, body.devview #roadmap, body.devview #desk, body.devview #board,
+  body.devview #home, body.devview #fixv, body.devview #statv{display:none !important;}
+  body.devview .searchbar, body.devview .tabs, body.devview .stats, body.devview .topbtns{display:none !important;}
+  body.devview h1, body.devview .lead{display:none !important;}
+  body.devview.detailopen #devv{display:none !important;}
+  body.devview.detailopen .wrap{display:block !important;}
+
+  /* 👨‍💻 개발자 화면 */
+  .dv-sum{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;}
+  .dv-sum .c{flex:1 1 150px; min-width:0; background:var(--ap-card); border-radius:var(--ap-r); padding:13px 15px;}
+  .dv-sum .c b{display:block; font-size:23px; font-weight:800; letter-spacing:-1px; color:var(--ap-l1);}
+  .dv-sum .c b.red{color:var(--ap-red);}
+  .dv-sum .c span{display:block; font-size:11.5px; color:var(--ap-l2); margin-top:2px;}
+  .dv-g{background:var(--ap-card); border-radius:var(--ap-r); margin-bottom:11px; overflow:hidden;}
+  .dv-h{display:flex; align-items:center; gap:9px; padding:13px 15px; position:relative;}
+  .dv-h::after{content:""; position:absolute; left:15px; right:0; bottom:0; height:.5px; background:var(--ap-sep);}
+  .dv-h .av{flex:0 0 auto; width:32px; height:32px; border-radius:50%; background:var(--ap-fill);
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:var(--ap-l2);}
+  .dv-h .nm{flex:1; min-width:0;}
+  .dv-h .nm b{display:block; font-size:15px; font-weight:700; letter-spacing:-.3px; color:var(--ap-l1);}
+  .dv-h .nm span{display:block; font-size:11.5px; color:var(--ap-l2); margin-top:1px;}
+  .dv-h .bd{flex:0 0 auto; background:var(--ap-red); color:#fff; font-size:11.5px; font-weight:800;
+    border-radius:9px; padding:3px 9px;}
+  .dv-h .ok{flex:0 0 auto; background:rgba(52,199,89,.16); color:#146b31; font-size:11.5px; font-weight:700;
+    border-radius:9px; padding:3px 9px;}
+  .dv-g.noown .dv-h .av{background:rgba(255,149,0,.2);}
+  .dv-r{display:flex; align-items:center; gap:10px; width:100%; background:none; border:0; text-align:left;
+    padding:11px 15px; cursor:pointer; font-family:inherit; position:relative;}
+  .dv-r + .dv-r::before{content:""; position:absolute; left:15px; right:0; top:0; height:.5px; background:var(--ap-sep);}
+  .dv-r:hover{background:var(--ap-fill);}
+  .dv-r .ic{flex:0 0 auto; width:26px; height:26px; border-radius:7px; display:flex; align-items:center;
+    justify-content:center; font-size:13px;}
+  .dv-r .m{flex:1; min-width:0;}
+  .dv-r .m .t{display:block; font-size:14px; font-weight:600; letter-spacing:-.3px; color:var(--ap-l1);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .dv-r .m .s{display:block; font-size:11px; color:var(--ap-l3); margin-top:2px;}
+  .dv-r .n{flex:0 0 auto; background:var(--ap-red); color:#fff; font-size:11px; font-weight:800;
+    border-radius:8px; padding:2px 8px; min-width:22px; text-align:center;}
+  .dv-r .n.done{background:rgba(52,199,89,.16); color:#146b31;}
+  .dv-r .go{flex:0 0 auto; font-size:11.5px; color:var(--ap-l3); font-weight:600;}
+  .dv-empty{background:var(--ap-card); border-radius:var(--ap-r); padding:18px; text-align:center;
+    font-size:12.5px; color:var(--ap-l3);}
   body.fixview .wrap, body.fixview #roadmap, body.fixview #desk, body.fixview #board, body.fixview #home,
   body.statview .wrap, body.statview #roadmap, body.statview #desk, body.statview #board, body.statview #home{display:none !important;}
   body.fixview .searchbar, body.fixview .tabs, body.fixview .stats, body.fixview .topbtns,
@@ -2024,6 +2067,7 @@
       <button type="button" class="vnav" id="vnavBoard" onclick="setView('board')">🗂️ 업무 현황</button>
       <button type="button" class="vnav" id="vnavDesk" onclick="setView('desk')">🧩 새 업무 검토<span class="nv-dot" id="vnavDeskDot" style="display:none">0</span></button>
       <button type="button" class="vnav" id="vnavMap" onclick="setView('map')">🧭 성장 로드맵</button>
+      <button type="button" class="vnav" id="vnavDev" onclick="setView('dev')">👨‍💻 개발자<span class="nv-dot" id="vnavDevDot" style="display:none">0</span></button>
       <div class="vn-t">기록</div>
       <button type="button" class="vnav" id="vnavFix" onclick="setView('fix')">🛠 고친 내역<span class="nv-dot" id="vnavFixDot" style="display:none">0</span></button>
       <button type="button" class="vnav" id="vnavStat" onclick="setView('stat')">📊 접속 현황</button>
@@ -2095,6 +2139,14 @@
   <div class="hm-list" id="hmAll"></div>
   <div class="hm-f">이름을 누르면 그 시스템이 <b>새 창으로 바로</b> 열립니다. 오른쪽 ⓘ 를 누르면 담당·점검·의견이 열립니다.<br>
     🔒 는 만드는 중이거나 민감한 것 — 비밀번호를 넣어야 주소가 보입니다.</div>
+</section>
+
+<section id="devv">
+  <div class="hm-hi"><h2>개발자</h2><p>누가 무엇을 맡고 있고, 답해야 할 의견이 몇 개 남았는지.</p></div>
+  <div class="dv-sum" id="dvSum"></div>
+  <div id="dvBox"></div>
+  <div class="hm-f">🔴 는 <b>담당 개발자 본인</b>이 그 시스템에 들어가서 「✅ 완료 처리」를 눌러야 사라집니다.<br>
+    사이트를 누르면 그 시스템의 의견 화면이 바로 열립니다.</div>
 </section>
 
 <section id="fixv">
@@ -3528,18 +3580,20 @@ function setFilter(mode){
 // ===== 🧭 성장 로드맵 (두 번째 메뉴) =====
 let currentView = 'hub';
 function setView(v){
-  currentView = (v === 'map' || v === 'desk' || v === 'board' || v === 'home' || v === 'fix' || v === 'stat') ? v : 'hub';
+  currentView = (v === 'map' || v === 'desk' || v === 'board' || v === 'home' || v === 'fix' || v === 'stat' || v === 'dev') ? v : 'hub';
   document.body.classList.toggle('mapview', currentView === 'map');
   document.body.classList.toggle('deskview', currentView === 'desk');
   document.body.classList.toggle('boardview', currentView === 'board');
   document.body.classList.toggle('homeview', currentView === 'home');
   document.body.classList.toggle('fixview', currentView === 'fix');
   document.body.classList.toggle('statview', currentView === 'stat');
+  document.body.classList.toggle('devview', currentView === 'dev');
   const a = document.getElementById('vnavHub'), b = document.getElementById('vnavMap'), d = document.getElementById('vnavDesk');
   const bd = document.getElementById('vnavBoard');
   const hm = document.getElementById('vnavHome');
   const fx = document.getElementById('vnavFix');
   const stv = document.getElementById('vnavStat');
+  const dvb = document.getElementById('vnavDev');
   if(a) a.classList.toggle('on', currentView === 'hub');
   if(b) b.classList.toggle('on', currentView === 'map');
   if(d) d.classList.toggle('on', currentView === 'desk');
@@ -3547,6 +3601,7 @@ function setView(v){
   if(hm) hm.classList.toggle('on', currentView === 'home');
   if(fx) fx.classList.toggle('on', currentView === 'fix');
   if(stv) stv.classList.toggle('on', currentView === 'stat');
+  if(dvb) dvb.classList.toggle('on', currentView === 'dev');
   const h = document.querySelector('header.top h1');
   const s = document.getElementById('headSub');
   if(currentView === 'desk'){
@@ -3560,6 +3615,11 @@ function setView(v){
     if(h) h.textContent = '위베이프 허브';
     if(s) s.textContent = '누르면 바로 열립니다.';
     try{ renderHome(); }catch(err){}
+  } else if(currentView === 'dev'){
+    document.body.classList.remove('detailopen');
+    if(h) h.textContent = '개발자';
+    if(s) s.textContent = '누가 무엇을 맡고 있고, 답해야 할 의견이 몇 개 남았는지.';
+    try{ renderDev(); }catch(err){}
   } else if(currentView === 'fix'){
     document.body.classList.remove('detailopen');
     if(h) h.textContent = '고친 내역';
@@ -4387,6 +4447,8 @@ async function completeEntryByKey(key){
 
 function render(){
   saveLocal(); // 화면을 다시 그릴 때마다 = 뭔가 바뀌었을 때마다 내 기기에 저장
+  try{ dvPaintBadge(); }catch(err){}
+  try{ if(typeof currentView !== 'undefined' && currentView === 'dev') renderDev(); }catch(err){}
   const liveEntries = entries.filter(e => e.status !== "개발중");
   const wipEntries = entries.map((e, idx) => ({...e, idx})).filter(e => e.status === "개발중");
   const activeDeptCodes = new Set(liveEntries.map(e => e.dept));
@@ -7405,6 +7467,143 @@ function dkFoldT(k){
   try{ var u = dkUI(); u.fold[k] = !u.fold[k]; renderDesk(); }catch(e){}
 }
 
+
+/* ============================================================
+   👨‍💻 개발자 화면 — 「누가 무엇을 맡고, 뭐가 밀려 있나」
+   · 담당 개발자 이름으로 사이트를 묶는다
+   · 미처리 의견이 있는 사람과 사이트를 위로 올린다
+   · 사이트를 누르면 그 시스템 상세(의견 화면)로 바로 들어간다
+   ★ function 선언만 쓴다 (applyData 가 파일 중간에서 먼저 돈다 — TDZ)
+   ============================================================ */
+function dvOwner(e){
+  var o = '';
+  try{ o = String((e && e.owner) || '').trim(); }catch(err){}
+  /* 「개발자:장현진」 처럼 붙어 있는 것도 이름만 뽑는다 */
+  o = o.replace(/^\s*(개발자|담당자|담당)\s*[:：]\s*/, '').trim();
+  return o;
+}
+/* 담당자가 두 명 이상이면(쉼표·슬래시·가운뎃점으로 적어 놓은 것) 각자 이름으로 쪼갠다.
+   그러면 그 시스템이 두 사람 화면에 모두 뜬다 — 둘 다 담당이니 맞다. */
+function dvOwners(e){
+  var o = dvOwner(e);
+  if(!o) return [];
+  return o.split(/\s*[,\/·&]\s*|\s+및\s+/).map(function(x){ return String(x).trim(); }).filter(Boolean);
+}
+function dvDoneCnt(url){
+  var n = 0;
+  try{
+    var c = CHECKS[url];
+    if(c && Array.isArray(c.fb)){ for(var i = 0; i < c.fb.length; i++){ if(ckFbDone(c.fb[i])) n++; } }
+  }catch(e){}
+  return n;
+}
+function dvGroups(){
+  var map = {}, order = [];
+  try{
+    (entries || []).forEach(function(e){
+      var names = dvOwners(e);
+      if(!names.length) names = [''];
+      var op = 0, dn = 0;
+      try{ op = ckFbOpenCnt(e.url); }catch(err){}
+      try{ dn = dvDoneCnt(e.url); }catch(err){}
+      names.forEach(function(nm){
+        var key = nm ? ckNameNorm(nm) : '__none__';
+        if(!map[key]){ map[key] = { name: nm, rows: [], open: 0, done: 0 }; order.push(key); }
+        if(nm && map[key].name.length < nm.length) map[key].name = nm;   // 「장현진」보다 「장현진 팀장」
+        map[key].rows.push({ e: e, open: op, done: dn, share: names.length > 1 });
+        map[key].open += op; map[key].done += dn;
+      });
+    });
+  }catch(e){}
+  var list = order.map(function(k){ return map[k]; });
+  list.forEach(function(g){
+    g.rows.sort(function(a, b){ return (b.open - a.open) || String(a.e.title).localeCompare(String(b.e.title)); });
+  });
+  list.sort(function(a, b){
+    if(!a.name !== !b.name) return a.name ? -1 : 1;      // 담당자 미지정은 항상 맨 아래
+    return (b.open - a.open) || (b.rows.length - a.rows.length);
+  });
+  return list;
+}
+/* 합계는 「사이트 기준」으로 한 번만 센다.
+   담당자가 두 명인 시스템을 두 번 세면 숫자가 부풀려진다. */
+function dvOpenTotal(){
+  var n = 0;
+  try{ (entries || []).forEach(function(e){ n += ckFbOpenCnt(e.url); }); }catch(e){}
+  return n;
+}
+function dvPaintBadge(){
+  var el = document.getElementById('vnavDevDot');
+  if(!el) return;
+  var n = 0;
+  try{ n = dvOpenTotal(); }catch(e){}
+  if(n > 0){ el.textContent = n > 99 ? '99+' : n; el.style.display = ''; }
+  else { el.style.display = 'none'; }
+}
+/* 사이트를 누르면 그 시스템 상세로 — 의견 칸까지 스크롤해 준다 */
+function dvGo(uq){
+  var url = String(uq || '');
+  try{
+    var e = findEntry(url);
+    if(!e) return;
+    setView('hub');
+    openDetail(entryKey(e));
+    setTimeout(function(){
+      try{
+        var t = document.querySelector('#detail .ck-fb');
+        if(t) t.scrollIntoView({ block: 'start' });
+      }catch(err){}
+    }, 260);
+  }catch(err){}
+}
+function renderDev(){
+  var box = document.getElementById('dvBox');
+  var sum = document.getElementById('dvSum');
+  if(!box) return;
+  var gs = dvGroups();
+  var tOpen = 0, tDone = 0, tSite = 0, tDev = 0;
+  try{ tOpen = dvOpenTotal(); }catch(e){}
+  try{ (entries || []).forEach(function(e){ tSite++; tDone += dvDoneCnt(e.url); }); }catch(e){}
+  gs.forEach(function(g){ if(g.name) tDev++; });
+
+  if(sum){
+    sum.innerHTML =
+      '<div class="c"><b class="' + (tOpen ? 'red' : '') + '">' + tOpen + '</b><span>답해야 할 의견</span></div>' +
+      '<div class="c"><b>' + tDone + '</b><span>처리 완료</span></div>' +
+      '<div class="c"><b>' + tDev + '</b><span>개발자</span></div>' +
+      '<div class="c"><b>' + tSite + '</b><span>맡고 있는 시스템</span></div>';
+  }
+  if(!gs.length){ box.innerHTML = '<div class="dv-empty">아직 등록된 시스템이 없습니다.</div>'; dvPaintBadge(); return; }
+
+  box.innerHTML = gs.map(function(g){
+    var nm = g.name || '담당자 미지정';
+    var ini = g.name ? String(g.name).replace(/\s.*$/, '').slice(-2) : '?';
+    var head = '<div class="dv-h">' +
+      '<span class="av">' + escapeHtml(ini) + '</span>' +
+      '<span class="nm"><b>' + escapeHtml(nm) + '</b>' +
+        '<span>맡은 시스템 ' + g.rows.length + '개' + (g.done ? ' · 처리 완료 ' + g.done + '건' : '') + '</span></span>' +
+      (g.open ? '<span class="bd">🔴 ' + g.open + '</span>' : '<span class="ok">✅ 밀린 것 없음</span>') +
+      '</div>';
+    var rows = g.rows.map(function(r){
+      var e = r.e;
+      var gr = groupOf(e.dept);
+      var uq = String(e.url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      var sub = (e.status === '개발중' ? '🔧 만드는중' : '✅ 사용가능');
+      if(r.done) sub += ' · 처리 완료 ' + r.done + '건';
+      if(r.share) sub += ' · 공동 담당';
+      return '<button type="button" class="dv-r" onclick="dvGo(\'' + uq + '\')">' +
+        '<span class="ic" style="background:' + gr.c + '">' + gr.e + '</span>' +
+        '<span class="m"><span class="t">' + escapeHtml(e.title) + '</span>' +
+          '<span class="s">' + sub + '</span></span>' +
+        (r.open ? '<span class="n">' + r.open + '</span>'
+                : (r.done ? '<span class="n done">✓</span>' : '')) +
+        '<span class="go">›</span></button>';
+    }).join('');
+    return '<div class="dv-g' + (g.name ? '' : ' noown') + '">' + head + rows + '</div>';
+  }).join('');
+  dvPaintBadge();
+}
+
 function renderDesk(){
   const box = document.getElementById('dkList');
   const cnt = document.getElementById('dkCount');
@@ -7900,6 +8099,8 @@ function paintUpdLine(){
 
 function fxPaintBadge(){
   try{ paintUpdLine(); }catch(e){}
+  try{ dvPaintBadge(); }catch(e){}
+  try{ if(typeof currentView !== 'undefined' && currentView === 'dev') renderDev(); }catch(e){}
   var el = document.getElementById('vnavFixDot');
   if(!el) return;
   var n = 0;
