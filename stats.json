@@ -148,7 +148,7 @@
     "2026-08-10": {
       "dev": {
         "dmshgfhsu6qyqac": 1,
-        "dmsfub5jac8mrsb": 4,
+        "dmsfub5jac8mrsb": 5,
         "dmsiy5nzph0lrhf": 1,
         "dmsg3bq568xkrh3": 1,
         "dmsfkq0kdr8q74h": 3,
@@ -169,11 +169,12 @@
         "https://vflow.kr": 1,
         "https://wevape-reservation.vercel.app/": 1,
         "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1
+        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-10T04:16:47.382Z",
+  "savedAt": "2026-08-10T04:17:35.257Z",
   "savedBy": "employee"
 }
