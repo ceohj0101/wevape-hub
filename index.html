@@ -1122,6 +1122,7 @@
   .dk-item.gone .it{text-decoration:line-through; color:#8b919c;}
   .dk-badge.gone{background:#eceef1; color:#6b727c;}
   .dk-chip.tr.on{background:#6b727c; border-color:#6b727c;}
+  .dk-chip.dn.on{background:#1d7a3b; border-color:#1d7a3b;}
   .dk-gone{margin-top:10px; background:#f4f5f7; border-radius:11px; padding:10px 12px;
     font-size:12px; color:#5a616b; line-height:1.65;}
   .dk-gone b{display:block; font-weight:800; color:#3d434b; margin-top:3px;}
@@ -2954,6 +2955,16 @@ function statusDotClass(s){
 const LOCK_PASSWORD = "0000"; // 나중에 바꿔달라고 하면 이 값만 수정하면 됨
 let unlocked = false;
 
+// 잠긴 시스템 비밀번호는 LOCK_PASSWORD 또는 대표 비밀번호(CEO_PASSWORD) 둘 중 하나만 맞아도 통과
+// (CEO_PASSWORD 는 파일 뒤쪽에서 선언되지만, 이 함수는 클릭했을 때만 실행되므로 문제 없음)
+function isLockPwOk(code){
+  var v = String(code || '').trim();
+  if(!v) return false;
+  if(v === LOCK_PASSWORD) return true;
+  try{ if(v === CEO_PASSWORD) return true; }catch(e){}
+  return false;
+}
+
 // 잠기는 조건: ① 민감정보로 지정된 것  ② "만드는중"인 것 전부
 //  → 만드는중은 제목·개발자명만 보이고, 주소는 비밀번호를 넣어야 보인다.
 function isLockedByRule(entry){
@@ -2967,7 +2978,7 @@ async function toggleLock(){
   if(!unlocked){
     const code = await customPrompt("잠긴 시스템 열람 비밀번호를 입력하세요.", "password");
     if(code === null) return;
-    if(code.trim() !== LOCK_PASSWORD){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
+    if(!isLockPwOk(code)){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
     unlocked = true;
   } else {
     unlocked = false;
@@ -2984,7 +2995,7 @@ async function toggleLock(){
 async function tryOpenLocked(url){
   const code = await customPrompt("이 시스템은 잠겨 있습니다. 비밀번호를 입력하세요.", "password");
   if(code === null) return;
-  if(code.trim() !== LOCK_PASSWORD){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
+  if(!isLockPwOk(code)){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
   unlocked = true;
   const btn = document.getElementById('lockBtn');
   if(btn){
@@ -6723,7 +6734,10 @@ function dkVisible(){
     if(u.tab === 'trash'){ if(!dkDeleted(r)) return false; }
     else if(dkDeleted(r)) return false;
     else if(u.tab === 'mine'){ if(!dkNeedsMe(r)) return false; }
-    else if(u.tab !== 'all'){ if(dkTabOf(r) !== u.tab) return false; }
+    /* ★ 기본 칸(「진행 중」)에서는 끝난 것(대표 최종승인·반려)을 뺀다.
+       쌓일수록 화면이 어지러워지던 문제 — 끝난 것은 「🏁 끝난 것」에서만 본다. */
+    else if(u.tab === 'all'){ if(dkTabOf(r) === 'done') return false; }
+    else if(dkTabOf(r) !== u.tab) return false;
     if(u.q){
       const s = ((r.title||'') + ' ' + (r.dev||'') + ' ' + (r.author||'') + ' ' + (r.url||'')).toLowerCase();
       if(s.indexOf(u.q) < 0) return false;
@@ -6740,10 +6754,10 @@ function dkToolsHtml(){
   const tn = dkTrash().length;
   const tabs = [
     ['mine', '🔴 지금 내 차례', n(dkNeedsMe), ' mn'],
-    ['all',  '전체', AL.length, ''],
+    ['all',  '진행 중', n(function(r){ return dkTabOf(r) !== 'done'; }), ''],
     ['wait', '검토 진행중', n(function(r){ return dkTabOf(r) === 'wait'; }), ''],
     ['fix',  '보완 필요', n(function(r){ return dkTabOf(r) === 'fix'; }), ''],
-    ['done', '끝난 것', n(function(r){ return dkTabOf(r) === 'done'; }), '']
+    ['done', '🏁 끝난 것', n(function(r){ return dkTabOf(r) === 'done'; }), ' dn']
   ];
   if(tn) tabs.push(['trash', '🗑 지운 것', tn, ' tr']);
   return tabs.map(function(t){
@@ -7616,7 +7630,9 @@ function renderDesk(){
   const tools = document.getElementById('dkTools');
   const sch = document.getElementById('dkSearch');
   const ALIVE = dkAlive();
-  if(cnt) cnt.textContent = ALIVE.length;
+  const LIVEN = ALIVE.filter(function(r){ return dkTabOf(r) !== 'done'; }).length;
+  const DONEN = ALIVE.length - LIVEN;
+  if(cnt) cnt.textContent = LIVEN;
   if(!box) return;
   // 업무가 2건 이상일 때만 필터, 4건 이상일 때만 찾기창을 보여준다
   if(tools) tools.innerHTML = ((ALIVE.length >= 2) || dkTrash().length) ? dkToolsHtml() : '';
@@ -7632,7 +7648,9 @@ function renderDesk(){
   if(!list.length){
     box.innerHTML = (u.tab === 'trash')
       ? '<div class="dk-none">지운 업무가 없습니다.</div>'
-      : '<div class="dk-none">여기에 맞는 업무가 없습니다.<br>위에서 「전체」를 눌러보세요.</div>';
+      : ((u.tab === 'all' && DONEN)
+        ? '<div class="dk-none">진행 중인 검토가 없습니다.<br>끝난 ' + DONEN + '건은 위의 「🏁 끝난 것」에서 볼 수 있습니다.</div>'
+        : '<div class="dk-none">여기에 맞는 업무가 없습니다.<br>위에서 「진행 중」을 눌러보세요.</div>');
     try{ dkPaintBadge(); }catch(e){}
     return;
   }
