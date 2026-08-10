@@ -148,7 +148,7 @@
     "2026-08-10": {
       "dev": {
         "dmshgfhsu6qyqac": 1,
-        "dmsfub5jac8mrsb": 5,
+        "dmsfub5jac8mrsb": 4,
         "dmsiy5nzph0lrhf": 1,
         "dmsg3bq568xkrh3": 1,
         "dmsfkq0kdr8q74h": 3,
@@ -159,9 +159,10 @@
         "dmsmn7nfcf9vc80": 2,
         "dmsl7ts7cxgphpq": 1,
         "dmslt099atkxudc": 1,
-        "dmsjyqa9r5flnon": 1
+        "dmsjyqa9r5flnon": 1,
+        "dmsjynqt9eg0kax": 2
       },
-      "hit": 37,
+      "hit": 39,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 3,
         "https://order-hub-dfni.onrender.com/": 3,
@@ -169,12 +170,11 @@
         "https://vflow.kr": 1,
         "https://wevape-reservation.vercel.app/": 1,
         "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/": 1
+        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-10T04:17:35.257Z",
+  "savedAt": "2026-08-10T04:18:08.684Z",
   "savedBy": "employee"
 }
