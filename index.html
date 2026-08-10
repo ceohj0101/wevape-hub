@@ -267,7 +267,7 @@
   }
   .fb-entry-actions button:hover{color:var(--ink);}
   .fb-edit-textarea{
-    width:100%;min-height:48px;border:1px solid var(--line);border-radius:7px;padding:6px 8px;
+    width:100%;min-height:70px;border:1px solid var(--line);border-radius:7px;padding:6px 8px;
     font-size:12px;font-family:inherit;resize:vertical;margin-bottom:6px;
   }
   .fb-devbox{
@@ -290,8 +290,8 @@
     font-size:12.5px;font-family:inherit;
   }
   .fb-newform textarea{
-    width:100%;min-height:48px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;
-    font-size:12.5px;font-family:inherit;resize:vertical;
+    width:100%;min-height:96px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;
+    font-size:12.5px;font-family:inherit;resize:vertical;line-height:1.6;
   }
   .fb-newform button{
     align-self:flex-end;background:var(--dark);color:#fff;border:none;border-radius:7px;
@@ -364,6 +364,7 @@
   .contact-panel-body{display:none;padding:0 20px 22px;}
   .contact-panel-body.open{display:block;}
   .contact-panel.fb-accent{border-left-color:var(--gold);}
+  .dv-sitefb{margin-top:22px;}
 
   /* ---- 오늘 등록된 피드백 알림 배너 ---- */
   .today-fb-notice{
@@ -2170,6 +2171,20 @@
   <div id="dvBox"></div>
   <div class="hm-f">🔴 는 <b>담당 개발자 본인</b>이 그 시스템에 들어가서 「✅ 완료 처리」를 눌러야 사라집니다.<br>
     사이트를 누르면 그 시스템의 의견 화면이 바로 열립니다.</div>
+
+  <div class="dv-sitefb">
+    <div class="contact-panel fb-accent">
+      <button type="button" class="contact-panel-toggle" onclick="goHubFeedback()">
+        <span class="contact-panel-title">💬 허브 사이트 피드백</span>
+        <span class="contact-panel-sub" id="dvSiteFbSub">0건 · 눌러서 열기</span>
+        <span class="contact-panel-arrow">↗</span>
+      </button>
+    </div>
+    <div class="section-desc" style="margin-top:8px">
+      개별 시스템이 아니라 <b>위베이프 허브(이 화면) 자체</b>에 대한 의견은 여기로 모입니다.
+      각 시스템에 대한 의견은 그 시스템 상세화면에서 남겨주세요.
+    </div>
+  </div>
 </section>
 
 <section id="fixv">
@@ -3066,6 +3081,14 @@ var FX_SEEN_KEY = "wevape_hub_fixlog_seen_v1";
    ★ 둘 다 var 로 선언 — CHECKS/FIXLOG 와 같은 이유 (applyData 가 파일 중간에서 먼저 돎) */
 var CK_OPEN = {};
 var CK_FB_FILTER = {};
+/* 🔧 업데이트요청 · 최근 업데이트 내역 — 시스템(웹앱)별로 따로 쌓는 장부
+   SYS_UPD[url] = { req:[{w,m,t,done,doneBy,doneT}], log:[{w,d,m,t}] }
+   · req = 직원·대표가 개발자에게 남기는 업데이트 요청
+   · log = 담당 개발자가 "그 웹앱 안에서" 실제로 바꾼 내용을 날짜별로 남기는 기록
+   · 위베이프 허브 자체를 고친 기록(FIXLOG)과는 완전히 다른 장부다 — 헷갈리지 말 것.
+   ★ var 로 선언 — CHECKS 와 같은 이유(applyData 가 파일 중간에서 먼저 돎) */
+var SYS_UPD = {};
+var SU_TAB = {};   // url -> 'req'|'log' (기본 'req')
 let openFeedbackPanels = new Set();
 let editingFeedbackIds = new Set();
 const FB_STATUS_OPTIONS = ["접수됨","업데이트 예정","업데이트 완료"];
@@ -3237,6 +3260,17 @@ function toggleSiteFeedbackPanel(){
   if(!body) return;
   body.classList.toggle('open');
   if(icon) icon.classList.toggle('open');
+}
+/* 👨‍💻 개발자 화면의 「💬 허브 사이트 피드백」 메뉴 — 클릭하면 기본 화면으로 옮겨서
+   허브 자체 피드백 패널을 펼치고 그쪽으로 스크롤해준다. 데이터·입력폼은 새로 안 만들고
+   기존 siteFbBody 하나만 그대로 쓴다 (두 군데서 따로 렌더링하면 id 겹쳐서 저장 버그 남). */
+function goHubFeedback(){
+  setView('hub');
+  openSiteFeedbackPanel();
+  setTimeout(function(){
+    const el = document.getElementById('siteFbBody');
+    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 80);
 }
 function jumpToFeedback(url, fid){
   if(url === '__site__'){
@@ -4457,6 +4491,255 @@ function chkStat(){
   return { n: n, ok: ok, stop: stop };
 }
 
+/* ============================================================
+   🔧 업데이트요청 · 최근 업데이트 내역
+   · 「📮 업데이트요청」 = 직원·대표가 개발자에게 남기는 요청. 비밀번호 없이 누구나 남긴다.
+   · 「📝 최근 업데이트 내역」 = 담당 개발자가 그 웹앱 안에서 실제로 바꾼 걸 날짜별로 적는 장부.
+   · 저장 위치: SYS_UPD[url] = { req:[...], log:[...] } — 데이터.json에 sysUpd 로 나간다.
+   · 왼쪽 「🛠 고친 내역」(FIXLOG, 감독관이 허브 자체를 고친 기록)과는 완전히 다른 장부다.
+   · 두 사람이 동시에 써도 안 사라지게, chkFbPull() 과 같은 방식으로 저장 직전에 공용 장부를 당겨 합친다.
+   ============================================================ */
+function suKey(o){
+  return String((o && o.t) || '') + '|' + String((o && o.w) || '') + '|' + String((o && o.m) || '');
+}
+async function suPull(){
+  try{
+    var R = ghRepo();
+    var hd = { "Accept": "application/vnd.github.raw" };
+    try{ var _t = ghToken(); if(_t) hd["Authorization"] = "Bearer " + _t; }catch(e){}
+    var _try = [{u: sameSiteUrl(R.path)},
+                {u: 'https://api.github.com/repos/' + R.owner + '/' + R.repo + '/contents/' + R.path + '?ref=' + R.branch, h: hd},
+                {u: 'https://raw.githubusercontent.com/' + R.owner + '/' + R.repo + '/' + R.branch + '/' + R.path + '?t=' + Date.now()}
+               ].filter(function(x){ return !!x.u; });
+    var res = null;
+    for(var _i = 0; _i < _try.length; _i++){
+      try{
+        var _r = await fetch(_try[_i].u, _try[_i].h ? { headers: _try[_i].h, cache: "no-store" } : { cache: "no-store" });
+        if(_r.ok){ res = _r; break; }
+      }catch(e2){}
+    }
+    if(!res) return false;
+    var d = await res.json();
+    if(!d || !d.sysUpd || typeof d.sysUpd !== 'object') return false;
+    for(var k in d.sysUpd){
+      if(!Object.prototype.hasOwnProperty.call(d.sysUpd, k)) continue;
+      var remote = d.sysUpd[k] || {};
+      if(!SYS_UPD[k]) SYS_UPD[k] = { req: [], log: [] };
+      var mine = SYS_UPD[k];
+      ['req', 'log'].forEach(function(kind){
+        var rArr = remote[kind] || [];
+        var mArr = mine[kind] || [];
+        var seen = {};
+        for(var i = 0; i < mArr.length; i++) seen[suKey(mArr[i])] = 1;
+        for(var j = 0; j < rArr.length; j++){ if(!seen[suKey(rArr[j])]) mArr.push(rArr[j]); }
+        mArr.sort(function(a, b){ return String((a && a.t) || '') < String((b && b.t) || '') ? -1 : 1; });
+        mine[kind] = mArr;
+      });
+    }
+    return true;
+  }catch(e){ return false; }
+}
+function suSetTab(url, tab){
+  SU_TAB[url] = tab;
+  try{ detailHtml(); }catch(e){}
+}
+function suReqListHtml(uq, list){
+  if(!list.length) return '<p class="ck-fbnone">아직 등록된 업데이트 요청이 없습니다.</p>';
+  var h = '<ul class="ck-fbl">';
+  for(var i = 0; i < list.length; i++){
+    var it = list[i] || {};
+    h += '<li><div class="hd"><span class="w">' + escapeHtml(String(it.w || '익명'))
+       + '</span><span class="t">' + escapeHtml(String(it.t || '')) + '</span>'
+       + '<button type="button" class="ck-fbx" title="지우기" onclick="suReqDel(\'' + uq + '\',' + i + ')">🗑</button>'
+       + '</div><p>' + escapeHtml(String(it.m || '')) + '</p>';
+    if(it.done){
+      h += '<div class="ck-rep"><div class="rh">✅ 처리 완료' + (it.doneBy ? ' — <b>' + escapeHtml(it.doneBy) + '</b>' : '')
+         + (it.doneT ? ' <span>' + escapeHtml(it.doneT) + '</span>' : '') + '</div></div>';
+      h += '<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:#8b919c;font-weight:600;">되돌릴 수 있습니다<button type="button" class="ck-repbtn" onclick="suReqUndo(\'' + uq + '\',' + i + ')">↩︎ 미완료로</button></div>';
+    }else{
+      h += '<div class="ck-nore">🔴 처리 대기<button type="button" class="ck-repbtn" onclick="suReqDone(\'' + uq + '\',' + i + ')">✅ 처리완료로 표시</button></div>';
+    }
+    h += '</li>';
+  }
+  h += '</ul>';
+  return h;
+}
+function suReqFormHtml(uq){
+  return '<div class="ck-fbf">'
+     + '<input type="text" id="suReqName" maxlength="20" placeholder="이름 (예: 대표, 강남점 홍길동)" value="' + escapeHtml(fbName()) + '">'
+     + '<textarea id="suReqMsg" maxlength="500" placeholder="개발자에게 바라는 업데이트를 적어주세요. (예: 지점을 찍으면 당월 근무자 편성을 볼 수 있게 해주세요)"></textarea>'
+     + '<button type="button" class="ck-fbs" id="suReqBtn" onclick="suReqAdd(\'' + uq + '\')">요청 남기기</button>'
+     + '</div>';
+}
+async function suReqAdd(url){
+  var elN = document.getElementById('suReqName');
+  var elM = document.getElementById('suReqMsg');
+  var elB = document.getElementById('suReqBtn');
+  var w = elN ? String(elN.value || '').trim() : '';
+  var m = elM ? String(elM.value || '').trim() : '';
+  if(!m){ await customAlert('요청 내용을 적어주세요.'); if(elM) elM.focus(); return; }
+  if(!w){ await customAlert('이름을 적어주세요. 누가 요청했는지 알아야 합니다.'); if(elN) elN.focus(); return; }
+  if(elB){ elB.disabled = true; elB.textContent = '올리는 중...'; }
+  try{
+    try{ lsSet(FB_NAME_KEY, w); }catch(e){}
+    await suPull();
+    if(!SYS_UPD[url]) SYS_UPD[url] = { req: [], log: [] };
+    if(!SYS_UPD[url].req) SYS_UPD[url].req = [];
+    SYS_UPD[url].req.push({ w: w, m: m, t: new Date().toLocaleString('ko-KR', { hour12: false }), done: false });
+    if(elM) elM.value = '';
+    try{ detailHtml(); }catch(e){}
+    await saveShared({ silent: true });
+  }catch(e){
+    await customAlert('요청을 올리다 문제가 생겼습니다. 잠시 뒤 다시 해보세요.');
+  }finally{
+    var b2 = document.getElementById('suReqBtn');
+    if(b2){ b2.disabled = false; b2.textContent = '요청 남기기'; }
+  }
+}
+async function suReqDel(url, i){
+  var s = SYS_UPD[url];
+  if(!s || !s.req || !s.req[i]) return;
+  var it = s.req[i];
+  if(!(await customConfirm('이 업데이트 요청을 지울까요?\n\n「' + String(it.w || '') + ' · ' + String(it.m || '').slice(0, 40) + '」', true, '지우기'))) return;
+  try{
+    await suPull();
+    var arr = (SYS_UPD[url] && SYS_UPD[url].req) ? SYS_UPD[url].req : [];
+    var k = suKey(it);
+    for(var j = 0; j < arr.length; j++){ if(suKey(arr[j]) === k){ arr.splice(j, 1); break; } }
+    SYS_UPD[url].req = arr;
+    try{ detailHtml(); }catch(e){}
+    await saveShared({ silent: true });
+  }catch(e){
+    await customAlert('지우다 문제가 생겼습니다. 잠시 뒤 다시 해보세요.');
+  }
+}
+async function suReqSetDone(url, i, done){
+  var s = SYS_UPD[url];
+  if(!s || !s.req || !s.req[i]) return;
+  var who = '';
+  if(done){
+    who = await customPrompt('처리한 사람 이름을 적어주세요.', 'text', ckMyName());
+    if(who === null) return;
+    who = String(who || '').trim();
+    if(!who){ await customAlert('이름을 적어주세요.'); return; }
+  }
+  try{
+    await suPull();
+    var it = (SYS_UPD[url] && SYS_UPD[url].req) ? SYS_UPD[url].req[i] : null;
+    if(!it){ await customAlert('그 사이 목록이 바뀌었습니다. 화면을 새로고침해주세요.'); return; }
+    it.done = done;
+    if(done){ it.doneBy = who; it.doneT = new Date().toLocaleString('ko-KR', { hour12: false }); try{ lsSet(FB_NAME_KEY, who); }catch(e){} }
+    else{ it.doneBy = ''; it.doneT = ''; }
+    try{ detailHtml(); }catch(e){}
+    await saveShared({ silent: true });
+  }catch(e){
+    await customAlert('저장하다 문제가 생겼습니다. 잠시 뒤 다시 해보세요.');
+  }
+}
+function suReqDone(url, i){ return suReqSetDone(url, i, true); }
+function suReqUndo(url, i){ return suReqSetDone(url, i, false); }
+function suLogListHtml(uq, list){
+  if(!list.length) return '<p class="ck-fbnone">아직 기록된 업데이트 내역이 없습니다.</p>';
+  var sorted = list.slice().sort(function(a, b){
+    var ad = String((a && a.d) || ''), bd = String((b && b.d) || '');
+    if(ad !== bd) return ad < bd ? 1 : -1;   // 최신 날짜가 먼저
+    return String((a && a.t) || '') < String((b && b.t) || '') ? 1 : -1;
+  });
+  var h = '<ul class="ck-fbl">';
+  for(var i = 0; i < sorted.length; i++){
+    var it = sorted[i] || {};
+    var realIdx = list.indexOf(it);
+    h += '<li><div class="hd"><span class="w">' + escapeHtml(String(it.d || '')) + ' · ' + escapeHtml(String(it.w || '개발자')) + '</span>'
+       + '<button type="button" class="ck-fbx" title="지우기" onclick="suLogDel(\'' + uq + '\',' + realIdx + ')">🗑</button></div>'
+       + '<p>' + escapeHtml(String(it.m || '')) + '</p></li>';
+  }
+  h += '</ul>';
+  return h;
+}
+function suLogFormHtml(uq){
+  var today = new Date();
+  var p2 = function(n){ return (n < 10 ? '0' : '') + n; };
+  var todayStr = today.getFullYear() + '-' + p2(today.getMonth() + 1) + '-' + p2(today.getDate());
+  return '<div class="ck-fbf">'
+     + '<input type="text" id="suLogName" maxlength="20" placeholder="담당 개발자 이름" value="' + escapeHtml(ckMyName()) + '">'
+     + '<input type="date" id="suLogDate" value="' + todayStr + '">'
+     + '<textarea id="suLogMsg" maxlength="500" placeholder="이 웹앱 안에서 무엇을 업데이트했는지 적어주세요. (예: 매장별 근무 인원 보기 버튼 추가)"></textarea>'
+     + '<button type="button" class="ck-fbs" id="suLogBtn" onclick="suLogAdd(\'' + uq + '\')">업데이트 기록 남기기</button>'
+     + '</div>';
+}
+async function suLogAdd(url){
+  var elN = document.getElementById('suLogName');
+  var elD = document.getElementById('suLogDate');
+  var elM = document.getElementById('suLogMsg');
+  var elB = document.getElementById('suLogBtn');
+  var w = elN ? String(elN.value || '').trim() : '';
+  var d = elD ? String(elD.value || '').trim() : '';
+  var m = elM ? String(elM.value || '').trim() : '';
+  if(!m){ await customAlert('무엇을 업데이트했는지 적어주세요.'); if(elM) elM.focus(); return; }
+  if(!w){ await customAlert('담당 개발자 이름을 적어주세요.'); if(elN) elN.focus(); return; }
+  if(!d){ var t = new Date(); var p2b = function(n){ return (n < 10 ? '0' : '') + n; }; d = t.getFullYear() + '-' + p2b(t.getMonth() + 1) + '-' + p2b(t.getDate()); }
+  if(elB){ elB.disabled = true; elB.textContent = '기록하는 중...'; }
+  try{
+    try{ lsSet(FB_NAME_KEY, w); }catch(e){}
+    await suPull();
+    if(!SYS_UPD[url]) SYS_UPD[url] = { req: [], log: [] };
+    if(!SYS_UPD[url].log) SYS_UPD[url].log = [];
+    SYS_UPD[url].log.push({ w: w, d: d, m: m, t: new Date().toLocaleString('ko-KR', { hour12: false }) });
+    if(elM) elM.value = '';
+    try{ detailHtml(); }catch(e){}
+    await saveShared({ silent: true });
+  }catch(e){
+    await customAlert('기록하다 문제가 생겼습니다. 잠시 뒤 다시 해보세요.');
+  }finally{
+    var b2 = document.getElementById('suLogBtn');
+    if(b2){ b2.disabled = false; b2.textContent = '업데이트 기록 남기기'; }
+  }
+}
+async function suLogDel(url, i){
+  var s = SYS_UPD[url];
+  if(!s || !s.log || !s.log[i]) return;
+  var it = s.log[i];
+  if(!(await customConfirm('이 업데이트 기록을 지울까요?\n\n「' + String(it.d || '') + ' · ' + String(it.m || '').slice(0, 40) + '」', true, '지우기'))) return;
+  try{
+    await suPull();
+    var arr = (SYS_UPD[url] && SYS_UPD[url].log) ? SYS_UPD[url].log : [];
+    var k = suKey(it);
+    for(var j = 0; j < arr.length; j++){ if(suKey(arr[j]) === k){ arr.splice(j, 1); break; } }
+    SYS_UPD[url].log = arr;
+    try{ detailHtml(); }catch(e){}
+    await saveShared({ silent: true });
+  }catch(e){
+    await customAlert('지우다 문제가 생겼습니다. 잠시 뒤 다시 해보세요.');
+  }
+}
+function sysUpdCard(url){
+  var uq = String(url || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  var s = SYS_UPD[url] || {};
+  var reqList = s.req || [];
+  var logList = s.log || [];
+  var tab = SU_TAB[url] || 'req';
+  var reqWait = 0;
+  for(var i = 0; i < reqList.length; i++){ if(!reqList[i] || !reqList[i].done) reqWait++; }
+
+  var h = '<div class="ck">';
+  h += '<div class="ck-h"><span class="ck-ttl">🔧 업데이트</span></div>';
+  h += '<div class="ck-fbtabs">'
+     + '<button type="button" class="ck-fbtab' + (tab === 'req' ? ' on' : '') + '" onclick="suSetTab(\'' + uq + '\',\'req\')">📮 업데이트요청' + (reqWait ? ' (' + reqWait + ')' : '') + '</button>'
+     + '<button type="button" class="ck-fbtab' + (tab === 'log' ? ' on' : '') + '" onclick="suSetTab(\'' + uq + '\',\'log\')">📝 최근 업데이트 내역' + (logList.length ? ' (' + logList.length + ')' : '') + '</button>'
+     + '</div>';
+  if(tab === 'log'){
+    h += suLogListHtml(uq, logList);
+    h += suLogFormHtml(uq);
+    h += '<div class="ck-fbhelp">이 시스템(웹앱) 안에서 실제로 바뀐 내용을 담당 개발자가 날짜별로 남깁니다. 위베이프 허브 자체를 고친 기록은 왼쪽 「🛠 고친 내역」에 따로 있습니다.</div>';
+  }else{
+    h += suReqListHtml(uq, reqList);
+    h += suReqFormHtml(uq);
+    h += '<div class="ck-fbhelp">직원·대표가 개발자에게 바라는 점을 남기면, 담당 개발자 화면에 바로 보입니다.</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
 function detailHtml(){
   const host = document.getElementById('detail');
   if(!host) return;
@@ -4495,6 +4778,7 @@ function detailHtml(){
         : (isNew ? `<div class="br-note-new"><b>🆕 새로 등록된 시스템입니다</b>아직 설명이 안 붙어 있어요. 담당자가 확인 후 채워주세요.</div>` : '')}
       <button type="button" class="br-open" onclick="${locked ? `tryOpenLocked('${uq}')` : `stGo('${uq}')`}">${locked ? '🔒 비밀번호 넣고 열기 →' : '열기 →'}</button>
       <button type="button" class="br-opt" onclick="entryOptions('${uq}')">⚙️ 부서·상태 바꾸기</button>
+      ${sysUpdCard(e.url || '')}
       ${chkCard(e.url || '')}
 
       <div class="br-grid">
@@ -4997,6 +5281,7 @@ function snapshot(){
     deleted: DELETED_URLS,
     checks: CHECKS,
     fixlog: FIXLOG,
+    sysUpd: SYS_UPD,
     savedAt: new Date().toISOString()
   };
 }
@@ -5047,6 +5332,7 @@ function applyData(d){
   if(typeof d.reviewSeq === "number") reviewSeq = Math.max(reviewSeq, d.reviewSeq);
   if(d.checks && typeof d.checks === "object") CHECKS = d.checks;
   if(Array.isArray(d.fixlog)) FIXLOG = d.fixlog;
+  if(d.sysUpd && typeof d.sysUpd === "object") SYS_UPD = d.sysUpd;
   try{ fxPaintBadge(); }catch(err){}
   try{ renderDesk(); }catch(err){}
 
@@ -7739,6 +8025,12 @@ function renderDev(){
       '<div class="c"><b>' + tDev + '</b><span>개발자</span></div>' +
       '<div class="c"><b>' + tSite + '</b><span>맡고 있는 시스템</span></div>';
   }
+  try{
+    var siteFbs = feedbackFor('__site__');
+    var sfSub = document.getElementById('dvSiteFbSub');
+    if(sfSub) sfSub.innerHTML = siteFbs.length + '건 ' + fbAlertBadge(siteFbs) + ' · 눌러서 열기';
+  }catch(e){}
+
   if(!gs.length){ box.innerHTML = '<div class="dv-empty">아직 등록된 시스템이 없습니다.</div>'; dvPaintBadge(); return; }
 
   box.innerHTML = gs.map(function(g){
