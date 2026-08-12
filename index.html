@@ -2135,7 +2135,6 @@
         <button class="adminBtn instBtn" id="installBtn" onclick="installApp()">📲 앱으로 받기</button>
         <button class="addBtn" id="addBtn" onclick="toggleAddPanel()">＋ 새로 넣기</button>
         <button class="adminBtn" id="lockBtn" onclick="toggleLock()">🔒 잠긴 시스템 보기</button>
-        <button class="adminBtn" id="lockSettingsBtn" onclick="openLockSettings()">⚙️ 잠금 설정</button>
       </div>
     </div>
     <div class="searchbar">
@@ -3010,35 +3009,10 @@ function isLockedByRule(entry){
   return !!entry.sensitive || entry.status === "개발중";
 }
 function isLocked(entry){
-  return isLockedByRule(entry) && !unlocked && !LOCK_DISABLED;
+  return isLockedByRule(entry) && !unlocked;
 }
 
-// 🔒 잠금 버튼 글자를 지금 상태(LOCK_DISABLED · unlocked)에 맞게 다시 칠한다.
-// applyData()로 다른 기기의 설정이 들어왔을 때도 여기서 다시 불러서 화면을 맞춘다.
-function paintLockBtn(){
-  const btn = document.getElementById('lockBtn');
-  if(btn){
-    if(LOCK_DISABLED){
-      btn.textContent = "🔓 비밀번호 절차 꺼짐(전체)";
-      btn.classList.add('on');
-    } else if(unlocked){
-      btn.textContent = "🔓 잠긴 시스템 열람중";
-      btn.classList.add('on');
-    } else {
-      btn.textContent = "🔒 잠긴 시스템 보기";
-      btn.classList.remove('on');
-    }
-  }
-  const sbtn = document.getElementById('lockSettingsBtn');
-  if(sbtn) sbtn.textContent = LOCK_DISABLED ? "⚙️ 다시 잠그기" : "⚙️ 잠금 설정";
-}
-
-// 개인 기기에서 잠깐 열람 (기존 동작 그대로 — 이 화면·이 기기에서만 유지되고 저장 안 됨)
 async function toggleLock(){
-  if(LOCK_DISABLED){
-    await customAlert("지금은 비밀번호 절차가 꺼져 있어서 모든 시스템이 이미 열려 있습니다.\n다시 잠그려면 옆의 「⚙️ 다시 잠그기」를 눌러주세요.");
-    return;
-  }
   if(!unlocked){
     const code = await customPrompt("잠긴 시스템 열람 비밀번호를 입력하세요.", "password");
     if(code === null) return;
@@ -3047,34 +3021,12 @@ async function toggleLock(){
   } else {
     unlocked = false;
   }
-  paintLockBtn();
-  renderUI();   // 개인 기기에서만 잠깐 열람 — 저장 없이 화면만 바꾼다
-}
-
-// ⚙️ 잠금 설정 — 비밀번호 절차 자체를 켜고 끄는 진짜 설정 기능.
-// 0000(또는 대표 비밀번호)을 넣으면 그 즉시 전 직원 공용 설정(LOCK_DISABLED)이 바뀌어 저장된다.
-async function openLockSettings(){
-  if(LOCK_DISABLED){
-    const code = await customPrompt("비밀번호를 입력하면 전 직원 비밀번호 절차가 다시 켜집니다.", "password");
-    if(code === null) return;
-    if(!isLockPwOk(code)){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
-    LOCK_DISABLED = false;
-    unlocked = false;
-    render();              // ⭐ 전직원 공유 설정이 바뀌는 것이라 renderUI()가 아니라 render()로 저장까지 태운다
-    paintLockBtn();
-    if(!canSave()) await askEmpPasswordThenSave();
-    await customAlert("비밀번호 절차를 다시 켰습니다.");
-    return;
+  const btn = document.getElementById('lockBtn');
+  if(btn){
+    btn.textContent = unlocked ? "🔓 잠긴 시스템 열람중" : "🔒 잠긴 시스템 보기";
+    btn.classList.toggle('on', unlocked);
   }
-  const code = await customPrompt("비밀번호를 입력하면 매출·인사 등 민감정보와 「만드는중」 시스템까지 전 직원이 비밀번호 없이 바로 볼 수 있게 됩니다.", "password");
-  if(code === null) return;
-  if(!isLockPwOk(code)){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
-  LOCK_DISABLED = true;
-  unlocked = true;
-  render();                // ⭐ 전직원 공유 설정 저장
-  paintLockBtn();
-  if(!canSave()) await askEmpPasswordThenSave();
-  await customAlert("비밀번호 절차를 없앴습니다. 이제 전 직원이 비번 없이 바로 볼 수 있습니다.\n(되돌리려면 「⚙️ 다시 잠그기」를 누르세요)");
+  renderUI();
 }
 
 // 잠긴 항목 클릭 시: 비밀번호 맞으면 그 자리에서 바로 열람(이동)
@@ -3100,7 +3052,6 @@ let feedbackSeq = 0;
 let REVIEW_LIST = [];   // 🧩 새 업무 검토 [{id,title,url,text,author,time,date,status,reply}]
 let reviewSeq = 0;
 let DELETED_URLS = [];  // 🗑 지운 시스템 주소 목록 (기본 목록에서 되살아나지 않게 기록해 둠)
-let LOCK_DISABLED = false;  // 🔓 대표가 "비번해제"로 전 직원 잠금 절차 자체를 없앤 상태 (전직원 공유 · data.json에 저장됨)
 // ⭐ 지운 주소라도 나중에 정식으로 다시 등록(승인·직접등록)하면 무덤에서 꺼내준다.
 //   안 그러면 applyData() 의 dead-필터가 새로 넣은 항목까지 계속 지워버린다.
 //   (2026-08-10 실제 사고: rv1 「위베이프 이슈 모니터링」이 예전에 지운 주소와 같아서
@@ -3631,22 +3582,47 @@ async function moveEntryDept(url){
   if(!canSave()) await askEmpPasswordThenSave();
 }
 
-// ⚙️ 옵션 버튼 — 부서 이동 / 상태 전환을 한 버튼에서 고르게 한다.
+// ⚙️ 옵션 버튼 — 부서 이동 / 상태 전환 / 잠금 걸고 풀기를 한 버튼에서 고르게 한다.
 // (대표 요청: "부서나 만드는중 사용가능 이라고 상태를 바꾸는 옵션 버튼을 만들어 달라" 2026-08-10)
+// (대표 요청 2: "여기서 선택해서 해당 부서의 앱을 일일히 잠금을 걸고 풀 수 있게" — 2026-08-12, 시스템별 개별 잠금 추가)
 async function entryOptions(url){
   const entry = findEntry(url);
   if(!entry) return;
   const ok = entry.status !== "개발중";
+  const isLockedNow = !!entry.sensitive;
   const options = [
     {value:'dept', label:`🏢 다른 부서로 옮기기 (지금: ${groupLabel(entry.dept)})`},
     {value:'status', label: ok ? '🔧 만드는중으로 되돌리기' : '✅ 다 만들어졌어요 — 사용가능으로'},
     {value:'owner', label:'👤 담당자 바꾸기'},
+    {value:'lock', label: isLockedNow ? '🔓 이 시스템 잠금 풀기' : '🔒 이 시스템 잠그기'},
   ];
   const picked = await customSelect(`"${entry.title}" 무엇을 바꿀까요?`, options, '');
   if(!picked) return;
   if(picked === 'dept') return moveEntryDept(url);
   if(picked === 'status') return ok ? revertToWip(url) : completeEntryByKey(entryKey(entry));
   if(picked === 'owner') return editEntryOwner(url);
+  if(picked === 'lock') return toggleEntryLock(url);
+}
+
+// 🔒 시스템 하나만 콕 집어 잠그거나 푼다 — 관리자 비밀번호(0000 또는 대표 비번)를 넣어야 바뀐다.
+// entry.sensitive 를 켜고 끄는 것뿐이라 isLockedByRule()/isLocked() 는 손대지 않아도 그대로 적용된다.
+async function toggleEntryLock(url){
+  const entry = findEntry(url);
+  if(!entry) return;
+  const wantLock = !entry.sensitive;
+  const code = await customPrompt(
+    wantLock
+      ? `"${entry.title}"을(를) 잠그려면 관리자 비밀번호를 입력하세요.`
+      : `"${entry.title}"의 잠금을 풀려면 관리자 비밀번호를 입력하세요.`,
+    "password"
+  );
+  if(code === null) return;
+  if(!isLockPwOk(code)){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
+  entry.sensitive = wantLock;
+  render();
+  syncUpdate(entry);
+  if(!canSave()) await askEmpPasswordThenSave();
+  await customAlert(wantLock ? `"${entry.title}"을(를) 잠갔습니다.` : `"${entry.title}"의 잠금을 풀었습니다.`);
 }
 
 // ✏️ 시스템 이름(제목) 수정 — 같은 이름이 두 개라 헷갈릴 때 구분해서 붙일 수 있게
@@ -5331,7 +5307,6 @@ function snapshot(){
     checks: CHECKS,
     fixlog: FIXLOG,
     sysUpd: SYS_UPD,
-    lockDisabled: LOCK_DISABLED,
     savedAt: new Date().toISOString()
   };
 }
@@ -5383,10 +5358,8 @@ function applyData(d){
   if(d.checks && typeof d.checks === "object") CHECKS = d.checks;
   if(Array.isArray(d.fixlog)) FIXLOG = d.fixlog;
   if(d.sysUpd && typeof d.sysUpd === "object") SYS_UPD = d.sysUpd;
-  if(typeof d.lockDisabled === "boolean") LOCK_DISABLED = d.lockDisabled;
   try{ fxPaintBadge(); }catch(err){}
   try{ renderDesk(); }catch(err){}
-  try{ paintLockBtn(); }catch(err){}
 
   if(Array.isArray(d.stores) && d.stores.length){
     const byStore = new Map(d.stores.filter(s => s && s.store).map(s => [s.store, s]));
@@ -8905,13 +8878,6 @@ function renderHome(){
 /* 📊 이용 현황 집계 시작 — 반드시 맨 끝(위쪽은 TDZ 때문에 안 됨) */
 (function initStats(){
   try{ stStart(); }catch(e){}
-})();
-
-/* 🔒 잠금 버튼 첫 표시 — applyData()가 파일 중간에서 먼저 돌지만 paintLockBtn은
-   function 선언이라 순서 문제 없음. 그래도 혹시 버튼이 그 시점에 아직 없었을 경우를
-   대비해 맨 끝에서 한 번 더 확실히 맞춰준다. */
-(function initLockBtn(){
-  try{ paintLockBtn(); }catch(e){}
 })();
 
 /* 🗂️ 현황 보드를 첫 화면으로 — 반드시 맨 끝.
