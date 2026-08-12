@@ -487,6 +487,16 @@
     width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px;
     margin-bottom:14px;font-family:inherit;
   }
+  /* ⚙️ 옵션 고르기 목록 — select 대신 버튼을 세로로 늘어놔서 글씨가 안 잘리게 한다.
+     (대표 지적: "글씨도 다 씹히고 비번잠금완전 해재 버튼이 없자나" — 2026-08-12,
+      네이티브 select 안에 4번째 옵션(잠금)이 숨어 있어서 안 보였던 문제) */
+  .modal-optlist{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+  .modal-optbtn{
+    width:100%;text-align:left;padding:13px 14px;border:1px solid var(--line);border-radius:10px;
+    background:#f8f9fb;font-size:14px;font-weight:700;color:var(--ink);cursor:pointer;
+    white-space:normal;word-break:keep-all;line-height:1.4;font-family:inherit;
+  }
+  .modal-optbtn:hover, .modal-optbtn:active{background:#eef1f5;border-color:#c9ceda;}
   .modal-actions{display:flex;justify-content:flex-end;gap:8px;}
   .modal-actions button{border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;}
   .modal-cancel{background:none;color:var(--sub);border:1px solid var(--line);}
@@ -2074,6 +2084,7 @@
     <div class="modal-msg" id="modalMsg"></div>
     <input type="text" class="modal-input" id="modalInput" style="display:none;">
     <select class="modal-input" id="modalSelect" style="display:none;"></select>
+    <div class="modal-optlist" id="modalOptList" style="display:none;"></div>
     <div class="modal-actions">
       <button type="button" class="modal-cancel" id="modalCancelBtn">취소</button>
       <button type="button" class="modal-confirm" id="modalConfirmBtn">확인</button>
@@ -2743,26 +2754,51 @@ function openModal(opts){
     document.getElementById('modalMsg').textContent = opts.message || '';
     const input = document.getElementById('modalInput');
     const select = document.getElementById('modalSelect');
-    if(opts.withSelect){
+    const optList = document.getElementById('modalOptList');
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    if(opts.withOptionList){
+      // select 대신 버튼 목록 — 글씨 안 잘리고, 눌러야 바로 선택된다(확인 버튼 불필요).
+      optList.innerHTML = (opts.options||[]).map((o,idx)=>
+        `<button type="button" class="modal-optbtn" data-optidx="${idx}">${escapeHtml(String(o.label||''))}</button>`
+      ).join('');
+      optList.style.display = 'flex';
+      select.style.display = 'none';
+      input.style.display = 'none';
+      confirmBtn.style.display = 'none';
+    } else if(opts.withSelect){
       select.innerHTML = (opts.options||[]).map(o=>`<option value="${o.value}" ${o.value===opts.selected?'selected':''}>${o.label}</option>`).join('');
       select.style.display = 'block';
       input.style.display = 'none';
+      optList.style.display = 'none';
+      confirmBtn.style.display = 'inline-block';
     } else if(opts.withInput){
       input.style.display = 'block';
       input.type = opts.inputType || 'text';
       input.value = opts.prefill || '';
       select.style.display = 'none';
+      optList.style.display = 'none';
+      confirmBtn.style.display = 'inline-block';
     } else {
       input.style.display = 'none';
       select.style.display = 'none';
+      optList.style.display = 'none';
+      confirmBtn.style.display = 'inline-block';
     }
     const cancelBtn = document.getElementById('modalCancelBtn');
-    const confirmBtn = document.getElementById('modalConfirmBtn');
     cancelBtn.style.display = opts.onlyOk ? 'none' : 'inline-block';
     confirmBtn.textContent = opts.confirmText || '확인';
     confirmBtn.classList.toggle('danger', !!opts.danger);
     document.getElementById('modalOverlay').classList.add('show');
     if(opts.withInput){ setTimeout(()=>input.focus(), 50); }
+    if(opts.withOptionList){
+      optList.querySelectorAll('.modal-optbtn').forEach(btn=>{
+        btn.onclick = ()=>{
+          const idx = parseInt(btn.getAttribute('data-optidx'), 10);
+          const o = (opts.options||[])[idx];
+          closeModal(o ? o.value : null);
+        };
+      });
+    }
   });
 }
 function closeModal(result){
@@ -2780,6 +2816,11 @@ async function customPrompt(message, inputType, prefill){
 }
 async function customSelect(message, options, selected){
   return await openModal({message, withSelect:true, options, selected});
+}
+// 버튼 목록으로 고르는 선택창 — 옵션이 몇 개 안 되고 그중 눈에 바로 띄어야 하는 경우
+// (예: ⚙️ 부서·상태 바꾸기 메뉴, 잠금/해제 버튼)에 쓴다. select 안에 숨는 customSelect와 다름.
+async function customOptionList(message, options){
+  return await openModal({message, withOptionList:true, options});
 }
 /* 확인창의 오른쪽 버튼 글자.
    ★ danger 를 붙이면 무조건 「삭제」라고 뜨던 게 문제였다 —
@@ -3125,6 +3166,14 @@ function ckFbOpenCnt(url){
   }catch(e){}
   try{
     (FEEDBACK_LIST || []).forEach(function(f){ if(f && f.url === url && f.status === '접수됨') n++; });
+  }catch(e){}
+  // 🔧 업데이트요청(SYS_UPD[].req) 중 아직 「처리완료」 안 된 것도 목록 배지에 같이 센다.
+  // (대표 요청: "여기다 피드백 하면 개발자에다가도 표시를 해줘야지" — 2026-08-12, 상세화면 안 열어도 목록에서 바로 보이게)
+  try{
+    var s = SYS_UPD[url];
+    if(s && Array.isArray(s.req)){
+      for(var j = 0; j < s.req.length; j++){ if(!s.req[j] || !s.req[j].done) n++; }
+    }
   }catch(e){}
   return n;
 }
@@ -3596,7 +3645,7 @@ async function entryOptions(url){
     {value:'owner', label:'👤 담당자 바꾸기'},
     {value:'lock', label: isLockedNow ? '🔓 이 시스템 잠금 풀기' : '🔒 이 시스템 잠그기'},
   ];
-  const picked = await customSelect(`"${entry.title}" 무엇을 바꿀까요?`, options, '');
+  const picked = await customOptionList(`"${entry.title}" 무엇을 바꿀까요?`, options);
   if(!picked) return;
   if(picked === 'dept') return moveEntryDept(url);
   if(picked === 'status') return ok ? revertToWip(url) : completeEntryByKey(entryKey(entry));
@@ -4625,6 +4674,13 @@ async function suReqDel(url, i){
   var s = SYS_UPD[url];
   if(!s || !s.req || !s.req[i]) return;
   var it = s.req[i];
+  // 🔒 개발자가 「처리완료」로 표시하기 전에는 지울 수 없다.
+  // (대표 요청: "피드백 하면 개발자에다가도 표시를 해줘야지 지우지기 전에" — 2026-08-12,
+  //  개발자가 확인도 안 한 요청이 그냥 삭제로 사라지는 걸 막는다)
+  if(!it.done){
+    await customAlert('아직 담당 개발자가 「처리완료」로 표시하지 않은 요청입니다.\n개발자가 확인하고 처리완료로 표시한 뒤에만 지울 수 있어요.');
+    return;
+  }
   if(!(await customConfirm('이 업데이트 요청을 지울까요?\n\n「' + String(it.w || '') + ' · ' + String(it.m || '').slice(0, 40) + '」', true, '지우기'))) return;
   try{
     await suPull();
