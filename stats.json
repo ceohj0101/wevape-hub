@@ -227,12 +227,14 @@
         "dmsfub5jac8mrsb": 1,
         "dmsoi28klrebuuz": 1
       },
-      "hit": 3,
-      "clk": {}
+      "hit": 2,
+      "clk": {
+        "https://order-hub-dfni.onrender.com/defects": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-12T01:18:18.485Z",
+  "savedAt": "2026-08-12T01:18:46.198Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
