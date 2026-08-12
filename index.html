@@ -2135,6 +2135,7 @@
         <button class="adminBtn instBtn" id="installBtn" onclick="installApp()">📲 앱으로 받기</button>
         <button class="addBtn" id="addBtn" onclick="toggleAddPanel()">＋ 새로 넣기</button>
         <button class="adminBtn" id="lockBtn" onclick="toggleLock()">🔒 잠긴 시스템 보기</button>
+        <button class="adminBtn" id="lockSettingsBtn" onclick="openLockSettings()">⚙️ 잠금 설정</button>
       </div>
     </div>
     <div class="searchbar">
@@ -3016,62 +3017,64 @@ function isLocked(entry){
 // applyData()로 다른 기기의 설정이 들어왔을 때도 여기서 다시 불러서 화면을 맞춘다.
 function paintLockBtn(){
   const btn = document.getElementById('lockBtn');
-  if(!btn) return;
-  if(LOCK_DISABLED){
-    btn.textContent = "🔓 비밀번호 절차 꺼짐 · 눌러서 다시 잠그기";
-    btn.classList.add('on');
-  } else if(unlocked){
-    btn.textContent = "🔓 잠긴 시스템 열람중";
-    btn.classList.add('on');
-  } else {
-    btn.textContent = "🔒 잠긴 시스템 보기";
-    btn.classList.remove('on');
+  if(btn){
+    if(LOCK_DISABLED){
+      btn.textContent = "🔓 비밀번호 절차 꺼짐(전체)";
+      btn.classList.add('on');
+    } else if(unlocked){
+      btn.textContent = "🔓 잠긴 시스템 열람중";
+      btn.classList.add('on');
+    } else {
+      btn.textContent = "🔒 잠긴 시스템 보기";
+      btn.classList.remove('on');
+    }
   }
+  const sbtn = document.getElementById('lockSettingsBtn');
+  if(sbtn) sbtn.textContent = LOCK_DISABLED ? "⚙️ 다시 잠그기" : "⚙️ 잠금 설정";
 }
 
+// 개인 기기에서 잠깐 열람 (기존 동작 그대로 — 이 화면·이 기기에서만 유지되고 저장 안 됨)
 async function toggleLock(){
-  // ── 이미 전체 잠금 해제 상태 — 대표 비밀번호로만 되돌릴 수 있다 ──
   if(LOCK_DISABLED){
-    const pw = await customPrompt("비밀번호 절차를 다시 켜려면 대표님 비밀번호를 입력하세요.", "password");
-    if(pw === null) return;
-    if(String(pw).trim() !== CEO_PASSWORD){ await customAlert("비밀번호가 맞지 않습니다."); return; }
-    LOCK_DISABLED = false;
-    unlocked = false;
-    render();               // ⭐ 전직원 공유 설정이 바뀌는 것이라 renderUI()가 아니라 render()로 저장까지 태운다
-    paintLockBtn();
-    if(!canSave()) await askEmpPasswordThenSave();
+    await customAlert("지금은 비밀번호 절차가 꺼져 있어서 모든 시스템이 이미 열려 있습니다.\n다시 잠그려면 옆의 「⚙️ 다시 잠그기」를 눌러주세요.");
     return;
   }
   if(!unlocked){
-    const code = await customPrompt("잠긴 시스템 열람 비밀번호를 입력하세요.\n(대표님: 비밀번호 절차 자체를 없애려면 여기에 \"비번해제\"라고 입력하세요)", "password");
+    const code = await customPrompt("잠긴 시스템 열람 비밀번호를 입력하세요.", "password");
     if(code === null) return;
-    const v = String(code || '').trim();
-
-    // ── 대표 전용: "비번해제" 매직워드 → 대표 비밀번호 재확인 후 전 직원 잠금 절차 자체를 없앤다 ──
-    if(v === '비번해제'){
-      const pw = await customPrompt("전 직원 비밀번호 절차를 없애려면 대표님 비밀번호를 한 번 더 입력하세요.", "password");
-      if(pw === null) return;
-      if(String(pw).trim() !== CEO_PASSWORD){ await customAlert("비밀번호가 맞지 않습니다."); return; }
-      const ok = await customConfirm(
-        "정말로 매출·인사 등 민감정보와 「만드는중」 시스템을 전 직원이 비밀번호 없이 바로 볼 수 있게 할까요?\n(나중에 이 버튼을 다시 눌러 대표님 비밀번호로 되돌릴 수 있습니다)",
-        true, "네, 없앨게요"
-      );
-      if(!ok) return;
-      LOCK_DISABLED = true;
-      unlocked = true;
-      render();              // ⭐ 전직원 공유 설정 저장
-      paintLockBtn();
-      if(!canSave()) await askEmpPasswordThenSave();
-      return;
-    }
-
     if(!isLockPwOk(code)){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
     unlocked = true;
   } else {
     unlocked = false;
   }
   paintLockBtn();
-  renderUI();   // 이 아래(개인 기기에서만 잠깐 열람) 는 원래대로 저장 없이 화면만
+  renderUI();   // 개인 기기에서만 잠깐 열람 — 저장 없이 화면만 바꾼다
+}
+
+// ⚙️ 잠금 설정 — 비밀번호 절차 자체를 켜고 끄는 진짜 설정 기능.
+// 0000(또는 대표 비밀번호)을 넣으면 그 즉시 전 직원 공용 설정(LOCK_DISABLED)이 바뀌어 저장된다.
+async function openLockSettings(){
+  if(LOCK_DISABLED){
+    const code = await customPrompt("비밀번호를 입력하면 전 직원 비밀번호 절차가 다시 켜집니다.", "password");
+    if(code === null) return;
+    if(!isLockPwOk(code)){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
+    LOCK_DISABLED = false;
+    unlocked = false;
+    render();              // ⭐ 전직원 공유 설정이 바뀌는 것이라 renderUI()가 아니라 render()로 저장까지 태운다
+    paintLockBtn();
+    if(!canSave()) await askEmpPasswordThenSave();
+    await customAlert("비밀번호 절차를 다시 켰습니다.");
+    return;
+  }
+  const code = await customPrompt("비밀번호를 입력하면 매출·인사 등 민감정보와 「만드는중」 시스템까지 전 직원이 비밀번호 없이 바로 볼 수 있게 됩니다.", "password");
+  if(code === null) return;
+  if(!isLockPwOk(code)){ await customAlert("비밀번호가 올바르지 않습니다."); return; }
+  LOCK_DISABLED = true;
+  unlocked = true;
+  render();                // ⭐ 전직원 공유 설정 저장
+  paintLockBtn();
+  if(!canSave()) await askEmpPasswordThenSave();
+  await customAlert("비밀번호 절차를 없앴습니다. 이제 전 직원이 비번 없이 바로 볼 수 있습니다.\n(되돌리려면 「⚙️ 다시 잠그기」를 누르세요)");
 }
 
 // 잠긴 항목 클릭 시: 비밀번호 맞으면 그 자리에서 바로 열람(이동)
