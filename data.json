@@ -90,7 +90,7 @@
       "note": "위베이프 직원 스케줄",
       "status": "운영중",
       "owner": "장대운 주임",
-      "sensitive": true
+      "sensitive": false
     },
     {
       "dept": "FIN",
@@ -2100,5 +2100,6 @@
       ]
     }
   },
-  "savedAt": "2026-08-12T01:45:00.897Z"
+  "savedAt": "2026-08-12T01:58:52.070Z",
+  "savedBy": "employee"
 }
