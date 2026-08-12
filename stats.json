@@ -230,19 +230,21 @@
         "dmspf892fvp8od7": 3,
         "dmsfjm49ci6i8at": 2,
         "dmso5txgh8zoybr": 2,
-        "dmsjshztbutzxa6": 1
+        "dmsjshztbutzxa6": 2
       },
       "hit": 9,
       "clk": {
         "https://order-hub-dfni.onrender.com/defects": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
         "https://vflow.kr": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
+        "https://order-hub-dfni.onrender.com/": 1,
+        "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-12T02:22:45.117Z",
+  "savedAt": "2026-08-12T02:23:34.021Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
