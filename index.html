@@ -8194,6 +8194,19 @@ function renderDesk(){
     const txt = String(r.text || '');
     const logn = Array.isArray(r.log) ? r.log.length : 0;
     const gone = dkDeleted(r);
+    // 🗑 내가 올린 업무면 관리자가 아니어도 지울 수 있어야 한다.
+    // (대표 요청: "새업무 등록한 개발자가 삭제하는 버튼도 만들어줘 해당 업무 올린거에서" — 2026-08-13)
+    // 진짜 로그인이 없는 앱이라 "본인"은 이 브라우저에 기억된 이름(ckMyName)과
+    // 올린 사람(r.author)·담당 개발자(r.dev) 중 하나라도 같으면 본인으로 본다.
+    const isMine = (function(){
+      try{
+        const me = ckMyName();
+        if(!me) return false;
+        const a = String(r.author || '').trim();
+        const d = String(r.dev || '').trim();
+        return (a && a === me) || (d && d === me);
+      }catch(e){ return false; }
+    })();
     return '<div class="dk-item' + (op ? ' op' : '') + (mine ? ' mine' : '') + (gone ? ' gone' : '') + '" id="dki_' + r.id + '">' +
       '<div class="dk-head" onclick="dkToggleOpen(\'' + r.id + '\')">' +
         '<div class="hb">' +
@@ -8263,6 +8276,11 @@ function renderDesk(){
             '<button type="button" class="hard" onclick="dkPurge(\'' + r.id + '\')">⛔ 완전히 지우기</button>'
           : '<button type="button" class="trash" onclick="deskDelete(\'' + r.id + '\')">🗑 이 업무 지우기</button>') +
         '</div>' : '') +
+      /* 🗑 관리자가 아니어도, 내가 올렸거나 내가 담당인 업무는 직접 지울 수 있다.
+         바로 없어지지 않고 deskDelete()가 그대로 「지운 것」 칸으로 옮긴다(되살리기 가능). */
+      ((!admin && !gone && isMine)
+        ? '<div class="dk-danger"><button type="button" class="trash" onclick="deskDelete(\'' + r.id + '\')">🗑 내가 올린 업무 지우기</button></div>'
+        : '') +
       '</div>' +
     '</div>';
   }).join('');
