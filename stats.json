@@ -259,16 +259,16 @@
     "2026-08-13": {
       "dev": {
         "dmspf892fvp8od7": 1,
-        "dmsgvbdt7ol9jmc": 1
+        "dmsgvbdt7ol9jmc": 2
       },
       "hit": 2,
       "clk": {
-        "https://order-hub-dfni.onrender.com/defects": 1
+        "https://order-hub-dfni.onrender.com/defects": 2
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-13T01:55:41.388Z",
+  "savedAt": "2026-08-13T02:21:19.456Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
