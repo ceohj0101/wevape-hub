@@ -288,12 +288,12 @@
     },
     "2026-08-14": {
       "dev": {
-        "dmsfub5jac8mrsb": 3,
+        "dmsfub5jac8mrsb": 2,
         "dmsgvbdt7ol9jmc": 1,
         "dmshf83c28ezwg1": 2,
         "dmsfk5gma6n6doq": 3,
         "dmsfkofxlwbratm": 6,
-        "dmsshcoxx7mhhqa": 1,
+        "dmsshcoxx7mhhqa": 2,
         "dmsilsmcbv88i3a": 4,
         "dmsfjm49ci6i8at": 2,
         "dmsfkq0kdr8q74h": 2,
@@ -313,7 +313,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-14T12:46:11.447Z",
+  "savedAt": "2026-08-14T12:46:45.839Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
