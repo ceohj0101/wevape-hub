@@ -2205,6 +2205,16 @@
       "t": "새 업무 검토 화면 삭제 버튼, 본인 확인 없이 모두에게 표시",
       "w": "🗑 새 업무 검토 화면에서 업무 삭제 버튼을 \"본인(이름 일치)\"만 보이던 것에서, 관리자가 아닌 모든 사람에게 보이도록 바꿨습니다. 지워도 완전히 없어지지 않고 「지운 것」 탭으로 옮겨가서 관리자가 되살릴 수 있는 점은 그대로입니다.",
       "src": "admin"
+    },
+    {
+      "id": "fx1786694154879",
+      "ts": 1786694154879,
+      "d": "2026-08-14",
+      "tm": "16:55",
+      "k": "new",
+      "t": "⚡ 직원용 런처(빠른 실행) 화면 추가",
+      "w": "장현진 이사님 피드백대로, 로그인/잠금 해제 후 맨 처음 보이는 화면을 큰 타일 6개(자주 쓰는 시스템) + 작은 타일 5개(보조 시스템)로 구성된 \"런처\" 화면으로 바꿨습니다. 기존 홈 화면(자동 정렬 바로가기)은 그대로 남아있고, 상단 \"허브 홈\" 버튼으로 이동할 수 있습니다. 관리자는 편집 모드(연필 버튼)로 타일 추가/삭제/순서 변경이 가능하며 즉시 저장됩니다. 잠금 표시(🔒)는 \"만드는중\" 상태이거나 민감 표시된 시스템에만 붙습니다.",
+      "src": "admin"
     }
   ],
   "sysUpd": {
@@ -2248,6 +2258,22 @@
       ]
     }
   },
-  "savedAt": "2026-08-13T09:22:20.094Z",
-  "savedBy": "employee"
+  "launcher": {
+    "main": [
+      "https://dksxoals0824-glitch.github.io/wevape-sales-report/",
+      "https://vflow.kr",
+      "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing",
+      "https://order-hub-dfni.onrender.com/",
+      "https://forms.gle/gVSBo4eeU4Bev561A",
+      "https://wjdwkdrn7714.github.io/-/"
+    ],
+    "mini": [
+      "https://docs.google.com/spreadsheets/d/1Cw7speJsddFGBLBsaTq9YkdNFqggbksCjF5I-j0CadU/edit?usp=sharing",
+      "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html",
+      "https://znsl132-lang.github.io/BIGLUCKY/request.html",
+      "https://znsl132-lang.github.io/BIGLUCKY/",
+      "https://ceohj0101.github.io/wevape-hr/"
+    ]
+  },
+  "savedAt": "2026-08-14T07:55:56.455Z"
 }
