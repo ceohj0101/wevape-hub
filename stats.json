@@ -290,16 +290,17 @@
       "dev": {
         "dmsfub5jac8mrsb": 1,
         "dmsgvbdt7ol9jmc": 1,
-        "dmshf83c28ezwg1": 1
+        "dmshf83c28ezwg1": 1,
+        "dmsfk5gma6n6doq": 1
       },
-      "hit": 3,
+      "hit": 4,
       "clk": {
         "https://vflow.kr": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-14T01:34:27.560Z",
+  "savedAt": "2026-08-14T01:40:29.635Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
