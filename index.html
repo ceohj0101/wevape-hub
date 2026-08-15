@@ -9144,30 +9144,62 @@ async function lnMove(slot, url, dir){
   await lnSave();
 }
 /* 😄 런처 인사말 — 시간대별 위트 있는 멘트 (2026-08-15, 「직원들 유행어 느낌으로, 특정 직원 지칭 없이」 요청)
-   ★ 매장 영업시간(10:30 오픈 ~ 22:00 마감)에 맞춰 시간대별로 후보 문장 중 하나를 무작위로 고른다.
+   ★ 매장 영업시간(10:30 오픈 ~ 22:00 마감)에 맞춰 시간대별로 후보 문장 중 하나를 고른다.
+   ★ 2026-08-15 추가: 새로고침할 때마다 그 시간대 후보들을 셔플된 순서로 한 바퀴 다 보여준 뒤에만 다시 섞는다
+     (순수 무작위면 같은 문구가 연달아 나올 수 있어 "골고루 다 나오게" 요청에 따라 셔플백 방식으로 변경).
    ★ 기존 🏠 홈 화면의 hmGreet()는 손대지 않았다 — 이 함수는 런처 전용이라 홈 화면 인사말은 그대로다.
    ★ 이 함수가 먼저 화면에 뜨고, 그 컴퓨터 별명이 오늘 근무자와 매칭되면 lnPersonalGreet()가 뒤이어 덮어쓴다. */
+function lnShuffle(n){
+  var arr = [];
+  for(var i = 0; i < n; i++) arr.push(i);
+  for(var i = arr.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr;
+}
+function lnPickPhrase(bucketKey, pool){
+  var storeKey = 'wevape_hub_ln_greet_cycle_v1';
+  var state = {};
+  try{ state = JSON.parse(localStorage.getItem(storeKey) || '{}') || {}; }catch(e){ state = {}; }
+  var rec = state[bucketKey];
+  if(!rec || !Array.isArray(rec.order) || rec.order.length !== pool.length || rec.pos >= rec.order.length){
+    rec = { order: lnShuffle(pool.length), pos: 0 };
+  }
+  var idx = rec.order[rec.pos];
+  rec.pos = rec.pos + 1;
+  state[bucketKey] = rec;
+  try{ localStorage.setItem(storeKey, JSON.stringify(state)); }catch(e){}
+  return pool[idx];
+}
 function lnFunnyGreet(){
   var h = 0, m = 0;
   try{ var now = new Date(); h = now.getHours(); m = now.getMinutes(); }catch(e){}
   var t = h * 60 + m;
-  var pools;
+  var key, pools;
   if(t < 10*60+30){
-    pools = ['아직 오픈 전이에요, 커피 한 잔 하고 준비해요 ☕', '곧 오픈! 넵.넵.넵.넵 준비 완료해봐요'];
+    key = 'open';
+    pools = ['아직 오픈 전이에요, 커피 한 잔 하고 준비해요 ☕', '곧 오픈! 넵.넵.넵.넵 준비 완료해봐요', '오픈 드루갈끄야~ 오늘도 준비 완료!'];
   } else if(t < 12*60){
+    key = 'morning';
     pools = ['자 정리할게요~ 오늘 하루 시작, 화이팅 결론낼게요 💪', '넵.넵.넵.넵 오픈 완료! 오늘도 잘 부탁드려요', '오늘도 다들 컨디션 좋으신가요? 화이팅이에요오오옹', '자 아침 정리할께요~ 오늘 목표 잡고 시작해봐요!'];
   } else if(t < 14*60){
+    key = 'lunch';
     pools = ['여보세요? 네? 밥 먹었냐고요? 넵! 이제 드시러 가세요 🍚', '다들 밥먹고 일하세요오오옹', '점심시간! 헤헤히히흐흐 맛있게 드세요'];
   } else if(t < 17*60){
+    key = 'afternoon';
     pools = ['제가 이제 그게 이제 저게 이제… 아무튼 오후도 화이팅!', '아으~ 오후도 고생이 많거든~ 조금만 더 힘내거든~', '오후도 슬슬 달려볼까요? 남은 시간도 화이팅입니다!'];
   } else if(t < 20*60){
+    key = 'evening';
     pools = ['다들 고생 많아요~ 저녁 손님 몰려온다~', '넵.넵.넵.넵 저녁 타임 준비 완료', '오늘 하루도 고생이 많거든~ 저녁도 화이팅이거든~', '아 저녁 정리할께요~ 마무리 슬슬 준비해봐요~'];
   } else if(t < 22*60){
-    pools = ['슬슬 마감 준비! 자 정리할게요~ 1번~2번~3번~', '마감까지 조금 남았어요, 헤헤히히흐흐 힘내세요', '오늘도 고생 많으셨습니다, 마무리 잘 부탁드려요'];
+    key = 'closing';
+    pools = ['슬슬 마감 준비! 자 정리할게요~ 1번~2번~3번~', '마감까지 조금 남았어요, 헤헤히히흐흐 힘내세요', '오늘도 고생 많으셨습니다, 마무리 잘 부탁드려요', '마감 드루갈꺼야~ 오늘도 다들 수고 많으셨어요', '여보세요? 머라고? 늦마감한다고?'];
   } else {
+    key = 'night';
     pools = ['오늘 영업 끝! 다들 고생 많으셨습니다, 편히 쉬세요 😴', '오늘도 고생 많으셨습니다. 내일 또 화이팅이에요오오옹'];
   }
-  try{ return pools[Math.floor(Math.random() * pools.length)]; }catch(e){ return pools[0]; }
+  try{ return lnPickPhrase(key, pools); }catch(e){ return pools[Math.floor(Math.random() * pools.length)]; }
 }
 function renderLauncher(){
   var admin = false;
