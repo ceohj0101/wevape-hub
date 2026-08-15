@@ -236,12 +236,12 @@
         "dmspibvbn05jp2o": 1,
         "dmsg3bq568xkrh3": 2,
         "dmsgvbdt7ol9jmc": 4,
-        "dmsfoaypgl2c1d8": 3,
+        "dmsfoaypgl2c1d8": 2,
         "dmsiy5nzph0lrhf": 3,
         "dmsqqflq9oihsgx": 1,
         "dmsfkofxlwbratm": 1
       },
-      "hit": 38,
+      "hit": 37,
       "clk": {
         "https://order-hub-dfni.onrender.com/defects": 3,
         "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 5,
@@ -321,16 +321,17 @@
         "dmsfk5gma6n6doq": 1,
         "dmsfoaypgl2c1d8": 1
       },
-      "hit": 2,
+      "hit": 1,
       "clk": {
         "https://forms.gle/gVSBo4eeU4Bev561A": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/": 1
+        "https://znsl132-lang.github.io/BIGLUCKY/": 1,
+        "https://vflow.kr": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-15T01:27:59.489Z",
+  "savedAt": "2026-08-15T01:28:06.022Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
