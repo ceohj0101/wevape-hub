@@ -162,6 +162,16 @@
       "owner": "개발자:신재현 실장",
       "sensitive": false,
       "createdAt": 1786449103905
+    },
+    {
+      "dept": "SEC",
+      "title": "AI 데일리 브리핑",
+      "url": "https://dksxoals0824-glitch.github.io/ai-daily-briefing/",
+      "note": "AI 관련 신규 업데이트, 뉴스 등 한 눈에 확인하기 위한 프로그램. (채팅 기반 AI 뿐만이 아니라 영상, 이미지, 음악 AI 포함.)\n매일 오전 10시 신규 정보 자동 업데이트.\n작업 할 시에 어떤 AI가 유용한지 추천 가능.",
+      "status": "운영중",
+      "owner": "개발자:안태민",
+      "sensitive": false,
+      "createdAt": 1786792307219
     }
   ],
   "stores": [
@@ -2430,6 +2440,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-08-15T08:42:49.188Z",
+  "savedAt": "2026-08-15T11:11:48.909Z",
   "savedBy": "employee"
 }
