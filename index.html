@@ -9153,6 +9153,7 @@ function renderLauncher(){
   if(!admin && lnEditing()){ window.__lnEdit = false; document.body.classList.remove('lnEditing'); }
   var hi = document.getElementById('lnHi');
   if(hi) hi.innerHTML = '<h2>' + hmGreet() + '</h2><p>' + hmDate() + ' · 필요한 것만 크게, 한 번에 열립니다</p>';
+  try{ lnPersonalGreet(); }catch(err){}
   var tick = document.getElementById('lnTick');
   if(tick){
     var last = (FIXLOG && FIXLOG.length) ? FIXLOG[FIXLOG.length - 1] : null;
@@ -9168,6 +9169,76 @@ function renderLauncher(){
   if(miniWrap) miniWrap.innerHTML = (LAUNCHER.mini || []).map(function(u){ return lnTile(u, false); }).join('');
   var miniAdd = document.getElementById('lnMiniAdd');
   if(miniAdd) miniAdd.style.display = (admin && lnEditing()) ? '' : 'none';
+}
+
+/* ⚡ 런처 개인화 인사말 (2026-08-15, 「스케줄표 근무자 이름으로 존칭 인사」 요청)
+   ★ 전직원 근무표(schedule-view.html)가 실제로 읽는 구글시트 데이터(Apps Script)를 그대로 다시 읽는다.
+     새 데이터를 만들지 않았다 — 이미 있는 장부를 재사용.
+   ★ 실패해도(네트워크·이번달 표 아님·이름 매칭 안 됨) 화면은 기존 일반 인사말 그대로 남는다 — 절대 화면을 깨지 않는다.
+   ★ 「이 컴퓨터」 별명(stNames/stDevId, 기존 자산)에 직원 이름이 들어있을 때만 그 사람으로 인식한다. */
+var LN_SCHED_URL = "https://script.google.com/macros/s/AKfycbxTkORMjTnG904crrghKNmEA2laN4WcVUpDItmbNuwArjRWlkpaZZOoxcFkTyHfBC1f/exec";
+var LN_SCHED_CACHE_KEY = "wevape_hub_sched_cache_v1";
+
+function lnSchedParse(text){
+  try{
+    var lines = String(text || '').split('\n').filter(function(l){ return l.length; });
+    if(lines.length < 4) return null;
+    var title = (lines[0].split(',')[0]) || '';
+    var now = new Date();
+    var ymTag = now.getFullYear() + '년 ' + (now.getMonth() + 1) + '월';
+    if(title.indexOf(ymTag) === -1) return null;
+    var rows = lines.slice(3).map(function(l){ return l.split(','); });
+    var out = {};
+    rows.forEach(function(r){
+      if(!r[1]) return;
+      out[r[1]] = { title: r[2] || '', days: r.slice(4, 35) };
+    });
+    return out;
+  }catch(err){ return null; }
+}
+async function lnSchedFetch(){
+  var cached = null;
+  try{ cached = JSON.parse(localStorage.getItem(LN_SCHED_CACHE_KEY) || 'null'); }catch(e){}
+  var now = 0;
+  try{ now = Date.now(); }catch(e){}
+  if(cached && cached.t && (now - cached.t) < 20 * 60 * 1000 && cached.map) return cached.map;
+  try{
+    var res = await fetch(LN_SCHED_URL, {method:'GET'});
+    if(!res.ok) return (cached && cached.map) || null;
+    var text = await res.text();
+    var map = lnSchedParse(text);
+    if(map){ try{ localStorage.setItem(LN_SCHED_CACHE_KEY, JSON.stringify({t: now, map: map})); }catch(e){} }
+    return map || (cached && cached.map) || null;
+  }catch(err){ return (cached && cached.map) || null; }
+}
+function lnSchedToday(days){
+  try{ var d = new Date().getDate(); return days[d - 1] || ''; }catch(e){ return ''; }
+}
+function lnSchedMsg(name, title, val){
+  var honor = title ? (title + '님') : '님';
+  if(val === '') return name + ' ' + honor + ', 오늘 휴무시네요. 푹 쉬세요 😊';
+  if(val === '병가') return name + ' ' + honor + ', 오늘 병가시네요. 얼른 나으세요.';
+  if(val === '제외') return null;
+  var loc = String(val).replace(/\(.*\)$/, '');
+  if(!loc) return null;
+  return name + ' ' + honor + ', 오늘 ' + loc + ' 근무시네요 🙌';
+}
+async function lnPersonalGreet(){
+  var nickname = '';
+  try{ nickname = lnStoreLabel() || ''; }catch(e){}
+  if(!nickname) return;
+  var map = await lnSchedFetch();
+  if(!map) return;
+  var matched = Object.keys(map).find(function(n){ return nickname.indexOf(n) !== -1; });
+  if(!matched) return;
+  var entry = map[matched];
+  var val = lnSchedToday(entry.days);
+  var msg = lnSchedMsg(matched, entry.title, val);
+  if(!msg) return;
+  if(typeof currentView !== 'undefined' && currentView !== 'launcher') return;
+  var hi = document.getElementById('lnHi');
+  if(!hi) return;
+  hi.innerHTML = '<h2>' + escapeHtml(msg) + '</h2><p>' + hmDate() + ' · 필요한 것만 크게, 한 번에 열립니다</p>';
 }
 
 /* 🔔 알림 뱃지 첫 표시
