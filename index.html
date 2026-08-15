@@ -9143,6 +9143,32 @@ async function lnMove(slot, url, dir){
   var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
   await lnSave();
 }
+/* 😄 런처 인사말 — 시간대별 위트 있는 멘트 (2026-08-15, 「직원들 유행어 느낌으로, 특정 직원 지칭 없이」 요청)
+   ★ 매장 영업시간(10:30 오픈 ~ 22:00 마감)에 맞춰 시간대별로 후보 문장 중 하나를 무작위로 고른다.
+   ★ 기존 🏠 홈 화면의 hmGreet()는 손대지 않았다 — 이 함수는 런처 전용이라 홈 화면 인사말은 그대로다.
+   ★ 이 함수가 먼저 화면에 뜨고, 그 컴퓨터 별명이 오늘 근무자와 매칭되면 lnPersonalGreet()가 뒤이어 덮어쓴다. */
+function lnFunnyGreet(){
+  var h = 0, m = 0;
+  try{ var now = new Date(); h = now.getHours(); m = now.getMinutes(); }catch(e){}
+  var t = h * 60 + m;
+  var pools;
+  if(t < 10*60+30){
+    pools = ['아직 오픈 전이에요, 커피 한 잔 하고 준비해요 ☕', '곧 오픈! 넵.넵.넵.넵 준비 완료해봐요'];
+  } else if(t < 12*60){
+    pools = ['자 정리할게요~ 오늘 하루 시작, 화이팅 결론낼게요 💪', '넵.넵.넵.넵 오픈 완료! 오늘도 잘 부탁드려요', '오늘도 다들 컨디션 좋으신가요? 화이팅이에요오오옹'];
+  } else if(t < 14*60){
+    pools = ['여보세요? 네? 밥 먹었냐고요? 넵! 이제 드시러 가세요 🍚', '다들 밥먹고 일하세요오오옹', '점심시간! 헤헤히히흐흐 맛있게 드세요'];
+  } else if(t < 17*60){
+    pools = ['제가 이제 그게 이제 저게 이제… 아무튼 오후도 화이팅!', '네 맞습니다. 그렇습니다. 고생 많으십니다 feat. AI 🤖', '아으~ 오후도 고생이 많거든~ 조금만 더 힘내거든~'];
+  } else if(t < 20*60){
+    pools = ['다들 고생 많아요~ 저녁 손님 몰려온다~', '넵.넵.넵.넵 저녁 타임 준비 완료', '오늘 하루도 고생이 많거든~ 저녁도 화이팅이거든~'];
+  } else if(t < 22*60){
+    pools = ['슬슬 마감 준비! 자 정리할게요~ 1번~2번~3번~', '마감까지 조금 남았어요, 헤헤히히흐흐 힘내세요', '오늘도 고생 많으셨습니다 feat. AI 🤖 마무리 잘 부탁드려요'];
+  } else {
+    pools = ['오늘 영업 끝! 다들 고생 많으셨습니다, 편히 쉬세요 😴', '오늘도 고생 많으셨습니다. 내일 또 화이팅이에요오오옹'];
+  }
+  try{ return pools[Math.floor(Math.random() * pools.length)]; }catch(e){ return pools[0]; }
+}
 function renderLauncher(){
   var admin = false;
   try{ admin = isAdmin(); }catch(e){}
@@ -9152,7 +9178,7 @@ function renderLauncher(){
   if(editBtn) editBtn.style.display = admin ? '' : 'none';
   if(!admin && lnEditing()){ window.__lnEdit = false; document.body.classList.remove('lnEditing'); }
   var hi = document.getElementById('lnHi');
-  if(hi) hi.innerHTML = '<h2>' + hmGreet() + '</h2><p>' + hmDate() + ' · 필요한 것만 크게, 한 번에 열립니다</p>';
+  if(hi) hi.innerHTML = '<h2>' + lnFunnyGreet() + '</h2><p>' + hmDate() + ' · 필요한 것만 크게, 한 번에 열립니다</p>';
   try{ lnPersonalGreet(); }catch(err){}
   var tick = document.getElementById('lnTick');
   if(tick){
