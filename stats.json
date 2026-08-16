@@ -353,16 +353,18 @@
     },
     "2026-08-16": {
       "dev": {
-        "dmspf892fvp8od7": 1
+        "dmspf892fvp8od7": 1,
+        "dmsfoaypgl2c1d8": 1
       },
-      "hit": 1,
+      "hit": 2,
       "clk": {
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1,
+        "https://vflow.kr": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-16T01:17:30.148Z",
+  "savedAt": "2026-08-16T01:19:58.884Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
