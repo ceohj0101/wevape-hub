@@ -357,7 +357,7 @@
         "dmspf892fvp8od7": 5,
         "dmsfoaypgl2c1d8": 2,
         "dmsfkofxlwbratm": 1,
-        "dmsfub5jac8mrsb": 2,
+        "dmsfub5jac8mrsb": 3,
         "dmspibvbn05jp2o": 1,
         "dmsgvbdt7ol9jmc": 5,
         "dmsvc9wv8fikwfk": 2,
@@ -374,12 +374,13 @@
         "https://order-hub-dfni.onrender.com/": 3,
         "https://order-hub-dfni.onrender.com/defects": 1,
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 2,
-        "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1
+        "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
+        "https://wevape-reservation.vercel.app/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-16T08:27:58.183Z",
+  "savedAt": "2026-08-16T08:55:35.224Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
