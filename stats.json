@@ -386,14 +386,15 @@
     },
     "2026-08-17": {
       "dev": {
-        "dmsfprzijmhz3ro": 1
+        "dmsfprzijmhz3ro": 1,
+        "dmsfub5jac8mrsb": 1
       },
-      "hit": 1,
+      "hit": 2,
       "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-17T01:11:36.777Z",
+  "savedAt": "2026-08-17T01:16:32.533Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
