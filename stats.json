@@ -392,9 +392,10 @@
         "dmsg3bq568xkrh3": 2,
         "dmsgvbdt7ol9jmc": 4,
         "dmsilsmcbv88i3a": 1,
-        "dmsfoaypgl2c1d8": 2
+        "dmsfoaypgl2c1d8": 2,
+        "dmswv3m7s6zqvtv": 1
       },
-      "hit": 7,
+      "hit": 8,
       "clk": {
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 3,
         "https://order-hub-dfni.onrender.com/": 3,
@@ -407,7 +408,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-17T05:38:52.984Z",
+  "savedAt": "2026-08-17T06:39:21.224Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
