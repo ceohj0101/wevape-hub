@@ -391,20 +391,21 @@
         "dmshf83c28ezwg1": 5,
         "dmsg3bq568xkrh3": 2,
         "dmsgvbdt7ol9jmc": 2,
-        "dmsilsmcbv88i3a": 1
+        "dmsilsmcbv88i3a": 1,
+        "dmsfoaypgl2c1d8": 1
       },
       "hit": 7,
       "clk": {
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 3,
         "https://order-hub-dfni.onrender.com/": 3,
         "https://vflow.kr": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
         "https://order-hub-dfni.onrender.com/defects": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-17T04:28:15.123Z",
+  "savedAt": "2026-08-17T05:06:21.817Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
