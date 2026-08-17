@@ -388,14 +388,16 @@
       "dev": {
         "dmsfprzijmhz3ro": 1,
         "dmsfub5jac8mrsb": 1,
-        "dmshf83c28ezwg1": 1
+        "dmshf83c28ezwg1": 2
       },
       "hit": 3,
-      "clk": {}
+      "clk": {
+        "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-17T01:31:44.027Z",
+  "savedAt": "2026-08-17T01:47:13.183Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
