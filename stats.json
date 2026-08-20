@@ -433,12 +433,14 @@
         "dmt1qzt5ppcj4z0": 1,
         "dmt1r24s2p08qkp": 2
       },
-      "hit": 3,
-      "clk": {}
+      "hit": 2,
+      "clk": {
+        "https://wevape-reservation.vercel.app/": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-20T17:01:01.174Z",
+  "savedAt": "2026-08-20T17:01:41.096Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
