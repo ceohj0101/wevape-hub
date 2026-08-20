@@ -424,17 +424,17 @@
       "dev": {
         "dmsoi28klrebuuz": 1,
         "dmsfk5gma6n6doq": 1,
-        "dmsfprzijmhz3ro": 2
+        "dmsfprzijmhz3ro": 1
       },
-      "hit": 2,
+      "hit": 0,
       "clk": {
-        "https://order-hub-dfni.onrender.com/defects": 1,
+        "https://order-hub-dfni.onrender.com/defects": 2,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-20T01:16:59.986Z",
+  "savedAt": "2026-08-20T01:17:06.784Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
