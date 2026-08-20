@@ -1,33 +1,6 @@
 {
   "v": 1,
   "days": {
-    "2026-08-07": {
-      "dev": {
-        "dmsgukyv4zr4ekv": 1,
-        "dmsi9gx13iapjg0": 6,
-        "dmsfub5jac8mrsb": 1,
-        "dmshit48eeidz5j": 1,
-        "dmsfkq0kdr8q74h": 2,
-        "dmsfjm49ci6i8at": 6,
-        "dmsg28t0xzmp6x4": 1,
-        "dmsilsmcbv88i3a": 1,
-        "dmsio4plqb8e2ts": 2,
-        "dmsfoaypgl2c1d8": 2,
-        "dmsiy5nzph0lrhf": 2,
-        "dmsfk5gma6n6doq": 3
-      },
-      "hit": 41,
-      "clk": {
-        "https://vflow.kr": 8,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 6,
-        "https://ceohj0101.github.io/wevape-hr/": 3,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
-        "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 4,
-        "https://wevape-pos-app.vercel.app/": 2,
-        "https://forms.gle/gVSBo4eeU4Bev561A": 2,
-        "https://znsl132-lang.github.io/BIGLUCKY/": 4
-      }
-    },
     "2026-08-08": {
       "dev": {
         "dmsio4plqb8e2ts": 3,
@@ -454,10 +427,17 @@
         "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 3,
         "https://znsl132-lang.github.io/BIGLUCKY/": 1
       }
+    },
+    "2026-08-21": {
+      "dev": {
+        "dmt1qzt5ppcj4z0": 1
+      },
+      "hit": 1,
+      "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-20T14:12:18.923Z",
+  "savedAt": "2026-08-20T16:41:55.022Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
