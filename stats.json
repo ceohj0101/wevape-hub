@@ -400,11 +400,11 @@
         "dmszid0qi156n5s": 1,
         "dmsfkq0kdr8q74h": 2,
         "dmsg3bq568xkrh3": 4,
-        "dmsfkofxlwbratm": 1,
+        "dmsfkofxlwbratm": 2,
         "dmsilsmcbv88i3a": 5,
         "dmsfk5gma6n6doq": 4
       },
-      "hit": 19,
+      "hit": 20,
       "clk": {
         "https://order-hub-dfni.onrender.com/": 5,
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 4,
@@ -427,18 +427,20 @@
         "dmsfprzijmhz3ro": 1,
         "dmsymwqxuywtiim": 1,
         "dmsgvbdt7ol9jmc": 4,
-        "dmsjshztbutzxa6": 1
+        "dmsjshztbutzxa6": 1,
+        "dmsfkofxlwbratm": 1
       },
-      "hit": 2,
+      "hit": 3,
       "clk": {
         "https://order-hub-dfni.onrender.com/defects": 5,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
-        "https://vflow.kr": 2
+        "https://vflow.kr": 2,
+        "https://order-hub-dfni.onrender.com/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-20T01:59:49.375Z",
+  "savedAt": "2026-08-20T02:10:16.294Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
