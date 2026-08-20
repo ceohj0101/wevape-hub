@@ -172,6 +172,16 @@
       "owner": "개발자:안태민",
       "sensitive": false,
       "createdAt": 1786792307219
+    },
+    {
+      "dept": "FIN",
+      "title": "세무관리 종합",
+      "url": "https://order-hub-dfni.onrender.com/tax",
+      "note": "각 매장 계산서, 매입, 매출 종합 세무관리",
+      "status": "운영중",
+      "owner": "개발자:신재현 실장",
+      "sensitive": true,
+      "createdAt": 1787203570763
     }
   ],
   "stores": [
@@ -2440,6 +2450,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-08-15T11:11:52.369Z",
+  "savedAt": "2026-08-20T05:26:12.146Z",
   "savedBy": "employee"
 }
