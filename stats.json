@@ -424,12 +424,14 @@
       "dev": {
         "dmsoi28klrebuuz": 1
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 0,
+      "clk": {
+        "https://order-hub-dfni.onrender.com/defects": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-20T00:18:35.652Z",
+  "savedAt": "2026-08-20T00:18:41.531Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
