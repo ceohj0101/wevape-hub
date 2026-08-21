@@ -436,9 +436,10 @@
         "dmt29qt8z1vhin7": 1,
         "dmsy65i5yszxf6k": 3,
         "dmsymwqxuywtiim": 3,
-        "dmsfk5gma6n6doq": 1
+        "dmsfk5gma6n6doq": 1,
+        "dmt2j4zffv6eijx": 1
       },
-      "hit": 8,
+      "hit": 9,
       "clk": {
         "https://wevape-reservation.vercel.app/": 1,
         "https://order-hub-dfni.onrender.com/tax": 1,
@@ -450,7 +451,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-21T03:33:35.749Z",
+  "savedAt": "2026-08-21T05:49:38.476Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
