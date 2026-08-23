@@ -435,19 +435,19 @@
     },
     "2026-08-23": {
       "dev": {
-        "dmsg3bq568xkrh3": 2,
+        "dmsg3bq568xkrh3": 3,
         "dmsfub5jac8mrsb": 1,
         "dmsymwqxuywtiim": 1
       },
       "hit": 2,
       "clk": {
-        "https://order-hub-dfni.onrender.com/": 1,
+        "https://order-hub-dfni.onrender.com/": 2,
         "https://vflow.kr": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-23T02:16:16.942Z",
+  "savedAt": "2026-08-23T02:18:00.124Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
