@@ -446,11 +446,12 @@
         "dmsfk5gma6n6doq": 1,
         "dmsoi28klrebuuz": 1,
         "dmt5e5p3spgy4nl": 1,
-        "dmsfoaypgl2c1d8": 2
+        "dmsfoaypgl2c1d8": 2,
+        "dmsio4plqb8e2ts": 1
       },
-      "hit": 12,
+      "hit": 13,
       "clk": {
-        "https://order-hub-dfni.onrender.com/": 8,
+        "https://order-hub-dfni.onrender.com/": 9,
         "https://vflow.kr": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
         "https://order-hub-dfni.onrender.com/tax": 1,
@@ -463,7 +464,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-23T06:04:48.424Z",
+  "savedAt": "2026-08-23T06:11:43.464Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
