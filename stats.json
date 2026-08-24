@@ -1,47 +1,6 @@
 {
   "v": 1,
   "days": {
-    "2026-08-10": {
-      "dev": {
-        "dmshgfhsu6qyqac": 1,
-        "dmsfub5jac8mrsb": 18,
-        "dmsiy5nzph0lrhf": 1,
-        "dmsg3bq568xkrh3": 5,
-        "dmsfkq0kdr8q74h": 16,
-        "dmsmkxkneffc90y": 13,
-        "dmsfjm49ci6i8at": 18,
-        "dmsfkofxlwbratm": 22,
-        "dmsfprzijmhz3ro": 2,
-        "dmsmn7nfcf9vc80": 3,
-        "dmsl7ts7cxgphpq": 5,
-        "dmslt099atkxudc": 1,
-        "dmsjyqa9r5flnon": 1,
-        "dmsmx7t00ca5nj5": 4,
-        "dmsilsmcbv88i3a": 2,
-        "dmsjshztbutzxa6": 4,
-        "dmsn2ymebu4r47q": 5,
-        "dmsn3600vbtzxm7": 1,
-        "dmsfk5gma6n6doq": 3,
-        "dmsgvbdt7ol9jmc": 2,
-        "dmshf83c28ezwg1": 1
-      },
-      "hit": 74,
-      "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 4,
-        "https://order-hub-dfni.onrender.com/": 7,
-        "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 5,
-        "https://vflow.kr": 3,
-        "https://wevape-reservation.vercel.app/": 11,
-        "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 10,
-        "https://wevape-pos-app.vercel.app/": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/": 4,
-        "https://wjdwkdrn7714.github.io/-/": 11,
-        "https://ceohj0101.github.io/wevape-hr/": 2,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 7,
-        "https://docs.google.com/spreadsheets/d/1Cw7speJsddFGBLBsaTq9YkdNFqggbksCjF5I-j0CadU/edit?usp=sharing": 2
-      }
-    },
     "2026-08-11": {
       "dev": {
         "dmsjshztbutzxa6": 1,
@@ -468,10 +427,17 @@
         "https://wjdwkdrn7714.github.io/-/": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/": 1
       }
+    },
+    "2026-08-24": {
+      "dev": {
+        "dmsfub5jac8mrsb": 1
+      },
+      "hit": 1,
+      "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-23T13:29:42.826Z",
+  "savedAt": "2026-08-24T01:17:52.781Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
