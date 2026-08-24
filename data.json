@@ -191,6 +191,16 @@
       "status": "운영중",
       "owner": "고아현",
       "createdAt": 1787548646373
+    },
+    {
+      "dept": "DEV",
+      "title": "포스 설치 가이드",
+      "url": "wevape-pos-app.vercel.app/setup.html",
+      "note": "포스통합프로그램 결제 연동 초기가이드",
+      "status": "개발중",
+      "owner": "개발자:김형진",
+      "sensitive": true,
+      "createdAt": 1787565692215
     }
   ],
   "stores": [
@@ -2638,6 +2648,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-08-24T06:32:38.338Z",
+  "savedAt": "2026-08-24T10:01:34.217Z",
   "savedBy": "employee"
 }
