@@ -404,6 +404,28 @@
   "feedbackSeq": 8,
   "reviews": [
     {
+      "id": "rv10",
+      "title": "매장 시연용 제품 교체",
+      "url": "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90",
+      "text": "",
+      "author": "원주현",
+      "dev": "원주현",
+      "files": [],
+      "time": "08. 24. 오후 03:32",
+      "date": "2026-08-24",
+      "status": "제출됨",
+      "stage": "제출됨",
+      "reply": "",
+      "todos": [],
+      "log": [
+        {
+          "w": "원주현",
+          "a": "검토 요청 제출",
+          "t": "08. 24. 오후 03:32"
+        }
+      ]
+    },
+    {
       "id": "rv9",
       "title": "SNS 자동화 시스",
       "url": "https://znsl132-lang.github.io/wevape-web/",
@@ -1731,7 +1753,7 @@
       "dev": "장현진"
     }
   ],
-  "reviewSeq": 10,
+  "reviewSeq": 11,
   "deleted": [
     "https://janghj201-cyber.github.io/-/",
     "https://znsl132-lang.github.io/BIGLUCKY/schedule.html"
@@ -2616,5 +2638,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-08-24T06:21:05.040Z"
+  "savedAt": "2026-08-24T06:32:38.338Z",
+  "savedBy": "employee"
 }
