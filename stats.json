@@ -399,7 +399,7 @@
         "dmsfoaypgl2c1d8": 2,
         "dmsgvbdt7ol9jmc": 3,
         "dmsfkofxlwbratm": 7,
-        "dmsg3bq568xkrh3": 9,
+        "dmsg3bq568xkrh3": 10,
         "dmsilsmcbv88i3a": 1,
         "dmsgukyv4zr4ekv": 1,
         "dmsfjm49ci6i8at": 2,
@@ -408,7 +408,7 @@
         "dmsfub5jac8mrsb": 2,
         "dmsfkq0kdr8q74h": 1
       },
-      "hit": 21,
+      "hit": 22,
       "clk": {
         "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 7,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 5,
@@ -423,14 +423,15 @@
     "2026-08-25": {
       "dev": {
         "dmsgukyv4zr4ekv": 2,
-        "dmsfub5jac8mrsb": 1
+        "dmsfub5jac8mrsb": 1,
+        "dmsg3bq568xkrh3": 1
       },
-      "hit": 3,
+      "hit": 4,
       "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-25T01:22:28.872Z",
+  "savedAt": "2026-08-25T01:32:20.105Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
