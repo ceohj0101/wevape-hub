@@ -1,35 +1,6 @@
 {
   "v": 1,
   "days": {
-    "2026-08-13": {
-      "dev": {
-        "dmspf892fvp8od7": 12,
-        "dmsgvbdt7ol9jmc": 6,
-        "dmsqw9a5gko075c": 2,
-        "dmsfkq0kdr8q74h": 2,
-        "dmsqxnwqq7fsfto": 2,
-        "dmsfjm49ci6i8at": 6,
-        "dmshgfhsu6qyqac": 2,
-        "dmsfk5gma6n6doq": 4,
-        "dmsfub5jac8mrsb": 2,
-        "dmsfkofxlwbratm": 1,
-        "dmsg3bq568xkrh3": 4,
-        "dmsrja3c04pvph7": 1,
-        "dmsmn7nfcf9vc80": 1,
-        "dmsiy5nzph0lrhf": 1
-      },
-      "hit": 33,
-      "clk": {
-        "https://order-hub-dfni.onrender.com/defects": 2,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/": 2,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 8,
-        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
-        "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 2,
-        "https://vflow.kr": 1,
-        "https://wjdwkdrn7714.github.io/-/": 1
-      }
-    },
     "2026-08-14": {
       "dev": {
         "dmsfub5jac8mrsb": 2,
@@ -448,10 +419,17 @@
         "https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1": 2,
         "https://znsl132-lang.github.io/BIGLUCKY/": 2
       }
+    },
+    "2026-08-27": {
+      "dev": {
+        "dmsio4plqb8e2ts": 1
+      },
+      "hit": 1,
+      "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-26T13:01:51.607Z",
+  "savedAt": "2026-08-26T16:44:58.499Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
