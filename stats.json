@@ -419,16 +419,17 @@
     },
     "2026-08-26": {
       "dev": {
-        "dmshgfhsu6qyqac": 1
+        "dmshgfhsu6qyqac": 1,
+        "dmt8o3x2x0l6q2u": 1
       },
-      "hit": 0,
+      "hit": 1,
       "clk": {
         "https://wevape-pos-app.vercel.app/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-25T15:53:49.098Z",
+  "savedAt": "2026-08-26T01:15:18.674Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
