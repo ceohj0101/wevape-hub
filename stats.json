@@ -424,12 +424,15 @@
       "dev": {
         "dmsio4plqb8e2ts": 1
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 0,
+      "clk": {
+        "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-26T16:44:58.499Z",
+  "savedAt": "2026-08-26T16:45:19.668Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
