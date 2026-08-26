@@ -421,7 +421,7 @@
     "2026-08-26": {
       "dev": {
         "dmshgfhsu6qyqac": 1,
-        "dmt8o3x2x0l6q2u": 5,
+        "dmt8o3x2x0l6q2u": 6,
         "dmsfub5jac8mrsb": 2,
         "dmsjshztbutzxa6": 2,
         "dmt9g3jpqy3in2x": 1,
@@ -441,12 +441,13 @@
         "https://order-hub-dfni.onrender.com/tax": 1,
         "https://order-hub-dfni.onrender.com/": 1,
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 1,
-        "https://order-hub-dfni.onrender.com/sales?month=2026-06": 1
+        "https://order-hub-dfni.onrender.com/sales?month=2026-06": 1,
+        "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-26T05:04:27.282Z",
+  "savedAt": "2026-08-26T05:26:55.263Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
