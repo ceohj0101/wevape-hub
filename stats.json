@@ -421,19 +421,19 @@
     "2026-08-26": {
       "dev": {
         "dmshgfhsu6qyqac": 1,
-        "dmt8o3x2x0l6q2u": 3,
+        "dmt8o3x2x0l6q2u": 4,
         "dmsfub5jac8mrsb": 1,
         "dmsjshztbutzxa6": 1
       },
       "hit": 3,
       "clk": {
         "https://wevape-pos-app.vercel.app/": 1,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 2
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 3
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-26T01:46:36.442Z",
+  "savedAt": "2026-08-26T01:49:19.619Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
