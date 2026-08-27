@@ -395,7 +395,7 @@
         "dmt8o3x2x0l6q2u": 8,
         "dmsfub5jac8mrsb": 6,
         "dmsjshztbutzxa6": 2,
-        "dmt9g3jpqy3in2x": 1,
+        "dmt9g3jpqy3in2x": 2,
         "dmsg3bq568xkrh3": 10,
         "dmsfprzijmhz3ro": 4,
         "dmsgvbdt7ol9jmc": 3,
@@ -407,7 +407,7 @@
       "hit": 21,
       "clk": {
         "https://wevape-pos-app.vercel.app/": 3,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 6,
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 7,
         "https://vflow.kr": 4,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 3,
         "https://docs.google.com/spreadsheets/d/1Cw7speJsddFGBLBsaTq9YkdNFqggbksCjF5I-j0CadU/edit?usp=sharing": 1,
@@ -425,9 +425,10 @@
         "dmsio4plqb8e2ts": 1,
         "dmsjshztbutzxa6": 1,
         "dmsfub5jac8mrsb": 1,
-        "dmsgvbdt7ol9jmc": 2
+        "dmsgvbdt7ol9jmc": 2,
+        "dmt9g3jpqy3in2x": 1
       },
-      "hit": 2,
+      "hit": 3,
       "clk": {
         "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
@@ -438,7 +439,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-27T01:33:37.935Z",
+  "savedAt": "2026-08-27T01:59:14.940Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
