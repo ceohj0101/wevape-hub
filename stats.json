@@ -424,7 +424,7 @@
       "dev": {
         "dmsio4plqb8e2ts": 1,
         "dmsjshztbutzxa6": 1,
-        "dmsfub5jac8mrsb": 1,
+        "dmsfub5jac8mrsb": 2,
         "dmsgvbdt7ol9jmc": 2,
         "dmt9g3jpqy3in2x": 1,
         "dmtavw780lkhne6": 6,
@@ -445,12 +445,13 @@
         "https://wevape-pos-app.vercel.app/": 3,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
         "https://order-hub-dfni.onrender.com/defects": 1,
-        "https://order-hub-dfni.onrender.com/": 3
+        "https://order-hub-dfni.onrender.com/": 3,
+        "https://znsl132-lang.github.io/BIGLUCKY/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-27T11:10:51.904Z",
+  "savedAt": "2026-08-27T11:18:43.180Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
