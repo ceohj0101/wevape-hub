@@ -429,11 +429,12 @@
         "dmsfprzijmhz3ro": 1,
         "dmsy65i5yszxf6k": 4,
         "dmtbiv1oqshmgt7": 8,
-        "dmsg3bq568xkrh3": 3
+        "dmsg3bq568xkrh3": 3,
+        "dmt9g3jpqy3in2x": 1
       },
-      "hit": 12,
+      "hit": 13,
       "clk": {
-        "https://vflow.kr": 1,
+        "https://vflow.kr": 2,
         "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
         "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 2,
         "https://ceohj0101.github.io/wevape-hr/": 1,
@@ -443,7 +444,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-28T02:42:53.788Z",
+  "savedAt": "2026-08-28T03:55:01.577Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
