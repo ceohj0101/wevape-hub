@@ -427,16 +427,17 @@
         "dmsfub5jac8mrsb": 1,
         "dmsgvbdt7ol9jmc": 1,
         "dmsfprzijmhz3ro": 1,
-        "dmsy65i5yszxf6k": 2
+        "dmsy65i5yszxf6k": 1
       },
-      "hit": 5,
+      "hit": 3,
       "clk": {
-        "https://vflow.kr": 1
+        "https://vflow.kr": 1,
+        "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-28T01:45:26.777Z",
+  "savedAt": "2026-08-28T01:45:47.634Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
