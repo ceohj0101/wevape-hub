@@ -427,9 +427,9 @@
         "dmsfub5jac8mrsb": 1,
         "dmsgvbdt7ol9jmc": 1,
         "dmsfprzijmhz3ro": 1,
-        "dmsy65i5yszxf6k": 2,
+        "dmsy65i5yszxf6k": 1,
         "dmtbiv1oqshmgt7": 8,
-        "dmsg3bq568xkrh3": 2
+        "dmsg3bq568xkrh3": 3
       },
       "hit": 12,
       "clk": {
@@ -441,7 +441,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-28T02:25:43.760Z",
+  "savedAt": "2026-08-28T02:26:12.373Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
