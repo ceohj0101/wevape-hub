@@ -210,6 +210,16 @@
       "status": "운영중",
       "owner": "원주현",
       "createdAt": 1787824655476
+    },
+    {
+      "dept": "FIN",
+      "title": "개인 지출내역 영수증 업로드",
+      "url": "https://order-hub-dfni.onrender.com/receipts",
+      "note": "매월 개인 지출내역 영수증 업로드 취합사이트. (보고용)",
+      "status": "운영중",
+      "owner": "개발자:신재현 실장",
+      "sensitive": false,
+      "createdAt": 1787889981829
     }
   ],
   "stores": [
@@ -2837,6 +2847,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-08-27T09:57:35.928Z",
+  "savedAt": "2026-08-28T04:06:23.250Z",
   "savedBy": "employee"
 }
