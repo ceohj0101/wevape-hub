@@ -1,35 +1,6 @@
 {
   "v": 1,
   "days": {
-    "2026-08-14": {
-      "dev": {
-        "dmsfub5jac8mrsb": 2,
-        "dmsgvbdt7ol9jmc": 1,
-        "dmshf83c28ezwg1": 2,
-        "dmsfk5gma6n6doq": 3,
-        "dmsfkofxlwbratm": 7,
-        "dmsshcoxx7mhhqa": 2,
-        "dmsilsmcbv88i3a": 7,
-        "dmsfjm49ci6i8at": 2,
-        "dmsfkq0kdr8q74h": 2,
-        "dmsfprzijmhz3ro": 2,
-        "dmss95spgvg84gp": 1,
-        "dmsg3bq568xkrh3": 1,
-        "dmst09qifrcopn8": 2,
-        "dmslt099atkxudc": 3
-      },
-      "hit": 13,
-      "clk": {
-        "https://vflow.kr": 2,
-        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
-        "https://order-hub-dfni.onrender.com/defects": 6,
-        "https://order-hub-dfni.onrender.com/": 1,
-        "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 5,
-        "https://znsl132-lang.github.io/BIGLUCKY/": 4,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 7,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2
-      }
-    },
     "2026-08-15": {
       "dev": {
         "dmsfub5jac8mrsb": 4,
@@ -424,7 +395,7 @@
       "dev": {
         "dmsio4plqb8e2ts": 1,
         "dmsjshztbutzxa6": 1,
-        "dmsfub5jac8mrsb": 4,
+        "dmsfub5jac8mrsb": 5,
         "dmsgvbdt7ol9jmc": 3,
         "dmt9g3jpqy3in2x": 2,
         "dmtavw780lkhne6": 6,
@@ -437,7 +408,7 @@
         "dmsqw9a5gko075c": 2,
         "dmtbiv1oqshmgt7": 2
       },
-      "hit": 22,
+      "hit": 23,
       "clk": {
         "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 2,
@@ -448,12 +419,19 @@
         "https://order-hub-dfni.onrender.com/defects": 1,
         "https://order-hub-dfni.onrender.com/": 4,
         "https://znsl132-lang.github.io/BIGLUCKY/": 2,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 6
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 7
       }
+    },
+    "2026-08-28": {
+      "dev": {
+        "dmsfub5jac8mrsb": 1
+      },
+      "hit": 1,
+      "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-27T13:04:11.651Z",
+  "savedAt": "2026-08-28T01:18:02.181Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
