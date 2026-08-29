@@ -431,12 +431,13 @@
         "dmsg3bq568xkrh3": 1,
         "dmsy65i5yszxf6k": 4,
         "dmtavw780lkhne6": 1,
-        "dmtdze3xqf3k62p": 1
+        "dmtdze3xqf3k62p": 1,
+        "dmtdzefeb9egz24": 1
       },
-      "hit": 7,
+      "hit": 8,
       "clk": {
         "wevape-pos-app.vercel.app/setup.html": 1,
-        "https://vflow.kr": 1,
+        "https://vflow.kr": 2,
         "https://order-hub-dfni.onrender.com/defects": 1,
         "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/": 1,
@@ -449,7 +450,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-29T06:10:16.397Z",
+  "savedAt": "2026-08-29T06:12:16.179Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
