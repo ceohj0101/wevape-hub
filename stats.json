@@ -433,7 +433,7 @@
     },
     "2026-08-30": {
       "dev": {
-        "dmsfoaypgl2c1d8": 2,
+        "dmsfoaypgl2c1d8": 3,
         "dmsfub5jac8mrsb": 1,
         "dmshgfhsu6qyqac": 1,
         "dmtcwqas1rlttle": 3,
@@ -441,7 +441,7 @@
       },
       "hit": 5,
       "clk": {
-        "https://vflow.kr": 1,
+        "https://vflow.kr": 2,
         "https://order-hub-dfni.onrender.com/": 3,
         "https://order-hub-dfni.onrender.com/receipts": 1,
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 1,
@@ -450,7 +450,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-08-30T04:03:15.990Z",
+  "savedAt": "2026-08-30T04:52:22.665Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
