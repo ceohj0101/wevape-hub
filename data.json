@@ -433,6 +433,28 @@
   "feedbackSeq": 8,
   "reviews": [
     {
+      "id": "rv11",
+      "title": "매장별 예약 및 as관리",
+      "url": "https://wevape-reservation-nu.vercel.app/",
+      "text": "",
+      "author": "정희경",
+      "dev": "김형진, 정희경",
+      "files": [],
+      "time": "08. 31. 오후 07:10",
+      "date": "2026-08-31",
+      "status": "제출됨",
+      "stage": "제출됨",
+      "reply": "",
+      "todos": [],
+      "log": [
+        {
+          "w": "김형진, 정희경",
+          "a": "검토 요청 제출",
+          "t": "08. 31. 오후 07:10"
+        }
+      ]
+    },
+    {
       "id": "rv10",
       "title": "매장 시연용 제품 교체",
       "url": "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90",
@@ -1962,7 +1984,7 @@
       "dev": "장현진"
     }
   ],
-  "reviewSeq": 11,
+  "reviewSeq": 12,
   "deleted": [
     "https://janghj201-cyber.github.io/-/",
     "https://znsl132-lang.github.io/BIGLUCKY/schedule.html"
@@ -2847,6 +2869,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-08-28T04:06:23.250Z",
+  "savedAt": "2026-08-31T10:10:33.441Z",
   "savedBy": "employee"
 }
