@@ -435,23 +435,24 @@
     "2026-09-02": {
       "dev": {
         "dmtdzefeb9egz24": 1,
-        "dmsgvbdt7ol9jmc": 2,
+        "dmsgvbdt7ol9jmc": 3,
         "dmt2x0w15y7gxv8": 1,
         "dmshf83c28ezwg1": 1,
         "dmsy65i5yszxf6k": 1,
         "dmsfkofxlwbratm": 1,
         "dmth85lx7rohldt": 1
       },
-      "hit": 6,
+      "hit": 7,
       "clk": {
         "https://vflow.kr": 3,
         "https://wevape-reservation-nu.vercel.app/": 1,
-        "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1
+        "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
+        "https://order-hub-dfni.onrender.com/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-02T02:51:20.326Z",
+  "savedAt": "2026-09-02T03:28:12.324Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
