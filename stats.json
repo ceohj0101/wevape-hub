@@ -435,16 +435,17 @@
     "2026-09-02": {
       "dev": {
         "dmtdzefeb9egz24": 1,
-        "dmsgvbdt7ol9jmc": 2
+        "dmsgvbdt7ol9jmc": 2,
+        "dmt2x0w15y7gxv8": 1
       },
-      "hit": 2,
+      "hit": 3,
       "clk": {
         "https://vflow.kr": 2
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-02T01:03:29.274Z",
+  "savedAt": "2026-09-02T01:13:01.141Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
