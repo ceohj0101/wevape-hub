@@ -353,17 +353,17 @@
         "dmsfkofxlwbratm": 3,
         "dmsfprzijmhz3ro": 2,
         "dmtfssojmymvat7": 2,
-        "dmshf83c28ezwg1": 1,
+        "dmshf83c28ezwg1": 2,
         "dmsgvbdt7ol9jmc": 1
       },
-      "hit": 19,
+      "hit": 20,
       "clk": {
         "https://vflow.kr": 2,
         "https://order-hub-dfni.onrender.com/": 5,
         "https://order-hub-dfni.onrender.com/receipts": 2,
         "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 9,
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 10,
         "https://ceohj0101.github.io/wevape-hr/": 1,
         "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
         "https://order-hub-dfni.onrender.com/defects": 1
@@ -399,7 +399,7 @@
     "2026-09-01": {
       "dev": {
         "dmsfoaypgl2c1d8": 1,
-        "dmsfub5jac8mrsb": 15,
+        "dmsfub5jac8mrsb": 14,
         "dmsfkofxlwbratm": 9,
         "dmthzj9yz6x01ro": 9,
         "dmsqw9a5gko075c": 4,
@@ -415,7 +415,7 @@
       },
       "hit": 23,
       "clk": {
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 6,
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 5,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 6,
         "https://wevape-pos-app.vercel.app/": 6,
         "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90": 3,
@@ -437,7 +437,7 @@
         "dmtdzefeb9egz24": 1,
         "dmsgvbdt7ol9jmc": 2,
         "dmt2x0w15y7gxv8": 1,
-        "dmsfub5jac8mrsb": 1
+        "dmshf83c28ezwg1": 1
       },
       "hit": 4,
       "clk": {
@@ -446,7 +446,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-02T01:24:57.673Z",
+  "savedAt": "2026-09-02T01:25:00.920Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
