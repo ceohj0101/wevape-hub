@@ -430,18 +430,19 @@
       "dev": {
         "dmsyx9x7fyu0wkv": 1,
         "dmsjshztbutzxa6": 2,
-        "dmtjjwvhx3o4ek0": 1
+        "dmtjjwvhx3o4ek0": 2
       },
       "hit": 2,
       "clk": {
         "https://forms.gle/gVSBo4eeU4Bev561A": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
-        "https://wevape-reservation-nu.vercel.app/": 1
+        "https://wevape-reservation-nu.vercel.app/": 1,
+        "https://wevape-pos-app.vercel.app/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-03T01:23:51.184Z",
+  "savedAt": "2026-09-03T01:25:20.001Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
