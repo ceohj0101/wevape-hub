@@ -432,14 +432,17 @@
       "dev": {
         "dmtmt730ef3onq4": 1,
         "dmsfub5jac8mrsb": 1,
-        "dmsfk5gma6n6doq": 1
+        "dmsfk5gma6n6doq": 1,
+        "dmsfoaypgl2c1d8": 1
       },
-      "hit": 3,
-      "clk": {}
+      "hit": 4,
+      "clk": {
+        "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-05T01:27:20.389Z",
+  "savedAt": "2026-09-05T01:30:04.703Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
