@@ -426,7 +426,7 @@
         "dmsfk5gma6n6doq": 2,
         "dmsfoaypgl2c1d8": 1,
         "dmtmt730ef3onq4": 1,
-        "dmsfub5jac8mrsb": 1,
+        "dmsfub5jac8mrsb": 2,
         "dmsg3bq568xkrh3": 2,
         "dmsio4plqb8e2ts": 2,
         "dmsmx7t00ca5nj5": 3
@@ -437,12 +437,12 @@
         "https://wevape-pos-app.vercel.app/": 1,
         "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
         "https://wevape-reservation.vercel.app/": 1,
-        "https://wevape-reservation-nu.vercel.app/": 1
+        "https://wevape-reservation-nu.vercel.app/": 2
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-06T07:04:34.179Z",
+  "savedAt": "2026-09-06T07:08:32.825Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
