@@ -430,21 +430,21 @@
         "dmsg3bq568xkrh3": 2,
         "dmsio4plqb8e2ts": 2,
         "dmsmx7t00ca5nj5": 3,
-        "dmsgvbdt7ol9jmc": 2
+        "dmsgvbdt7ol9jmc": 3
       },
-      "hit": 9,
+      "hit": 10,
       "clk": {
         "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 2,
         "https://wevape-pos-app.vercel.app/": 1,
         "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
         "https://wevape-reservation.vercel.app/": 1,
         "https://wevape-reservation-nu.vercel.app/": 2,
-        "https://order-hub-dfni.onrender.com/": 4
+        "https://order-hub-dfni.onrender.com/": 5
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-06T08:54:06.406Z",
+  "savedAt": "2026-09-06T11:09:49.805Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
