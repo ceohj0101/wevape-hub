@@ -25,14 +25,6 @@
       "owner": "장현진 팀장"
     },
     {
-      "dept": "CX",
-      "title": "AS 스프레드시트",
-      "url": "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing",
-      "note": "Google Sheets",
-      "status": "운영중",
-      "owner": "정희경 주임"
-    },
-    {
       "dept": "GRO",
       "title": "회원가입 구글폼",
       "url": "https://forms.gle/gVSBo4eeU4Bev561A",
@@ -2129,7 +2121,8 @@
   "reviewSeq": 12,
   "deleted": [
     "https://janghj201-cyber.github.io/-/",
-    "https://znsl132-lang.github.io/BIGLUCKY/schedule.html"
+    "https://znsl132-lang.github.io/BIGLUCKY/schedule.html",
+    "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing"
   ],
   "checks": {
     "https://vflow.kr": {
@@ -3011,6 +3004,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-09-03T07:51:24.077Z",
+  "savedAt": "2026-09-07T12:35:12.571Z",
   "savedBy": "employee"
 }
