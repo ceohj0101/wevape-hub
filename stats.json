@@ -423,14 +423,13 @@
     "2026-09-07": {
       "dev": {
         "dmsvx1acw8wb1f9": 2,
-        "dmsg3bq568xkrh3": 1,
+        "dmsg3bq568xkrh3": 2,
         "dmsfub5jac8mrsb": 1,
         "dmtmt730ef3onq4": 1,
         "dmsqw9a5gko075c": 1,
-        "dmtliihxlebaaqy": 1,
-        "dmsy65i5yszxf6k": 1
+        "dmtliihxlebaaqy": 1
       },
-      "hit": 7,
+      "hit": 6,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
         "https://vflow.kr": 3,
@@ -441,7 +440,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-07T01:31:46.084Z",
+  "savedAt": "2026-09-07T01:31:55.325Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
