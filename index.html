@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>위베이프 시스템 허브</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%23FFC94A'/%3E%3Ctext%20x='32'%20y='45'%20font-family='Arial,%20Helvetica,%20sans-serif'%20font-size='36'%20font-weight='900'%20fill='%23111C28'%20text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='%231a5df0'/%3E%3Ctext%20x='32'%20y='46'%20font-family='Arial,%20Helvetica,%20sans-serif'%20font-size='40'%20font-weight='900'%20fill='%23ffffff'%20text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#191f28">
+<meta name="theme-color" content="#1a5df0">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="시스템 허브">
+<meta name="apple-mobile-web-app-title" content="WEVAPE HUB">
 <meta name="description" content="위베이프 전 지점이 쓰는 업무 시스템 모음">
 <style>
   :root{
@@ -1154,6 +1154,11 @@
   .dk-ceo button:hover{background:linear-gradient(135deg,#182333 0%,#2b3c51 100%);}
   .dk-ceo button b{display:block; font-size:13.5px; font-weight:800; letter-spacing:-.3px;}
   .dk-ceo button span{display:block; font-size:11px; font-weight:500; color:#c6d2e0; margin-top:3px; line-height:1.5;}
+  /* ↩️ 직권통과 되돌리기 — 되돌리는 동작이라 승인 버튼과 색을 확실히 다르게(차분한 회색) */
+  .dk-undo{margin-top:7px;}
+  .dk-undo button{background:linear-gradient(135deg,#4a4f57 0%,#5f6670 100%);}
+  .dk-undo button:hover{background:linear-gradient(135deg,#3e434a 0%,#525862 100%);}
+  .dk-undo button span{color:#d7dbe0;}
   .dk-badge.re{background:#e8eefb;color:#2a55b5;}
   .dk-badge.fin{background:#1d7a3b;color:#fff;}
   .dk-badge.no{background:#fdeceb;color:#c0392b;}
@@ -1658,6 +1663,51 @@
   @media (max-width:820px){
     .ln-main{grid-template-columns:repeat(2,minmax(0,1fr));}
     .ln-mini{grid-template-columns:repeat(3,minmax(0,1fr));}
+  }
+
+  /* ========== ⚡ 새 런처 (부서 사이드바 + 전체 툴 그리드, 2026-09-08) ========== */
+  .ln-bar{display:flex; align-items:center; gap:12px; margin:14px 0 12px;}
+  .ln-search{flex:1; max-width:340px; height:38px; display:flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); border-radius:10px; padding:0 12px;}
+  .ln-search .ln-sic{font-size:14px; opacity:.75;}
+  .ln-search input{flex:1; background:none; border:0; outline:0; color:#eceef3; font-size:14px; font-family:inherit;}
+  .ln-search input::placeholder{color:#8b8f9a;}
+  .ln-count{margin-left:auto; color:#8b8f9a; font-size:12.5px; font-variant-numeric:tabular-nums;}
+  .ln-shell{display:flex; gap:18px; align-items:flex-start;}
+  .ln-side{width:196px; flex-shrink:0; display:flex; flex-direction:column; gap:2px;}
+  .ln-navi{display:flex; align-items:center; gap:10px; height:38px; padding:0 12px; border-radius:9px;
+    color:#c2c5cf; font-size:13.5px; font-weight:600; cursor:pointer; border:1px solid transparent; transition:.12s;}
+  .ln-navi:hover{background:rgba(255,255,255,.05);}
+  .ln-navi.on{background:rgba(95,140,255,.16); border-color:rgba(95,140,255,.35); color:#fff;}
+  .ln-navi .ln-cd{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
+  .ln-navi .ln-ct{margin-left:auto; color:#7e828d; font-size:11.5px; font-variant-numeric:tabular-nums;}
+  .ln-navi.on .ln-ct{color:#aeb6ff;}
+  .ln-sidesep{height:1px; background:rgba(255,255,255,.09); margin:9px 8px;}
+  .ln-grid{flex:1; display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:11px; align-content:start;}
+  .ln-card{position:relative; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.08);
+    border-radius:14px; padding:14px 13px; min-height:104px; cursor:pointer; transition:.13s; overflow:hidden;
+    display:flex; flex-direction:column; gap:10px;}
+  .ln-card:hover{border-color:#4f7be6; background:rgba(79,123,230,.10); box-shadow:0 8px 22px rgba(30,60,140,.28); transform:translateY(-1px);}
+  .ln-card .ln-cic{width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:21px;
+    background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04));}
+  .ln-card .ln-cnm{font-size:13px; font-weight:650; color:#eef0f5; line-height:1.32;}
+  .ln-card .ln-csub{font-size:11px; color:#8b8f9a; margin-top:-4px;}
+  .ln-card .ln-cdot{position:absolute; top:14px; right:14px; width:8px; height:8px; border-radius:50%; box-shadow:0 0 0 2px rgba(0,0,0,.2);}
+  .ln-card.wip{opacity:.62;}
+  .ln-card.wip .ln-cic{filter:saturate(.55);}
+  .ln-cwip{font-size:9.5px; font-weight:800; color:#e0a53c; letter-spacing:-.2px;}
+  .ln-clk{position:absolute; top:12px; left:12px; font-size:12px;}
+  .ln-cfb{position:absolute; bottom:12px; right:12px; min-width:17px; height:17px; padding:0 4px; border-radius:9px;
+    background:var(--ap-red,#e34948); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+  .ln-empty{grid-column:1/-1; color:#8b8f9a; font-size:13px; padding:30px 4px; text-align:center;}
+  @media (max-width:720px){
+    .ln-shell{flex-direction:column;}
+    .ln-side{width:100%; flex-direction:row; overflow-x:auto; gap:7px; padding-bottom:4px; -webkit-overflow-scrolling:touch;}
+    .ln-navi{height:34px; white-space:nowrap; flex-shrink:0;}
+    .ln-navi .ln-ct{display:none;}
+    .ln-sidesep{display:none;}
+    .ln-side .ln-navi.ln-all{order:-1;}
+    .ln-grid{grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); width:100%;}
   }
 
   .hm-hi{padding:14px 4px 2px;}
@@ -2238,13 +2288,18 @@
   </div>
   <div class="hm-hi" id="lnHi"></div>
   <div class="ln-tick" id="lnTick"></div>
-  <div class="hm-h">⚡ 바로 열기 <em>· 자리는 항상 고정 — 관리자만 바꿀 수 있습니다</em></div>
-  <div class="ln-main" id="lnMain"></div>
-  <div class="ln-addrow" id="lnMainAdd" style="display:none"><button type="button" class="ln-add" onclick="lnAdd('main')">＋ 슬롯에 추가</button></div>
-  <div class="hm-h">🗂 가끔 쓰는 것</div>
-  <div class="ln-mini" id="lnMini"></div>
-  <div class="ln-addrow" id="lnMiniAdd" style="display:none"><button type="button" class="ln-add" onclick="lnAdd('mini')">＋ 슬롯에 추가</button></div>
-  <div class="hm-f" id="lnNote">배치는 관리자만 바꿀 수 있습니다 · 문제 신고나 의견은 「전체 허브 →」에서 해당 시스템에 남겨주세요.</div>
+  <div class="ln-bar">
+    <div class="ln-search"><span class="ln-sic">🔍</span><input id="lnSearch" type="text" placeholder="툴 이름 검색" oninput="lnSearchInput(this.value)" autocomplete="off"></div>
+    <div class="ln-count" id="lnCount"></div>
+  </div>
+  <div class="ln-shell">
+    <aside class="ln-side" id="lnSide"></aside>
+    <div class="ln-grid" id="lnGrid"></div>
+  </div>
+  <div class="hm-f" id="lnNote">왼쪽 부서를 누르면 그 부서 툴만, 맨 아래 「전체」로 전부 봅니다 · 이름을 누르면 새 창으로 열립니다 · 🔒 는 비밀번호가 필요합니다.</div>
+  <!-- 기존 자리(레거시): 코드 참조 유지용, 화면엔 안 씀 -->
+  <div id="lnMain" style="display:none"></div><div id="lnMini" style="display:none"></div>
+  <div id="lnMainAdd" style="display:none"></div><div id="lnMiniAdd" style="display:none"></div>
 </section>
 
 <section id="home">
@@ -3817,9 +3872,9 @@ async function deleteEntry(url){
     + `· 되돌릴 수 없습니다\n\n`
     + `(프로그램 자체가 없어지는 건 아니고, 이 모음에서만 빠집니다)`;
   if(!(await customConfirm(warn, true))) return;
-  const typed = await customPrompt('실수 방지용입니다. 아래 칸에  삭제  라고 그대로 입력해주세요.', 'text', '');
-  if(typed === null) return;
-  if(String(typed).trim() !== '삭제'){ await customAlert('입력이 달라서 지우지 않았습니다.'); return; }
+  const pw = await customPrompt('관리자 비밀번호를 입력해주세요.\n\n툴 삭제는 관리자만 할 수 있습니다.\n(직권 통과에 쓰는 그 비밀번호입니다. 모르면 창을 닫아주세요.)', 'password', '');
+  if(pw === null) return;
+  if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다. 지우지 않았습니다.'); return; }
 
   FEEDBACK_LIST = FEEDBACK_LIST.filter(f => f.url !== key && f.url !== entry.url);
   openFeedbackPanels.delete(safeId(key));
@@ -4995,8 +5050,8 @@ function detailHtml(){
       </div>
 
       <div class="br-danger">
-        <span>이 시스템을 더 안 쓰면 목록에서 지울 수 있습니다.</span>
-        <button type="button" onclick="deleteEntry('${uq}')">🗑 이 기능 삭제</button>
+        <span>이 시스템을 더 안 쓰면 목록에서 지울 수 있습니다. <b>관리자 비밀번호가 있어야 삭제됩니다.</b></span>
+        <button type="button" onclick="deleteEntry('${uq}')">🗑 이 툴 삭제 (관리자)</button>
       </div>
 
       <div class="br-fb">
@@ -7685,9 +7740,10 @@ async function deskFastPass(id){
   var target = await askDeployTarget(r);
   if(target === undefined){ await customAlert('부서·상태를 고르지 않아 직권 통과를 멈췄습니다. 다시 눌러서 끝까지 골라주세요.'); return; }
 
+  var prevStage = ''; try{ prevStage = dkStage(r); }catch(e){}
   dkSetStage(r, '최종승인');
   r.approvedAt = dkNow();
-  r.fastPass = { t: r.approvedAt, skip: skip.slice(0) };
+  r.fastPass = { t: r.approvedAt, skip: skip.slice(0), prevStage: prevStage };
   try{ dkLog(r, '대표', '🚀 직권 통과 — 최종 승인' + (skip.length ? ' (건너뜀: ' + skip.join(', ') + ')' : '')); }catch(e){}
   var msg = '';
   try{ msg = dkToEntry(r, target); }catch(e){}
@@ -7801,13 +7857,53 @@ async function deskReject(id){
   dkLog(r, '감독관/대표', '반려 — ' + (String(v).trim() || '사유 없음'));
   await dkSaveReview();
 }
+/* 되돌릴 때 어느 단계로 갈지 정한다.
+   ★ 직권통과 때 저장해 둔 직전 단계(prevStage)가 있으면 그대로 쓴다.
+   ★ 없으면 보완 지시·검토 의견 상태로 추정한다 — 예전처럼 무조건 '제출됨'으로
+     초기화하면 감독관이 확인한 항목까지 다 날아가서 처음부터 다시 봐야 했다. */
+function dkPrevStage(r){
+  try{ if(r && r.fastPass && r.fastPass.prevStage) return r.fastPass.prevStage; }catch(e){}
+  var td = (r && Array.isArray(r.todos)) ? r.todos : [];
+  if(td.length){
+    if(td.some(function(x){ return x && x.v === 'no'; })) return '보완필요';
+    if(td.some(function(x){ return !x || x.v !== 'ok'; })) return (r && r.reply) ? '재검토요청' : '보완필요';
+    return '승인대기';
+  }
+  return (r && r.reply) ? '승인대기' : '제출됨';
+}
 async function deskReopen(id){
   const r = REVIEW_LIST.find(x => x.id === id);
   if(!r) return;
   if(!(await customConfirm('이 건을 다시 진행 상태로 되돌릴까요?'))) return;
-  dkSetStage(r, '제출됨');
-  dkLog(r, '감독관', '다시 진행 상태로 되돌림');
+  dkSetStage(r, dkPrevStage(r));
+  dkLog(r, '감독관', '다시 진행 상태로 되돌림 → ' + dkStage(r));
   await dkSaveReview();
+}
+/* ↩️ 대표 직권 통과 되돌리기 — 직권통과로 승인된 건을 직전 상태로 되돌린다.
+   ★ 직권통과 버튼과 똑같이 대표 비밀번호로만 되돌릴 수 있다(관리자 열쇠 없는 폰·매장 PC 에서도
+     대표 본인이 자기가 누른 걸 무를 수 있게). 최종승인 표식(fastPass·approvedAt)을 지우고
+     건너뛰었던 검토 절차로 되돌린다. 업무 모음 등록은 건드리지 않는다(잘못 지우면 링크가 사라짐). */
+async function deskUndoFastPass(id){
+  var r = REVIEW_LIST.find(function(x){ return x.id === id; });
+  if(!r) return;
+  if(!r.fastPass){ await customAlert('이 건은 대표 직권 통과로 승인된 건이 아닙니다.\n(직권통과 되돌리기는 직권통과된 건에만 쓸 수 있습니다.)'); return; }
+  var prev = dkPrevStage(r);
+  var body = '↩️ 대표 직권 통과 되돌리기\n\n「' + String(r.title || '') + '」\n' +
+    '최종 승인을 취소하고, 직권통과 직전 상태(' + prev + ')로 되돌립니다.\n' +
+    '건너뛰었던 감독관 검토 절차를 다시 밟게 됩니다.\n' +
+    '(업무 모음 등록은 그대로 둡니다.)\n\n계속할까요?';
+  if(!(await customConfirm(body, false, '↩️ 되돌리기'))) return;
+  var pw = await customPrompt('대표 비밀번호를 입력해주세요.\n\n직권 통과를 되돌리는 것도 대표 본인만 할 수 있습니다.\n비밀번호를 모르면 그냥 창을 닫아주세요.', 'password', '');
+  if(pw === null) return;
+  if(String(pw).trim() !== CEO_PASSWORD){ await customAlert('비밀번호가 맞지 않습니다.'); return; }
+  var fpAt = (r.fastPass && r.fastPass.t) || r.approvedAt || '';
+  dkSetStage(r, prev);
+  try{ delete r.fastPass; }catch(e){ r.fastPass = null; }
+  try{ delete r.approvedAt; }catch(e){ r.approvedAt = ''; }
+  try{ dkLog(r, '대표', '↩️ 직권 통과 되돌림 — 최종 승인 취소, ' + prev + ' 상태로 복귀' + (fpAt ? ' (직권통과 ' + fpAt + ' 취소)' : '')); }catch(e){}
+  await dkSaveReview();
+  try{ closeModal(true); }catch(e){}
+  await customAlert('↩️ 직권 통과를 되돌렸습니다.\n이제 감독관 검토 절차로 다시 진행됩니다.');
 }
 
 async function deskReply(id){
@@ -8364,7 +8460,7 @@ function renderDesk(){
         ((admin && st !== '승인대기' && st !== '최종승인' && st !== '반려') ? '<button type="button" onclick="deskPass(\'' + r.id + '\')">✅ 검토 통과</button>' : '') +
         ((admin && st === '승인대기') ? '<button type="button" class="fin" onclick="deskApprove(\'' + r.id + '\')">🏁 대표 최종 승인</button>' : '') +
         ((admin && st !== '최종승인' && st !== '반려') ? '<button type="button" class="del" onclick="deskReject(\'' + r.id + '\')">반려</button>' : '') +
-        ((admin && (st === '최종승인' || st === '반려')) ? '<button type="button" onclick="deskReopen(\'' + r.id + '\')">되돌리기</button>' : '') +
+        ((admin && (st === '최종승인' || st === '반려') && !r.fastPass) ? '<button type="button" onclick="deskReopen(\'' + r.id + '\')">되돌리기</button>' : '') +
       '</div>' +
       /* 🚀 대표 직권 통과 — 화면에는 누구나 보이지만, 대표 비밀번호를 넣어야만 실제로 통과된다.
          (관리자 열쇠가 없는 폰이나 매장 PC 에서도 대표가 바로 쓸 수 있게 하려고 이렇게 열어 두었다) */
@@ -8373,6 +8469,13 @@ function renderDesk(){
             '<b>🚀 대표 직권 통과</b><span>검토 절차를 건너뛰고 바로 최종 승인 · 대표 비밀번호 필요' +
             (function(){ var k = []; try{ k = dkSkipInfo(r); }catch(e){} return k.length ? ' · 건너뛸 것 ' + k.length + '가지' : ' · 건너뛸 것 없음'; })() +
           '</span></button></div>'
+        : '') +
+      /* ↩️ 대표 직권 통과 되돌리기 — 직권통과로 승인된 건에만 뜬다. 직권통과와 똑같이
+         누구 화면에서나 보이지만 대표 비밀번호를 넣어야만 되돌려진다. */
+      (r.fastPass
+        ? '<div class="dk-ceo dk-undo"><button type="button" onclick="deskUndoFastPass(\'' + r.id + '\')">' +
+            '<b>↩️ 직권 통과 되돌리기</b><span>최종 승인을 취소하고 직권통과 직전 상태로 · 대표 비밀번호 필요</span>' +
+          '</button></div>'
         : '')) +
       (admin ? '<div class="dk-danger">' +
         (gone
@@ -9207,8 +9310,8 @@ function renderLauncher(){
   var storeEl = document.getElementById('lnStore');
   if(storeEl) storeEl.innerHTML = '<span class="ln-dot"></span> ' + escapeHtml(lnStoreLabel());
   var editBtn = document.getElementById('lnEditBtn');
-  if(editBtn) editBtn.style.display = admin ? '' : 'none';
-  if(!admin && lnEditing()){ window.__lnEdit = false; document.body.classList.remove('lnEditing'); }
+  if(editBtn) editBtn.style.display = 'none'; /* 새 런처는 전체 자동표시라 배치 편집 없음 */
+  if(lnEditing()){ window.__lnEdit = false; document.body.classList.remove('lnEditing'); }
   var hi = document.getElementById('lnHi');
   if(hi) hi.innerHTML = '<h2>' + lnFunnyGreet() + '</h2><p>' + hmDate() + ' · 필요한 것만 크게, 한 번에 열립니다</p>';
   try{ lnPersonalGreet(); }catch(err){}
@@ -9219,14 +9322,82 @@ function renderLauncher(){
       ? '<span class="ln-new">NEW</span> 마지막 업데이트 · ' + escapeHtml(last.t || '') + (last.tm ? ' (' + escapeHtml(last.tm) + ')' : '')
       : '';
   }
-  var mainWrap = document.getElementById('lnMain');
-  if(mainWrap) mainWrap.innerHTML = (LAUNCHER.main || []).map(function(u){ return lnTile(u, true); }).join('');
-  var mainAdd = document.getElementById('lnMainAdd');
-  if(mainAdd) mainAdd.style.display = (admin && lnEditing()) ? '' : 'none';
-  var miniWrap = document.getElementById('lnMini');
-  if(miniWrap) miniWrap.innerHTML = (LAUNCHER.mini || []).map(function(u){ return lnTile(u, false); }).join('');
-  var miniAdd = document.getElementById('lnMiniAdd');
-  if(miniAdd) miniAdd.style.display = (admin && lnEditing()) ? '' : 'none';
+  try{ lnRenderTools(); }catch(err){ /* 안전: 실패해도 인사말 화면은 그대로 */ }
+}
+
+/* ⚡ 새 런처 본문 — 부서 사이드바 + 전체 툴 그리드 (2026-09-08, 「전체 툴 다 보이게 + PC 기준」 요청)
+   ★ 허브 데이터(entries)에서 자동으로 끌어온다 — 툴을 추가/삭제하면 런처도 자동 반영.
+   ★ 부서 묶음은 기존 GROUPS(groupOf)를 그대로 쓴다. 전체는 맨 아래.  */
+var LN_DOT = { work:'#5f8cff', money:'#e0a53c', stock:'#37b978', shop:'#e5657f',
+  custmkt:'#d867a8', data:'#8a72e0', sys:'#54b4d0', mgmt:'#8b93a3' };
+var LN_EMO = [
+  [/포스.*설치|설치가이드/,'🧰'],[/포스/,'💳'],
+  [/근무표|스케줄|근태/,'🗓️'],[/휴무/,'🌴'],[/재직|신입/,'🧑‍💼'],[/브이플로우|일\/월/,'📋'],
+  [/발주/,'📦'],[/입출고|재고/,'🔁'],[/청소/,'🧹'],[/녹음|voice/i,'🎙️'],[/블로그/,'✍️'],
+  [/예약|as현황|as·|a\/s/i,'🛠️'],[/인스타|sns/i,'📸'],[/회원가입|가입폼|가입 폼/,'📝'],[/회원량|신규회원|회원.*조회/,'👥'],
+  [/세무|세금/,'🧾'],[/영수증|지출/,'💵'],[/일매출/,'📈'],[/매출/,'📊'],
+  [/이슈|모니터/,'🚨'],[/불량|하자|제보/,'🚩'],[/시연/,'💨'],[/브리핑/,'🤖']
+];
+function lnEmoji(e){
+  var t = (e && e.title) || '';
+  for(var i=0;i<LN_EMO.length;i++){ if(LN_EMO[i][0].test(t)) return LN_EMO[i][1]; }
+  try{ return groupOf(e.dept).e; }catch(_){ return '🔗'; }
+}
+function lnGroupsWithCounts(){
+  var counts = {};
+  (entries||[]).forEach(function(e){ if(!e || !e.url) return; var g=groupOf(e.dept); counts[g.id]=(counts[g.id]||0)+1; });
+  return GROUPS.filter(function(g){ return counts[g.id]; }).map(function(g){ return {g:g, n:counts[g.id]}; });
+}
+function lnSetFilter(id){ window.__lnFilter = id; try{ lnRenderTools(); }catch(e){} }
+function lnSearchInput(v){ window.__lnQuery = String(v||'').trim().toLowerCase(); try{ lnRenderTools(); }catch(e){} }
+function lnMatch(e){
+  var f = window.__lnFilter || 'all';
+  if(f !== 'all'){ try{ if(groupOf(e.dept).id !== f) return false; }catch(_){ return false; } }
+  var q = window.__lnQuery || '';
+  if(q){
+    var s = ((e.title||'') + ' ' + (e.owner||'') + ' ' + (function(){ try{ return groupOf(e.dept).t; }catch(_){ return ''; } })()).toLowerCase();
+    if(s.indexOf(q) < 0) return false;
+  }
+  return true;
+}
+function lnToolCard(e){
+  var g; try{ g = groupOf(e.dept); }catch(_){ g = {id:'', t:'', e:'🔗'}; }
+  var uq = String(e.url || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  var wip = (e.status === '개발중');
+  var lk = false; try{ lk = isLocked(e); }catch(_){}
+  var fb = 0; try{ fb = ckFbOpenCnt(e.url); }catch(_){}
+  var dot = LN_DOT[g.id] || '#5f8cff';
+  return '<div class="ln-card'+(wip?' wip':'')+'" onclick="lnOpen(\''+uq+'\')" title="'+escapeHtml(e.title||'')+'">'+
+    (lk ? '<span class="ln-clk">🔒</span>' : '') +
+    (fb ? '<span class="ln-cfb">'+fb+'</span>' : '') +
+    '<span class="ln-cdot" style="background:'+dot+'"></span>'+
+    '<span class="ln-cic">'+lnEmoji(e)+'</span>'+
+    '<span class="ln-cnm">'+escapeHtml(e.title||'')+'</span>'+
+    (wip ? '<span class="ln-cwip">만드는중</span>' : '<span class="ln-csub">'+escapeHtml(g.t||'')+'</span>')+
+  '</div>';
+}
+function lnRenderTools(){
+  var side = document.getElementById('lnSide');
+  var grid = document.getElementById('lnGrid');
+  var cntEl = document.getElementById('lnCount');
+  if(!side || !grid) return;
+  var f = window.__lnFilter || 'all';
+  var groups = lnGroupsWithCounts();
+  var total = (entries||[]).filter(function(e){ return e && e.url; }).length;
+  var html = groups.map(function(x){
+    return '<div class="ln-navi'+(f===x.g.id?' on':'')+'" onclick="lnSetFilter(\''+x.g.id+'\')">'+
+      '<span class="ln-cd" style="background:'+(LN_DOT[x.g.id]||'#5f8cff')+'"></span>'+escapeHtml(x.g.t)+
+      '<span class="ln-ct">'+x.n+'</span></div>';
+  }).join('');
+  html += '<div class="ln-sidesep"></div>';
+  html += '<div class="ln-navi ln-all'+(f==='all'?' on':'')+'" onclick="lnSetFilter(\'all\')">'+
+    '<span class="ln-cd" style="background:#5f8cff"></span>전체<span class="ln-ct">'+total+'</span></div>';
+  side.innerHTML = html;
+  var list = (entries||[]).filter(function(e){ return e && e.url && lnMatch(e); });
+  grid.innerHTML = list.length
+    ? list.map(lnToolCard).join('')
+    : '<div class="ln-empty">해당하는 툴이 없습니다.'+(window.__lnQuery?' 검색어를 바꿔보세요.':'')+'</div>';
+  if(cntEl) cntEl.textContent = (f==='all' && !window.__lnQuery) ? ('툴 '+total+'개') : (list.length+'개 표시');
 }
 
 /* ⚡ 런처 개인화 인사말 (2026-08-15, 「스케줄표 근무자 이름으로 존칭 인사」 요청)
