@@ -435,10 +435,10 @@
         "dmshf83c28ezwg1": 2,
         "dmsfprzijmhz3ro": 1,
         "dmsg3bq568xkrh3": 1,
-        "dmsfkq0kdr8q74h": 2,
+        "dmsfkq0kdr8q74h": 3,
         "dmtselzmm1o7ku2": 2
       },
-      "hit": 21,
+      "hit": 22,
       "clk": {
         "https://wevape-pos-app.vercel.app/": 5,
         "https://vflow.kr": 5,
@@ -454,7 +454,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-08T09:42:52.470Z",
+  "savedAt": "2026-09-08T09:44:16.737Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
