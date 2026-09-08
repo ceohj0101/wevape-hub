@@ -424,7 +424,7 @@
     "2026-09-08": {
       "dev": {
         "dmsgvbdt7ol9jmc": 1,
-        "dmtrz2pj57bpyt3": 3,
+        "dmtrz2pj57bpyt3": 4,
         "dmsfub5jac8mrsb": 1,
         "dmsfoaypgl2c1d8": 2
       },
@@ -432,12 +432,13 @@
       "clk": {
         "https://wevape-pos-app.vercel.app/": 1,
         "https://vflow.kr": 2,
-        "https://order-hub-dfni.onrender.com/tax": 1
+        "https://order-hub-dfni.onrender.com/tax": 1,
+        "https://order-hub-dfni.onrender.com/sales?month=2026-06": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-08T01:33:46.256Z",
+  "savedAt": "2026-09-08T01:34:53.433Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
