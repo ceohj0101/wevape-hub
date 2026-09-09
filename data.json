@@ -212,6 +212,16 @@
       "status": "운영중",
       "owner": "김형진, 정희경",
       "createdAt": 1788234627357
+    },
+    {
+      "dept": "DEV",
+      "title": "카드 매출 확인 및 취소",
+      "url": "miniprinter.com",
+      "note": "id 8936\npw wevape#1",
+      "status": "운영중",
+      "owner": "개발자:김형진",
+      "sensitive": false,
+      "createdAt": 1788948538100
     }
   ],
   "stores": [
@@ -2996,6 +3006,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-09-08T05:39:54.417Z",
+  "savedAt": "2026-09-09T10:08:56.892Z",
   "savedBy": "employee"
 }
