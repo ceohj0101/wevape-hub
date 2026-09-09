@@ -216,7 +216,7 @@
     {
       "dept": "DEV",
       "title": "카드 매출 확인 및 취소",
-      "url": "miniprinter.com",
+      "url": "https://nibs.nicevan.co.kr/websquare/index.jsp",
       "note": "id 8936\npw wevape#1",
       "status": "운영중",
       "owner": "개발자:김형진",
@@ -3006,6 +3006,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-09-09T10:08:56.892Z",
+  "savedAt": "2026-09-09T10:09:42.215Z",
   "savedBy": "employee"
 }
