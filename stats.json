@@ -434,7 +434,7 @@
         "dmsfk5gma6n6doq": 1,
         "dmtuvmfyieq7nvg": 4,
         "dmsfub5jac8mrsb": 2,
-        "dmsgvbdt7ol9jmc": 2
+        "dmsgvbdt7ol9jmc": 3
       },
       "hit": 8,
       "clk": {
@@ -446,12 +446,13 @@
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
         "https://wevape-reservation-nu.vercel.app/": 1,
         "https://ceohj0101.github.io/wevape-hr/": 1,
-        "https://nibs.nicevan.co.kr/websquare/index.jsp": 1
+        "https://nibs.nicevan.co.kr/websquare/index.jsp": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule.html?opt=1": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-10T11:36:48.074Z",
+  "savedAt": "2026-09-10T11:52:53.339Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
