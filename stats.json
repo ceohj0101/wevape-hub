@@ -407,14 +407,16 @@
     },
     "2026-09-12": {
       "dev": {
-        "dmt16dxuuhcinst": 1
+        "dmt16dxuuhcinst": 2
       },
       "hit": 1,
-      "clk": {}
+      "clk": {
+        "https://ceohj0101.github.io/wevape-hr/": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-11T18:34:47.818Z",
+  "savedAt": "2026-09-11T18:35:40.977Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
