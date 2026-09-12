@@ -408,16 +408,17 @@
     "2026-09-12": {
       "dev": {
         "dmt16dxuuhcinst": 2,
-        "dmsfoaypgl2c1d8": 1
+        "dmsfoaypgl2c1d8": 2
       },
       "hit": 2,
       "clk": {
-        "https://ceohj0101.github.io/wevape-hr/": 1
+        "https://ceohj0101.github.io/wevape-hr/": 1,
+        "https://vflow.kr": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-12T01:16:50.132Z",
+  "savedAt": "2026-09-12T01:19:54.969Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
