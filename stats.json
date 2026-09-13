@@ -407,30 +407,30 @@
     },
     "2026-09-13": {
       "dev": {
-        "dmsfoaypgl2c1d8": 2,
+        "dmsfoaypgl2c1d8": 3,
         "dmsgvbdt7ol9jmc": 4,
         "dmsfkofxlwbratm": 4,
         "dmtuvmfyieq7nvg": 3,
         "dmsg3bq568xkrh3": 1,
         "dmsilsmcbv88i3a": 1,
         "dmsoi28klrebuuz": 2,
-        "dmt2x0w15y7gxv8": 2,
+        "dmt2x0w15y7gxv8": 1,
         "dmsfub5jac8mrsb": 3
       },
-      "hit": 13,
+      "hit": 12,
       "clk": {
         "https://vflow.kr": 4,
         "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 3,
         "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90": 1,
         "https://forms.gle/gVSBo4eeU4Bev561A": 1,
-        "https://wevape-pos-app.vercel.app/": 2,
+        "https://wevape-pos-app.vercel.app/": 1,
         "https://order-hub-dfni.onrender.com/": 5
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-13T08:05:37.938Z",
+  "savedAt": "2026-09-13T08:05:51.818Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
