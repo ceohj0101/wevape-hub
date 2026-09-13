@@ -407,7 +407,7 @@
     },
     "2026-09-13": {
       "dev": {
-        "dmsfoaypgl2c1d8": 6,
+        "dmsfoaypgl2c1d8": 7,
         "dmsgvbdt7ol9jmc": 5,
         "dmsfkofxlwbratm": 5,
         "dmtuvmfyieq7nvg": 3,
@@ -419,7 +419,7 @@
       },
       "hit": 16,
       "clk": {
-        "https://vflow.kr": 4,
+        "https://vflow.kr": 5,
         "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 3,
         "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90": 1,
@@ -434,7 +434,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-13T13:12:46.961Z",
+  "savedAt": "2026-09-13T13:13:25.958Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
