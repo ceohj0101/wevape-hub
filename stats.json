@@ -407,7 +407,7 @@
     },
     "2026-09-13": {
       "dev": {
-        "dmsfoaypgl2c1d8": 5,
+        "dmsfoaypgl2c1d8": 6,
         "dmsgvbdt7ol9jmc": 5,
         "dmsfkofxlwbratm": 5,
         "dmtuvmfyieq7nvg": 3,
@@ -417,7 +417,7 @@
         "dmt2x0w15y7gxv8": 4,
         "dmsfub5jac8mrsb": 3
       },
-      "hit": 15,
+      "hit": 16,
       "clk": {
         "https://vflow.kr": 4,
         "https://app.notion.com/p/3a40c265452981ce957bd706dbf51bb2": 1,
@@ -434,7 +434,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-13T12:55:46.173Z",
+  "savedAt": "2026-09-13T13:12:46.961Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
