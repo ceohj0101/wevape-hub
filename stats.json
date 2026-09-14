@@ -411,12 +411,14 @@
       "dev": {
         "dmsfoaypgl2c1d8": 1
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 0,
+      "clk": {
+        "https://vflow.kr": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-14T01:15:09.144Z",
+  "savedAt": "2026-09-14T01:15:25.661Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
