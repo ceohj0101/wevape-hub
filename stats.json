@@ -414,16 +414,17 @@
         "dmu0kdrti38mpan": 2,
         "dmsg3bq568xkrh3": 2
       },
-      "hit": 3,
+      "hit": 2,
       "clk": {
         "https://vflow.kr": 2,
         "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1,
-        "https://order-hub-dfni.onrender.com/": 1
+        "https://order-hub-dfni.onrender.com/": 1,
+        "https://wevape-reservation-nu.vercel.app/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-14T01:47:17.469Z",
+  "savedAt": "2026-09-14T01:47:23.948Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
