@@ -1665,25 +1665,21 @@
     .ln-mini{grid-template-columns:repeat(3,minmax(0,1fr));}
   }
 
-  /* ========== ⚡ 새 런처 (부서 사이드바 + 전체 툴 그리드, 2026-09-08 · 가로형·밝은테마) ========== */
-  .ln-bar{display:flex; align-items:center; gap:12px; margin:14px 0 12px;}
-  .ln-search{flex:1; max-width:340px; height:38px; display:flex; align-items:center; gap:8px;
-    background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:0 12px;}
-  .ln-search .ln-sic{font-size:14px; opacity:.55;}
-  .ln-search input{flex:1; background:none; border:0; outline:0; color:var(--ink); font-size:14px; font-family:inherit;}
-  .ln-search input::placeholder{color:var(--sub);}
-  .ln-count{margin-left:auto; color:var(--sub); font-size:12.5px; font-variant-numeric:tabular-nums;}
-  .ln-shell{display:flex; gap:18px; align-items:flex-start;}
-  .ln-side{width:186px; flex-shrink:0; display:flex; flex-direction:column; gap:2px;}
-  .ln-navi{display:flex; align-items:center; gap:9px; height:36px; padding:0 11px; border-radius:9px;
-    color:var(--ink); font-size:13.5px; font-weight:600; cursor:pointer; border:1px solid transparent; transition:.12s;}
-  .ln-navi:hover{background:#eceeec;}
-  .ln-navi.on{background:var(--blue-bg); border-color:#cdd8e6; color:var(--blue);}
-  .ln-navi .ln-cd{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
-  .ln-navi .ln-ct{margin-left:auto; color:var(--sub); font-size:11.5px; font-variant-numeric:tabular-nums;}
-  .ln-navi.on .ln-ct{color:var(--blue);}
-  .ln-sidesep{height:1px; background:var(--line); margin:8px 6px;}
-  .ln-grid{flex:1; display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:9px; align-content:start;}
+  /* ========== ⚡ 새 런처 (원래 UI 큰 카드 + 전체 툴 부서별, 2026-09-15 · PC 짬뽕) ========== */
+  .ln-favgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:13px; margin:14px 0 8px;}
+  .ln-fav{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px; display:flex; align-items:center; gap:13px; position:relative; cursor:pointer; transition:.12s;}
+  .ln-fav:hover{border-color:#4f7be6; transform:translateY(-1px); box-shadow:0 5px 16px rgba(30,60,140,.10);}
+  .ln-fav .ln-fic{width:50px; height:50px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:25px; flex-shrink:0;}
+  .ln-fav .ln-fbody{flex:1; min-width:0;}
+  .ln-fav .ln-fnm{font-size:14.5px; font-weight:800; line-height:1.25; color:var(--ink); overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+  .ln-fav .ln-fmeta{font-size:12px; color:var(--sub); margin-top:5px; display:flex; align-items:center; gap:6px;}
+  .ln-fav .ln-fdt{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .ln-fav .ln-fopen{position:absolute; right:15px; bottom:13px; font-size:12px; color:var(--sub);}
+  .ln-grp{margin-top:22px;}
+  .ln-grph{display:flex; align-items:center; gap:9px; font-size:15px; font-weight:800; color:var(--ink); margin-bottom:10px;}
+  .ln-grpdot{width:11px; height:11px; border-radius:50%;}
+  .ln-grpn{color:var(--sub); font-size:12.5px; font-weight:700;}
+  .ln-grpgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(226px,1fr)); gap:10px;}
   .ln-card{position:relative; background:var(--panel); border:1px solid var(--line);
     border-radius:12px; padding:11px 12px; cursor:pointer; transition:.12s; overflow:hidden;
     display:grid; grid-template-columns:40px 1fr; grid-template-rows:auto auto; column-gap:11px; align-items:center;}
@@ -1702,13 +1698,8 @@
     background:var(--bad); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center;}
   .ln-empty{grid-column:1/-1; color:var(--sub); font-size:13px; padding:30px 4px; text-align:center;}
   @media (max-width:720px){
-    .ln-shell{flex-direction:column;}
-    .ln-side{width:100%; flex-direction:row; overflow-x:auto; gap:7px; padding-bottom:4px; -webkit-overflow-scrolling:touch;}
-    .ln-navi{height:34px; white-space:nowrap; flex-shrink:0;}
-    .ln-navi .ln-ct{display:none;}
-    .ln-sidesep{display:none;}
-    .ln-side .ln-navi.ln-all{order:-1;}
-    .ln-grid{grid-template-columns:1fr; width:100%;}
+    .ln-favgrid{grid-template-columns:1fr;}
+    .ln-grpgrid{grid-template-columns:1fr;}
   }
 
   .hm-hi{padding:14px 4px 2px;}
@@ -2289,15 +2280,11 @@
   </div>
   <div class="hm-hi" id="lnHi"></div>
   <div class="ln-tick" id="lnTick"></div>
-  <div class="ln-bar">
-    <div class="ln-search"><span class="ln-sic">🔍</span><input id="lnSearch" type="text" placeholder="툴 이름 검색" oninput="lnSearchInput(this.value)" autocomplete="off"></div>
-    <div class="ln-count" id="lnCount"></div>
-  </div>
-  <div class="ln-shell">
-    <aside class="ln-side" id="lnSide"></aside>
-    <div class="ln-grid" id="lnGrid"></div>
-  </div>
-  <div class="hm-f" id="lnNote">왼쪽 부서를 누르면 그 부서 툴만, 맨 아래 「전체」로 전부 봅니다 · 이름을 누르면 새 창으로 열립니다 · 🔒 는 비밀번호가 필요합니다.</div>
+  <div class="hm-h">⚡ 바로 열기 <em id="lnFavN"></em></div>
+  <div class="ln-favgrid" id="lnFav"></div>
+  <div class="hm-h" style="margin-top:6px">📂 전체 툴 <em id="lnAllN"></em></div>
+  <div id="lnAll"></div>
+  <div class="hm-f" id="lnNote">이름을 누르면 새 창으로 바로 열립니다 · 🔒 는 비밀번호가 필요합니다.</div>
   <!-- 기존 자리(레거시): 코드 참조 유지용, 화면엔 안 씀 -->
   <div id="lnMain" style="display:none"></div><div id="lnMini" style="display:none"></div>
   <div id="lnMainAdd" style="display:none"></div><div id="lnMiniAdd" style="display:none"></div>
@@ -9374,31 +9361,43 @@ function lnToolCard(e){
     '<span class="ln-cdot" style="background:'+dot+'"></span>'+
     '<span class="ln-cic">'+lnEmoji(e)+'</span>'+
     '<span class="ln-cnm">'+escapeHtml(e.title||'')+'</span>'+
-    (wip ? '<span class="ln-cwip">만드는중</span>' : '<span class="ln-csub">'+escapeHtml(g.t||'')+'</span>')+
+    (wip ? '<span class="ln-cwip">만드는중</span>' : '<span class="ln-csub">'+escapeHtml(e.owner||g.t||'')+'</span>')+
   '</div>';
 }
+/* 바로 열기 큰 카드 (원래 UI 느낌) */
+function lnFavCard(e){
+  var g; try{ g = groupOf(e.dept); }catch(_){ g = {c:'#eef0f5', e:'🔗'}; }
+  var uq = String(e.url || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  var wip = (e.status === '개발중');
+  return '<div class="ln-fav" onclick="lnOpen(\''+uq+'\')" title="'+escapeHtml(e.title||'')+'">'+
+    '<div class="ln-fic" style="background:'+(g.c||'#eef0f5')+'">'+lnEmoji(e)+'</div>'+
+    '<div class="ln-fbody"><div class="ln-fnm">'+escapeHtml(e.title||'')+'</div>'+
+    '<div class="ln-fmeta"><span class="ln-fdt" style="background:'+(wip?'#c99a2f':'#37b978')+'"></span>'+escapeHtml(e.owner||'담당 미지정')+'</div></div>'+
+    '<div class="ln-fopen">열기 →</div></div>';
+}
 function lnRenderTools(){
-  var side = document.getElementById('lnSide');
-  var grid = document.getElementById('lnGrid');
-  var cntEl = document.getElementById('lnCount');
-  if(!side || !grid) return;
-  var f = window.__lnFilter || 'all';
+  var favWrap = document.getElementById('lnFav');
+  var allWrap = document.getElementById('lnAll');
+  if(!favWrap || !allWrap) return;
+  var list = (entries||[]).filter(function(e){ return e && e.url; });
+  /* 바로 열기 — 실제 많이 누른 순서, 잠기지 않은 것 상위 6개 */
+  var clk = {}; try{ clk = hmClk(); }catch(e){}
+  var fav = list.filter(function(e){ try{ return !isLocked(e); }catch(_){ return true; } });
+  fav.sort(function(a,b){ return (clk[b.url]||0) - (clk[a.url]||0); });
+  fav = fav.slice(0,6);
+  favWrap.innerHTML = fav.length ? fav.map(lnFavCard).join('') : '<div class="hm-f">아직 열 수 있는 시스템이 없습니다.</div>';
+  var favN = document.getElementById('lnFavN'); if(favN) favN.textContent = fav.length ? '· 많이 누른 순서' : '';
+  /* 전체 툴 — 부서별 섹션 */
   var groups = lnGroupsWithCounts();
-  var total = (entries||[]).filter(function(e){ return e && e.url; }).length;
   var html = groups.map(function(x){
-    return '<div class="ln-navi'+(f===x.g.id?' on':'')+'" onclick="lnSetFilter(\''+x.g.id+'\')">'+
-      '<span class="ln-cd" style="background:'+(LN_DOT[x.g.id]||'#5f8cff')+'"></span>'+escapeHtml(x.g.t)+
-      '<span class="ln-ct">'+x.n+'</span></div>';
+    var items = list.filter(function(e){ try{ return groupOf(e.dept).id === x.g.id; }catch(_){ return false; } });
+    var cards = items.map(lnToolCard).join('');
+    var dot = LN_DOT[x.g.id] || '#5f8cff';
+    return '<section class="ln-grp"><div class="ln-grph"><span class="ln-grpdot" style="background:'+dot+'"></span>'+
+      escapeHtml(x.g.t)+'<span class="ln-grpn">'+x.n+'</span></div><div class="ln-grpgrid">'+cards+'</div></section>';
   }).join('');
-  html += '<div class="ln-sidesep"></div>';
-  html += '<div class="ln-navi ln-all'+(f==='all'?' on':'')+'" onclick="lnSetFilter(\'all\')">'+
-    '<span class="ln-cd" style="background:#5f8cff"></span>전체<span class="ln-ct">'+total+'</span></div>';
-  side.innerHTML = html;
-  var list = (entries||[]).filter(function(e){ return e && e.url && lnMatch(e); });
-  grid.innerHTML = list.length
-    ? list.map(lnToolCard).join('')
-    : '<div class="ln-empty">해당하는 툴이 없습니다.'+(window.__lnQuery?' 검색어를 바꿔보세요.':'')+'</div>';
-  if(cntEl) cntEl.textContent = (f==='all' && !window.__lnQuery) ? ('툴 '+total+'개') : (list.length+'개 표시');
+  allWrap.innerHTML = html || '<div class="ln-empty">등록된 툴이 없습니다.</div>';
+  var allN = document.getElementById('lnAllN'); if(allN) allN.textContent = '· '+list.length+'개';
 }
 
 /* ⚡ 런처 개인화 인사말 (2026-08-15, 「스케줄표 근무자 이름으로 존칭 인사」 요청)
