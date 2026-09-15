@@ -411,7 +411,7 @@
         "dmsfprzijmhz3ro": 1,
         "dmu0kdrti38mpan": 2,
         "dmtdzefeb9egz24": 1,
-        "dmu2fv79xjgvmbk": 2
+        "dmu2fv79xjgvmbk": 3
       },
       "hit": 17,
       "clk": {
@@ -420,12 +420,13 @@
         "https://wevape-reservation-nu.vercel.app/": 8,
         "https://ceohj0101.github.io/wevape-hr/": 1,
         "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90": 1,
-        "https://order-hub-dfni.onrender.com/sales?month=2026-06": 1
+        "https://order-hub-dfni.onrender.com/sales?month=2026-06": 1,
+        "https://wevape-pos-app.vercel.app/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-15T09:03:25.372Z",
+  "savedAt": "2026-09-15T09:06:59.428Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
