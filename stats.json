@@ -401,18 +401,19 @@
     },
     "2026-09-16": {
       "dev": {
-        "dmt1r24s2p08qkp": 3
+        "dmt1r24s2p08qkp": 4
       },
       "hit": 0,
       "clk": {
         "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90": 1,
         "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1,
+        "https://wevape-reservation-nu.vercel.app/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-15T18:00:10.416Z",
+  "savedAt": "2026-09-15T18:01:13.394Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
