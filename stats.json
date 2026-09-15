@@ -403,12 +403,14 @@
       "dev": {
         "dmt1r24s2p08qkp": 1
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 0,
+      "clk": {
+        "https://nibs.nicevan.co.kr/websquare/index.jsp": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-15T17:51:19.041Z",
+  "savedAt": "2026-09-15T17:52:20.089Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
