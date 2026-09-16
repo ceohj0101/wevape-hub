@@ -212,6 +212,16 @@
       "owner": "개발자:김형진",
       "sensitive": false,
       "createdAt": 1788948538100
+    },
+    {
+      "dept": "GRO",
+      "title": "구포스 데이터 이관 툴",
+      "url": "https://wevape-pos-app.vercel.app/mig.html",
+      "note": "",
+      "status": "운영중",
+      "owner": "",
+      "sensitive": false,
+      "createdAt": 1789529233950
     }
   ],
   "stores": [
@@ -2997,6 +3007,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-09-16T02:54:27.455Z",
+  "savedAt": "2026-09-16T03:27:15.269Z",
   "savedBy": "employee"
 }
