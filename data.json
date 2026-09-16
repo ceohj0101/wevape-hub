@@ -176,16 +176,6 @@
       "createdAt": 1787548646373
     },
     {
-      "dept": "DEV",
-      "title": "포스 설치 가이드",
-      "url": "wevape-pos-app.vercel.app/setup.html",
-      "note": "포스통합프로그램 결제 연동 초기가이드",
-      "status": "개발중",
-      "owner": "개발자:김형진",
-      "sensitive": true,
-      "createdAt": 1787565692215
-    },
-    {
       "dept": "SLS",
       "title": "매장 시연용 제품 교체",
       "url": "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90",
@@ -2124,7 +2114,8 @@
     "https://janghj201-cyber.github.io/-/",
     "https://znsl132-lang.github.io/BIGLUCKY/schedule.html",
     "https://docs.google.com/spreadsheets/d/17DVk5ITSC04N3Nrb2tz-PjN1H4xQLW7Yplp5KK7YiM4/edit?usp=sharing",
-    "https://wevape-reservation.vercel.app/"
+    "https://wevape-reservation.vercel.app/",
+    "wevape-pos-app.vercel.app/setup.html"
   ],
   "checks": {
     "https://vflow.kr": {
@@ -3006,6 +2997,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-09-09T10:09:42.215Z",
+  "savedAt": "2026-09-16T02:54:27.455Z",
   "savedBy": "employee"
 }
