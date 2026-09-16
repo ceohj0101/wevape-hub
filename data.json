@@ -222,6 +222,16 @@
       "owner": "",
       "sensitive": false,
       "createdAt": 1789529233950
+    },
+    {
+      "dept": "DEV",
+      "title": "영수증 프린터기 설치 프로그램",
+      "url": "https://miniprinter.com/page/?pid=product_view&pr_id=8&ca_id=1",
+      "note": "",
+      "status": "운영중",
+      "owner": "",
+      "sensitive": false,
+      "createdAt": 1789543375613
     }
   ],
   "stores": [
@@ -3007,6 +3017,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-09-16T03:27:43.232Z",
+  "savedAt": "2026-09-16T07:22:57.382Z",
   "savedBy": "employee"
 }
