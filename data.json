@@ -214,7 +214,7 @@
       "createdAt": 1788948538100
     },
     {
-      "dept": "GRO",
+      "dept": "DEV",
       "title": "구포스 데이터 이관 툴",
       "url": "https://wevape-pos-app.vercel.app/mig.html",
       "note": "",
@@ -3007,6 +3007,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-09-16T03:27:15.269Z",
+  "savedAt": "2026-09-16T03:27:43.232Z",
   "savedBy": "employee"
 }
