@@ -402,9 +402,10 @@
     "2026-09-16": {
       "dev": {
         "dmt1r24s2p08qkp": 7,
-        "dmsfub5jac8mrsb": 1
+        "dmsfub5jac8mrsb": 1,
+        "dmsfk5gma6n6doq": 1
       },
-      "hit": 2,
+      "hit": 3,
       "clk": {
         "https://wfs0356-coder.github.io/vape-tracker/?store=%EC%83%81%EB%8F%99%EC%A0%90": 1,
         "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
@@ -418,7 +419,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-16T01:17:51.179Z",
+  "savedAt": "2026-09-16T01:20:56.086Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
