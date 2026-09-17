@@ -413,12 +413,14 @@
       "dev": {
         "dmsgukyv4zr4ekv": 1
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 0,
+      "clk": {
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-17T23:51:02.319Z",
+  "savedAt": "2026-09-17T23:51:19.807Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
