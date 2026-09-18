@@ -420,7 +420,7 @@
         "dmu23hyah8751pf": 1,
         "dmu4vlr9ktj59nh": 1,
         "dmu2fv79xjgvmbk": 2,
-        "dmsfprzijmhz3ro": 1
+        "dmsfprzijmhz3ro": 2
       },
       "hit": 8,
       "clk": {
@@ -428,12 +428,13 @@
         "https://vflow.kr": 2,
         "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
         "https://wevape-pos-app.vercel.app/": 1,
-        "https://order-hub-dfni.onrender.com/": 1
+        "https://order-hub-dfni.onrender.com/": 1,
+        "https://order-hub-dfni.onrender.com/sales?month=2026-06": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-18T07:14:33.078Z",
+  "savedAt": "2026-09-18T07:16:28.534Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
