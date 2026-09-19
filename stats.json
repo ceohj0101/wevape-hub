@@ -411,9 +411,10 @@
         "dmu4vlr9ktj59nh": 2,
         "dmsfoaypgl2c1d8": 1,
         "dmsyx9x7fyu0wkv": 1,
-        "dmu58u23f2i85ab": 1
+        "dmu58u23f2i85ab": 1,
+        "dmsg3bq568xkrh3": 1
       },
-      "hit": 4,
+      "hit": 5,
       "clk": {
         "https://wevape-reservation-nu.vercel.app/": 2,
         "https://vflow.kr": 2,
@@ -423,7 +424,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-19T03:27:54.987Z",
+  "savedAt": "2026-09-19T03:44:54.361Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
