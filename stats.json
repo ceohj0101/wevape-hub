@@ -409,14 +409,15 @@
     "2026-09-20": {
       "dev": {
         "dmtdzefeb9egz24": 1,
-        "dmsfub5jac8mrsb": 1
+        "dmsfub5jac8mrsb": 1,
+        "dmsfoaypgl2c1d8": 1
       },
-      "hit": 2,
+      "hit": 3,
       "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-20T01:16:42.498Z",
+  "savedAt": "2026-09-20T01:20:52.454Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
