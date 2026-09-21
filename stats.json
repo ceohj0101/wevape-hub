@@ -414,7 +414,7 @@
         "dmt16dxuuhcinst": 1,
         "dmsgvbdt7ol9jmc": 1,
         "dmtavw780lkhne6": 1,
-        "dmsoi28klrebuuz": 1
+        "dmsoi28klrebuuz": 2
       },
       "hit": 16,
       "clk": {
@@ -422,13 +422,13 @@
         "https://vflow.kr": 2,
         "https://order-hub-dfni.onrender.com/": 8,
         "https://ceohj0101.github.io/wevape-hr/": 1,
-        "https://wevape-pos-app.vercel.app/": 2,
+        "https://wevape-pos-app.vercel.app/": 3,
         "https://miniprinter.com/page/?pid=product_view&pr_id=8&ca_id=1": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-21T09:26:49.034Z",
+  "savedAt": "2026-09-21T09:28:19.731Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
