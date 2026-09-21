@@ -406,7 +406,7 @@
         "dmt1jxph9na8h5h": 1,
         "dmsfprzijmhz3ro": 1,
         "dmtdzefeb9egz24": 1,
-        "dmsfub5jac8mrsb": 1,
+        "dmsfub5jac8mrsb": 2,
         "dmsfkofxlwbratm": 3,
         "dmsiy5nzph0lrhf": 3,
         "dmu6ylv9io125wu": 6,
@@ -423,12 +423,13 @@
         "https://order-hub-dfni.onrender.com/": 8,
         "https://ceohj0101.github.io/wevape-hr/": 1,
         "https://wevape-pos-app.vercel.app/": 3,
-        "https://miniprinter.com/page/?pid=product_view&pr_id=8&ca_id=1": 1
+        "https://miniprinter.com/page/?pid=product_view&pr_id=8&ca_id=1": 1,
+        "https://wevape-reservation-nu.vercel.app/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-21T09:28:19.731Z",
+  "savedAt": "2026-09-21T09:58:20.849Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
