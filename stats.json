@@ -405,7 +405,7 @@
         "dmsfub5jac8mrsb": 1,
         "dmub7mhhmy3d2od": 1,
         "dmsfprzijmhz3ro": 1,
-        "dmsfkq0kdr8q74h": 5,
+        "dmsfkq0kdr8q74h": 6,
         "dmsfkofxlwbratm": 5,
         "dmsiy5nzph0lrhf": 1,
         "dmsio4plqb8e2ts": 2,
@@ -420,12 +420,13 @@
         "https://wevape-pos-app.vercel.app/board.html": 4,
         "https://order-hub-dfni.onrender.com/": 7,
         "https://wevape-reservation-nu.vercel.app/": 3,
-        "https://order-hub-dfni.onrender.com/receipts": 1
+        "https://order-hub-dfni.onrender.com/receipts": 1,
+        "https://nibs.nicevan.co.kr/websquare/index.jsp": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-22T11:49:06.960Z",
+  "savedAt": "2026-09-22T11:57:39.093Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
