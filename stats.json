@@ -405,17 +405,18 @@
         "dmsfub5jac8mrsb": 1,
         "dmub7mhhmy3d2od": 1,
         "dmsfprzijmhz3ro": 1,
-        "dmsfkq0kdr8q74h": 1
+        "dmsfkq0kdr8q74h": 2
       },
       "hit": 8,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
-        "https://vflow.kr": 2
+        "https://vflow.kr": 2,
+        "https://wevape-pos-app.vercel.app/board.html": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-22T02:13:31.331Z",
+  "savedAt": "2026-09-22T02:22:06.512Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
