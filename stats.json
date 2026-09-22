@@ -406,20 +406,22 @@
         "dmub7mhhmy3d2od": 1,
         "dmsfprzijmhz3ro": 1,
         "dmsfkq0kdr8q74h": 3,
-        "dmsfkofxlwbratm": 1
+        "dmsfkofxlwbratm": 1,
+        "dmsiy5nzph0lrhf": 1
       },
-      "hit": 9,
+      "hit": 10,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
         "https://vflow.kr": 4,
         "https://wevape-pos-app.vercel.app/board.html": 1,
         "https://order-hub-dfni.onrender.com/": 2,
-        "https://wevape-reservation-nu.vercel.app/": 1
+        "https://wevape-reservation-nu.vercel.app/": 1,
+        "https://order-hub-dfni.onrender.com/receipts": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-22T04:42:54.290Z",
+  "savedAt": "2026-09-22T04:45:44.707Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
