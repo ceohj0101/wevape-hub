@@ -232,6 +232,16 @@
       "owner": "",
       "sensitive": false,
       "createdAt": 1789543375613
+    },
+    {
+      "dept": "DEV",
+      "title": "W포스 수정요청사항",
+      "url": "https://wevape-pos-app.vercel.app/board.html",
+      "note": "",
+      "status": "운영중",
+      "owner": "",
+      "sensitive": false,
+      "createdAt": 1790043226207
     }
   ],
   "stores": [
@@ -3017,6 +3027,6 @@
       "https://ceohj0101.github.io/wevape-hr/"
     ]
   },
-  "savedAt": "2026-09-16T07:22:57.382Z",
+  "savedAt": "2026-09-22T02:13:49.326Z",
   "savedBy": "employee"
 }
