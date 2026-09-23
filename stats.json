@@ -333,7 +333,7 @@
       "dev": {
         "dmt1jxph9na8h5h": 1,
         "dmsfprzijmhz3ro": 1,
-        "dmtdzefeb9egz24": 2,
+        "dmtdzefeb9egz24": 3,
         "dmsfub5jac8mrsb": 3,
         "dmsfkofxlwbratm": 3,
         "dmsiy5nzph0lrhf": 3,
@@ -348,9 +348,9 @@
         "dmub7mhhmy3d2od": 1,
         "dmsfkq0kdr8q74h": 2
       },
-      "hit": 27,
+      "hit": 28,
       "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 4,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 5,
         "https://vflow.kr": 2,
         "https://order-hub-dfni.onrender.com/": 8,
         "https://ceohj0101.github.io/wevape-hr/": 1,
@@ -363,7 +363,7 @@
     },
     "2026-09-22": {
       "dev": {
-        "dmtdzefeb9egz24": 1,
+        "dmtdzefeb9egz24": 3,
         "dmu58u23f2i85ab": 5,
         "dmsfoaypgl2c1d8": 7,
         "dmsfub5jac8mrsb": 1,
@@ -378,9 +378,9 @@
         "dmshf83c28ezwg1": 5,
         "dmu6ylv9io125wu": 2
       },
-      "hit": 21,
+      "hit": 23,
       "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 4,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 6,
         "https://vflow.kr": 7,
         "https://wevape-pos-app.vercel.app/board.html": 4,
         "https://order-hub-dfni.onrender.com/": 7,
@@ -393,16 +393,17 @@
     },
     "2026-09-23": {
       "dev": {
-        "dmsyx9x7fyu0wkv": 1
+        "dmsyx9x7fyu0wkv": 1,
+        "dmtdzefeb9egz24": 1
       },
-      "hit": 1,
+      "hit": 2,
       "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-22T15:28:41.240Z",
+  "savedAt": "2026-09-23T00:34:04.830Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
