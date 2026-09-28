@@ -391,8 +391,8 @@
         "dmshf83c28ezwg1": 1,
         "dmsjyqa9r5flnon": 1,
         "dmtavw780lkhne6": 1,
-        "dmsgvbdt7ol9jmc": 3,
-        "dmsfprzijmhz3ro": 3
+        "dmsgvbdt7ol9jmc": 2,
+        "dmsfprzijmhz3ro": 4
       },
       "hit": 11,
       "clk": {
@@ -404,7 +404,7 @@
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-28T11:50:45.754Z",
+  "savedAt": "2026-09-28T11:51:00.558Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
