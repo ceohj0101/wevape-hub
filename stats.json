@@ -385,7 +385,7 @@
     "2026-09-30": {
       "dev": {
         "dmsgvbdt7ol9jmc": 1,
-        "dmsfub5jac8mrsb": 7,
+        "dmsfub5jac8mrsb": 8,
         "dmsyx9x7fyu0wkv": 2,
         "dmsfoaypgl2c1d8": 1,
         "dmsfkq0kdr8q74h": 2,
@@ -402,12 +402,12 @@
         "https://miniprinter.com/page/?pid=product_view&pr_id=8&ca_id=1": 1,
         "https://wevape-pos-app.vercel.app/mig.html": 2,
         "https://ceohj0101.github.io/wevape-hr/": 1,
-        "https://wevape-pos-app.vercel.app/board.html": 2
+        "https://wevape-pos-app.vercel.app/board.html": 3
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-30T10:01:19.726Z",
+  "savedAt": "2026-09-30T11:03:50.986Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
