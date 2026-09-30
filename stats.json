@@ -387,7 +387,7 @@
         "dmsfub5jac8mrsb": 5,
         "dmsyx9x7fyu0wkv": 1,
         "dmsfoaypgl2c1d8": 1,
-        "dmsfkq0kdr8q74h": 1
+        "dmsfkq0kdr8q74h": 2
       },
       "hit": 5,
       "clk": {
@@ -395,12 +395,13 @@
         "https://order-hub-dfni.onrender.com/": 1,
         "https://order-hub-dfni.onrender.com/receipts": 1,
         "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
-        "https://miniprinter.com/page/?pid=product_view&pr_id=8&ca_id=1": 1
+        "https://miniprinter.com/page/?pid=product_view&pr_id=8&ca_id=1": 1,
+        "https://wevape-pos-app.vercel.app/mig.html": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-30T05:42:27.642Z",
+  "savedAt": "2026-09-30T05:59:39.753Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
