@@ -387,16 +387,17 @@
         "dmsfub5jac8mrsb": 5,
         "dmsyx9x7fyu0wkv": 1
       },
-      "hit": 5,
+      "hit": 4,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
         "https://order-hub-dfni.onrender.com/": 1,
-        "https://order-hub-dfni.onrender.com/receipts": 1
+        "https://order-hub-dfni.onrender.com/receipts": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-09-30T02:44:30.097Z",
+  "savedAt": "2026-09-30T02:45:14.045Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
