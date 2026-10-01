@@ -354,12 +354,14 @@
       "dev": {
         "dmtr72f28m4pa5e": 1
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 0,
+      "clk": {
+        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-01T16:23:57.650Z",
+  "savedAt": "2026-10-01T16:24:03.624Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
