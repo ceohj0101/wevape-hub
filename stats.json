@@ -337,7 +337,7 @@
     "2026-10-04": {
       "dev": {
         "dmsfub5jac8mrsb": 1,
-        "dmsfkofxlwbratm": 1,
+        "dmsfkofxlwbratm": 2,
         "dmsfk5gma6n6doq": 2,
         "dmub7mhhmy3d2od": 1,
         "dmuqfjl5pqh4j8k": 2,
@@ -346,15 +346,16 @@
         "dmsn37kel5noice": 1,
         "dmu6ylv9io125wu": 1
       },
-      "hit": 10,
+      "hit": 11,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 4,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 2
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 2,
+        "https://order-hub-dfni.onrender.com/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-04T12:55:24.294Z",
+  "savedAt": "2026-10-04T12:59:18.380Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
