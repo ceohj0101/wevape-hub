@@ -331,14 +331,15 @@
     },
     "2026-10-05": {
       "dev": {
-        "dmtdzefeb9egz24": 1
+        "dmtdzefeb9egz24": 1,
+        "dmsilsmcbv88i3a": 1
       },
-      "hit": 1,
+      "hit": 2,
       "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-05T01:08:11.140Z",
+  "savedAt": "2026-10-05T01:19:48.657Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
