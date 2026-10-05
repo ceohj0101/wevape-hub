@@ -345,17 +345,18 @@
         "dmsfub5jac8mrsb": 3,
         "dmsyx9x7fyu0wkv": 1
       },
-      "hit": 20,
+      "hit": 19,
       "clk": {
         "https://order-hub-dfni.onrender.com/": 6,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
         "https://vflow.kr": 6,
-        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1
+        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
+        "https://wevape-pos-app.vercel.app/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-05T13:43:29.130Z",
+  "savedAt": "2026-10-05T13:43:44.480Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
