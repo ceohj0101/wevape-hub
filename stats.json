@@ -1,39 +1,6 @@
 {
   "v": 1,
   "days": {
-    "2026-09-21": {
-      "dev": {
-        "dmt1jxph9na8h5h": 1,
-        "dmsfprzijmhz3ro": 1,
-        "dmtdzefeb9egz24": 4,
-        "dmsfub5jac8mrsb": 3,
-        "dmsfkofxlwbratm": 3,
-        "dmsiy5nzph0lrhf": 3,
-        "dmu6ylv9io125wu": 10,
-        "dmsfoaypgl2c1d8": 1,
-        "dmt16dxuuhcinst": 2,
-        "dmsgvbdt7ol9jmc": 2,
-        "dmtavw780lkhne6": 1,
-        "dmsoi28klrebuuz": 2,
-        "dmub3rpcvha9tm9": 5,
-        "dmsyx9x7fyu0wkv": 1,
-        "dmub7mhhmy3d2od": 1,
-        "dmsfkq0kdr8q74h": 2,
-        "dmsfk5gma6n6doq": 2
-      },
-      "hit": 31,
-      "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 6,
-        "https://vflow.kr": 2,
-        "https://order-hub-dfni.onrender.com/": 8,
-        "https://ceohj0101.github.io/wevape-hr/": 1,
-        "https://wevape-pos-app.vercel.app/": 3,
-        "https://miniprinter.com/page/?pid=product_view&pr_id=8&ca_id=1": 1,
-        "https://wevape-reservation-nu.vercel.app/": 1,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 11,
-        "https://nibs.nicevan.co.kr/websquare/index.jsp": 1
-      }
-    },
     "2026-09-22": {
       "dev": {
         "dmtdzefeb9egz24": 5,
@@ -353,10 +320,17 @@
         "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
         "https://wevape-pos-app.vercel.app/": 1
       }
+    },
+    "2026-10-06": {
+      "dev": {
+        "dmsfub5jac8mrsb": 1
+      },
+      "hit": 1,
+      "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-05T13:43:44.480Z",
+  "savedAt": "2026-10-06T01:16:06.731Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
