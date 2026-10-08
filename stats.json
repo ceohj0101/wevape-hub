@@ -256,15 +256,17 @@
         "dmuv37u812k78dq": 1,
         "dmsfub5jac8mrsb": 3,
         "dmsyx9x7fyu0wkv": 1,
-        "dmub7mhhmy3d2od": 1
+        "dmub7mhhmy3d2od": 1,
+        "dmu6ylv9io125wu": 2
       },
-      "hit": 20,
+      "hit": 22,
       "clk": {
         "https://order-hub-dfni.onrender.com/": 6,
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
         "https://vflow.kr": 6,
         "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
-        "https://wevape-pos-app.vercel.app/": 1
+        "https://wevape-pos-app.vercel.app/": 1,
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 2
       }
     },
     "2026-10-06": {
@@ -312,14 +314,17 @@
     },
     "2026-10-08": {
       "dev": {
-        "dmsfub5jac8mrsb": 1
+        "dmsfub5jac8mrsb": 1,
+        "dmu6ylv9io125wu": 2
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 3,
+      "clk": {
+        "https://order-hub-dfni.onrender.com/": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-08T01:26:02.997Z",
+  "savedAt": "2026-10-08T02:37:44.473Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
