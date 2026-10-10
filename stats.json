@@ -291,16 +291,16 @@
     "2026-10-10": {
       "dev": {
         "dmsjyqa9r5flnon": 1,
-        "dmsfoaypgl2c1d8": 1
+        "dmsfoaypgl2c1d8": 2
       },
       "hit": 2,
       "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 3
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-10T02:44:08.368Z",
+  "savedAt": "2026-10-10T04:46:23.353Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
