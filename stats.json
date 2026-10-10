@@ -280,9 +280,10 @@
       "dev": {
         "dmsyx9x7fyu0wkv": 3,
         "dmsilsmcbv88i3a": 1,
-        "dmsn37kel5noice": 4
+        "dmsn37kel5noice": 4,
+        "dmsfub5jac8mrsb": 1
       },
-      "hit": 5,
+      "hit": 6,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 3,
         "https://wevape-pos-app.vercel.app/": 2
@@ -291,16 +292,17 @@
     "2026-10-10": {
       "dev": {
         "dmsjyqa9r5flnon": 3,
-        "dmsfoaypgl2c1d8": 2
+        "dmsfoaypgl2c1d8": 2,
+        "dmsfub5jac8mrsb": 3
       },
-      "hit": 3,
+      "hit": 6,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 5
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-10T08:15:48.725Z",
+  "savedAt": "2026-10-10T08:40:09.964Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
