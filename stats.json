@@ -255,19 +255,19 @@
       "dev": {
         "dmte82bxouvh0uk": 1,
         "dmub7mhhmy3d2od": 1,
-        "dmsfkofxlwbratm": 3,
+        "dmsfkofxlwbratm": 4,
         "dmsilsmcbv88i3a": 1,
         "dmsfoaypgl2c1d8": 2
       },
       "hit": 7,
       "clk": {
         "https://wevape-reservation-nu.vercel.app/": 1,
-        "https://order-hub-dfni.onrender.com/": 1
+        "https://order-hub-dfni.onrender.com/": 2
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-15T07:10:10.114Z",
+  "savedAt": "2026-10-15T08:45:48.714Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
