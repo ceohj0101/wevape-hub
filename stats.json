@@ -253,14 +253,17 @@
     },
     "2026-10-15": {
       "dev": {
-        "dmte82bxouvh0uk": 1
+        "dmte82bxouvh0uk": 1,
+        "dmub7mhhmy3d2od": 1
       },
-      "hit": 1,
-      "clk": {}
+      "hit": 2,
+      "clk": {
+        "https://wevape-reservation-nu.vercel.app/": 1
+      }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-15T01:21:02.846Z",
+  "savedAt": "2026-10-15T02:36:33.114Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
