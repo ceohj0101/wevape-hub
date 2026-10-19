@@ -224,16 +224,17 @@
     "2026-10-19": {
       "dev": {
         "dmsfub5jac8mrsb": 1,
-        "dmsfkofxlwbratm": 1
+        "dmsfkofxlwbratm": 1,
+        "dmveqj7fomkvyve": 1
       },
-      "hit": 2,
+      "hit": 3,
       "clk": {
         "https://order-hub-dfni.onrender.com/": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-19T01:52:11.275Z",
+  "savedAt": "2026-10-19T04:09:28.450Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
