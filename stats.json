@@ -1,31 +1,6 @@
 {
   "v": 1,
   "days": {
-    "2026-10-06": {
-      "dev": {
-        "dmsfkofxlwbratm": 1,
-        "dmtavw780lkhne6": 1,
-        "dmuw24wt266ic06": 1,
-        "dmsfkq0kdr8q74h": 3,
-        "dmub7mhhmy3d2od": 3,
-        "dmuv9eof2qxe9pd": 1,
-        "dmsn37kel5noice": 3,
-        "dmsilsmcbv88i3a": 1,
-        "dmsyx9x7fyu0wkv": 2,
-        "dmsfub5jac8mrsb": 1,
-        "dmtdzefeb9egz24": 1
-      },
-      "hit": 15,
-      "clk": {
-        "https://wevape-pos-app.vercel.app/": 2,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1,
-        "https://dksxoals0824-glitch.github.io/ai-daily-briefing/": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/feeds.html": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/": 2,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 5,
-        "https://vflow.kr": 3
-      }
-    },
     "2026-10-07": {
       "dev": {
         "dmsfub5jac8mrsb": 8,
@@ -149,15 +124,15 @@
       "dev": {
         "dmsgvbdt7ol9jmc": 3,
         "dmub7mhhmy3d2od": 3,
-        "dmtdzefeb9egz24": 2,
+        "dmtdzefeb9egz24": 4,
         "dmsyx9x7fyu0wkv": 1,
         "dmsfub5jac8mrsb": 4,
         "dmsilsmcbv88i3a": 1
       },
-      "hit": 13,
+      "hit": 15,
       "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 6,
-        "https://order-hub-dfni.onrender.com/": 3,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 8,
+        "https://order-hub-dfni.onrender.com/": 4,
         "https://ceohj0101.github.io/wevape-hr/": 1
       }
     },
@@ -169,26 +144,29 @@
         "dmsilsmcbv88i3a": 1,
         "dmsfoaypgl2c1d8": 2,
         "dmshf83c28ezwg1": 3,
-        "dmsfub5jac8mrsb": 2
+        "dmsfub5jac8mrsb": 2,
+        "dmtdzefeb9egz24": 4
       },
-      "hit": 10,
+      "hit": 14,
       "clk": {
         "https://wevape-reservation-nu.vercel.app/": 1,
         "https://order-hub-dfni.onrender.com/": 3,
         "https://vflow.kr": 1,
         "https://ceohj0101.github.io/wevape-hr/": 1,
-        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1
+        "https://dksxoals0824-glitch.github.io/wevape-sales-report/": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 3
       }
     },
     "2026-10-16": {
       "dev": {
         "dmsfub5jac8mrsb": 1,
         "dmsilsmcbv88i3a": 2,
-        "dmv6e0rm41051re": 5
+        "dmv6e0rm41051re": 5,
+        "dmtdzefeb9egz24": 3
       },
-      "hit": 6,
+      "hit": 9,
       "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 5,
         "https://order-hub-dfni.onrender.com/tax": 1,
         "https://vflow.kr": 1,
         "https://order-hub-dfni.onrender.com/receipts": 1
@@ -199,12 +177,13 @@
         "dmsfub5jac8mrsb": 2,
         "dmvbva4at22u0hf": 3,
         "dmsfkofxlwbratm": 1,
-        "dmsfoaypgl2c1d8": 1
+        "dmsfoaypgl2c1d8": 1,
+        "dmtdzefeb9egz24": 3
       },
-      "hit": 7,
+      "hit": 10,
       "clk": {
         "https://order-hub-dfni.onrender.com/receipts": 1,
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 4,
         "https://order-hub-dfni.onrender.com/": 1
       }
     },
@@ -213,11 +192,12 @@
         "dmsfub5jac8mrsb": 1,
         "dmsfoaypgl2c1d8": 1,
         "dmsfkofxlwbratm": 1,
-        "dmsgvbdt7ol9jmc": 1
+        "dmsgvbdt7ol9jmc": 1,
+        "dmtdzefeb9egz24": 1
       },
-      "hit": 4,
+      "hit": 5,
       "clk": {
-        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
         "https://order-hub-dfni.onrender.com/": 2
       }
     },
@@ -226,17 +206,28 @@
         "dmsfub5jac8mrsb": 1,
         "dmsfkofxlwbratm": 2,
         "dmveqj7fomkvyve": 2,
-        "dmsfkq0kdr8q74h": 1
+        "dmsfkq0kdr8q74h": 1,
+        "dmtdzefeb9egz24": 1
       },
-      "hit": 4,
+      "hit": 5,
       "clk": {
         "https://order-hub-dfni.onrender.com/": 3,
-        "https://order-hub-dfni.onrender.com/receipts": 1
+        "https://order-hub-dfni.onrender.com/receipts": 1,
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
+      }
+    },
+    "2026-10-20": {
+      "dev": {
+        "dmtdzefeb9egz24": 3
+      },
+      "hit": 3,
+      "clk": {
+        "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-19T12:16:57.972Z",
+  "savedAt": "2026-10-20T01:17:19.239Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
