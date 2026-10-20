@@ -219,19 +219,20 @@
     "2026-10-20": {
       "dev": {
         "dmtdzefeb9egz24": 3,
-        "dmsfub5jac8mrsb": 2,
+        "dmsfub5jac8mrsb": 3,
         "dmsfoaypgl2c1d8": 1,
         "dmvg0hohx25c19c": 1
       },
       "hit": 7,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 2,
-        "https://order-hub-dfni.onrender.com/": 1
+        "https://order-hub-dfni.onrender.com/": 1,
+        "https://wevape-pos-app.vercel.app/board.html": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-20T11:26:03.919Z",
+  "savedAt": "2026-10-20T11:33:44.174Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
