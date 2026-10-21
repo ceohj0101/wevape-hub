@@ -212,14 +212,15 @@
     },
     "2026-10-21": {
       "dev": {
-        "dmte82bxouvh0uk": 1
+        "dmte82bxouvh0uk": 1,
+        "dmsfub5jac8mrsb": 1
       },
-      "hit": 1,
+      "hit": 2,
       "clk": {}
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-21T00:28:03.212Z",
+  "savedAt": "2026-10-21T01:23:48.604Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
