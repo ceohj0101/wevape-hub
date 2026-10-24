@@ -182,14 +182,14 @@
     },
     "2026-10-22": {
       "dev": {
-        "dmsfub5jac8mrsb": 2,
+        "dmsfub5jac8mrsb": 4,
         "dmt03a0f2pdd7k3": 4,
         "dmvj27cfmzq11sf": 2,
         "dmsilsmcbv88i3a": 1,
         "dmte82bxouvh0uk": 1,
         "dmvj95iif003m2t": 2
       },
-      "hit": 11,
+      "hit": 13,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 6
       }
@@ -198,25 +198,27 @@
       "dev": {
         "dmspibvbn05jp2o": 1,
         "dmvkyka04seibln": 1,
-        "dmsyx9x7fyu0wkv": 1
+        "dmsyx9x7fyu0wkv": 1,
+        "dmsfub5jac8mrsb": 1
       },
-      "hit": 3,
+      "hit": 4,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
       }
     },
     "2026-10-24": {
       "dev": {
-        "dmsyx9x7fyu0wkv": 1
+        "dmsyx9x7fyu0wkv": 1,
+        "dmsfub5jac8mrsb": 1
       },
-      "hit": 1,
+      "hit": 2,
       "clk": {
         "https://znsl132-lang.github.io/BIGLUCKY/schedule-view.html": 1
       }
     }
   },
   "note": "probe",
-  "savedAt": "2026-10-24T00:13:36.678Z",
+  "savedAt": "2026-10-24T01:23:32.239Z",
   "savedBy": "employee",
   "names": {
     "dmsfkofxlwbratm": "상동점",
