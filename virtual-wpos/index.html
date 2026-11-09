@@ -498,6 +498,10 @@ button.lv-round{border:0; padding:0; cursor:pointer}
 .p1-gf-row .lv-btn1{width:110px; flex:none}
 .p1-gf-found{display:flex; flex-direction:column; gap:4px; max-height:220px; overflow-y:auto}
 .p1-gf-auto{align-self:flex-start; font-size:calc(13px*var(--fk)); background:#eaf2ff; color:#1d4e89; border-radius:calc(8px*var(--rk)); padding:6px 10px}
+/* 현금 결제 «전액» — 받은 돈 = 결제 금액 그대로 (2026-11-09 팀장 «전액 버튼 만들어주고 받은돈») · 잔액(눌러 계산) · 딱 맞게는 거스름돈이 바로 보여서 겹침 → 전액 하나로 */
+.lv-pills .p1-all{background:var(--k-ink,var(--k-inv)) !important;color:#fff !important;font-weight:800}
+/* 손님 이력 칸 아래 두 단추 — 좁은 칸에서 «다른 손님»이 밖으로 밀려 잘리던 것 (2026-11-09) */
+.p1 .p1-mfoot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;flex:none}.p1 .p1-mfoot>button{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* 묶음 p10-work */
 /* p10 할 일 · 인수인계 · 권한 · 자료실 · 설정 */
@@ -10340,6 +10344,8 @@ try {
 
   /* ── 손님 계산 ── */
   function custOf(id) { var c = id && S.d.customers[id]; return c && !c.gone ? Object.assign({ id: id }, c) : null; }
+  /* 손님 특이사항 — 손님 묶음(p3) cs_notes{body} 가 기준 (W포스 cust_notes 한 표) · p1 예전 sale_notes{text} 도 같이 · 새 글이 위 */
+  function custNotes(id) { var a = arr(col('cs_notes')).filter(function (n) { return n.cust === id && !n.hidden; }).map(function (n) { return { t: n.body || '', kind: n.kind || '', at: n.at || 0 }; }).concat(arr(col('sale_notes')).filter(function (n) { return n.cust === id && !n.hidden; }).map(function (n) { return { t: n.text || '', kind: n.kind || '', at: n.at || 0 }; })); return a.filter(function (n) { return n.t; }).sort(function (x, y) { return (y.kind === '주의') - (x.kind === '주의') || y.at - x.at; }); }
   function ciOf(ix, id) { return ix[id] || { bal: 0, earned: 0, spend: 0, visits: 0, last: 0, hist: [], sales: [] }; }
   /* 누적 · 적립은 core custIndex 가 customers.adj{spend,earned} 를 이미 더한 값 — 여기서 또 더하지 않는다 */
   function spendOf(c, o) { return Math.max(0, o.spend || 0); }
@@ -10887,7 +10893,7 @@ try {
     var c = p.c, ix = p.ix; var o = ciOf(ix, c.id); var g = gradeOfC(c, o); var f = flagsOf(c); var cyc = cycleOf(o);
     var last = o.sales[0]; var lastLines = last ? (last.lines || []).filter(function (l) { return !l.svc && l.c !== TEST_C; }).slice(0, 4) : [];
     var asOpen = arr(S.d.as).filter(function (r) { return r.cust === c.id && r.status !== '완료' && r.status !== '취소'; }), rvOpen = arr(S.d.resv).filter(function (r) { return r.cust === c.id && r.status !== '구매완료' && r.status !== '구매취소'; });
-    var notes = arr(col('sale_notes')).filter(function (n) { return n.cust === c.id && !n.hidden; }).sort(function (a, b) { return b.at - a.at; }).slice(0, 2).map(function (n) { return n.text; });
+    var notes = custNotes(c.id).slice(0, 2).map(function (n) { return (n.kind === '주의' ? '⚠ ' : '') + n.t; });
     var memo = [c.memo].concat(notes).filter(Boolean).slice(0, 2); var pp = prepaysOf(c.id); var n = L.cart.lines.reduce(function (a, l) { return a + (l.qty || 0); }, 0);
     return html`<aside class="lv-cart p1-cart p1-mside" id="p1-mside">
       <div class="p1-mhead"><span class="av">${c.name.slice(0, 1)}</span><span class="t"><b>${c.name} 님 <span class=${'lv-grade ' + GCLS[g.name]}>${g.name}</span></b><span>뒤 ${L.tail4(c.phone)} · 방문 ${o.visits}번 · ${L.storeName(c.store || 's1')}</span></span><span class="bal"><small>사용 가능</small><b id="p1-mbal2">${won(o.bal)}P</b></span></div>
@@ -10900,7 +10906,7 @@ try {
       ${memo.length ? html`<span class="p1-mnote">📝 ${memo.join(' · ')}</span>` : ''}
       <${AppCode} />
       <span style="flex:1"></span>
-      <div style="display:flex; gap:8px; flex:none"><button type="button" class="lv-btn2" style="flex:1" id="p1-fullbtn" onClick=${function () { ui({ left: 'cust' }); }}>이력 전체 (구매 · AS · 예약 · 포인트) ›</button><button type="button" class="lv-btn2" onClick=${function () { dropCust(); ui({ left: 'prod' }); }}>다른 손님</button></div>
+      <div class="p1-mfoot"><button type="button" class="lv-btn2" id="p1-fullbtn" title="구매 · AS · 예약 · 포인트 · 특이사항" onClick=${function () { ui({ left: 'cust' }); }}>이력 전체 ›</button><button type="button" class="lv-btn2" onClick=${function () { dropCust(); ui({ left: 'prod' }); }}>다른 손님</button></div>
       ${n ? html`<button type="button" class="lv-btn1" id="p1-tocart" onClick=${function () { ui({ hist: false }); }}>장바구니로 돌아가기 · ${n}개</button>` : html`<span class="lv-small">상품을 담으면 이 칸은 장바구니가 되고, 손님은 맨 위 한 줄로 접혀요</span>`}
       ${!n ? html`<${HoldTools} />` : ''}
     </aside>`;
@@ -11004,7 +11010,7 @@ try {
     var words = name.split(/\s+/).filter(Boolean);
     var exact = list.filter(function (c) { var ph = L.digits(c.phone); return (!name || (c.name || '').indexOf(name) >= 0) && (!d || ph.slice(-d.length) === d || (d.length > 4 && ph.indexOf(d) >= 0)); });
     if (name && (words.length > 1 || !exact.length)) {
-      var notes = arr(col('sale_notes'));
+      var notes = arr(col('sale_notes')).map(function (n) { return { cust: n.cust, hidden: n.hidden, text: n.text }; }).concat(arr(col('cs_notes')).map(function (n) { return { cust: n.cust, hidden: n.hidden, text: n.body }; }));
       var hits = list.map(function (c) {
         var why = [], o = ciOf(L.custIndex(), c.id); var bought = {}; o.sales.forEach(function (s) { (s.lines || []).forEach(function (l) { bought[l.name] = 1; }); });
         var my = notes.filter(function (n) { return n.cust === c.id && !n.hidden; }).map(function (n) { return n.text; }).join(' ');
@@ -11070,7 +11076,7 @@ try {
       <div class="p1-kl"><span class="grow">${asOpen.length || rvOpen.length ? [asOpen.length ? 'AS ' + asOpen.map(function (r) { return (r.prod ? r.prod.n : '') + ' ' + (L.AS_LABEL[r.status] || r.status); }).join(', ') : '', rvOpen.length ? '예약 ' + rvOpen.map(function (r) { return (r.item ? r.item.n : '') + ' ' + r.status; }).join(', ') : ''].filter(Boolean).join(' · ') : 'AS · 예약 접수 없음'}</span><button type="button" class="p1-sm" onClick=${function () { /* AS 접수는 p3 창 하나로 (W포스 초도불량 길 · 지점보관 · 취합 자동 담기 — 21898) */ L.openSheet(L.REG_HAS && L.REG_HAS('p3-as-new') ? 'p3-as-new' : (window.VWP3 ? 'p3-as-new' : 'p1-as'), { cust: c.id }); }}>+ AS 접수</button><button type="button" class="p1-sm" onClick=${function () { L.openSheet(L.regSheet && L.regSheet('p3-resv-new') ? 'p3-resv-new' : 'p1-resv', { cust: c.id }); }}>+ 예약</button></div>
       <div class="p1-kl">${memo == null ? html`<button type="button" class="p1-sm" style="flex:1;justify-content:flex-start;text-align:left" onClick=${function () { setMemo(c.memo || ''); }}>${c.memo ? '메모: ' + c.memo : '메모 등록 (취향 · 주의할 점 한 줄)'}</button>` : html`<textarea class="p1-ta" id="p1-mmemo" maxlength="300" style="min-height:44px" value=${memo} onInput=${function (e) { setMemo(e.target.value); }}></textarea><span class="lv-small">${String(memo).length}/300</span><button type="button" class="p1-sm y" onClick=${saveMemo}>저장</button><button type="button" class="p1-sm" onClick=${function () { setMemo(null); }}>취소</button>`}</div>
       <div class="p1-kl"><span class=${'lv-grade ' + GCLS[g.name]}>${g.name}${g.fixed ? ' (고정)' : ''}</span><span class="grow lv-small">누적 구매 ${won(spendOf(c, o))}원 · ${g.next ? g.next + '까지 ' + won(g.left) + '원' : '최고 등급'}</span><button type="button" class="p1-sm" onClick=${function () { L.openSheet('p1-grade', { id: c.id }); }}>✏️ 수정</button><button type="button" class="p1-sm red" onClick=${function () { L.openSheet('p1-flags', { id: c.id }); }}>주의 표시</button></div>
-      <div class="p1-mini"><button type="button" class=${sec.hist ? 'on' : ''} onClick=${function () { tog('hist'); }}>고객 이력 (W포스 구매 ${o.visits}회)</button><button type="button" class=${sec.info ? 'on' : ''} onClick=${function () { tog('info'); }}>정보 수정 (성함 · 포인트 · 연락처)</button><button type="button" class=${sec.det ? 'on' : ''} onClick=${function () { tog('det'); }}>상세 (성별 · 방문 · 추천)</button><button type="button" onClick=${function () { var ls0 = o.sales.find(function (s) { return L.saleSums(s).net > 0; }); if (!ls0) { toast('교환할 구매가 없어요'); return; } openOther('p2-exmulti', { id: ls0.id, sale: ls0.id }, '구매내역(교환)'); }}>이 손님 교환 · 최근 구매에서 바로</button><button type="button" onClick=${function () { L.openSheet('p1-crbulk', { cust: c.id }); }}>현금영수증 한꺼번에 ›</button></div>
+      <div class="p1-mini"><button type="button" class=${sec.hist ? 'on' : ''} onClick=${function () { tog('hist'); }}>고객 이력 (W포스 구매 ${o.visits}회)</button><button type="button" class=${sec.info ? 'on' : ''} onClick=${function () { tog('info'); }}>정보 수정 (성함 · 포인트 · 연락처)</button><button type="button" class=${sec.det ? 'on' : ''} onClick=${function () { tog('det'); }}>상세 (성별 · 방문 · 추천)</button><button type="button" id="p1-notesbtn" onClick=${function () { if (L.regSheet && L.regSheet('p3-notes')) L.openSheet('p3-notes', c.id); else L.openSheet('p1-notes', { cust: c.id }); }}>특이사항 ${custNotes(c.id).length}건 · 작성</button><button type="button" onClick=${function () { var ls0 = o.sales.find(function (s) { return L.saleSums(s).net > 0; }); if (!ls0) { toast('교환할 구매가 없어요'); return; } openOther('p2-exmulti', { id: ls0.id, sale: ls0.id }, '구매내역(교환)'); }}>이 손님 교환 · 최근 구매에서 바로</button><button type="button" onClick=${function () { L.openSheet('p1-crbulk', { cust: c.id }); }}>현금영수증 한꺼번에 ›</button></div>
       ${sec.info ? html`<${InfoEdit} c=${c} o=${o} key=${'ie' + c.id} />` : ''}
       ${sec.det ? html`<${Detail} c=${c} o=${o} />` : ''}
       ${sec.hist ? html`<div class="lv-tabs" role="tablist">${tabs.map(function (x) { return html`<button type="button" role="tab" aria-selected=${tab === x[0]} class=${tab === x[0] ? 'on' : ''} onClick=${function () { ui({ ctab: x[0] }); }}>${x[1]}</button>`; })}</div>
@@ -11117,7 +11123,7 @@ try {
       <div class="p1-mini" id="p1-devs"><span class="lv-small">회원 코드 ${custCode(c.id)} · 소속 ${L.storeName(c.store || 's1')}</span>${(c.devices || []).length ? (c.devices || []).map(function (d, i) { return html`<span class="p1-tag blue">폰 ${i + 1} · ${md(d.at)} 연결</span><button type="button" onClick=${function () { unlink(i); }}>끊기</button>`; }) : html`<span class="lv-small">연결된 폰 0대</span>`}</div>
       <div class="p1-mini"><input class="p1-in" id="p1-i-name" style="width:130px" value=${F.name} onInput=${function (e) { set('name', e.target.value); }} onKeyDown=${key} placeholder="성함" /><input class="p1-in" id="p1-i-phone" style="width:140px" value=${F.phone} onInput=${function (e) { set('phone', e.target.value); }} onKeyDown=${key} placeholder="전화번호(전체)" /><input class="p1-in" id="p1-i-car" style="width:110px" value=${F.car} onInput=${function (e) { set('car', e.target.value); }} onKeyDown=${key} placeholder="차량번호" /><button type="button" class="p1-sm y" disabled=${busy} onClick=${save}>저장 (Enter)</button></div>
       <div class="p1-mini"><input class="p1-in" id="p1-i-addr" style="flex:1;min-width:200px" value=${F.addr} onInput=${function (e) { set('addr', e.target.value); }} onKeyDown=${key} placeholder="집주소 (배송 · 택배)" /><input class="p1-in" id="p1-i-old" style="width:180px" value=${F.old} onInput=${function (e) { set('old', e.target.value); }} onKeyDown=${key} placeholder="예전 메모" /></div>
-      <div class="p1-mini"><button type="button" onClick=${function () { L.openSheet('p1-notes', { cust: c.id }); }}>손님 특이사항 보기 · 작성</button><button type="button" class=${P.on ? 'on' : ''} onClick=${function () { setP(Object.assign({}, P, { on: !P.on })); }}>포인트 조정 (지급 · 차감 — 사유 필수)</button><button type="button" onClick=${function () { L.openSheet('p1-ptmove', { id: c.id }); }}>포인트 이전</button></div>
+      <div class="p1-mini"><button type="button" class=${P.on ? 'on' : ''} onClick=${function () { setP(Object.assign({}, P, { on: !P.on })); }}>포인트 조정 (지급 · 차감 — 사유 필수)</button><button type="button" onClick=${function () { L.openSheet('p1-ptmove', { id: c.id }); }}>포인트 이전</button></div>
       ${P.on ? html`<div class="p1-mini"><input class="p1-in" id="p1-padj" inputmode="numeric" style="width:100px" value=${P.n ? won(num(P.n)) : ''} onInput=${function (e) { setP(Object.assign({}, P, { n: e.target.value })); }} placeholder="포인트 수" /><input class="p1-in" id="p1-pwhy" style="flex:1;min-width:150px" value=${P.why} onInput=${function (e) { setP(Object.assign({}, P, { why: e.target.value })); }} placeholder="사유 (꼭)" /><button type="button" onClick=${function () { adj(1); }}>포인트 지급</button><button type="button" style="color:var(--k-red)" onClick=${function () { adj(-1); }}>포인트 차감</button></div>` : ''}
       ${(c.edits || []).length ? html`<span class="lv-small">고친 기록: ${(c.edits || []).slice(-3).map(function (e) { return md(e.at) + ' ' + e.from + ' → ' + e.to + (e.byName ? ' (' + e.byName + ')' : ''); }).join(' · ')}</span>` : ''}
     </div>`;
@@ -11507,20 +11513,23 @@ try {
     L.useStore(); var a = p.arg || {}; var c = custOf(a.cust); var m = me();
     var ts = useState('all'), tab = ts[0], setTab = ts[1]; var ws = useState(a.add ? '' : null), txt = ws[0], setTxt = ws[1]; var ks = useState(''), kind = ks[0], setKind = ks[1]; var nx = useState(false), nextV = nx[0], setNext = nx[1]; var es = useState(null), edit = es[0], setEdit = es[1];
     if (!c) return '';
-    var all = arr(col('sale_notes')).filter(function (n) { return n.cust === c.id && (!n.hidden || L.canSuper()); }).sort(function (x, y) { return y.at - x.at; });
-    var tabs = [['all', '전체 ' + all.length], ['좋은 기억', '좋은 기억 ' + all.filter(function (n) { return n.kind === '좋은 기억'; }).length], ['기억 단서', '단서 ' + all.filter(function (n) { return n.kind === '기억 단서'; }).length], ['주의', '주의 ' + all.filter(function (n) { return n.kind === '주의' || n.kind === '불편'; }).length], ['mine', '내 작성 ' + all.filter(function (n) { return n.by === m.by && m.by; }).length], ['next', '다음 방문 한 줄 ' + all.filter(function (n) { return n.next; }).length]];
-    var list = all.filter(function (n) { return tab === 'all' || (tab === 'mine' ? n.by === m.by : tab === 'next' ? n.next : tab === '주의' ? (n.kind === '주의' || n.kind === '불편') : n.kind === tab); });
-    async function add() { var t = String(txt || '').trim(); if (!t) { toast('적을 말을 넣어 주세요'); return; } try { await setDoc('sale_notes', L.uid('n'), { cust: c.id, text: t, kind: kind || noteKind(t), next: nextV, at: Date.now(), store: L.store(), by: m.by, byName: m.byName, likes: {} }); setTxt(null); setKind(''); setNext(false); toast('특이사항을 남겼어요', kind || noteKind(t)); } catch (e) {} }
-    async function like(n) { var lk = Object.assign({}, n.likes || {}); if (lk[m.by || 'pc']) delete lk[m.by || 'pc']; else lk[m.by || 'pc'] = Date.now(); try { await setDoc('sale_notes', n.id, Object.assign({}, n, { likes: lk, id: undefined })); } catch (e) {} }
-    async function hide(n) { try { await upd('sale_notes', n.id, { hidden: !n.hidden }); toast(n.hidden ? '다시 보이게 했어요' : '숨겼어요'); } catch (e) {} }
+    /* 묶음 빌드: 손님 묶음(p3) cs_notes{body · helpful} 한 곳에 읽고 씀 (W포스 cust_notes 한 표) — 손님 메뉴 특이사항과 같은 기록 · p3 가 없을 때만 sale_notes */
+    var CS = !!(L.regSheet && L.regSheet('p3-notes')); var COL = CS ? 'cs_notes' : 'sale_notes';
+    function toCs(k) { return k === '불편' || k === '도움' ? '불편 · 도움' : k; }
+    var all = arr(col(COL)).map(function (n) { return CS ? Object.assign({}, n, { text: n.body || '', likes: n.helpful || {} }) : n; }).filter(function (n) { return n.cust === c.id && (!n.hidden || L.canSuper()); }).sort(function (x, y) { return y.at - x.at; });
+    var tabs = [['all', '전체 ' + all.length], ['좋은 기억', '좋은 기억 ' + all.filter(function (n) { return n.kind === '좋은 기억'; }).length], ['기억 단서', '단서 ' + all.filter(function (n) { return n.kind === '기억 단서'; }).length], ['주의', '주의 · 불편 ' + all.filter(function (n) { return n.kind === '주의' || String(n.kind || '').indexOf('불편') >= 0; }).length], ['mine', '내 작성 ' + all.filter(function (n) { return n.by === m.by && m.by; }).length], ['next', '다음 방문 한 줄 ' + all.filter(function (n) { return n.next; }).length]];
+    var list = all.filter(function (n) { return tab === 'all' || (tab === 'mine' ? n.by === m.by : tab === 'next' ? n.next : tab === '주의' ? (n.kind === '주의' || String(n.kind || '').indexOf('불편') >= 0) : n.kind === tab); });
+    async function add() { var t = String(txt || '').trim(); if (!t) { toast('적을 말을 넣어 주세요'); return; } try { if (CS) await setDoc('cs_notes', L.uid('n'), { cust: c.id, body: t, kind: toCs(kind || noteKind(t)), next: nextV, at: Date.now(), store: L.store(), by: m.by, byName: m.byName, amount: '', edits: [], helpful: {}, hidden: false, src: '판매 화면' }); else await setDoc('sale_notes', L.uid('n'), { cust: c.id, text: t, kind: kind || noteKind(t), next: nextV, at: Date.now(), store: L.store(), by: m.by, byName: m.byName, likes: {} }); setTxt(null); setKind(''); setNext(false); toast('특이사항을 남겼어요', kind || noteKind(t)); } catch (e) {} }
+    async function like(n) { var lk = Object.assign({}, n.likes || {}); if (lk[m.by || 'pc']) delete lk[m.by || 'pc']; else lk[m.by || 'pc'] = Date.now(); try { if (CS) { var o = {}; o[m.by || 'pc'] = lk[m.by || 'pc'] || null; await upd('cs_notes', n.id, { helpful: o }); } else await setDoc('sale_notes', n.id, Object.assign({}, n, { likes: lk, id: undefined })); } catch (e) {} }
+    async function hide(n) { try { await upd(COL, n.id, { hidden: !n.hidden }); toast(n.hidden ? '다시 보이게 했어요' : '숨겼어요'); } catch (e) {} }
     return html`<${Sheet} w=${900} h=${680} label="판매 · 손님" title=${'손님 특이사항 — ' + c.name + ' 님'} sub="좋은 기억 · 단서 · 불편 · 주의 — 모든 직원이 함께 봐요" onClose=${close} left=${html`<${Btn2} onClick=${function () { setTxt(''); }}>+ 새 기록 작성</${Btn2}>`} right=${html`<${Btn1} onClick=${close}>닫기</${Btn1}>`}>
       <div class="lv-tabs">${tabs.map(function (x) { return html`<button type="button" class=${tab === x[0] ? 'on' : ''} onClick=${function () { setTab(x[0]); }}>${x[1]}</button>`; })}</div>
       ${txt != null ? html`<div class="p1-card"><textarea class="p1-ta" id="p1-notetxt" value=${txt} onInput=${function (e) { setTxt(e.target.value); }} placeholder="무엇이든 한 칸에 — 갈래는 포스가 고르고 바꿀 수 있어요" autofocus></textarea><div class="p1-mini"><span>갈래</span>${NOTE_K.map(function (k) { var auto = !kind && String(txt).trim() && noteKind(txt) === k; return html`<button type="button" class=${kind === k || auto ? 'on' : ''} onClick=${function () { setKind(k); }}>${k}</button>`; })}<label class="lv-check"><input type="checkbox" checked=${nextV} onChange=${function (e) { setNext(e.target.checked); }} />다음 방문 한 줄</label><span style="flex:1"></span><button type="button" onClick=${function () { setTxt(null); }}>그만</button><button type="button" class="on" onClick=${add}>남기기</button></div></div>` : ''}
       ${!list.length ? html`<div class="lv-empty"><b>기록이 없어요</b><span>«+ 새 기록 작성»으로 첫 기억을 남겨 보세요</span></div>` : ''}
-      ${list.map(function (n) { var nl = Object.keys(n.likes || {}).length; return html`<div class="p1-kl" style="align-items:flex-start"><span style="width:150px" class="lv-small">${n.byName || '—'} · ${md(n.at)} · ${L.storeName(n.store)}</span><span class="grow">${edit != null && edit.id === n.id ? html`<input class="p1-in" style="width:100%" value=${edit.v} onInput=${function (e) { setEdit({ id: n.id, v: e.target.value }); }} />` : html`<span class="p1-tag ${n.kind === '주의' || n.kind === '불편' ? 'red' : n.kind === '좋은 기억' ? 'grn' : 'blue'}">${n.kind}</span> ${n.text}${n.next ? html` <span class="p1-tag org">다음 방문</span>` : ''}${(n.edits || []).length ? html` <span class="lv-small">(고침 · 원문: ${n.edits[0].from})</span>` : ''}${n.hidden ? html` <span class="p1-tag">숨김</span>` : ''}`}</span>
+      ${list.map(function (n) { var nl = Object.keys(n.likes || {}).length; return html`<div class="p1-kl" style="align-items:flex-start"><span style="width:150px" class="lv-small">${n.byName || '—'} · ${md(n.at)} · ${L.storeName(n.store)}</span><span class="grow">${edit != null && edit.id === n.id ? html`<input class="p1-in" style="width:100%" value=${edit.v} onInput=${function (e) { setEdit({ id: n.id, v: e.target.value }); }} />` : html`<span class="p1-tag ${n.kind === '주의' || n.kind === '불편' ? 'red' : n.kind === '좋은 기억' ? 'grn' : 'blue'}">${n.kind}</span> ${n.text}${n.next ? html` <span class="p1-tag org">다음 방문</span>` : ''}${(n.edits || []).length ? html` <span class="lv-small">(고침 · 원문: ${n.edits[0].from || n.edits[0].body})</span>` : ''}${n.hidden ? html` <span class="p1-tag">숨김</span>` : ''}`}</span>
         ${edit != null && edit.id === n.id ? html`<button type="button" class="p1-sm y" onClick=${function () { saveEditX(n, edit.v); }}>저장</button>` : html`<button type="button" class="p1-sm" onClick=${function () { setEdit({ id: n.id, v: n.text }); }}>수정</button>`}<button type="button" class="p1-sm" onClick=${function () { like(n); }}>좋아요 ${nl || ''}</button>${L.canSuper() ? html`<button type="button" class="p1-sm red" onClick=${function () { hide(n); }}>${n.hidden ? '보이기' : '숨김'}</button>` : ''}</div>`; })}
     </${Sheet}>`;
-    async function saveEditX(n, v) { try { await upd('sale_notes', n.id, { text: v, edits: (n.edits || []).concat([{ at: Date.now(), from: n.text, byName: m.byName }]) }); setEdit(null); toast('고쳤어요 (원문은 남아요)'); } catch (e) {} }
+    async function saveEditX(n, v) { try { if (CS) await upd('cs_notes', n.id, { body: v, edits: (n.edits || []).concat([{ at: Date.now(), body: n.text, byName: m.byName }]) }); else await upd('sale_notes', n.id, { text: v, edits: (n.edits || []).concat([{ at: Date.now(), from: n.text, byName: m.byName }]) }); setEdit(null); toast('고쳤어요 (원문은 남아요)'); } catch (e) {} }
   });
   L.sheet('p1-merge', function MergeSheet(p) {
     L.useStore(); var ix = L.useCustIndex(); var c = custOf((p.arg || {}).id); var ss = useState(1), step = ss[0], setStep = ss[1];
@@ -11537,6 +11546,7 @@ try {
         for (var a of arr(S.d.as)) if (a.cust === D.id) await upd('as', a.id, { cust: K.id, custName: K.name });
         for (var r of arr(S.d.resv)) if (r.cust === D.id) await upd('resv', r.id, { cust: K.id, custName: K.name });
         for (var n of arr(col('sale_notes'))) if (n.cust === D.id) await upd('sale_notes', n.id, { cust: K.id });
+        for (var n2 of arr(col('cs_notes'))) if (n2.cust === D.id) await upd('cs_notes', n2.id, { cust: K.id });
         var fill = {}; ['car', 'addr', 'bmonth', 'sex', 'nat'].forEach(function (k) { if (!K[k] && D[k]) fill[k] = D[k]; }); if (D.memo) fill.memo = [K.memo, D.memo].filter(Boolean).join(' / '); if (D.adj) fill.adj = { spend: ((K.adj || {}).spend || 0) + (D.adj.spend || 0), earned: ((K.adj || {}).earned || 0) + (D.adj.earned || 0) };
         await upd('customers', K.id, Object.assign(fill, { merges: (K.merges || []).concat([{ at: Date.now(), from: D.id, name: D.name, phone: D.phone, byName: m.byName }]) }));
         await upd('customers', D.id, { gone: true, mergedInto: K.id, mergedAt: Date.now() });
@@ -11732,7 +11742,7 @@ try {
       <${QInline} />
       <div class="lv-kv"><span>결제 금액</span><b>${won(t.due)}원</b></div>
       <${Field} label="받은 돈 (손님이 주신 돈)"><input class="lv-input big" id="lv-recv" inputmode="numeric" value=${recv ? won(r) : ''} onInput=${function (e) { setRecv(e.target.value); }} placeholder="0" autofocus /></${Field}>
-      <div class="lv-pills"><button type="button" onClick=${function () { setRecv(String(r)); toast(r >= t.due ? '거스름돈 ' + won(change) + '원' : '아직 ' + won(t.due - r) + '원 모자라요'); }}>잔액</button><button type="button" onClick=${function () { setRecv(String(t.due)); }}>딱 맞게</button>${[1000, 5000, 10000, 50000].map(function (v) { return html`<button type="button" onClick=${function () { setRecv(String(r + v)); }}>+${v >= 10000 ? v / 10000 + '만' : v / 1000 + '천'}</button>`; })}<button type="button" onClick=${function () { setRecv(''); }}>지우기</button></div>
+      <div class="lv-pills"><button type="button" id="p1-recv-all" class="p1-all" onClick=${function () { setRecv(String(t.due)); }}>전액 ${won(t.due)}</button>${[1000, 5000, 10000, 50000].map(function (v) { return html`<button type="button" onClick=${function () { setRecv(String(r + v)); }}>+${v >= 10000 ? v / 10000 + '만' : v / 1000 + '천'}</button>`; })}<button type="button" onClick=${function () { setRecv(''); }}>지우기</button></div>
       <div class="lv-kv"><span>거스름돈</span><b id="p1-change" class=${change < 0 ? 'red' : ''}>${r ? won(change) + '원' : '—'}</b></div>
       <${CrFields} v=${cr} set=${setCr} />
     </${Sheet}>`;
@@ -18420,7 +18430,7 @@ try {
     var mo = useState(0), mOff = mo[0], setMOff = mo[1]; var sl = useState({}), picked = sl[0], setPicked = sl[1];
     var f1 = useState(false), o1 = f1[0], s1 = f1[1]; var f2 = useState(false), o2 = f2[0], s2 = f2[1]; var f3 = useState(false), o3 = f3[0], s3 = f3[1]; var f4 = useState(false), o4 = f4[0], s4 = f4[1]; var f5 = useState(false), o5 = f5[0], s5 = f5[1];
     var gc = useState('neu'), gchip = gc[0], setGchip = gc[1]; var aq = useState(''), appQ = aq[0], setAppQ = aq[1];
-    var NX = L.col('cm_newx'); L.col('cm_applog'); L.col('cm_comeback'); L.col('cm_reasons'); L.col('sale_answers'); L.col('cm_contact'); L.col('sale_notes');
+    var NX = L.col('cm_newx'); L.col('cm_applog'); L.col('cm_comeback'); L.col('cm_reasons'); L.col('sale_answers'); L.col('cm_contact'); L.col('sale_notes'); L.col('cs_notes');
     if (!can('mgr')) return html`<${Shell} sid=${L.sidOf('customers/통계')}><${Gate} need="mgr" what="고객 통계" /></${Shell}>`;
     var ps = perStart(per); var today = L.today(); var tT = dayT(today); var ym = ymOf(Date.now());
     var scC = b.list.filter(function (c) { return inSc(b.home[c.id], sc); }); var cs = scC.filter(function (c) { return !c.migrated; });
@@ -18437,7 +18447,7 @@ try {
     var care = (sc === 'all' ? L.storeIds() : [sc]).map(function (st) {
       var ss = allS.filter(function (s) { return L.storeOf(s) === st && (s.day || D(s.at)) >= t14 && s.kind !== 'exchange'; }); var wc = ss.filter(function (s) { return s.cust; }).length;
       var cb = cbs.filter(function (x) { return x.store === st && !x.auto && D(x.at) >= t14; }).length; var ct = colArr('cm_contact').filter(function (x) { return x.store === st && D(x.at) >= t14; }).length;
-      var memo = colArr('sale_notes').filter(function (x) { return x.store === st && D(x.at) >= t14 && String(x.text || '').trim(); }).length;
+      var memo = colArr('sale_notes').concat(colArr('cs_notes')).filter(function (x) { return x.store === st && D(x.at) >= t14 && String(x.text || x.body || '').trim(); }).length;   /* 특이사항 — p3 cs_notes(기준) + p1 예전 sale_notes */
       return { st: st, pay: ss.length, cust: wc, p: pctR(wc, ss.length), cb: cb, wait: queueOf(st).length, done: ct, memo: memo };
     }).sort(function (a, c) { return (c.p == null ? -1 : c.p) - (a.p == null ? -1 : a.p); });
     /* 고객 방문 주기 (리듬통계 — 서버 새벽 계산값 그대로 · 대상 = 4번+ · 1년 안) */
@@ -22184,7 +22194,8 @@ try {
     </${L.Sheet}>`;
   }
 
-  /* ── 마감 시재확인 — ⓪ 카드 → ① 시재 · 이유 → ② 일마감 복사 → ③ 마감 QR → 퇴근 ──
+  /* ── 마감 시재확인 — ⓪ 카드 → ① 시재 · 이유 → ② 마감 QR → ③ 퇴근 → ④ 일마감 복사(맨 마지막 · 2026-11-09 팀장 «일마감 복사가 맨 마지막») ──
+     W포스 11-03(#577): 마감 QR이 저장되는 순간의 일마감 글이 찍은 폰으로 가서 거기서 고치고 복사 · PC는 «모두 퇴근» · 마감 완료 창에 [지금 복사] ──
      저장: cash.close + mn_close/<매장>_<날짜> = {store, day, status:'done'|'cancelled', how, at, by, byName, cash:{…}, card:{…}, sales:{…}, report, staff, qr:{<직원>:시각}} */
   function isLastDay(d) { return mEnd(d) === d; }
   function closeDraftKey(st, d) { return 'vw-p6-close-' + L.cashKey(d, st); }
@@ -22203,8 +22214,8 @@ try {
     var keepOk = keep >= cd.reserve || (F.keepWhy || '').trim().length >= 5;   /* 기준보다 적게 남기면 사유 5자 이상 (v-13) · 센 돈보다 많으면 한 번 더 묻기만 */
     var cashOk = C.touched && reasonOk && keepOk;
     var ready = cs.ok && cashOk; var redo = !!(cd.doc.close);
-    var steps = [['⓪ 카드 맞추기', cs.ok], ['① 시재 세기 · 차액 이유', cashOk], ['② 일마감 복사', copied], ['③ 마감 QR 찍기 (또는 QR 없이)', false], ['퇴근 QR / 모두 퇴근', false]];
-    var nowStep = !cs.ok ? 0 : !cashOk ? 1 : !copied ? 2 : 3;
+    var steps = [['⓪ 카드 맞추기', cs.ok], ['① 시재 세기 · 차액 이유', cashOk], ['② 마감 QR 찍기 (또는 QR 없이)', false], ['③ 퇴근 QR / 모두 퇴근', false], ['④ 일마감 복사 (맨 마지막)', copied]];
+    var nowStep = !cs.ok ? 0 : !cashOk ? 1 : 2;
     function jump(id) { var e = document.getElementById(id); if (e && e.scrollIntoView) e.scrollIntoView({ block: 'center' }); }
     function text() { var lv = { diff: C.touched ? diff : null, why: diff ? F.why : '', memo: F.memo1 }; return isLastDay(d) ? monthText(st, d, lv) : dayText(st, d, lv); }
     async function save(how, who) {
@@ -22233,7 +22244,7 @@ try {
     }
     var block = []; if (!cs.ok) block.push(['카드 맞추러 가기 ↑', 'p6-c-card', '카드 대사가 안 끝났어요']); if (!C.touched) block.push(['서랍 돈 세러 가기 ↑', 'p6-c-cash', '서랍 돈을 아직 안 셌어요']); else if (!reasonOk) block.push(['차액 이유 고르러 가기 ↑', 'p6-c-why', '차액 이유를 안 골랐어요']); else if (!keepOk) block.push(['준비금 사유 적으러 가기 ↑', 'p6-c-keep', '준비금이 기준보다 적어요']);
     var under = html`<div style="padding:10px 28px 0"><nav class="p6-stepbar" aria-label="마감 순서">${steps.map(function (s, i) { return html`<span class=${(s[1] ? 'done ' : '') + (i === nowStep ? 'now' : '')}><i>${s[1] ? '✓' : i + 1}</i>${s[0]}</span>`; })}</nav></div>`;
-    return html`<${L.Sheet} w=${1180} h=${700} label="돈 · 시재" title=${'마감 시재확인' + (redo ? ' (다시 하기)' : '') + (isLastDay(d) ? ' · 말일 — 월마감' : '')} sub=${stName(st) + ' · ' + mdw(d) + ' · 카드 맞추기 → 시재 세기 · 차액 이유 → 일마감 복사 → 마감 QR로 마감'} onClose=${L.closeSheet} under=${under}
+    return html`<${L.Sheet} w=${1180} h=${700} label="돈 · 시재" title=${'마감 시재확인' + (redo ? ' (다시 하기)' : '') + (isLastDay(d) ? ' · 말일 — 월마감' : '')} sub=${stName(st) + ' · ' + mdw(d) + ' · 카드 맞추기 → 시재 세기 · 차액 이유 → 마감 QR → 퇴근 → 일마감 복사(맨 마지막)'} onClose=${L.closeSheet} under=${under}
       left=${html`<${L.Btn2} disabled=${busy} onClick=${function () { save('noqr'); }}>폰이 안 돼요 — QR 없이 저장</${L.Btn2}><${L.Btn2} onClick=${L.closeSheet}>취소</${L.Btn2}>`}
       right=${html`<span class="lv-small">${ready ? '근무자가 폰 W출근으로 QR을 찍으면 마감 저장 · 판매 잠김' : '남은 것: ' + block.map(function (b) { return b[2]; }).join(' · ')}</span><${L.Btn1} disabled=${busy || !ready} onClick=${function () { save('qr', (wl[0] || {}).staff || (L.op() || {}).id || ''); }}>마감 QR 찍기 (체험판)</${L.Btn1}>`}>
       <div class="p6-close2">
@@ -22253,10 +22264,10 @@ try {
           <div class="lv-row"><${L.Btn2} small icon="printer" onClick=${function () { printHtml('마감 정산서 ' + d, slipHtml(st, d, true, C.touched ? { amount: C.value, keep: keep, diff: diff, keepWhy: F.keepWhy, why: diff ? F.why : '', memo1: F.memo1 } : null)); L.toast('정산서 미리 출력 — 인쇄 창을 열었어요'); }}>마감 정산서 미리 출력</${L.Btn2}><input class="lv-input" id="p6-c-memo" style="flex:1" value=${F.memo || ''} onInput=${function (e) { setF('memo', e.target.value); }} placeholder="메모 (선택)" /></div>
         </div>
         <div class="p6-cr">
-          <div class="lv-row"><h4 style="margin:0">${isLastDay(d) ? '② 월마감 · 일마감' : '② 일마감'}</h4><span style="flex:1"></span><${L.Btn2} small onClick=${function () { L.openSheet(isLastDay(d) ? 'p6-month' : 'p6-day', { store: st, day: d, back: 'p6-close' }); }}>보고서 전체 보기</${L.Btn2}></div>
+          <div class="lv-row"><h4 style="margin:0">${isLastDay(d) ? '월마감 · 일마감 적을 칸' : '일마감 적을 칸'}</h4><span style="flex:1"></span><${L.Btn2} small onClick=${function () { L.openSheet(isLastDay(d) ? 'p6-month' : 'p6-day', { store: st, day: d, back: 'p6-close' }); }}>보고서 전체 보기</${L.Btn2}></div>
           <${DayFields} st=${st} d=${d} compact=${true} />
-          <${L.Btn2} onClick=${function () { var tx = text(); copy(tx); markCopied(st, d, tx); setCopied(true); }}>${copied ? '✓ 복사함 — 다시 복사' : '일마감 복사 — 카톡에 붙여넣기'}</${L.Btn2}>
-          <h4>③ 마감 QR</h4>
+          <span class="lv-small" id="p6-c-copylast">${copied ? '✓ 일마감 글을 복사했어요 — 바뀐 게 있으면 퇴근 뒤에 다시 복사해요' : '📋 일마감 복사는 맨 마지막 — 마감 QR · 퇴근으로 숫자가 확정된 뒤에 해요'}</span>
+          <h4>② 마감 QR</h4>
           ${ready ? html`<div class="p6-qrbox" id="p6-c-qr"><${QR} seed=${key + ':' + slot} size=${132} /><div class="p6-qrlist"><b>20초마다 바뀌어요 · 찍을 순서</b>${wl.length ? wl.map(function (w, i) { return html`<div><span>${i + 1}. ${w.name}</span><${L.Btn2} small onClick=${function () { save('qr', w.staff); }}>(체험판) 폰으로 찍음</${L.Btn2}></div>`; }) : html`<span class="lv-small">출근 기록이 없어요 — QR 없이 저장하세요</span>`}<span class="lv-small">체험판 QR — 실제 W출근 연결은 교체 때</span></div></div>`
             : html`<div class="p6-warnbox" id="p6-c-block"><b>QR이 아직 안 나와요</b>${block.map(function (b) { return html`<button type="button" class="lv-link" onClick=${function () { jump(b[1]); }}>${b[2]} · ${b[0]}</button>`; })}</div>`}
         </div>
@@ -22274,10 +22285,13 @@ try {
     L.useStore(); var a = p.arg || {}; var st = a.store || L.store(), d = a.day || today(); var slot = useSlot(20);
     var wl = workerList(st, d); var allOut = wl.length > 0 && wl.every(function (w) { return !!w.out; });
     useEffect(function () { if (!allOut) return; var t = setTimeout(function () { L.openSheet('p6-blocked', { mode: 'bye', store: st, day: d }); }, 5000); return function () { clearTimeout(t); }; }, [allOut]);
-    return html`<${L.Sheet} w=${600} h=${600} label="돈 · 시재" title="퇴근 QR (마감 끝)" sub="마감 뒤 각자 폰으로 찍고 퇴근 시각을 남겨요 · 20초마다 바뀜" onClose=${L.closeSheet}
-      left=${html`<${L.Btn2} onClick=${function () { lsSet('vw-p6-leave-later', { store: st, day: d, at: Date.now() + 600000 }); L.closeSheet(); L.toast('10분 뒤 다시 띄울게요'); }}>나중에 (10분)</${L.Btn2}>`} right=${html`<${L.Btn1} onClick=${L.closeSheet}>닫기</${L.Btn1}>`}>
+    var dd = dailyDoc(st, d); var copiedAt = dd.copiedAt || 0;
+    function copyNow() { var tx = isLastDay(d) ? monthText(st, d) : dayText(st, d); copy(tx); markCopied(st, d, tx); }
+    return html`<${L.Sheet} w=${600} h=${640} label="돈 · 시재 · 마감 ③ → ④" title="퇴근 QR (마감 끝)" sub="마감 뒤 각자 폰으로 찍고 퇴근 시각을 남겨요 · 20초마다 바뀜 · 맨 마지막에 일마감 복사" onClose=${L.closeSheet}
+      left=${html`<${L.Btn2} onClick=${function () { lsSet('vw-p6-leave-later', { store: st, day: d, at: Date.now() + 600000 }); L.closeSheet(); L.toast('10분 뒤 다시 띄울게요'); }}>나중에 (10분)</${L.Btn2}>`} right=${copiedAt ? html`<${L.Btn2} onClick=${copyNow}>다시 복사</${L.Btn2}><${L.Btn1} onClick=${L.closeSheet}>닫기</${L.Btn1}>` : html`<${L.Btn2} onClick=${L.closeSheet}>닫기</${L.Btn2}><${L.Btn1} onClick=${copyNow}>④ 일마감 복사 — 마지막</${L.Btn1}>`}>
       <div class="p6-qrbox"><${QR} seed=${'out:' + st + d + ':' + slot} size=${170} /><div class="p6-qrlist" id="p6-leave-list"><b>근무자 ${wl.length}명</b>${wl.length ? wl.map(function (w) { return html`<div><span>${w.name}${w.in ? ' · ' + hm(w.in) + ' 출근' : ''}</span>${w.out ? html`<span class="lv-tag green">✓ ${hm(w.out)} 퇴근</span>` : html`<${L.Btn2} small onClick=${function () { markOut(st, d, w).catch(function () {}); }}>(체험판) 폰으로 찍음</${L.Btn2}>`}</div>`; }) : html`<span class="lv-small">오늘 출근 기록이 없어요</span>`}<span class="lv-small">체험판 QR — 실제 W출근 연결은 교체 때</span></div></div>
       ${allOut ? html`<div class="p6-okline" id="p6-allout">모두 퇴근했어요 — 5초 뒤 닫히고 30초 뒤 로그아웃해요</div>` : ''}
+      <div class=${copiedAt ? 'p6-okline' : 'p6-warnbox'} id="p6-leave-copy">${copiedAt ? '✓ ④ 일마감 글 ' + hm(copiedAt) + ' 복사함 — 카톡 보고방에 붙여넣기(Ctrl+V)' : html`<b>④ 마지막 — 일마감 복사</b><span>마감 숫자가 확정됐어요 · [일마감 복사]를 눌러 카톡 보고방에 붙여넣어 주세요</span>`}</div>
     </${L.Sheet}>`;
   }
   /* ── 마감 QR 막힘 · 모두 퇴근 · 자동 로그아웃 ── */
@@ -28828,7 +28842,7 @@ try {
         report: txt, staff: staffL, memo: memo.trim(), flow: 'p9', counted: counted, expect: cf.expect, diff: diff };
       try { await upsert('cash', key, { close: rec }); await L.write(function (db) { return db.collection('mn_close').doc(key).set(doc); }); setDayLock(true, st); if (b.by) { try { await clockOut(b.by, st, '마감 ' + (qr ? 'QR' : 'QR 없이')); } catch (e) {} } lsSet('vw-p9-closedraft', null); setFlow(function (f) { f.close.done = Date.now(); f.close.phase = 'done'; }); close(); open('p9-closedone'); } catch (e) { bz[1](false); }
     }
-    var order = [['⓪ 카드 맞추기', cardN ? (cardOk ? '✓ ' + cardN + '건' : '오늘 카드 ' + cardN + '건') : '카드 결제 없음 — 넘어감', !cardN || cardOk], ['① 시재 · 내일 준비금', has ? won(counted) + '원' : '권종별 장수 또는 총액', has], ['② 일마감 복사', r.copiedAt ? '✓ ' + hm(r.copiedAt) : '카톡에 붙여넣기', !!r.copiedAt], ['③ 마감 QR', '근무자 한 명이 찍기', false]];
+    var order = [['⓪ 카드 맞추기', cardN ? (cardOk ? '✓ ' + cardN + '건' : '오늘 카드 ' + cardN + '건') : '카드 결제 없음 — 넘어감', !cardN || cardOk], ['① 시재 · 내일 준비금', has ? won(counted) + '원' : '권종별 장수 또는 총액', has], ['② 마감 QR', '근무자 한 명이 찍기', false], ['③ 일마감 복사', r.copiedAt ? '✓ ' + hm(r.copiedAt) : '맨 마지막 — 마감 뒤', !!r.copiedAt]];
     return html`<${Sheet} w=${1180} h=${724} label="마감하기 · 마감 흐름 ③(자동) · 마감 준비 알약" title="마감 시재확인" sub=${L.storeName(st) + ' · ' + dLabel(d) + ' — 한 창에서 마감'} onClose=${close}
       under=${html`<div style="padding:0 28px 8px"><nav class="lv-order inside" aria-label="순서" style="grid-template-columns:repeat(4,1fr)">${order.map(function (o, i) { return html`<span class=${!o[2] && order.slice(0, i).every(function (x) { return x[2]; }) ? 'now' : ''}><span class=${'n' + (o[2] ? ' done' : '')}>${o[2] ? '✓' : i}</span><span class="tx"><b>${o[0]}</b><span>${o[1]}</span></span></span>`; })}</nav></div>`}
       left=${html`<${Btn2} onClick=${close}>취소</${Btn2}><${Btn2} disabled=${bz[0]} onClick=${function () { save(false); }}>폰이 안 돼요 — QR 없이 저장</${Btn2}>`} right=${html`<${Btn1} disabled=${bz[0] || !has} onClick=${function () { save(true); }}>${has ? '🌙 QR 찍음 · 마감 저장 (체험)' : '센 금액을 넣으면 QR이 나와요'}</${Btn1}>`}>
@@ -28879,11 +28893,14 @@ try {
     if (!lk) return html`<${Sheet} w=${560} h=${300} label="판매" title="판매가 열려 있어요" onClose=${close}><span class="lv-note">이 PC는 오늘 마감으로 잠기지 않았어요.</span></${Sheet}>`;
     var n = closeNums(cl || {}); var sm = sumSales(salesOf(today(), st));
     var diffTxt = !cl ? '기록 없음' : !n.diff ? '정확히 맞았습니다' : (n.diff > 0 ? '+' + won(n.diff) + ' 남음' : won(n.diff) + ' 부족');
+    var rp = repOf(st, today());   /* 마감 맨 마지막 = 일마감 복사 (W포스 #377 «마감 완료 작은 창에 [📋 지금 복사]» · 2026-11-09 팀장 «일마감 복사가 맨 마지막») */
+    function copyRep() { copy((cl && cl.report) || dayReportText(st, today())); saveRep(st, today(), { copiedAt: Date.now() }).catch(function () {}); setLeft(30); }
     return html`<${Sheet} w=${560} h=${520} label="마감 저장 뒤 이 PC · 마감한 날 다시 로그인" title="마감 완료" sub=${(cl && cl.byName ? cl.byName + '님, ' : '') + '오늘 하루도 고생 많으셨습니다 · ' + L.storeName(st) + ' · ' + dLabel()} onClose=${function () { close(); go('S3-history'); }}
-      left=${html`<${Btn2} onClick=${function () { setLeft(30); on.current = false; lsSet('vw-p9-printdoc', { st: st, d: today(), counted: n.counted, expect: n.expect, diff: n.diff, keep: n.keep, memo: n.memo, cf: cashFlow(today(), st), bills: null }); close(); open('p9-print', { back: 'p9-locked' }); }}>🧾 정산서 다시 뽑기</${Btn2}>${conf ? html`<${Btn2} red onClick=${function () { on.current = false; setDayLock(false, st); close(); toast('영업을 다시 열었어요', '파신 뒤에는 반드시 마감을 한 번 더 해주세요'); }}>네, 영업 다시 열기</${Btn2}>` : html`<${Btn2} onClick=${function () { on.current = false; setConf(true); }}>영업 재개</${Btn2}>`}`}
-      right=${html`<${Btn1} onClick=${function () { on.current = false; logout('로그아웃했어요 — 다음 근무자 교대'); close(); }}>🔒 지금 로그아웃</${Btn1}>`}>
+      left=${html`${rp.copiedAt ? '' : html`<${Btn1} onClick=${copyRep}>📋 일마감 복사 — 마지막</${Btn1}>`}<${Btn2} onClick=${function () { setLeft(30); on.current = false; lsSet('vw-p9-printdoc', { st: st, d: today(), counted: n.counted, expect: n.expect, diff: n.diff, keep: n.keep, memo: n.memo, cf: cashFlow(today(), st), bills: null }); close(); open('p9-print', { back: 'p9-locked' }); }}>🧾 정산서 다시 뽑기</${Btn2}>${conf ? html`<${Btn2} red onClick=${function () { on.current = false; setDayLock(false, st); close(); toast('영업을 다시 열었어요', '파신 뒤에는 반드시 마감을 한 번 더 해주세요'); }}>네, 영업 다시 열기</${Btn2}>` : html`<${Btn2} onClick=${function () { on.current = false; setConf(true); }}>영업 재개</${Btn2}>`}`}
+      right=${html`<${rp.copiedAt ? Btn1 : Btn2} onClick=${function () { on.current = false; logout('로그아웃했어요 — 다음 근무자 교대'); close(); }}>🔒 지금 로그아웃</${rp.copiedAt ? Btn1 : Btn2}>`}>
       <div class="p9-sum3"><${Kv} k="오늘 매출" v=${won(sm.net) + ' · ' + sm.n + '건'} /><${Kv} k="서랍에 센 현금" v=${cl ? won(n.counted) + '원' : '-'} /><${Kv} k="차액" v=${diffTxt} c=${n.diff ? 'red' : ''} /></div>
       ${conf ? html`<div class="lv-warnline">영업을 다시 여시겠습니까? — 마감 뒤에 판매하시면 오늘 서랍 금액이 다시 안 맞습니다. 파신 뒤에는 반드시 마감을 한 번 더 해주세요.</div>` : html`<span class="lv-note">판매가 잠겼습니다. 이 PC에서만 잠긴 것이고, 내일이 되면 저절로 풀립니다. 이제 퇴근하셔도 됩니다.</span>`}
+      <span class=${rp.copiedAt ? 'lv-small' : 'lv-warnline'} id="p9-lk-copy">${rp.copiedAt ? '✓ 일마감 글 ' + hm(rp.copiedAt) + ' 복사함 · 바뀐 게 있으면 [다시 복사]' : '④ 마지막 — 일마감을 아직 복사 안 했어요 · [📋 일마감 복사]를 눌러 카톡 보고방에 붙여넣어 주세요'}${rp.copiedAt ? html` <button type="button" class="lv-link" onClick=${copyRep}>다시 복사</button>` : ''}</span>
       ${me() && on.current ? html`<div class="lv-term"><b id="p9-left">${Math.max(0, left)}초 뒤 자동 로그아웃</b></div>` : ''}
     </${Sheet}>`;
   });
