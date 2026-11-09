@@ -510,6 +510,37 @@ button.lv-round{border:0; padding:0; cursor:pointer}
 .p1-phnotes{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:calc(12px*var(--rk));background:var(--k-bg1)}.p1-phnotes span{font-size:calc(13px*var(--fk))}.p1-phnotes .warn{color:#b42318;font-weight:700}
 .p1-phsec{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:calc(12px*var(--rk));box-shadow:inset 0 0 0 1px var(--k-line)}.p1-phsec>b{font-size:calc(13px*var(--fk))}
 .p1-phacts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.p1-phacts .lv-btn2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 기억 한 줄 (2026-11-09 «사람을 담는 포스» B안) — 직원이 쓰지 않아도 뜸: 저절로(구매 기록) · 지난번 누른 답 · 노란 칸 하나 · 글자 대비 7:1 이상 */
+.p1-cue{flex:none;display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:calc(14px*var(--rk));background:#fff4c2;color:#3d3100}
+.p1-cue .k{font-size:calc(12px*var(--fk));font-weight:700;color:#5c4a00}
+.p1-cue b{font-size:calc(15.5px*var(--fk));line-height:1.4}
+.p1-cue .p1-mini{gap:6px}
+.p1-cue .p1-sm{min-height:40px;background:transparent;border:1px solid #a89a5c;color:#3d3100 !important}
+.p1-cue .p1-sm.dk,.p1-habit .p1-sm.dk{background:var(--k-inv) !important;color:#fff !important;border:0}
+.p1-habit{flex:none;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:calc(12px*var(--rk));background:var(--k-fill)}
+.p1-habit .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.p1-habit small{font-size:calc(12px*var(--fk));color:var(--k-ink2);font-weight:700}.p1-habit b{font-size:calc(15px*var(--fk))}
+.p1-habit .p1-sm{min-height:44px;padding:0 16px}
+/* 오랜만 손님 단계별 창 · 기억 남기기 누르기 — 누르는 칸은 44px 이상 */
+.p1-bk{gap:12px}
+.p1-bk-top{display:flex;flex-direction:column;gap:10px}
+.p1-bk-gap{align-self:flex-start;padding:6px 12px;border-radius:999px;background:#fff0e0;color:#5a2b00;font-size:calc(13px*var(--fk));font-weight:700}
+.p1-bk-opts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.p1-bk-chip{min-height:48px;padding:0 18px;border-radius:999px;border:1px solid var(--k-line2);background:var(--k-card);color:inherit;font:inherit;font-size:calc(15px*var(--fk));font-weight:700;cursor:pointer}
+.p1-bk-chip.on{background:var(--k-inv) !important;border-color:var(--k-ink) !important;color:#fff !important}
+.p1-bk-chip.type{border-style:dashed}
+.p1-bk-chip.ghost{border-style:dashed;font-weight:500}
+.p1-bk-chip:focus-visible{outline:3px solid #0a64d6;outline-offset:2px}
+.p1-bk-groups{display:flex;flex-direction:column;gap:10px;overflow:auto;min-height:0}
+.p1-bk-g{display:flex;align-items:flex-start;gap:12px}.p1-bk-g>b{width:96px;flex:none;padding-top:13px;font-size:calc(14px*var(--fk));color:var(--k-ink2)}
+.p1-bk-g .p1-bk-chip{min-height:44px;padding:0 15px}
+.p1-bk-hint{align-self:center}
+.p1-mt{display:flex;flex-direction:column;gap:12px}
+.p1-mt-row{display:flex;align-items:flex-start;gap:12px}.p1-mt-row>b,.p1-mt-row>label{width:132px;flex:none;padding-top:12px;font-size:calc(15px*var(--fk))}
+.p1-mt-row .p1-bk-opts{flex:1;min-width:0}
+.p1-mt-q{width:220px;height:48px}
+.p1-mt-tip{margin-left:144px}
+.p1-mt-line{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}.p1-mt-line .lv-input{height:52px}
+.p1-mt-warn{padding:10px 12px;border-radius:calc(10px*var(--rk));background:#fff0e0;border:1px solid #e3a15f;color:#5a2b00;font-size:calc(13.5px*var(--fk));font-weight:700}
 
 /* 묶음 p10-work */
 /* p10 할 일 · 인수인계 · 권한 · 자료실 · 설정 */
@@ -1650,6 +1681,21 @@ button.p4-tag{cursor:pointer}
 .p6-main > .p6-tiles .p6-tile{background:var(--k-card)}
 .p6-card > .lv-tag{align-self:flex-start}
 #live .p6-tile.minus b{color:var(--k-red)}
+/* 퇴근 창 «오늘의 나» (2026-11-09) — 왼쪽 오늘 내가 이어 간 관계 · 마음 한 번 / 오른쪽 퇴근 QR · ④ 일마감 복사 */
+.p6-leave2{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;min-height:0}
+.p6-leave-r{display:flex;flex-direction:column;gap:12px;min-width:0}
+.p6-me{display:flex;flex-direction:column;gap:10px;min-width:0}
+.p6-me-t{font-size:calc(22px*var(--fk));font-weight:800}
+.p6-me-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.p6-me-tiles>div{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:calc(14px*var(--rk));background:var(--k-fill)}
+.p6-me-tiles>div.y{background:#fff4c2;color:#3d3100}
+.p6-me-tiles span{font-size:calc(12.5px*var(--fk));font-weight:700}
+.p6-me-tiles b{font-size:calc(26px*var(--fk));font-weight:800}
+.p6-mood{display:flex;flex-direction:column;gap:6px;padding:14px;border-radius:calc(16px*var(--rk));box-shadow:inset 0 0 0 1px var(--k-line)}
+.p6-mood>b{font-size:calc(15px*var(--fk))}
+.p6-mood-b{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.p6-mood-b button{min-height:48px;border-radius:calc(12px*var(--rk));border:1px solid var(--k-line2);background:var(--k-card);color:inherit;font:inherit;font-size:calc(15px*var(--fk));font-weight:700;cursor:pointer}
+.p6-mood-b button.skip{border:0;background:transparent;font-weight:500}
 
 /* 묶음 p7-ops */
 /* p7-ops — 회사 · 매장 운영 (색은 var(--k-*) 또는 기본 색만) */
@@ -10342,6 +10388,17 @@ try {
   var Q_ORDER = ['where', 'other', 'bday'], Q_OTHER = { '다른 가게도': 1, '온라인도': 1, '가끔 다른 매장': 1 };
   var BACK_A = ['우리 다른 지점', '다른 가게', '끊었다 다시', '이사·출장', '사용 주기가 길어서', '못 물어봄'];
   var NOTE_K = ['좋은 기억', '기억 단서', '불편', '도움', '주의'];
+  /* 오랜만 손님 — 결제 뒤 단계별 창 (2026-11-09 팀장 «팝업창으로 단계별로 · 질문이 너무 적어 · 직접 입력 옵션도»)
+     운영 W포스 9/30~11/9 답 109건 중 «사용 주기가 길어서» 46 · «말 안 함» 30 — 고를 게 6개뿐 · 어디서와 왜가 한 질문에 섞여 한쪽으로 몰림 → 셋으로 나눔 */
+  var BK_WHERE = ['우리 다른 지점', '다른 전자담배 가게', '편의점', '온라인 · 해외', '지인 · 선물', '안 샀어요 (쉬었음)', '기억 안 남'];
+  var BK_WHY = [['쓰는 양', ['사용 주기가 길어서', '줄이는 중', '쉬었다가 다시', '다른 담배로 바꿨었음']], ['생활', ['이사', '이직 · 새 직장', '여행 · 출장', '군 복무', '바빠서']], ['가게', ['더 가까운 가게가 생겨서', '가격 때문에', '원하는 제품이 없어서', '영업시간이 안 맞아서', '주차가 불편해서']], ['제품 · 응대', ['맛 · 제품이 안 맞아서', '기기 고장 · 불량', '응대가 아쉬워서']]];
+  var BK_CAME = ['가까워서', '지나가다가', '아는 직원이 있어서', '원하는 제품이 있어서', '포인트 · 리뷰 혜택', '지도 · 리뷰 보고', '지인 추천', '그냥'];
+  var BK_STEP = [['wh', '어디서', '그동안 어디서 사셨대요?', '그동안 어디서 사셨어요?', '하나만 골라요 · 누르면 바로 다음'], ['why', '왜', '왜 한동안 안 오셨대요?', '요즘 통 안 보이셨네요, 바쁘셨어요?', '여러 개 골라도 돼요'], ['came', '다시 온 계기', '오늘은 어떻게 다시 오셨대요?', '오늘은 어떻게 다시 들러 주셨어요?', '하나만 골라요 · 누르면 끝']];
+  /* 기억 남기기 — 쓰지 않고 누르기 (팀장 «사람을 남기는 것조차 사람» · 운영 26일: 결제 때 누른 답 737건 · 직접 쓴 글 13건) · 단추 말은 손님이 봐도 괜찮은 말만 */
+  var MT = [{ k: 'taste', lb: '맛 취향', kind: '좋은 기억', o: ['시원한 맛', '달콤한 맛', '과일 맛', '담배 맛', '연하게', '세게'] }, { k: 'next', lb: '다음에 물어볼 것', kind: '다음 방문', o: ['여행', '출장', '이사', '시험', '새 직장', '군 복무'] }, { k: 'pain', lb: '불편했던 것', kind: '불편 · 도움', o: ['누수', '탄 맛', '충전', '기기 고장', '맛이 변함'] }];
+  var NEXT_SAY = { '여행': '여행은 잘 다녀오셨어요?', '출장': '출장은 잘 다녀오셨어요?', '이사': '이사는 잘 하셨어요?', '시험': '시험은 잘 보셨어요?', '새 직장': '새 직장은 좀 어떠세요?', '군 복무': '휴가 나오셨어요?' };
+  var JUDGE = /까다롭|까다로운|진상|이상한 사람|짜증나|싸가지|무례한|별로인 손님|블랙/;
+  var LASTPAID = null;
   /* 주의 표시 — W포스 CUST_FLAGS 순서 그대로(판매 금지 · 블랙리스트 · 응대 주의 · 미성년자 의심 · 신분증 확인 요망) + 약속 v2 의 rude(폭언 · 무례, W포스에는 없음 — p3 칸) · 판매 금지 · 블랙리스트만 결제 때 «그래도 결제할까요?» */
   var FLAGS = [['ban', '판매 금지', '팔면 안 되는 손님'], ['black', '블랙리스트', '출입·거래 거절'], ['care', '응대 주의', '말이 험해지는 분'], ['minor', '미성년자 의심', '나이 확인 필요'], ['idcheck', '신분증 확인 요망', '올 때마다 확인'], ['rude', '폭언 · 무례', '직원에게 험하게 대한 적 있음']];
   var GRADE_N = ['자동', '브론즈', '실버', '골드', 'VIP'];
@@ -10355,6 +10412,49 @@ try {
   /* 손님 특이사항 — 손님 묶음(p3) cs_notes{body} 가 기준 (W포스 cust_notes 한 표) · p1 예전 sale_notes{text} 도 같이 · 새 글이 위 */
   function custNotes(id) { var a = arr(col('cs_notes')).filter(function (n) { return n.cust === id && !n.hidden; }).map(function (n) { return { t: n.body || '', kind: n.kind || '', at: n.at || 0 }; }).concat(arr(col('sale_notes')).filter(function (n) { return n.cust === id && !n.hidden; }).map(function (n) { return { t: n.text || '', kind: n.kind || '', at: n.at || 0 }; })); return a.filter(function (n) { return n.t; }).sort(function (x, y) { return (y.kind === '주의') - (x.kind === '주의') || y.at - x.at; }); }
   function ciOf(ix, id) { return ix[id] || { bal: 0, earned: 0, spend: 0, visits: 0, last: 0, hist: [], sales: [] }; }
+  /* ── 기억 한 줄 — 직원이 쓰지 않아도 뜬다: 저절로(구매 기록) · 지난번 누른 답(cs_notes.tap{k, v[], codes[]}) ── */
+  function shortN(n) { return String(n || '').replace(/^\s*\([^)]*\)\s*/, ''); }
+  function memTaps(cid, k) { return arr(col('cs_notes')).filter(function (n) { return n.cust === cid && !n.hidden && n.tap && (!k || n.tap.k === k); }).sort(function (a, b) { return (b.at || 0) - (a.at || 0); }); }
+  function lastBuyAt(o) { return o && o.sales && o.sales[0] ? o.sales[0].at || 0 : 0; }
+  /* ① 손님을 찾은 순간 — 지난번 «다음에 물어볼 것»(누른 답 · 예전 «다음 방문» 글) · 마지막 구매 때(또는 그 뒤) 남긴 것만 → 오늘 사고 나면 다시 안 뜸 */
+  function greetCue(c, o) {
+    var n = arr(col('cs_notes')).filter(function (x) { return x.cust === c.id && !x.hidden && ((x.tap && x.tap.k === 'next') || (!x.tap && (x.kind === '다음 방문' || x.next))); }).sort(function (a, b) { return (b.at || 0) - (a.at || 0); })[0];
+    if (!n || (n.at || 0) < lastBuyAt(o) - 6 * 3600e3) return null;
+    if (n.tap) { var v = (n.tap.v || [])[0] || ''; return { key: 'g' + n.id, src: '지난번 누른 답 · 다음에 물어볼 것 «' + (n.tap.v || []).join(' · ') + '»', text: '“' + (NEXT_SAY[v] || v + ' — 어떻게 되셨어요?') + '”' }; }
+    return n.body ? { key: 'g' + n.id, src: '지난번 남긴 글 · ' + md(n.at) + (n.byName ? ' · ' + n.byName : ''), text: n.body } : null;
+  }
+  /* 지난번 «다음에 찾을 제품»(누른 답) — 장바구니에 없고 상품표에 있으면 */
+  function wantCue(c, o) {
+    var w = memTaps(c.id, 'want')[0]; if (!w || (w.at || 0) < lastBuyAt(o) - 6 * 3600e3) return null; var prods = L.products(); var off = L.cart.cueOff || {};
+    var cs = (w.tap.codes || []).filter(function (cc) { return prods[cc] && !L.cart.lines.some(function (l) { return l.c === cc; }) && !off['w' + cc]; }); if (!cs.length) return null;
+    var p = prods[cs[0]]; var q = L.stockMap()[cs[0]] || 0;
+    return { key: 'w' + cs[0], src: '지난번 누른 답 · 다음에 찾을 제품', text: '지난번 찾으신 상품 — «' + shortN(p.n) + '» · 지금 재고 ' + q + '개', act: q > 0 ? [['담기', function () { pushLine(p, 1); }]] : [] };
+  }
+  /* 늘 사시는 것 — 최근 4번 구매 중 3번 이상 같은 상품 (구매 기록만 · 직원 할 일 없음) */
+  function habitOf(o) {
+    var ss = ((o && o.sales) || []).filter(function (s) { return !s.practice && L.saleSums(s).net > 0; }).slice(0, 4); if (ss.length < 3) return null;
+    var n = {}, nm = {}, q = {}; ss.forEach(function (s) { var seen = {}; (s.lines || []).forEach(function (l) { if (l.svc || l.c === TEST_C || seen[l.c]) return; seen[l.c] = 1; n[l.c] = (n[l.c] || 0) + 1; nm[l.c] = l.name; if (q[l.c] == null) q[l.c] = l.qty; }); });
+    var top = Object.keys(n).sort(function (a, b) { return n[b] - n[a]; })[0]; if (!top || n[top] < 3) return null;
+    var run = 0; for (var i = 0; i < ss.length; i++) { if ((ss[i].lines || []).some(function (l) { return l.c === top; })) run++; else break; }
+    return { c: top, name: nm[top], hits: n[top], of: ss.length, run: run, qty: q[top] || 1 };
+  }
+  function swapLine(l0, p) { var i = L.cart.lines.indexOf(l0); var q = l0.qty || 1; if (i >= 0) L.cart.lines.splice(i, 1); pushLine(p, q); toast('늘 사시는 걸로 바꿨어요', shortN(p.n)); }
+  /* ② 상품을 담은 순간 — 늘 사시는 것과 같은 분류의 다른 상품을 담으면 · 아니면 지난번 찾으신 상품. 한 줄만 · [그대로 두기]면 이 장바구니에선 다시 안 뜸 */
+  function cartCue(c, o) {
+    if (!c || !L.cart.lines.length) return null; var prods = L.products(); var off = L.cart.cueOff || {};
+    var h = habitOf(o); var hp = h && prods[h.c];
+    if (hp && !L.cart.lines.some(function (l) { return l.c === h.c; })) {
+      var bought = {}; (o.sales || []).forEach(function (s) { (s.lines || []).forEach(function (l) { bought[l.c] = 1; }); });
+      var l0 = L.cart.lines.filter(function (l) { var p = prods[l.c]; return !l.svc && p && p.k && p.k === hp.k; })[0];
+      if (l0 && !off['h' + l0.c]) return { key: 'h' + l0.c, src: '저절로 · 구매 기록', text: shortN(h.name) + (h.run >= 3 ? '만 ' + h.run + '번 연속 사셨어요' : ' — 최근 ' + h.of + '번 중 ' + h.hits + '번 사셨어요') + (bought[l0.c] ? '' : ' — «' + shortN(l0.name) + '» 처음 고르셨어요'), act: [['늘 사시는 걸로 바꾸기', function () { swapLine(l0, hp); }]] };
+    }
+    return wantCue(c, o);
+  }
+  function cueOff(k) { L.cart.cueOff = Object.assign({}, L.cart.cueOff || {}); L.cart.cueOff[k] = 1; cartCh(); }
+  function Cue(p) {
+    var q = p.q; if (!q || (L.cart.cueOff || {})[q.key]) return '';
+    return html`<div class="p1-cue" id="p1-cue" role="status" data-key=${q.key}><span class="k">기억 한 줄 · ${q.src}</span><b>${q.text}</b><div class="p1-mini">${(q.act || []).map(function (x) { return html`<button type="button" class="p1-sm dk" onClick=${x[1]}>${x[0]}</button>`; })}<button type="button" class="p1-sm" onClick=${function () { cueOff(q.key); }}>${q.act && q.act.length ? '그대로 두기' : '알겠어요'}</button></div></div>`;
+  }
   /* 누적 · 적립은 core custIndex 가 customers.adj{spend,earned} 를 이미 더한 값 — 여기서 또 더하지 않는다 */
   function spendOf(c, o) { return Math.max(0, o.spend || 0); }
   function earnedOf(c, o) { return Math.max(0, o.earned || 0); }
@@ -10653,8 +10753,9 @@ try {
     return { state: st, since: since, lastGap: lastGap, cyc: cyc };
   }
   function otherStoreOf(c, beforeAt) { var home = c.store || 's1', n = {}; Object.keys(S.d.sales).forEach(function (k) { var s = S.d.sales[k]; if (!s || s.cust !== c.id || s.practice || s.at >= beforeAt || s.at < beforeAt - 90 * 864e5) return; var st = L.storeOf(s); if (st !== home) n[st] = (n[st] || 0) + 1; }); return Object.keys(n).sort(function (a, b) { return n[b] - n[a]; })[0] || ''; }
-  function backAnswered(cid, at) { var lim = at - 60 * 864e5; return arr(col('cm_comeback')).some(function (x) { return x.cust === cid && x.at >= lim; }) || answers(cid).some(function (a) { return a.k === 'back' && a.at >= lim; }); }
-  function backInfo(cid, at) { var c = custOf(cid); if (!c) return null; var day0 = L.dayOf(at); var r = rhythmOf(cid, day0); if (!r) return null; var gap = r.state === 'risk' || r.state === 'gone' ? r.since : r.state === 'back' ? r.lastGap : 0; if (!gap) return null; var start = at - (at - new Date(day0 + 'T00:00:00').getTime()); return { gap: gap, state: r.state, other: otherStoreOf(c, start) }; }
+  /* 60일 안에 답한 손님은 다시 안 물음 — «못 물어봄»(말 안 함)만 남긴 건 답이 아니라서 다음 방문 때 다시 (2026-11-09 단계별 창) */
+  function backAnswered(cid, at) { var lim = at - 60 * 864e5; return arr(col('cm_comeback')).some(function (x) { return x.cust === cid && x.at >= lim && (x.a || x.ans) !== '말 안 함' && (x.a || x.ans) !== '못 물어봄'; }) || answers(cid).some(function (a) { return a.k === 'back' && a.at >= lim && a.a !== '못 물어봄'; }); }
+  function backInfo(cid, at) { var c = custOf(cid); if (!c) return null; var day0 = L.dayOf(at); var r = rhythmOf(cid, day0); if (!r) return null; var gap = r.state === 'risk' || r.state === 'gone' ? r.since : r.state === 'back' ? r.lastGap : 0; if (!gap) return null; var start = at - (at - new Date(day0 + 'T00:00:00').getTime()); return { gap: gap, state: r.state, cyc: r.cyc || 0, other: otherStoreOf(c, start) }; }
   function qOf(k) { return QS.find(function (x) { return x.k === k; }); }
   function qGot(cid) { var g = {}; answers(cid).sort(function (a, b) { return a.at - b.at; }).forEach(function (a) { if (a.a && a.a !== '못 물어봄') g[a.k] = a.a; }); return g; }
   /* 안 묻는 손님(W포스 그대로): 비회원 · 연습 · 가입한 날 · 오랜만 손님(결제 뒤 «그동안 어디서?»가 따로 있음) · 외국인 · 따이공 구분 · 오늘 이미 물어봄(답 · 못 물어봄) */
@@ -10712,10 +10813,14 @@ try {
       var toA = cart.ship && cart.ship.to; if (c && toA && toA.addr && !cart.ship.once && toA.addr !== (c.addr || '')) await upd('customers', c.id, { addr: toA.addr });
     } catch (e) {}
     var paid = { cust: sale.cust, name: sale.custName, amount: t.due, at: at, sale: id };
+    LASTPAID = { id: id, cust: sale.cust, at: at, practice: !!sale.practice };
     clearCart(); ui({ tail: sale.cust ? paid : null, more: false, left: 'prod', q: '', t4: '', look: '', found: null, hist: false });
     return id;
   }
-  async function payDone(pay, extra) { try { var id = await finishSale(pay, extra); L.openSheet('p1-done', id); return id; } catch (e) { return null; } }
+  /* 결제 뒤 — 오랜만 손님이면 단계별 질문 창 먼저(어디서 → 왜 → 다시 온 계기), 끝나면 결제 완료 창 */
+  function backAsk(lp) { var c = lp && custOf(lp.cust); if (!c || lp.practice) return null; var b = backInfo(c.id, lp.at); if (!b || b.other || backAnswered(c.id, lp.at)) return null; return { sale: lp.id, cust: c.id, gap: b.gap, state: b.state, cyc: b.cyc || 0, at: lp.at }; }
+  function openDone(id) { var s = S.d.sales[id]; var lp = s ? { id: id, cust: s.cust, at: s.at, practice: s.practice } : LASTPAID && LASTPAID.id === id ? LASTPAID : null; var bq = backAsk(lp); if (bq) L.openSheet('p1-back', bq); else L.openSheet('p1-done', id); }
+  async function payDone(pay, extra) { try { var id = await finishSale(pay, extra); openDone(id); return id; } catch (e) { return null; } }
 
   /* ── 결제 시작 ── */
   /* 오늘의 질문은 결제 창 위에 붙어서 묻는다 (결제를 막지 않음) · 카드는 창 하나(할부 · 승인 대기)에서 끝남 */
@@ -10792,8 +10897,9 @@ try {
   }
   function TailCard() {
     var x = UI.tail; var c = custOf(x.cust); if (!c) return '';
-    return html`<div class="p1-tail" role="status"><b style="font-size:15px">${c.name} 님 — 남길 말 있으세요?</b><span class="lv-small">방금 ${won(x.amount)}원 결제 · ${L.hm(x.at)}</span>
-      <div class="lv-row" style="gap:6px"><span style="flex:1"></span><button type="button" class="p1-sm" onClick=${function () { ui({ tail: null }); }}>보류</button><button type="button" class="p1-sm y" onClick=${function () { ui({ tail: null }); L.openSheet('p1-notes', { cust: c.id, add: true }); }}>적기</button></div></div>`;
+    /* 결제 뒤 — 쓰지 않고 누르기가 먼저 (2026-11-09 «사람을 남기는 것조차 사람») · 글로 쓰기는 원하는 사람만 */
+    return html`<div class="p1-tail" role="status"><b style="font-size:15px">${c.name} 님 — 들은 것 있으세요?</b><span class="lv-small">방금 ${won(x.amount)}원 결제 · ${L.hm(x.at)} · 누르면 다음 근무자에게 이어져요</span>
+      <div class="lv-row" style="gap:6px"><span style="flex:1"></span><button type="button" class="p1-sm" onClick=${function () { ui({ tail: null }); }}>없어요</button><button type="button" class="p1-sm" onClick=${function () { ui({ tail: null }); L.openSheet('p1-notes', { cust: c.id, add: true }); }}>글로 쓰기</button><button type="button" class="p1-sm y" id="p1-tail-tap" onClick=${function () { ui({ tail: null }); L.openSheet('p1-memtap', { cust: c.id }); }}>누르기</button></div></div>`;
   }
 
   /* ── 왼쪽: 상품 칸 ── */
@@ -10905,15 +11011,18 @@ try {
     var asOpen = arr(S.d.as).filter(function (r) { return r.cust === c.id && r.status !== '완료' && r.status !== '취소'; }), rvOpen = arr(S.d.resv).filter(function (r) { return r.cust === c.id && r.status !== '구매완료' && r.status !== '구매취소'; });
     var notes = custNotes(c.id).slice(0, 2).map(function (n) { return (n.kind === '주의' ? '⚠ ' : '') + n.t; });
     var memo = [c.memo].concat(notes).filter(Boolean).slice(0, 2); var pp = prepaysOf(c.id); var n = L.cart.lines.reduce(function (a, l) { return a + (l.qty || 0); }, 0);
+    var hb = habitOf(o); var hbp = hb && L.products()[hb.c];
     return html`<aside class="lv-cart p1-cart p1-mside" id="p1-mside">
       <div class="p1-mhead"><span class="av">${c.name.slice(0, 1)}</span><span class="t"><b>${c.name} 님 <span class=${'lv-grade ' + GCLS[g.name]}>${g.name}</span></b><span>뒤 ${L.tail4(c.phone)} · 방문 ${o.visits}번 · ${L.storeName(c.store || 's1')}</span></span><span class="bal"><small>사용 가능</small><b id="p1-mbal2">${won(o.bal)}P</b></span></div>
       ${FLAGS.some(function (x) { return f[x[0]]; }) ? html`<div class="p1-mini">${FLAGS.filter(function (x) { return f[x[0]]; }).map(function (x) { return html`<span class="p1-tag red">⚠ ${x[1]}</span>`; })}</div>` : ''}
-      <div class="p1-mlast">${last ? html`<div class="p1-hd"><b>지난번 ${md(last.at)} · ${L.daysSince(last.at)}일 전</b><span style="flex:1"></span><button type="button" class="p1-sm y" id="p1-lastall" onClick=${function () { putSale(last); }}>그대로 담기</button></div>
+      <${Cue} q=${greetCue(c, o) || wantCue(c, o)} />
+      ${hb ? html`<div class="p1-habit" id="p1-habit"><span class="t"><small>늘 사시는 것 · 최근 ${hb.of}번 중 ${hb.hits}번</small><b>${shortN(hb.name)} × ${hb.qty}</b></span>${hbp ? html`<button type="button" class="p1-sm dk" id="p1-habitadd" onClick=${function () { pushLine(hbp, hb.qty); }}>담기</button>` : ''}</div>` : ''}
+      <div class="p1-mlast">${last ? html`<div class="p1-hd"><b>지난번 ${md(last.at)} · ${L.daysSince(last.at)}일 전</b><span style="flex:1"></span><button type="button" class="p1-sm y" id="p1-lastall" onClick=${function () { putSale(last); }}>지난번 그대로 담기</button></div>
         ${lastLines.map(function (l) { var pr = L.products()[l.c]; return html`<div class="p1-kl"><span class="grow">${l.name}</span><span class="lv-small">×${l.qty}</span>${pr ? html`<button type="button" class="p1-sm" onClick=${function () { addProd(pr, l.qty); }}>담기</button>` : html`<span class="lv-small">상품표에 없음</span>`}</div>`; })}` : html`<span class="lv-small">아직 W포스 구매가 없어요</span>`}</div>
       ${cyc && cyc.gap ? html`<span class="lv-small" id="p1-mcyc">자주 사는 것 — ${cyc.name} · 보통 ${cyc.gap}일마다${cyc.next ? (cyc.next <= Date.now() ? ' → 지금쯤 떨어질 때예요' : ' → ' + md(cyc.next) + '쯤') : ''}</span>` : ''}
       <div class="p1-kl"><span class="grow lv-small">${asOpen.length || rvOpen.length ? [asOpen.length ? 'AS ' + asOpen.map(function (r) { return (r.prod ? r.prod.n : '') + ' ' + (L.AS_LABEL[r.status] || r.status); }).join(', ') : '', rvOpen.length ? '예약 ' + rvOpen.map(function (r) { return (r.item ? r.item.n : '') + ' ' + r.status; }).join(', ') : ''].filter(Boolean).join(' · ') : 'AS · 예약 접수 없음'}</span><button type="button" class="p1-sm" onClick=${function () { L.openSheet(L.REG_HAS && L.REG_HAS('p3-as-new') ? 'p3-as-new' : (window.VWP3 ? 'p3-as-new' : 'p1-as'), { cust: c.id }); }}>+ AS 접수</button><button type="button" class="p1-sm" onClick=${function () { L.openSheet(L.regSheet && L.regSheet('p3-resv-new') ? 'p3-resv-new' : 'p1-resv', { cust: c.id }); }}>+ 예약</button></div>
       ${pp.length ? html`<span class="p1-tag grn" style="align-self:flex-start">💰 선결제 ${won(pp.reduce(function (a, r) { return a + (r.prepay.amount || 0); }, 0))}원 — 담으면 장바구니에서 뺄 수 있어요</span>` : ''}
-      ${memo.length ? html`<span class="p1-mnote">📝 ${memo.join(' · ')}</span>` : ''}
+      <div class="p1-kl">${memo.length ? html`<span class="p1-mnote grow">📝 ${memo.join(' · ')}</span>` : html`<span class="grow lv-small">들은 것이 있으면 눌러 남겨요 — 다음 근무자에게 이어져요</span>`}<button type="button" class="p1-sm y" id="p1-memtapbtn" onClick=${function () { L.openSheet('p1-memtap', { cust: c.id }); }}>들은 것 누르기</button></div>
       <${AppCode} />
       <span style="flex:1"></span>
       <div class="p1-mfoot"><button type="button" class="lv-btn2" id="p1-fullbtn" title="구매 · AS · 예약 · 포인트 · 특이사항" onClick=${function () { ui({ left: 'cust' }); }}>이력 전체 ›</button><button type="button" class="lv-btn2" onClick=${function () { dropCust(); ui({ left: 'prod' }); }}>다른 손님</button></div>
@@ -10977,6 +11086,7 @@ try {
     var park = parkUrl(); var drawer = drawerOpen; function goParkHere() { goPark(c); }
     return html`<aside class="lv-cart p1-cart">
       <${CustChip} ix=${ix} t=${t} />
+      ${c ? html`<${Cue} q=${cartCue(c, o)} />` : ''}
       ${UI.found && !c ? html`<div class="p1-drop" style="top:58px" id="p1-fdrop"><${Found} ix=${ix} /></div>` : ''}
       <div class="p1-mrow"><${Seg} items=${[['방문', '매장방문'], ['택배', '택배'], ['퀵', '퀵']]} value=${shipKind() === '대리택배' ? '택배' : shipKind()} onChange=${setShip} />${hl.length ? html`<button type="button" class=${'p1-sm' + (UI.holds ? ' on' : '')} id="p1-holdchip" onClick=${function () { ui({ holds: !UI.holds }); }}>보류 ${hl.length}</button>` : ''}<span style="flex:1"></span><span class="lv-small" id="p1-n">${t.n}개</span><button type="button" class="p1-sm" onClick=${function () { if (!L.cart.lines.length) { toast('장바구니가 비어 있어요', '상품을 담으면 크게 볼 수 있어요'); return; } L.openSheet('p1-cartbig'); }}>확대 보기</button></div>
       ${UI.holds && hl.length ? html`<div class="p1-drop" style="top:100px">${hl.map(function (h) { return html`<${HoldRow} h=${h} key=${h.id} />`; })}</div>` : ''}
@@ -11086,7 +11196,7 @@ try {
       <div class="p1-kl"><span class="grow">${asOpen.length || rvOpen.length ? [asOpen.length ? 'AS ' + asOpen.map(function (r) { return (r.prod ? r.prod.n : '') + ' ' + (L.AS_LABEL[r.status] || r.status); }).join(', ') : '', rvOpen.length ? '예약 ' + rvOpen.map(function (r) { return (r.item ? r.item.n : '') + ' ' + r.status; }).join(', ') : ''].filter(Boolean).join(' · ') : 'AS · 예약 접수 없음'}</span><button type="button" class="p1-sm" onClick=${function () { /* AS 접수는 p3 창 하나로 (W포스 초도불량 길 · 지점보관 · 취합 자동 담기 — 21898) */ L.openSheet(L.REG_HAS && L.REG_HAS('p3-as-new') ? 'p3-as-new' : (window.VWP3 ? 'p3-as-new' : 'p1-as'), { cust: c.id }); }}>+ AS 접수</button><button type="button" class="p1-sm" onClick=${function () { L.openSheet(L.regSheet && L.regSheet('p3-resv-new') ? 'p3-resv-new' : 'p1-resv', { cust: c.id }); }}>+ 예약</button></div>
       <div class="p1-kl">${memo == null ? html`<button type="button" class="p1-sm" style="flex:1;justify-content:flex-start;text-align:left" onClick=${function () { setMemo(c.memo || ''); }}>${c.memo ? '메모: ' + c.memo : '메모 등록 (취향 · 주의할 점 한 줄)'}</button>` : html`<textarea class="p1-ta" id="p1-mmemo" maxlength="300" style="min-height:44px" value=${memo} onInput=${function (e) { setMemo(e.target.value); }}></textarea><span class="lv-small">${String(memo).length}/300</span><button type="button" class="p1-sm y" onClick=${saveMemo}>저장</button><button type="button" class="p1-sm" onClick=${function () { setMemo(null); }}>취소</button>`}</div>
       <div class="p1-kl"><span class=${'lv-grade ' + GCLS[g.name]}>${g.name}${g.fixed ? ' (고정)' : ''}</span><span class="grow lv-small">누적 구매 ${won(spendOf(c, o))}원 · ${g.next ? g.next + '까지 ' + won(g.left) + '원' : '최고 등급'}</span><button type="button" class="p1-sm" onClick=${function () { L.openSheet('p1-grade', { id: c.id }); }}>✏️ 수정</button><button type="button" class="p1-sm red" onClick=${function () { L.openSheet('p1-flags', { id: c.id }); }}>주의 표시</button></div>
-      <div class="p1-mini"><button type="button" class=${sec.hist ? 'on' : ''} onClick=${function () { tog('hist'); }}>고객 이력 (W포스 구매 ${o.visits}회)</button><button type="button" class=${sec.info ? 'on' : ''} onClick=${function () { tog('info'); }}>정보 수정 (성함 · 포인트 · 연락처)</button><button type="button" class=${sec.det ? 'on' : ''} onClick=${function () { tog('det'); }}>상세 (성별 · 방문 · 추천)</button><button type="button" id="p1-notesbtn" onClick=${function () { if (L.regSheet && L.regSheet('p3-notes')) L.openSheet('p3-notes', c.id); else L.openSheet('p1-notes', { cust: c.id }); }}>특이사항 ${custNotes(c.id).length}건 · 작성</button><button type="button" onClick=${function () { var ls0 = o.sales.find(function (s) { return L.saleSums(s).net > 0; }); if (!ls0) { toast('교환할 구매가 없어요'); return; } openOther('p2-exmulti', { id: ls0.id, sale: ls0.id }, '구매내역(교환)'); }}>이 손님 교환 · 최근 구매에서 바로</button><button type="button" onClick=${function () { L.openSheet('p1-crbulk', { cust: c.id }); }}>현금영수증 한꺼번에 ›</button></div>
+      <div class="p1-mini"><button type="button" class=${sec.hist ? 'on' : ''} onClick=${function () { tog('hist'); }}>고객 이력 (W포스 구매 ${o.visits}회)</button><button type="button" class=${sec.info ? 'on' : ''} onClick=${function () { tog('info'); }}>정보 수정 (성함 · 포인트 · 연락처)</button><button type="button" class=${sec.det ? 'on' : ''} onClick=${function () { tog('det'); }}>상세 (성별 · 방문 · 추천)</button><button type="button" id="p1-notesbtn" onClick=${function () { if (L.regSheet && L.regSheet('p3-notes')) L.openSheet('p3-notes', c.id); else L.openSheet('p1-notes', { cust: c.id }); }}>특이사항 ${custNotes(c.id).length}건 · 작성</button><button type="button" id="p1-memtapbtn2" onClick=${function () { L.openSheet('p1-memtap', { cust: c.id }); }}>들은 것 누르기</button><button type="button" onClick=${function () { var ls0 = o.sales.find(function (s) { return L.saleSums(s).net > 0; }); if (!ls0) { toast('교환할 구매가 없어요'); return; } openOther('p2-exmulti', { id: ls0.id, sale: ls0.id }, '구매내역(교환)'); }}>이 손님 교환 · 최근 구매에서 바로</button><button type="button" onClick=${function () { L.openSheet('p1-crbulk', { cust: c.id }); }}>현금영수증 한꺼번에 ›</button></div>
       ${sec.info ? html`<${InfoEdit} c=${c} o=${o} key=${'ie' + c.id} />` : ''}
       ${sec.det ? html`<${Detail} c=${c} o=${o} />` : ''}
       ${sec.hist ? html`<div class="lv-tabs" role="tablist">${tabs.map(function (x) { return html`<button type="button" role="tab" aria-selected=${tab === x[0]} class=${tab === x[0] ? 'on' : ''} onClick=${function () { ui({ ctab: x[0] }); }}>${x[1]}</button>`; })}</div>
@@ -11817,7 +11927,7 @@ try {
     var from = s0.from && s0.from !== L.store() ? s0.from : '';
     async function pay() { if (!conf) { toast('통장에 입금된 것을 확인하고 체크해 주세요'); return; } if (crBad(cr)) { toast(crErr(cr)); return; } setBusy(true); L.cart.ship.to = { name: F.name.trim(), phone: L.digits(F.phone), addr: F.addr.trim() }; L.cart.ship.once = F.once; var m = me(); var items = L.cart.lines.map(function (l) { return l.name + ' × ' + l.qty; }).join(', '); var mode = shipKind() === '퀵' ? '퀵' : '택배';
       try { var id = await finishSale({ method: 'transfer', amount: t.due, cr: crOf(cr), confirmed: { at: Date.now(), by: m.by, byName: m.byName } }); setDone({ id: id, items: items, mode: mode, from: from || L.store() }); setStep(3); } catch (e) {} setBusy(false); }
-    async function finish() { if (done) { try { await upd('sales', done.id, { ship: { courier: done.mode === '택배' ? cour : '', invoice: inv.trim() } }); } catch (e) {} close(); L.openSheet('p1-done', done.id); } }
+    async function finish() { if (done) { try { await upd('sales', done.id, { ship: { courier: done.mode === '택배' ? cour : '', invoice: inv.trim() } }); } catch (e) {} close(); openDone(done.id); } }
     var info = done ? [['받는 분', F.name], ['연락처', F.phone], ['주소', F.addr], ['물품', done.items], ['출발지', L.storeName(done.from)]] : [];
     var msg = done ? (done.mode === '택배' ? fillTpl('ship', { '매장': L.storeName(), '이름': F.name, '택배사': cour, '송장': inv || '(나오면 알려드릴게요)' }) : fillTpl('quick', { '매장': L.storeName(), '이름': F.name })) : '';
     var under = html`<div style="padding:10px 28px 0"><nav class="lv-order inside" style="grid-template-columns:repeat(3,minmax(0,1fr))">${['받는 곳', '입금 확인', '접수 정보'].map(function (x, i) { return html`<span class=${step === i + 1 ? 'now' : ''}><span class=${'n' + (i + 1 < step ? ' done' : '')}>${i + 1}</span><span class="tx"><b>${x}</b></span></span>`; })}</nav></div>`;
@@ -11957,20 +12067,120 @@ try {
     async function print() { try { await upd('sales', id, { prints: (s.prints || 0) + 1 }); } catch (e) {} toast('영수증 출력 기록을 남겼어요 (체험판)', '실제 출력은 영수증 프린터 연결 때 — 구매내역에서 다시 출력할 수 있어요'); next(); }
     async function reissue() { var cr = pay.cr || {}; try { await upd('sales', id, { pay: { cr: { reissue: (cr.reissue || 0) + 1, status: '재발행(체험판)', at: Date.now() } } }); toast('현금영수증 재발행 기록을 남겼어요 (체험판)'); } catch (e) {} }
     /* 복귀 답 — W포스: 최근 90일 다른 지점 구매가 있으면 묻지 않고 «우리 다른 지점»으로 자동 기록 · [못 물어봄]도 «말 안 함»으로 남김 · 60일 안에 답한 손님은 다시 안 물음 */
-    async function answer(a, auto) { setBack(a); var w = CB_MAP[a] || ['', '기타']; var m = me(); try { await setDoc('cm_comeback', L.uid('cb'), Object.assign({ at: Date.now(), store: L.store(), cust: c.id, where: w[0], why: w[1], ans: a === '못 물어봄' ? '말 안 함' : a, gap: gap, home: c.store || '', by: m.by, byName: m.byName }, auto ? { auto: true, other: auto } : {})); if (!auto) toast('기록했습니다', a); } catch (e) {} }
+    async function answer(a, auto) { setBack(a); var w = CB_MAP[a] || ['', '기타']; var m = me(); var a2 = a === '못 물어봄' ? '말 안 함' : a; try { await setDoc('cm_comeback', L.uid('cb'), Object.assign({ at: Date.now(), day: L.today(), store: L.store(), cust: c.id, sale: id, where: w[0], why: w[1], a: a2, ans: a2, wh: a === '우리 다른 지점' ? a : '', whyL: [], came: '', gap: gap, st: bk ? bk.state : '', home: c.store || '', v: 2, src: '결제 뒤', by: m.by, byName: m.byName }, auto ? { auto: true, other: auto } : {})); if (!auto) toast('기록했습니다', a); } catch (e) {} }
     if (bk && bk.other && !autoBack.current) { autoBack.current = true; setTimeout(function () { answer('우리 다른 지점', bk.other); }, 0); }
+    var cbDoc = c ? arr(col('cm_comeback')).filter(function (x) { return x.sale === id && !x.auto; }).sort(function (x, y) { return (y.at || 0) - (x.at || 0); })[0] : null;
     var kv = function (k, v) { return html`<div class="p1-kl"><span style="width:110px" class="lv-small">${k}</span><span class="grow">${v}</span></div>`; };
     return html`<${Sheet} w=${640} h=${720} label=${recOnly ? '판매 · 승인 안 됨 — 기록만' : '판매 · 승인 완료'} title=${(recOnly ? '기록만 남았어요 · ' : '결제 완료 · ') + won(paid) + '원'} sub=${recOnly ? '카드 승인 안 됨 — 단말기에서 따로 승인했는지 꼭 확인하세요' : '재고에서 빠졌고 구매내역에 들어갔어요' + (pay.sim ? ' · 체험판 승인' : '') + (s.practice ? ' · 연습 판매' : '')} onClose=${next}
       left=${html`<${Btn2} icon="printer" onClick=${print}>영수증 인쇄</${Btn2}>`} right=${html`<${Btn1} onClick=${next}>다음 손님 · 인쇄 안 함 (Enter · Esc)</${Btn1}>`}>
       ${recOnly ? html`<div class="p1-fail"><b>카드 단말기 연동이 꺼져 있어 기록만 남았어요</b><span>카드 승인 안 됨 — 단말기에서 승인했는지 확인하세요</span></div>` : ''}
       ${appS().receiptAuto ? html`<span class="lv-small">영수증 자동 인쇄됨 (체험판 — 매장 설정 «자동 인쇄»)</span>` : ''}
       <div class="lv-tiles"><div><span>결제 금액</span><b id="p1-donepaid">${won(paid)}원</b><span>${PM[pay.method] || pay.method || ''}${pay.name ? ' · ' + pay.name : pay.where ? ' · ' + pay.where : ''}</span></div><div><span>포인트 사용</span><b>${won((s.pts && s.pts.used) || 0)}P</b></div><div><span>고객</span><b>${s.custName || '비회원'}</b><span>${s.ctype || ''}</span></div><div><span>적립</span><b id="p1-doneearn">+${won((s.pts && s.pts.earned) || 0)}P</b></div></div>
-      ${c ? html`<button type="button" class="lv-btn2" onClick=${function () { L.openSheet('p1-rev1', { id: id }); }}>리뷰 할래요 (매장 POP QR · 플랫폼마다 ${won(revPts())}P)</button>` : ''}
-      ${bk && bk.other ? html`<div class="p1-card" id="p1-back"><b>${gap}일 만에 오신 손님</b><span class="lv-small">그동안 ${L.storeName(bk.other)}에서 사신 기록이 있어 «우리 다른 지점»으로 적었습니다.</span></div>` : bk ? html`<div class="p1-card" id="p1-back"><b>${back ? '✓ 적었습니다 — ' + back : gap + '일 만에 오신 손님 — 그동안 어디서 사셨대요? · 왜 늦으셨대요?'}</b>${back ? '' : html`<span class="lv-small">들으셨으면 한 번만 눌러주세요. 안 눌러도 됩니다.</span>`}<div class="p1-mini">${BACK_A.map(function (a) { return html`<button type="button" class=${back === a ? 'on' : ''} disabled=${!!back} onClick=${function () { answer(a); }}>${a}</button>`; })}</div></div>` : ''}
+      ${c ? html`<div class="lv-2col"><button type="button" class="lv-btn2" onClick=${function () { L.openSheet('p1-rev1', { id: id }); }}>리뷰 할래요 (매장 POP QR · 플랫폼마다 ${won(revPts())}P)</button><button type="button" class="lv-btn2" id="p1-done-memtap" onClick=${function () { L.openSheet('p1-memtap', { cust: c.id, sale: id }); }}>오늘 들은 것 누르기</button></div>` : ''}
+      ${cbDoc ? html`<div class="p1-card" id="p1-back">${cbDoc.a === '말 안 함' ? html`<b>${cbDoc.gap || gap}일 만에 오신 손님 — 못 물어봄</b><span class="lv-small">다음 방문 때 같은 질문이 다시 떠요</span>` : html`<b>✓ 오랜만 손님 답을 적었습니다</b><span class="lv-small" id="p1-back-sum">${'어디서 ' + (cbDoc.wh || '—') + ' · 왜 ' + ((cbDoc.whyL || []).join(', ') || '—') + ' · 다시 온 계기 ' + (cbDoc.came || '—')}</span>${cbDoc.a === '사용 주기가 길어서' ? html`<span class="lv-small">«사용 주기가 길어서» — 이 손님 주기를 ${cbDoc.gap}일로 봅니다 (그 전에는 «이탈 위험»에 안 떠요)</span>` : ''}`}</div>`
+        : bk && bk.other ? html`<div class="p1-card" id="p1-back"><b>${gap}일 만에 오신 손님</b><span class="lv-small">그동안 ${L.storeName(bk.other)}에서 사신 기록이 있어 «우리 다른 지점»으로 적었습니다.</span></div>`
+        : bk ? html`<div class="p1-card" id="p1-back"><b>${gap}일 만에 오신 손님</b><button type="button" class="p1-sm y" style="align-self:flex-start" onClick=${function () { L.openSheet('p1-back', { sale: id, cust: c.id, gap: gap, state: bk.state, cyc: bk.cyc || 0, at: s.at }); }}>오랜만 손님 질문 열기 (어디서 → 왜 → 다시 온 계기)</button></div>` : ''}
       <button type="button" class=${'p1-sm' + (det ? ' on' : '')} onClick=${function () { setDet(!det); }}>${det ? '자세히 접기' : '자세히 보기'}</button>
       ${det ? html`<div id="p1-donedet">${kv('결제수단', (PM[pay.method] || pay.method) + ' — ' + (pay.parts || []).map(function (x) { return (PM[x.m] || x.m) + ' ' + won(x.n); }).join(' + '))}${kv('매장', L.storeName(L.storeOf(s)))}${kv('고객', (s.custName || '비회원') + ' · ' + (s.ctype || ''))}${kv('소계', won(s.sub) + '원' + (s.disc ? ' · 할인 −' + won(s.disc) : '') + (s.ship ? ' · 배송비 ' + won(s.ship.fee) : ''))}${pay.method === 'card' || (pay.parts || []).some(function (x) { return x.m === 'card'; }) ? kv('카드', (pay.co || '') + ' · ' + (pay.inst || '일시불') + ' · 승인번호 ' + (pay.appr || (recOnly ? '없음 (기록만)' : '—'))) : ''}${pay.cheque ? kv('수표', pay.cheque.bank + ' · ' + pay.cheque.no + ' · ' + won(pay.cheque.amount)) : ''}${pay.received != null ? kv('받은 돈', won(pay.received) + ' · 거스름 ' + won(pay.change)) : ''}${kv('현금영수증', pay.cr ? pay.cr.type + (pay.cr.num ? ' · ' + L.mask(pay.cr.num) : '') + ' · ' + pay.cr.status : '발행 안 함')}</div>` : ''}
       ${pay.cr ? html`<div class="p1-kl"><span class="grow">현금영수증 발행 결과 — ${pay.cr.status}</span><button type="button" class="p1-sm" onClick=${reissue}>현금영수증 재발행</button></div>` : ''}
       <${Receipt} s=${Object.assign({ id: id }, s)} />
+    </${Sheet}>`;
+  });
+  /* ── 오랜만 손님 — 결제 뒤 단계별 창 (한 화면에 한 질문 · 직접 입력 · 못 물어봄은 언제나) ──
+     저장: cm_comeback {at, day, store, home, cust, sale, gap, st, a(예전 6칸 막대용), ans, wh, whyL[], came, typed{wh, why[], came}, skip, v:2, src:'결제 뒤', by, byName}
+     a 는 p4 재방문 응답 막대 · «사용 주기가 길어서» 주기 반영(#196)이 그대로 읽도록 예전 6칸 중 하나로 맞춤 (어디에도 안 맞으면 «기타») */
+  function bkTyped(f) { var lim = Date.now() - 60 * 864e5, n = {}; arr(col('cm_comeback')).forEach(function (x) { if ((x.at || 0) < lim || !x.typed) return; var t = x.typed[f]; (Array.isArray(t) ? t : t ? [t] : []).forEach(function (s0) { var s1 = String(s0).trim(); if (s1) n[s1] = (n[s1] || 0) + 1; }); }); return Object.keys(n).filter(function (k) { return n[k] >= 3; }).sort(function (a, b) { return n[b] - n[a]; }).slice(0, 4); }
+  function bkLegacy(o) {
+    var w = o.whyL || []; if (!o.wh && !w.length && !o.came) return '말 안 함';
+    if (w.indexOf('사용 주기가 길어서') >= 0) return '사용 주기가 길어서';
+    if (o.wh === '우리 다른 지점') return '우리 다른 지점';
+    if (['다른 전자담배 가게', '편의점', '온라인 · 해외'].indexOf(o.wh) >= 0) return '다른 가게';
+    if (o.wh === '안 샀어요 (쉬었음)' || w.indexOf('쉬었다가 다시') >= 0 || w.indexOf('줄이는 중') >= 0 || w.indexOf('다른 담배로 바꿨었음') >= 0) return '끊었다 다시';
+    if (['이사', '이직 · 새 직장', '여행 · 출장', '군 복무'].some(function (x) { return w.indexOf(x) >= 0; })) return '이사·출장';
+    return '기타';
+  }
+  L.sheet('p1-back', function BackSheet(p) {
+    L.useStore(); var a = p.arg || {}; var c = custOf(a.cust); var s = S.d.sales[a.sale] || {}; var m = me();
+    var ss = useState({ i: 0, wh: '', whyL: [], came: '', t: { wh: '', why: [], came: '' }, typing: false, text: '' }), st = ss[0], setSt = ss[1]; var busy = useRef(false); var stR = useRef(st); stR.current = st;
+    function set(o) { setSt(function (pv) { return Object.assign({}, pv, typeof o === 'function' ? o(pv) : o); }); }
+    async function save(o, skip) {
+      if (busy.current) return; busy.current = true;
+      var doc = { at: Date.now(), day: L.today(), store: L.store(), home: c ? c.store || '' : '', cust: a.cust, sale: a.sale || '', gap: a.gap || 0, st: a.state || '', wh: o.wh || '', whyL: o.whyL || [], came: o.came || '', typed: { wh: o.t.wh || '', why: o.t.why || [], came: o.t.came || '' }, skip: !!skip, v: 2, src: '결제 뒤', by: m.by, byName: m.byName };
+      doc.a = bkLegacy(doc); doc.ans = doc.a;
+      try { await setDoc('cm_comeback', L.uid('cb'), doc); toast(doc.a === '말 안 함' ? '못 물어봄 — 다음 방문 때 다시 물어요' : '오랜만 손님 답을 적었어요', doc.a === '말 안 함' ? '' : [doc.wh, doc.whyL.join(', '), doc.came].filter(Boolean).join(' · ')); } catch (e) {}
+      L.openSheet('p1-done', a.sale);
+    }
+    function skip() { save(stR.current, true); }
+    /* Esc · 화면 이동으로 창이 닫히면(코어가 onClose 없이 닫음) = 거기까지 답한 것만 남기고 못 물어봄 → 결제 완료 창 */
+    useEffect(function () { return function () { if (!busy.current) setTimeout(function () { save(stR.current, true); }, 0); }; }, []);
+    useEffect(function () {   /* 숫자 1~9 = 그 번호 칸 · Enter = 다음(왜 단계) — 입력칸에 있을 땐 안 함 */
+      function onKey(e) { if (e.ctrlKey || e.metaKey || e.altKey || (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName))) return; if (/^[1-9]$/.test(e.key)) { var b = document.querySelectorAll('#p1-bk .p1-bk-chip')[+e.key - 1]; if (b) { e.preventDefault(); b.click(); } } else if (e.key === 'Enter' && stR.current.i === 1) { e.preventDefault(); toCame(); } }
+      window.addEventListener('keydown', onKey); return function () { window.removeEventListener('keydown', onKey); };
+    }, []);
+    function toCame() { if (!stR.current.whyL.length) { toast('하나 이상 골라 주세요', '모르면 [못 물어봄]'); return; } set({ i: 2, typing: false, text: '' }); }
+    function openType() { set(function (pv) { return { typing: !pv.typing, text: '' }; }); setTimeout(function () { var i = document.getElementById('p1-bk-text'); if (i) i.focus(); }, 40); }
+    function saveText() {
+      var o = stR.current; var tx = String(o.text || '').trim(); if (!tx) { toast('손님이 하신 말을 짧게 넣어 주세요'); return; }
+      if (o.i === 0) set({ wh: tx, t: Object.assign({}, o.t, { wh: tx }), i: 1, typing: false, text: '' });
+      else if (o.i === 1) set({ whyL: o.whyL.indexOf(tx) >= 0 ? o.whyL : o.whyL.concat([tx]), t: Object.assign({}, o.t, { why: o.t.why.concat([tx]) }), typing: false, text: '' });
+      else save(Object.assign({}, o, { came: tx, t: Object.assign({}, o.t, { came: tx }) }), false);
+    }
+    if (!c) return '';
+    var S0 = BK_STEP[st.i]; var paid = s.pay && s.pay.amount != null ? s.pay.amount : (s.total || 0);
+    function chip(label, on, go, cls) { return html`<button type="button" class=${'p1-bk-chip' + (on ? ' on' : '') + (cls || '')} aria-pressed=${on ? 'true' : 'false'} onClick=${go}>${label}</button>`; }
+    var typeChip = chip('직접 입력', st.typing, openType, ' type');
+    var body = '';
+    if (st.i === 0) body = html`<div class="p1-bk-opts" role="group" aria-label="어디서">${BK_WHERE.concat(bkTyped('wh').filter(function (x) { return BK_WHERE.indexOf(x) < 0; })).map(function (v) { return chip(v, st.wh === v, function () { set({ wh: v, i: 1, typing: false, text: '' }); }); })}${typeChip}</div>`;
+    if (st.i === 1) {
+      var extra = bkTyped('why'); var groups = BK_WHY.concat([['그 밖', extra]]);
+      body = html`<div class="p1-bk-groups">${groups.map(function (g) { return html`<div class="p1-bk-g" role="group" aria-label=${g[0]}><b>${g[0]}</b><div class="p1-bk-opts">${g[1].map(function (v) { var on = st.whyL.indexOf(v) >= 0; return chip(v, on, function () { set(function (pv) { var has = pv.whyL.indexOf(v) >= 0; return { whyL: has ? pv.whyL.filter(function (x) { return x !== v; }) : pv.whyL.concat([v]) }; }); }); })}${g[0] === '그 밖' ? typeChip : ''}</div></div>`; })}
+        ${st.t.why.length ? html`<div class="p1-bk-g"><b>직접 쓴 것</b><div class="p1-bk-opts">${st.t.why.map(function (v) { return chip(v + ' ✕', true, function () { set(function (pv) { return { whyL: pv.whyL.filter(function (x) { return x !== v; }), t: Object.assign({}, pv.t, { why: pv.t.why.filter(function (x) { return x !== v; }) }) }; }); }); })}</div></div>` : ''}</div>`;
+    }
+    if (st.i === 2) body = html`<div class="p1-bk-opts" role="group" aria-label="다시 온 계기">${BK_CAME.concat(bkTyped('came').filter(function (x) { return BK_CAME.indexOf(x) < 0; })).map(function (v) { return chip(v, st.came === v, function () { save(Object.assign({}, stR.current, { came: v }), false); }); })}${typeChip}</div>`;
+    var dots = html`<ol class="p1-gf-dots" aria-label="단계">${BK_STEP.map(function (x, i) { var k = i === st.i ? 'now' : i < st.i ? 'done' : ''; return html`<li class=${k}><i></i><span>${k === 'done' ? '✓ ' : ''}${x[1]}</span></li>`; })}</ol>`;
+    var right = st.i === 1 ? html`<${Btn1} onClick=${toCame}>${st.whyL.length ? '다음 — ' + st.whyL.length + '개 골랐어요' : '하나 이상 골라 주세요'}</${Btn1}>` : html`<span class="lv-small p1-bk-hint">하나 누르면 바로 ${st.i === 2 ? '끝나요' : '다음으로 넘어가요'}</span>`;
+    var left = html`<${Btn2} onClick=${skip}>못 물어봄 — 다음 방문 때 다시</${Btn2}>${st.i > 0 ? html`<${Btn2} onClick=${function () { set(function (pv) { return { i: pv.i - 1, typing: false, text: '' }; }); }}>이전</${Btn2}>` : ''}`;
+    return html`<${Sheet} w=${1000} h=${700} label=${'결제 끝 · ' + c.name + ' 님 · ' + won(paid) + '원'} title=${S0[2]} sub=${'손님께는 이렇게: “' + S0[3] + '” · ' + S0[4]} onClose=${skip} left=${left} right=${right}>
+      <div class="p1-gf p1-bk" id="p1-bk" data-step=${S0[0]}>
+        <div class="p1-bk-top"><span class="p1-bk-gap" id="p1-bk-gap">${(a.gap || 0) + '일 만에 오셨어요' + (a.cyc ? ' · 평소 ' + Math.round(a.cyc) + '일마다' : '')}</span>${dots}</div>
+        ${body}
+        ${st.typing ? html`<div class="p1-gf-row" id="p1-bk-type"><input class="lv-input" id="p1-bk-text" value=${st.text} onInput=${function (e) { var v = e.target.value; set({ text: v }); }} onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); saveText(); } }} placeholder="손님이 하신 말 그대로 짧게" aria-label="직접 입력" autocomplete="off" /><button type="button" class="lv-btn1" id="p1-bk-save" onClick=${saveText}>${st.i === 1 ? '추가' : '저장하고 다음'}</button></div><span class="lv-small">같은 말이 3번 넘게 직접 입력되면 다음부터 단추로 올라와요</span>` : ''}
+      </div>
+    </${Sheet}>`;
+  });
+  /* ── 기억 남기기 — 쓰지 않고 누르기 (맛 · 다음에 물어볼 것 · 찾을 제품 · 불편 → 한 줄은 선택) ──
+     cs_notes 한 칸에 묶음마다 한 줄: {cust, body, kind, tap{k, v[], codes[]}, next, at, store, by, byName, edits[], helpful{}, hidden, src:'누르기'} — 손님 메뉴 특이사항 · 판매 화면 기억 한 줄이 같은 칸을 읽음 */
+  L.sheet('p1-memtap', function MemTap(p) {
+    L.useStore(); var a = p.arg || {}; var c = custOf(a.cust || (typeof a === 'string' ? a : '')); var m = me();
+    var ss = useState({}), sel = ss[0], setSel = ss[1]; var ws = useState([]), want = ws[0], setWant = ws[1]; var qs = useState(''), q = qs[0], setQ = qs[1]; var ls = useState(''), line = ls[0], setLine = ls[1]; var sr = useState(false), sure = sr[0], setSure = sr[1]; var busy = useRef(false);
+    if (!c) return '';
+    function tog(k, v) { setSel(function (pv) { var o = Object.assign({}, pv); var x = (o[k] || []).slice(); var i = x.indexOf(v); if (i >= 0) x.splice(i, 1); else x.push(v); o[k] = x; return o; }); }
+    var prods = L.products(); var qq = String(q || '').replace(/\s/g, '');
+    var hits = qq ? Object.keys(prods).map(function (k) { return prods[k]; }).filter(function (pp) { return String(pp.n || '').replace(/\s/g, '').indexOf(qq) >= 0 && !want.some(function (w) { return w.c === pp.c; }); }).slice(0, 6) : [];
+    var judge = JUDGE.test(line);
+    var picked = MT.reduce(function (n, g) { return n + (sel[g.k] || []).length; }, 0) + want.length + (line.trim() ? 1 : 0);
+    var sum = [].concat.apply([], MT.map(function (g) { return sel[g.k] || []; })).concat(want.map(function (w) { return shortN(w.n); })).join(' · ');
+    async function save(thenAs) {
+      if (busy.current) return; if (!picked) { toast('누른 것이 없어요', '들은 것을 하나 이상 눌러 주세요'); return; }
+      if (judge && !sure) { setSure(true); toast('판단하는 말이 들어 있어요', '있었던 일로 바꾸거나, 그래도 남기려면 한 번 더 눌러 주세요'); return; }
+      busy.current = true; var base = { cust: c.id, at: Date.now(), store: L.store(), by: m.by, byName: m.byName, amount: '', edits: [], helpful: {}, hidden: false, src: '누르기' };
+      try {
+        for (var g of MT) { var v = sel[g.k] || []; if (v.length) await setDoc('cs_notes', L.uid('n'), Object.assign({}, base, { body: g.lb + ' — ' + v.join(' · '), kind: g.kind, next: g.k === 'next', tap: { k: g.k, v: v } })); }
+        if (want.length) await setDoc('cs_notes', L.uid('n'), Object.assign({}, base, { body: '다음에 찾을 제품 — ' + want.map(function (w) { return shortN(w.n); }).join(' · '), kind: '기억 단서', next: false, tap: { k: 'want', v: want.map(function (w) { return w.n; }), codes: want.map(function (w) { return w.c; }) } }));
+        if (line.trim()) { var nk = noteKind(line); await setDoc('cs_notes', L.uid('n'), Object.assign({}, base, { body: line.trim(), kind: nk === '불편' || nk === '도움' ? '불편 · 도움' : nk, next: false, src: '누르기 · 한 줄' })); }
+        toast('기억을 남겼어요 — 다음 근무자에게 이어져요', sum || line.trim());
+        if (thenAs) L.openSheet(L.regSheet && L.regSheet('p3-as-new') ? 'p3-as-new' : 'p1-as', { cust: c.id }); else close();
+      } catch (e) { busy.current = false; }
+    }
+    function chip(label, on, go) { return html`<button type="button" class=${'p1-bk-chip' + (on ? ' on' : '')} aria-pressed=${on ? 'true' : 'false'} onClick=${go}>${label}</button>`; }
+    return html`<${Sheet} w=${1000} h=${700} label=${'손님 · ' + c.name + ' 님 · 기억 남기기'} title=${c.name + ' 님 — 오늘 들은 것 누르기'} sub="쓰지 않아도 돼요. 들은 것만 누르면 다음 근무자에게 이어져요 · 손님이 보셔도 괜찮은 말만 단추로 만들었어요 · 전 매장 직원이 함께 봐요" onClose=${close}
+      left=${(sel.pain || []).length ? html`<${Btn2} onClick=${function () { save(true); }}>남기고 AS 접수로</${Btn2}>` : ''} right=${html`<${Btn2} onClick=${close}>취소</${Btn2}><${Btn1} onClick=${function () { save(false); }}>${judge && sure ? '그래도 남기기' : picked ? '남기기 · ' + picked + '개' : '남기기'}</${Btn1}>`}>
+      <div class="p1-mt" id="p1-mt">
+        ${MT.map(function (g) { return html`<div class="p1-mt-row" role="group" aria-label=${g.lb} data-k=${g.k}><b>${g.lb}</b><div class="p1-bk-opts">${g.o.map(function (v) { return chip(v, (sel[g.k] || []).indexOf(v) >= 0, function () { tog(g.k, v); }); })}${g.k === 'pain' ? html`<span class="lv-small">누르면 [남기고 AS 접수로]가 생겨요</span>` : ''}</div></div>`; })}
+        <div class="p1-mt-row" role="group" aria-label="다음에 찾을 제품" data-k="want"><b>다음에 찾을 제품</b><div class="p1-bk-opts">${want.map(function (w) { return chip(shortN(w.n) + ' ✕', true, function () { setWant(want.filter(function (x) { return x.c !== w.c; })); }); })}<input class="lv-input p1-mt-q" id="p1-mt-q" value=${q} onInput=${function (e) { setQ(e.target.value); }} placeholder="상품 이름 몇 글자" aria-label="찾을 제품 이름" autocomplete="off" />${hits.map(function (pp) { return html`<button type="button" class="p1-bk-chip ghost" onClick=${function () { setWant(want.concat([pp])); setQ(''); }}>${shortN(pp.n)}</button>`; })}</div></div>
+        <span class="lv-small p1-mt-tip">찾을 제품은 다음 방문 때 · 그 손님 장바구니에 저절로 떠요</span>
+        <div class="p1-mt-row"><label for="p1-mt-line"><b>한 줄 쓰기</b><small> (선택)</small></label><div class="p1-mt-line"><input class="lv-input" id="p1-mt-line" value=${line} onInput=${function (e) { setLine(e.target.value); setSure(false); }} placeholder="꼭 남길 말만 · 있었던 일 그대로" autocomplete="off" />${judge ? html`<span class="p1-mt-warn" id="p1-mt-warn">판단하는 말이 들어 있어요 — 있었던 일로 바꿔 주세요 (예: «교환을 두 번 요청하셨음»). 손님이 보여 달라고 하시면 그대로 보여 드려야 해요.</span>` : ''}</div></div>
+      </div>
     </${Sheet}>`;
   });
   /* 회원 리뷰 — sales.reviews 에 {plat, pts, mode:'add', at, byName, ptsDoc} + points(kind:'review', plat, sale) */
@@ -12083,7 +12293,20 @@ try {
     try { (lines || []).forEach(function (l) { cart.lines.push({ c: l.c, name: l.name, price: +l.price || 0, qty: +l.qty || 0, disc: 0 }); }); g41Set(g41Plan()); setSet(setPlan()); out = cart.lines.map(function (l) { return { disc: l.disc || 0, why: l.discWhy || '' }; }); }
     finally { cart.lines.splice(0); keep.forEach(function (l) { cart.lines.push(l); }); }
     return out;
-  }, LIQ_TABLE: LIQ_TABLE });
+  }, LIQ_TABLE: LIQ_TABLE, dayMe: dayMe });
+  /* 하루 끝 «오늘의 나» (p6 퇴근 창) — 오늘 이 매장 내 결제 중 ① 기억(누른 답 · 글)이 있던 손님 ② 내가 남긴 기억이 오늘 쓰인 결제(누가 했든 · 어느 매장이든)
+     ③ 제때 다시 오신 손님 — 지난 방문 + max(7일, 평소 주기 × 1.5) 안 (인사 «응대»와 같은 규칙) · 이 매장 이번 달 «제때 다시 옴» % (손님 · 날짜 한 번씩) */
+  function dayMe(st, d, by) {
+    var all = arr(S.d.sales).filter(function (s) { return s && !s.practice && s.cust && L.dayOf(s.at) === d; });
+    var mine = all.filter(function (s) { return L.storeOf(s) === st && s.by === by; });
+    var notes = arr(col('cs_notes')).concat(arr(col('sale_notes'))).filter(function (n) { return !n.hidden; });
+    function onTime(s) { var r = rhythmOf(s.cust, L.dayOf(s.at)); if (!r || !r.cyc) return null; return r.since <= Math.max(7, r.cyc * 1.5); }
+    var served = {}, ot = {}; mine.forEach(function (s) { if (notes.some(function (n) { return n.cust === s.cust && (n.at || 0) < s.at; })) served[s.cust] = 1; if (onTime(s)) ot[s.cust] = 1; });
+    var used = by ? all.filter(function (s) { return notes.some(function (n) { return n.cust === s.cust && n.by === by && (n.at || 0) < s.at - 60000; }); }).length : 0;
+    var mon = String(d).slice(0, 7), n = 0, ok = 0, seen = {};
+    arr(S.d.sales).forEach(function (s) { if (!s || s.practice || !s.cust || L.storeOf(s) !== st) return; var dd = L.dayOf(s.at); if (dd.slice(0, 7) !== mon || dd > d || seen[s.cust + dd]) return; seen[s.cust + dd] = 1; var v = onTime(s); if (v == null) return; n++; if (v) ok++; });
+    return { served: Object.keys(served).length, used: used, ontime: Object.keys(ot).length, rate: n ? Math.round(ok * 100 / n) : null, rateN: n };
+  }
   L.view('p1-sale', SaleView);
 })();
 
@@ -18512,6 +18735,9 @@ try {
     var an = rc.steady + rc.ok + rc.late + rc.risk + rc.back + rc.gone; function rp(n) { return an ? Math.round(n / an * 1000) / 10 : 0; }
     function inScA(x) { if (x.practice) return false; if (sc === 'all') return true; var hm = x.home != null ? x.home : ((b.byId[x.cust] || {}).store || ''); return hm === sc || (!hm && x.store === sc); } /* 코드 리듬통계: 연습 기록 뺌 · 소속(손님 등록 매장 — p1 기록엔 없어 손님에서 찾음) 없으면 기록 매장 */
     var ansN = {}; cbs.filter(inScA).forEach(function (x) { var a = ansOf(x); ansN[a] = (ansN[a] || 0) + 1; }); var rsN = {}; rsn.filter(inScA).forEach(function (x) { rsN[x.reason] = (rsN[x.reason] || 0) + 1; });
+    /* 결제 뒤 단계별 창(v2 · 2026-11-09) — 어디서 · 왜(여럿) · 다시 온 계기 · 직접 입력도 그대로 셈 */
+    var whN = {}, wyN = {}, cmN = {}, cbV2 = 0; cbs.filter(inScA).forEach(function (x) { if (x.v !== 2 || x.auto || ansOf(x) === '말 안 함') return; cbV2++; if (x.wh) whN[x.wh] = (whN[x.wh] || 0) + 1; (x.whyL || []).forEach(function (w) { wyN[w] = (wyN[w] || 0) + 1; }); if (x.came) cmN[x.came] = (cmN[x.came] || 0) + 1; });
+    function topRows(o, n) { return Object.keys(o).sort(function (a, b) { return o[b] - o[a]; }).slice(0, n).map(function (k) { return [k, o[k]]; }); }
     var RHO = [['steady', '방문 간격 일정 · 주기 내 재방문'], ['ok', '평소 주기 1.5배 이내'], ['late', '평소 주기 1.5~2배'], ['risk', '평소 주기 2~4배 · 180일 이내'], ['gone', '평소 주기 4배 초과 · 180일 초과'], ['back', '장기 공백 후 최근 재방문']];
     /* 어떤 손님들 */
     var pc = scC.filter(function (c) { return !ps || c.at >= ps || ((b.ix[c.id] || EMPTY).last >= ps); });
@@ -18546,8 +18772,9 @@ try {
         <div class="p4-tiles7"><${Tile} k="an" l="분석 대상" v=${an + '명'} s="4회 이상 방문 회원 · 최근 1년 내" />${RHO.map(function (x) { var n = x[0] === 'back' ? rc.backAll : rc[x[0]]; return html`<${Tile} k=${x[0]} l=${RH_NAME[x[0]]} v=${n + '명'} s=${x[1]} />`; })}</div>
         <div class="p4-dist">${an ? RHO.filter(function (x) { return rc[x[0]]; }).map(function (x) { return html`<i class=${'p4-c-' + RH_CLS[x[0]]} style=${'width:' + rp(rc[x[0]]) + '%'} title=${RH_NAME[x[0]] + ' ' + rc[x[0]] + '명'}></i>`; }) : html`<i style="width:100%" class="p4-c-gray"></i>`}</div>
         <div class="p4-legend">${RHO.map(function (x) { return html`<span><i class=${'p4-c-' + RH_CLS[x[0]]}></i>${RH_NAME[x[0]]} ${rp(rc[x[0]])}%</span>`; })}</div>
-        <div class="p4-row2"><div><b>재방문 고객 응답 (구매처 · 사유)</b> <span class="lv-small">판매 화면 1탭</span><${Bars} rows=${BACK_ANS.map(function (a) { return [a, ansN[a] || 0]; }) /* 코드 리듬통계 막대들 — 이름은 복귀답목록 그대로 */} unit="" empty="아직 기록이 없습니다" noPct=${true} /></div>
+        <div class="p4-row2"><div><b>재방문 고객 응답 (구매처 · 사유)</b> <span class="lv-small">판매 화면 1탭</span><${Bars} rows=${BACK_ANS.map(function (a) { return [a, ansN[a] || 0]; }).concat(ansN['기타'] ? [['기타', ansN['기타']]] : []) /* 코드 리듬통계 막대들 — 이름은 복귀답목록 그대로 (+ 단계별 창에서 어디에도 안 맞는 답은 «기타») */} unit="" empty="아직 기록이 없습니다" noPct=${true} /></div>
           <div><b>챙김 때 적은 사정</b> <span class="lv-small">금일 관리 대상 고객</span><${Bars} rows=${REASONS.map(function (a) { return [a, rsN[a] || 0]; })} unit="" noPct=${true} /><span class="lv-small">늦어짐·이탈 위험 중 최근 90일 다른 지점에서 산 분 <b data-n="other">${other}</b>명</span></div></div>
+        ${cbV2 ? html`<div class="p4-row3" id="p4-cb2"><div><b>그동안 어디서</b> <span class="lv-small">결제 뒤 단계별 창 ${cbV2}건</span><${Bars} rows=${topRows(whN, 8)} unit="" noPct=${true} /></div><div><b>왜 한동안 안 오셨나</b> <span class="lv-small">여러 개 고름</span><${Bars} rows=${topRows(wyN, 10)} unit="" noPct=${true} /></div><div><b>다시 온 계기</b><${Bars} rows=${topRows(cmN, 8)} unit="" noPct=${true} /></div></div>` : ''}
         <span class="lv-small">산출 기준 — 방문 = 구매가 있던 날(같은 날은 한 번) · 평소 주기 = 방문 간격 가운데 값 · 상태는 새벽 4시 계산값(어제까지의 방문)으로 셉니다 · 등급과는 따로입니다</span>
       </${Card}>
       <${Card} id="p4-who"><div class="p4-h"><b class="t">어떤 손님들인가</b><span class="lv-small">${scName(sc)} · 기간 안에 등록하거나 오신 ${pc.length}명</span></div>
@@ -22348,11 +22575,21 @@ try {
     useEffect(function () { if (!allOut) return; var t = setTimeout(function () { L.openSheet('p6-blocked', { mode: 'bye', store: st, day: d }); }, 5000); return function () { clearTimeout(t); }; }, [allOut]);
     var dd = dailyDoc(st, d); var copiedAt = dd.copiedAt || 0;
     function copyNow() { var tx = isLastDay(d) ? monthText(st, d) : dayText(st, d); copy(tx); markCopied(st, d, tx); }
-    return html`<${L.Sheet} w=${600} h=${640} label="돈 · 시재 · 마감 ③ → ④" title="퇴근 QR (마감 끝)" sub="마감 뒤 각자 폰으로 찍고 퇴근 시각을 남겨요 · 20초마다 바뀜 · 맨 마지막에 일마감 복사" onClose=${L.closeSheet}
+    /* «오늘의 나» (2026-11-09 «사람을 담는 포스») — 오늘 내가 이어 간 관계 + 마음 한 번(이름 · 매장 없이 hr_mood{day, mood}만 · 이 브라우저에선 하루 한 번) */
+    var who = by(); var me1 = window.VWP1 && VWP1.dayMe ? VWP1.dayMe(st, d, who.by) : null;
+    var mk = 'vw-mood-' + d + '-' + (who.by || 'pc'); var ms = useState(lsGet(mk, '')), mood = ms[0], setMood = ms[1];
+    async function pickMood(v) { setMood(v); lsSet(mk, v); if (v === '건너뛰기') return; try { await L.write(function (db) { return db.collection('hr_mood').doc(L.uid('md')).set({ day: d, mood: v }); }); } catch (e) {} }
+    var meBox = html`<div class="p6-me" id="p6-me"><b class="p6-me-t">${who.byName ? who.byName + ' 님, ' : ''}오늘 수고하셨어요</b><span class="lv-small">오늘의 나 — 오늘 이 매장에서 내가 이어 간 관계</span>
+      ${me1 ? html`<div class="p6-me-tiles"><div class="y"><span>기억을 보고 응대한 손님</span><b id="p6-me-served">${me1.served}명</b></div><div><span>내가 남긴 기억이 쓰인 횟수</span><b id="p6-me-used">${me1.used}번</b></div><div><span>제때 다시 오신 손님</span><b id="p6-me-ontime">${me1.ontime}명</b></div></div>
+        <span class="lv-small" id="p6-me-rate">이 매장 이번 달 «제때 다시 옴» ${me1.rate == null ? '— 아직 셀 방문이 없어요' : me1.rate + '% (' + me1.rateN + '번 중)'} · 참고: 운영 W포스 9월 회사 전체 74%</span>` : html`<span class="lv-small">판매 묶음이 없는 빌드라 숫자를 못 셉니다</span>`}
+      <div class="p6-mood" id="p6-mood">${mood ? html`<span>${mood === '건너뛰기' ? '마음 칸은 건너뛰었어요' : '고마워요 — 이름 · 매장 없이 회사 전체로만 모였어요'}</span>` : html`<b>오늘 마음은 어땠어요?</b><span class="lv-small">이름 · 매장 없이 회사 전체로만 모여요 · 안 눌러도 돼요</span><div class="p6-mood-b">${['뿌듯했어요', '보통이었어요', '힘들었어요'].map(function (v) { return html`<button type="button" onClick=${function () { pickMood(v); }}>${v}</button>`; })}<button type="button" class="skip" onClick=${function () { pickMood('건너뛰기'); }}>건너뛰기</button></div>`}</div></div>`;
+    return html`<${L.Sheet} w=${1040} h=${680} label="돈 · 시재 · 마감 ③ → ④" title="퇴근 QR (마감 끝)" sub="마감 뒤 각자 폰으로 찍고 퇴근 시각을 남겨요 · 20초마다 바뀜 · 맨 마지막에 일마감 복사" onClose=${L.closeSheet}
       left=${html`<${L.Btn2} onClick=${function () { lsSet('vw-p6-leave-later', { store: st, day: d, at: Date.now() + 600000 }); L.closeSheet(); L.toast('10분 뒤 다시 띄울게요'); }}>나중에 (10분)</${L.Btn2}>`} right=${copiedAt ? html`<${L.Btn2} onClick=${copyNow}>다시 복사</${L.Btn2}><${L.Btn1} onClick=${L.closeSheet}>닫기</${L.Btn1}>` : html`<${L.Btn2} onClick=${L.closeSheet}>닫기</${L.Btn2}><${L.Btn1} onClick=${copyNow}>④ 일마감 복사 — 마지막</${L.Btn1}>`}>
-      <div class="p6-qrbox"><${QR} seed=${'out:' + st + d + ':' + slot} size=${170} /><div class="p6-qrlist" id="p6-leave-list"><b>근무자 ${wl.length}명</b>${wl.length ? wl.map(function (w) { return html`<div><span>${w.name}${w.in ? ' · ' + hm(w.in) + ' 출근' : ''}</span>${w.out ? html`<span class="lv-tag green">✓ ${hm(w.out)} 퇴근</span>` : html`<${L.Btn2} small onClick=${function () { markOut(st, d, w).catch(function () {}); }}>(체험판) 폰으로 찍음</${L.Btn2}>`}</div>`; }) : html`<span class="lv-small">오늘 출근 기록이 없어요</span>`}<span class="lv-small">체험판 QR — 실제 W출근 연결은 교체 때</span></div></div>
+      <div class="p6-leave2">${meBox}<div class="p6-leave-r">
+      <div class="p6-qrbox"><${QR} seed=${'out:' + st + d + ':' + slot} size=${150} /><div class="p6-qrlist" id="p6-leave-list"><b>근무자 ${wl.length}명</b>${wl.length ? wl.map(function (w) { return html`<div><span>${w.name}${w.in ? ' · ' + hm(w.in) + ' 출근' : ''}</span>${w.out ? html`<span class="lv-tag green">✓ ${hm(w.out)} 퇴근</span>` : html`<${L.Btn2} small onClick=${function () { markOut(st, d, w).catch(function () {}); }}>(체험판) 폰으로 찍음</${L.Btn2}>`}</div>`; }) : html`<span class="lv-small">오늘 출근 기록이 없어요</span>`}<span class="lv-small">체험판 QR — 실제 W출근 연결은 교체 때</span></div></div>
       ${allOut ? html`<div class="p6-okline" id="p6-allout">모두 퇴근했어요 — 5초 뒤 닫히고 30초 뒤 로그아웃해요</div>` : ''}
-      <div class=${copiedAt ? 'p6-okline' : 'p6-warnbox'} id="p6-leave-copy">${copiedAt ? '✓ ④ 일마감 글 ' + hm(copiedAt) + ' 복사함 — 카톡 보고방에 붙여넣기(Ctrl+V)' : html`<b>④ 마지막 — 일마감 복사</b><span>마감 숫자가 확정됐어요 · [일마감 복사]를 눌러 카톡 보고방에 붙여넣어 주세요</span>`}</div>
+      <div class=${copiedAt ? 'p6-okline' : 'p6-warnbox'} id="p6-leave-copy">${copiedAt ? '✓ ④ 일마감 글 ' + hm(copiedAt) + ' 복사함 — 카톡 보고방에 붙여넣기(Ctrl+V)' : html`<b>④ 마지막 — 일마감 복사</b><span>마감 숫자가 확정됐어요 · [일마감 복사]를 눌러 카톡 보고방에 붙여넣어 주세요 · 마음 칸은 복사에 안 들어가요</span>`}</div>
+      </div></div>
     </${L.Sheet}>`;
   }
   /* ── 마감 QR 막힘 · 모두 퇴근 · 자동 로그아웃 ── */
