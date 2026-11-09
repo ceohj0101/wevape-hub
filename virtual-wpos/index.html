@@ -16172,7 +16172,7 @@ try {
     var fixEl = isSuper() && !fixDone && !narrow ? html`<div class="p2-fixband"><b>일회성 보정 — 지난 계산점 따이공 매출</b><span class="lv-small" style="flex:1">주문 장부와 매출 장부가 다른 결제 ${fixList.length}줄을 주문 장부로 맞춥니다 (한 번만)</span><${Btn2} small onClick=${function () { setFixOpen(!fixOpen); }}>내용 보기 · 적용</${Btn2}>${fixOpen ? html`<div style="width:100%" class="lv-small">${fixList.map(function (x) { return x.no + ' ' + won(x.amount) + ' ' + BOOKS[x.book].short + ' → ' + BOOKS[orders[x.order].book].short; }).join(' · ') || '맞출 줄이 없어요'} <${Btn2} small onClick=${applyFix}>보정 적용</${Btn2}></div>` : ''}</div>` : '';
     var body = html`${fixEl}${periodBar}${tabs}${tiles}<div class=${narrow ? 'p2-sstack' : 'p2-sgrid'}>${dailyEl}${clientEl}${flavorEl}${devEl}${itemEl}${shipEl}${payEl}</div>`;
     if (narrow) return html`<div class="p2-appsales">${body}</div>`;
-    var moneyRow = isSuper() ? html`<span class="p2-moneyrow">${MONEY_ROW.map(function (x) { return x[1] ? html`<a href=${'#' + x[1]} class=${x[1] === 'g2' && x[0] === '따이공 매출' ? 'on' : ''}>${x[0]}</a>` : html`<b>${x[0]}</b>`; })}</span>` : '';
+    var moneyRow = isSuper() && !(window.VW_P9 && VW_P9.admSide) ? html`<span class="p2-moneyrow">${MONEY_ROW.map(function (x) { return x[1] ? html`<a href=${'#' + x[1]} class=${x[1] === 'g2' && x[0] === '따이공 매출' ? 'on' : ''}>${x[0]}</a>` : html`<b>${x[0]}</b>`; })}</span>` : '';
     return html`<div class="lv-screen"><${L.Header} g=${0} s=${2} /><${DgTabs} on="g2" extra=${moneyRow} />
       <main class="lv-main p2-dgmain p2-salesmain" data-scroll>${body}</main><${L.Dock} act="판매" /></div>`;
   }
@@ -21192,6 +21192,7 @@ try {
   function SubNav(p) {
     if (!isSuper()) return '';
     var it = [['g22', '전매장 재고'], ['g20', '실사 오차'], ['g21', '상품·원가'], ['g23', '발주·이익']];
+    if (window.VW_P9 && VW_P9.admSide && VW_P9.admSide()) it = [];   /* 관리 쪽: 화면 칸은 머리줄(관리 묶음 재고 · 상품)에 — 요청 단추만 (2026-11-09) */
     return html`<nav class="p5-sub" aria-label="재고 · 상품 세부"><span class="lv-small"><b>재고 · 상품</b></span>${it.map(function (x) { return html`<a href=${'#' + x[0]} class=${p.cur === x[0] ? 'on' : ''}>${x[1]}</a>`; })}<span class="lv-small" style="padding-left:6px"><b>요청</b></span><button type="button" onClick=${function () { openSheet('p5-ship'); }}>매장에 발송 요청</button></nav>`;
   }
 
@@ -21692,6 +21693,11 @@ try {
     if (p.kind === 'mr' && !canSuper() && canMgr()) extra = ['g25', 'g26'].filter(function (x) { return base.indexOf(x) < 0; });
     if (p.kind === 'st' && canSuper()) { lab = '재고 · 상품'; extra = ['g20', 'g21'].filter(function (x) { return base.indexOf(x) < 0; }); acts = [['#S7-request', '매장에 발송 요청']]; }
     if (p.kind === 'rank' && canSuper()) { lab = '매출'; if (base.indexOf('g24') < 0) base = ['g24'].concat(base); }
+    /* 현장 · 관리 분리 (2026-11-09 팀장 «하단부 버튼만으로만 전환») — 현장 쪽 최고관리자: 관리 전용 칸 · 보고 단추 빼기 / 관리 쪽: 화면 칸은 머리줄(관리 묶음)에 있으니 보고 · 요청 단추만 */
+    var P9 = window.VW_P9; if (canSuper() && P9 && P9.admSide) {
+      if (P9.admSide()) { base = []; extra = []; lab = ''; }
+      else { extra = []; acts = []; lab = p.kind === 'rank' ? lab : ''; base = base.filter(function (x) { return !P9.admOnly(x); }); }
+    }
     if (base.length < 2 && !extra.length && !acts.length && !lab) return '';
     return html`<nav class="p6-sub" aria-label="세부 칸">
       ${lab ? html`<span class="lb">${lab}</span>` : ''}
@@ -27694,11 +27700,18 @@ try {
   function side() { return role() === 'super' ? lsGet('vw-p9-side', 'f') : 'f'; }
   function setSide(s) {
     lsSet('vw-p9-side', s); var last = lsGet('vw-p9-last-' + (myId() || 'pc'), {});
-    go(s === 'a' ? (last.a || 'g25') : (last.f || 'S1-sale')); L.emit();
+    go(s === 'a' ? (last.a && ADMIN_SIDS[last.a] ? last.a : 'g25') : (last.f && !ADMIN_SIDS[last.f] || last.f && FIELD_SIDS[last.f] ? last.f : 'S1-sale')); L.emit();
   }
-  /* 관리 화면을 열면 저절로 관리 쪽, 현장 화면을 열면 저절로 현장 쪽 (W포스 10-29-9) · 양쪽 다 마지막에 본 화면 기억 */
+  /* 현장 ↔ 관리는 아래 [현장 | 관리] 단추로만 바뀜 (2026-11-09 팀장 «하단부 버튼만으로만 전환» — W포스 10-29-9 «관리 화면을 열면 저절로 관리 쪽»은 끔)
+     현장 쪽(최고관리자)에서는 관리 전용 화면을 메뉴에서 빼고, 관리 쪽에서는 머리줄 칸을 관리 묶음 화면으로 · 양쪽 다 마지막에 본 화면 기억 */
   var FIELD_SIDS = {}; FIELD.forEach(function (f) { (f[3] || []).forEach(function (x) { FIELD_SIDS[x] = 1; }); });
-  window.addEventListener('hashchange', function () { var sid = curSid(); var k = 'vw-p9-last-' + (myId() || 'pc'); var last = lsGet(k, {}); if (ADMIN_SIDS[sid]) last.a = sid; else if (/^(S\d|g\d)/.test(sid)) last.f = sid; lsSet(k, last); if (role() === 'super') { if (ADMIN_SIDS[sid] && !FIELD_SIDS[sid] && lsGet('vw-p9-side', 'f') !== 'a') { lsSet('vw-p9-side', 'a'); L.emit(); } else if (FIELD_SIDS[sid] && !ADMIN_SIDS[sid] && lsGet('vw-p9-side', 'f') !== 'f') { lsSet('vw-p9-side', 'f'); L.emit(); } } });
+  function admOnly(sid) { return !!ADMIN_SIDS[sid] && !FIELD_SIDS[sid]; }
+  function admSide() { return role() === 'super' && side() === 'a'; }
+  function hideInField(seg) { return role() === 'super' && side() !== 'a' && (seg[1] || []).every(admOnly); }
+  function admGroupOf(sid) { for (var i = 0; i < ADMIN.length; i++) if (ADMIN[i][2].indexOf(sid) >= 0) return i; return -1; }
+  function admSegs(gi) { return gi < 0 ? [] : ADMIN[gi][2].filter(function (s) { return s[0] !== '|'; }).map(function (s) { return [stitle(s), [s], sidRole(s)]; }); }
+  P9.side = function () { return side(); }; P9.admOnly = admOnly; P9.admSide = admSide;
+  window.addEventListener('hashchange', function () { var sid = curSid(); var k = 'vw-p9-last-' + (myId() || 'pc'); var last = lsGet(k, {}); if (/^(S\d|g\d)/.test(sid)) { if (admSide()) last.a = sid; else last.f = sid; } lsSet(k, last); });
   /* 관리 쪽 대기 = 가입 승인 대기(staff acct 'wait') + 안 본 개선요청(VWP.devUnseen) + 아직 안 본 발송 요청(st_ship req) */
   function adminWaiting() { return waitSignups().length + nDev() + shipReqs().filter(function (r) { return r.stage === 'req'; }).length; }
   function previewGo(r) {
@@ -27754,7 +27767,9 @@ try {
     L.useStore(); useTick();
     var sp = useState(false), pop = sp[0], setPop = sp[1];
     var o = me(); var t = L.opTime(); var st = L.store();
-    var g = L.DOCK[p.g] || ['', '', []]; var segs = g[2] || []; var act = p.s;
+    var g = L.DOCK[p.g] || ['', '', []]; var segs0 = g[2] || []; var segs, act, moreArg;
+    if (admSide()) { var agi = admGroupOf(curSid()); segs = admSegs(agi); act = segs.findIndex(function (x) { return x[1][0] === curSid(); }); moreArg = { adm: agi }; }
+    else { segs = segs0.filter(function (x) { return !hideInField(x); }); act = segs.indexOf(segs0[p.s]); moreArg = p.g; }
     var idx = segs.map(function (_, i) { return i; }); var vis = idx, more = false;
     if (segs.length > 5) { more = true; vis = act < 4 ? idx.slice(0, 4) : idx.slice(0, 3).concat([act]); }
     var al = useAlerts(); var chips = al.slice(0, 2); var restN = al.length - chips.length;
@@ -27771,7 +27786,7 @@ try {
         </span>
         <span class="p9-chips">${chips.map(function (a) { return html`<${AlertChip} a=${a} key=${a.id} />`; })}${restN > 0 ? html`<button type="button" class="p9-achip more" onClick=${function () { L.openSheet('p9-big', ''); }}>＋${restN}개 더</button>` : ''}</span>
       </span>
-      <nav aria-label="이 메뉴 안" class="lv-segs">${vis.map(function (i) { var s = segs[i]; return html`<a href=${'#' + s[1][0]} data-r=${s[2]} class=${i === act ? 'on' : ''}>${s[0]}</a>`; })}${more ? html`<a href=${'#d' + p.g} onClick=${function (e) { e.preventDefault(); L.openSheet('p9-segs', p.g); }}>더 보기 ▾</a>` : ''}</nav>
+      <nav aria-label="이 메뉴 안" class="lv-segs">${vis.map(function (i) { var s = segs[i]; return html`<a href=${'#' + s[1][0]} data-r=${s[2]} class=${i === act ? 'on' : ''}>${s[0]}</a>`; })}${more ? html`<a href=${'#d' + p.g} onClick=${function (e) { e.preventDefault(); L.openSheet('p9-segs', moreArg); }}>더 보기 ▾</a>` : ''}</nav>
       <span class="lv-head-r">
         <button type="button" class=${'p9-closebtn' + (evening ? ' on' : '')} title="마감하기 — 오늘 영업 마감" onClick=${function () { P9.pressClose(); }}>${T('마감하기')}</button>
         <button type="button" class="lv-round p9-rb" aria-label=${T('인수인계')} title=${'인수인계 — 안 읽은 ' + hu} onClick=${function () { tryOpen('p10-handover', null, function () { go('g37'); }); }}><${Ic} n="note" s=${17} c="var(--k-ink2)" w=${2} />${hu ? html`<b class="p9-badge">${hu}</b>` : ''}</button>
@@ -27804,7 +27819,7 @@ try {
   }
   function DockPop(p) {
     var segs = p.segs; var adm = side() === 'a';
-    return html`<span class="p9-dpop" role="menu">${segs.filter(function (s) { if (typeof s === 'string') return true; return can(s[2]) && (adm || !s[1].every(function (x) { return ADMIN_SIDS[x]; })); }).map(function (s) {
+    return html`<span class="p9-dpop" role="menu">${segs.filter(function (s) { if (typeof s === 'string') return true; return can(s[2]) && (adm || !hideInField(s)); }).map(function (s) {
       if (typeof s === 'string') return html`<em>${s.slice(1)}</em>`;
       return html`<a href=${'#' + s[1][0]} role="menuitem" class=${'r-' + s[2]}>${s[0]}</a>`;
     })}${(p.extra || []).map(function (x) { return html`<button type="button" class="ext" onClick=${function () { openAny(x[1]); }}>↗ ${x[0]}</button>`; })}</span>`;
@@ -28257,7 +28272,9 @@ try {
   });
   /* 머리줄 «더 보기 ▾» — 이 묶음 세부 화면 전부 */
   sheet('p9-segs', function SegsSheet(p) {
-    var g = L.DOCK[p.arg] || ['', '', []]; var sid = curSid();
+    var a0 = p.arg; var sid = curSid(); var g;
+    if (a0 && typeof a0 === 'object') g = a0.adm >= 0 ? [ADMIN[a0.adm][0], '', admSegs(a0.adm)] : ['', '', []];
+    else { g = L.DOCK[a0] || ['', '', []]; g = [g[0], g[1], (g[2] || []).filter(function (x) { return !hideInField(x); })]; }
     return html`<${Sheet} w=${720} h=${560} label="두 번째 줄" title=${g[0] + ' — 세부 화면'} sub="● 중간관리자 · ● 최고관리자 화면은 색으로 표시" onClose=${close}>
       ${(g[2] || []).map(function (s) { var ok = can(s[2]); return html`<a class=${'lv-rowline p9-segrow r-' + s[2] + (s[1].indexOf(sid) >= 0 ? ' on' : '')} href=${ok ? '#' + s[1][0] : null} onClick=${function (e) { if (!ok) { e.preventDefault(); toast('이 화면은 ' + (s[2] === 'super' ? '최고관리자' : '중간관리자 이상') + '만 볼 수 있어요'); return; } close(); }}><span class="t"><b>${s[0]}</b><span>${s[1].map(stitle).join(' · ')}</span></span>${s[2] !== 'all' ? html`<span class=${'p9-tag ' + (s[2] === 'super' ? 'blue' : 'org')}>${s[2] === 'super' ? '최고관리자' : '중간관리자'}</span>` : ''}</a>`; })}
     </${Sheet}>`;
