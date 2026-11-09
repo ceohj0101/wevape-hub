@@ -10187,7 +10187,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
   Object.defineProperty(window.VWL, 'cart', { get: function () { return cart; }, set: function (v) { cart = v; cartChanged(); }, enumerable: true });
   async function pinHash(pin) { var b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('vw-pin|' + String(pin || ''))); return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, '0'); }).join(''); }
   async function pinCheck(st, pin) { if (!st || !pin) return false; if (st.pinh) return st.pinh === await pinHash(pin); return false; }
-  Object.assign(window.VWL, { curGrades: curGrades, hasSheet: function (k) { return k ? sheetState.kind === k : !!sheetState.kind; }, pinHash: pinHash, pinCheck: pinCheck });
+  Object.assign(window.VWL, { sheetKeys: function () { return Object.keys(REG.sheets); }, curGrades: curGrades, hasSheet: function (k) { return k ? sheetState.kind === k : !!sheetState.kind; }, pinHash: pinHash, pinCheck: pinCheck });
   window.addEventListener('vw:role', function () { emit(); });
   render(html`<${App} />`, document.getElementById('live'));
   VW.liveShow = liveShow;
@@ -10912,7 +10912,7 @@ try {
         <span style="flex:1"></span><button type="button" class="p1-sm" onClick=${function () { ui({ left: 'prod' }); }}>‹ 상품으로</button>
       </div>
       <div class="p1-cbody" data-scroll>
-        ${L.cart.lines.length || c ? html`<${GuestBits} full=${true} />` : html`<span class="lv-small">비회원이면 장바구니에 담은 뒤 구분 · 이유를 골라요</span>`}
+        ${c ? html`<${GuestBits} full=${true} />` : html`<span class="lv-small">비회원이면 구분 · 이유는 오른쪽 장바구니에서 골라요</span>`}
         ${UI.tips ? html`<${Tips} />` : ''}
         ${UI.found ? html`<${Found} ix=${ix} />` : ''}
         ${c ? html`<${MemberCard} c=${c} o=${ciOf(ix, c.id)} ix=${ix} key=${c.id} />` : !UI.found ? html`<div class="lv-empty"><b>손님을 조회하면 여기에 구매 기록이 펼쳐집니다</b><span>성함 · 뒤 4자리 · 단서(예: 망고 김)로 찾고 Enter</span></div>` : ''}
@@ -24181,7 +24181,7 @@ try {
       <${MHead} ms=${(function () { var o = {}; o[st] = M; return o; })()} title="매장별 보고서" sub="매장 한 곳의 지표 · 산출 근거 · 운영 특이사항" />
       <div class="lv-row"><${L.Chips} items=${stores.map(function (s) { return [s.id, s.name]; })} value=${st} onChange=${setSt} /></div>
       <div class="p7-scroll2" data-scroll>
-        <section class="p7-card"><div class="lv-row"><b style="font-size:22px">${stName(st)}</b><${Tag} k="kind">${typeOf(st)}</${Tag}><span class="lv-small">${[cf.addr, cf.floor, cf.opened ? cf.opened + ' 개점' : '', cf.closeAt ? cf.closeAt + ' 닫음' : '', cf.area, cf.customers ? '주요 고객 ' + cf.customers : ''].filter(Boolean).join(' · ') || '기본 정보가 비어 있어요 — [설정]'}</span><span style="flex:1"></span><${L.Btn2} small onClick=${function () { L.openSheet('p7-insp', { store: st }); }}>현장 점검 시작</${L.Btn2}><${L.Btn2} small onClick=${function () { L.openSheet('p7-memo', { store: st }); }}>현장 메모</${L.Btn2}><${L.Btn2} small onClick=${function () { window.__p7Set = st; L.go('g49'); }}>설정</${L.Btn2}></div>
+        <section class="p7-card"><div class="lv-row"><b style="font-size:22px">${stName(st)}</b><${Tag} k="kind">${typeOf(st)}</${Tag}><span class="lv-small">${[cf.addr, cf.floor, cf.opened ? cf.opened + ' 개점' : '', cf.closeAt ? cf.closeAt + ' 닫음' : '', cf.area, cf.customers ? '주요 고객 ' + cf.customers : ''].filter(Boolean).join(' · ') || '기본 정보가 비어 있어요 — [설정]'}</span><span style="flex:1"></span><${L.Btn2} small onClick=${function () { L.openSheet('p7-memo', { store: st }); }}>현장 메모</${L.Btn2}><${L.Btn2} small onClick=${function () { window.__p7Set = st; L.go('g49'); }}>설정</${L.Btn2}></div>
           <span class="lv-small" id="p7-rep-sum">양호 ${good.length}개${good.length ? '(' + good.map(function (m) { return m.name; }).join(', ') + ')' : ''} · 개선 필요 · 주의 ${bw.length}개${bw.length ? '(' + bw.map(function (m) { return m.name; }).join(', ') + ')' : ''} · 데이터 수집 중 ${wait.length}개${guest.p != null ? ' — 객수는 ' + (guest.gbasis === '직전 8주' ? '직전 8주' : '전년 동기') + ' 대비 ' + plus(guest.p) + '%' : ''}</span>
           ${cf.note ? html`<div class="p7-memoline">운영 특이사항 — ${cf.note}</div>` : ''}</section>
         <div class="p7-tiles8">${M.map(function (m) { return html`<${MTile} m=${m} full=${true} />`; })}</div>
