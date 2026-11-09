@@ -502,6 +502,14 @@ button.lv-round{border:0; padding:0; cursor:pointer}
 .lv-pills .p1-all{background:var(--k-ink,var(--k-inv)) !important;color:#fff !important;font-weight:800}
 /* 손님 이력 칸 아래 두 단추 — 좁은 칸에서 «다른 손님»이 밖으로 밀려 잘리던 것 (2026-11-09) */
 .p1 .p1-mfoot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;flex:none}.p1 .p1-mfoot>button{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 📞 전화 응대 (2026-11-09 B안) */
+.p1-phonebtn{color:var(--k-blue) !important}
+.p1-phone{display:flex;flex-direction:column;gap:12px;height:100%;min-height:0}
+.p1-phfind{display:flex;gap:8px}.p1-phfind input{flex:1}
+.p1-phcust{display:flex;flex-direction:column;gap:12px;overflow:auto;min-height:0}
+.p1-phnotes{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border-radius:calc(12px*var(--rk));background:var(--k-bg1)}.p1-phnotes span{font-size:calc(13px*var(--fk))}.p1-phnotes .warn{color:#b42318;font-weight:700}
+.p1-phsec{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:calc(12px*var(--rk));box-shadow:inset 0 0 0 1px var(--k-line)}.p1-phsec>b{font-size:calc(13px*var(--fk))}
+.p1-phacts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.p1-phacts .lv-btn2{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* 묶음 p10-work */
 /* p10 할 일 · 인수인계 · 권한 · 자료실 · 설정 */
@@ -10525,6 +10533,7 @@ try {
   var SC = { buf: '', last: 0, t0: 0, target: null, snap: null };
   window.addEventListener('keydown', function (e) {
     var live = document.getElementById('live'); if (!live || live.hidden) return;
+    if (e.key === 'F8' && MYR[L.route.name] && L.sheetState.kind !== 'p1-phone') { e.preventDefault(); L.openSheet('p1-phone', {}); return; }   /* 📞 전화 응대 */
     var now = Date.now();
     if (e.key && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       if (now - SC.last > 100) { SC.buf = ''; SC.target = e.target; SC.snap = (e.target && 'value' in e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) ? e.target.value : null; SC.t0 = now; }
@@ -10829,6 +10838,7 @@ try {
     return html`
       <div class="p1-srow"><label class="lv-search"><${Ic} n="search" s=${18} c="var(--k-ink2)" w=${2} /><input type="text" id="lv-sale-q" value=${UI.pq} onInput=${function (e) { setP({ pq: e.target.value }); }} onKeyDown=${onKey} placeholder="품목코드 또는 품목명 검색 (예: 라임, A-0001) · 바코드" aria-label="상품 찾기" autocomplete="off" />${UI.pq ? html`<button type="button" class="lv-clear" aria-label="검색어 지우기" onClick=${function () { setP({ pq: '' }); }}>×</button>` : ''}</label>
         <span class="p1-stat" id="p1-pstat">${shown.length}개 · 품절 ${outN}개 ${q || showOut || UI.edit ? '포함' : '숨김'}</span>
+        <button type="button" class="p1-ai p1-phonebtn" id="p1-phonebtn" title="전화 응대 — 장바구니는 그대로 (F8)" onClick=${function () { L.openSheet('p1-phone', {}); }}>📞 전화 응대</button>
         <button type="button" class="p1-ai" id="p1-aibtn" onClick=${function () { L.openSheet('p1-ai'); }}><${Ic} n="spark" s=${16} />발주 추천(AI발주)${aiN.hot ? html`<em>${aiN.hot}</em>` : ''}${aiN.mid ? html`<em class="org">${aiN.mid}</em>` : ''}</button></div>
       <div class="p1-catrow"><div class="p1-tabs" role="tablist">${['전체'].concat(cats).map(function (k) { return html`<button type="button" role="tab" class=${'lv-chip' + (UI.cat === k ? ' on' : '')} onClick=${function () { setP({ cat: k, ser: '', nic: '' }); }}>${k === '전체' ? '전체' : catName(k)}</button>`; })}</div>
         <button type="button" class=${'p1-tog' + (showOut ? ' on' : '')} aria-pressed=${showOut} onClick=${function () { lsSet('p1-showOut', showOut ? '0' : '1'); L.emit(); }}>품절 상품 표시</button>
@@ -11679,6 +11689,51 @@ try {
     </${Sheet}>`;
   });
   var RV_REASON = ['품절', '미취급', '단종·재입고 미정', '기타'];
+  /* ══ 📞 전화 응대 (2026-11-09 팀장 B안 «전화 문의 · 주문 · 예약은 판매 화면에서») ══
+     창 안에서 조회 · 이력 · 예약 · AS · 특이사항까지 — 지금 장바구니(계산 중인 매장 손님)는 건드리지 않음
+     주문을 받을 때만 [판매로 담기]: 장바구니에 상품이 있으면 «전화 받는 중 보류»로 보류 → 새 장바구니에 이 손님 */
+  L.sheet('p1-phone', function PhoneSheet(p) {
+    L.useStore(); L.useCart(); var ix = L.useCustIndex(); var a = p.arg || {};
+    var qs = useState(''), q = qs[0], setQ = qs[1]; var rs = useState(null), res = rs[0], setRes = rs[1]; var cs = useState(a.cust || ''), cid = cs[0], setCid = cs[1];
+    var c = cid ? custOf(cid) : null; var busyCart = L.cart.lines.length > 0;
+    function find(all) { var r = lookList(q, all); if (r.mode === 'empty') { toast('뒤 4자리 · 성함 · 전체 번호를 넣어 주세요'); return; } if (r.mode === 'one') { setCid(r.id); setRes(null); return; } setCid(''); setRes(Object.assign({}, r, { all: !!all })); }
+    async function toSale(withLast, last) {
+      if (busyCart) { var ok = await holdCart('📞 전화 받는 중 보류' + (L.cart.cust && custOf(L.cart.cust) ? ' · ' + custOf(L.cart.cust).name + ' 님' : ''), true); if (!ok) return; }
+      else { dropCust(); guestOff(); }
+      if (c) pickCust(c.id);
+      if (busyCart) toast('지금 장바구니를 보류하고 ' + (c ? c.name + ' 님' : '전화 손님') + ' 장바구니를 열었어요', '보류한 손님은 «보류»에서 다시 불러와요');
+      if (withLast && last) putSale(last);
+      ui({ left: 'prod', hist: false, found: null }); close();
+    }
+    var head = html`<div class="p1-phfind"><input class="lv-input big" id="p1-phq" value=${q} onInput=${function (e) { setQ(e.target.value); }} onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); find(false); } }} placeholder="뒤 4자리 · 성함 · 전체 번호" aria-label="전화 손님 찾기" autocomplete="off" autofocus /><button type="button" class="lv-btn1" id="p1-phgo" onClick=${function () { find(false); }}>찾기</button></div>`;
+    var body;
+    if (c) {
+      var o = ciOf(ix, c.id), g = gradeOfC(c, o), f = flagsOf(c), cyc = cycleOf(o); var sales = o.sales.slice(0, 3); var last = o.sales[0];
+      var asOpen = arr(S.d.as).filter(function (r) { return r.cust === c.id && r.status !== '완료' && r.status !== '취소'; }), rvOpen = arr(S.d.resv).filter(function (r) { return r.cust === c.id && r.status !== '구매완료' && r.status !== '구매취소'; });
+      var nts = custNotes(c.id).slice(0, 3); var pp = prepaysOf(c.id);
+      body = html`<div class="p1-phcust" id="p1-phcust">
+        <div class="p1-mhead"><span class="av">${c.name.slice(0, 1)}</span><span class="t"><b>${c.name} 님 <span class=${'lv-grade ' + GCLS[g.name]}>${g.name}</span></b><span>${L.digits(c.phone).replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3')} · 방문 ${o.visits}번 · ${L.storeName(c.store || 's1')}</span></span><span class="bal"><small>포인트</small><b>${won(o.bal)}P</b></span></div>
+        ${FLAGS.some(function (x) { return f[x[0]]; }) ? html`<div class="p1-mini">${FLAGS.filter(function (x) { return f[x[0]]; }).map(function (x) { return html`<span class="p1-tag red">⚠ ${x[1]}</span>`; })}</div>` : ''}
+        <div class="p1-phacts">
+          <button type="button" class="lv-btn2" id="p1-ph-resv" onClick=${function () { L.openSheet(L.regSheet && L.regSheet('p3-resv-new') ? 'p3-resv-new' : 'p1-resv', { cust: c.id }); }}>＋ 예약 받기</button>
+          <button type="button" class="lv-btn2" id="p1-ph-as" onClick=${function () { L.openSheet(L.regSheet && L.regSheet('p3-as-new') ? 'p3-as-new' : 'p1-as', { cust: c.id }); }}>＋ AS 접수</button>
+          <button type="button" class="lv-btn2" id="p1-ph-note" onClick=${function () { if (L.regSheet && L.regSheet('p3-notes')) L.openSheet('p3-notes', c.id); else L.openSheet('p1-notes', { cust: c.id, add: true }); }}>특이사항 ${custNotes(c.id).length}건 · 쓰기</button>
+          <button type="button" class="lv-btn2" onClick=${function () { setCid(''); setQ(''); }}>다른 손님</button>
+        </div>
+        ${nts.length ? html`<div class="p1-phnotes">${nts.map(function (n) { return html`<span class=${n.kind === '주의' ? 'warn' : ''}>${n.kind === '주의' ? '⚠ ' : '📝 '}${n.t}</span>`; })}</div>` : ''}
+        <div class="p1-phsec"><b>최근 구매</b>${sales.length ? sales.map(function (s) { return html`<div class="p1-kl"><span class="lv-small" style="width:92px">${md(s.at)} · ${L.daysSince(s.at)}일 전</span><span class="grow">${(s.lines || []).filter(function (l) { return !l.svc; }).map(function (l) { return l.name.replace(/^\([^)]*\)\s*/, '') + (l.qty > 1 ? ' ×' + l.qty : ''); }).join(', ')}</span><span class="lv-small">${won(L.saleSums(s).net)}원</span></div>`; }) : html`<span class="lv-small">아직 W포스 구매가 없어요</span>`}
+          ${cyc && cyc.gap ? html`<span class="lv-small">자주 사는 것 — ${cyc.name} · 보통 ${cyc.gap}일마다${cyc.next ? (cyc.next <= Date.now() ? ' → 지금쯤 떨어질 때' : ' → ' + md(cyc.next) + '쯤') : ''}</span>` : ''}</div>
+        <div class="p1-phsec"><b>AS · 예약</b><span class="lv-small">${asOpen.length || rvOpen.length ? [asOpen.length ? 'AS ' + asOpen.map(function (r) { return (r.prod ? r.prod.n : '') + ' ' + (L.AS_LABEL[r.status] || r.status); }).join(', ') : '', rvOpen.length ? '예약 ' + rvOpen.map(function (r) { return (r.item ? r.item.n : '') + ' ' + r.status; }).join(', ') : ''].filter(Boolean).join(' · ') : '진행 중인 AS · 예약 없음'}</span>${pp.length ? html`<span class="p1-tag grn" style="align-self:flex-start">💰 선결제 ${won(pp.reduce(function (x, r) { return x + (r.prepay.amount || 0); }, 0))}원</span>` : ''}</div>
+        </div>`;
+      var right = html`${last ? html`<${Btn2} onClick=${function () { toSale(true, last); }}>지난번 그대로 주문</${Btn2}>` : ''}<${Btn1} onClick=${function () { toSale(false); }}>${busyCart ? '지금 손님 보류하고 주문 받기' : '주문 받기 — 판매로 담기'}</${Btn1}>`;
+    } else if (res) {
+      if (res.mode === 'none') body = html`<div class="p1-card" id="p1-phfound"><b>등록된 손님이 없어요${res.d ? ' — ' + res.d : ''}</b><span class="lv-small">처음 전화한 손님이면 예약만 받거나, 주문을 받아 판매 화면에서 회원 가입 · 비회원으로 결제해요</span><div class="p1-mini">${!res.all ? html`<button type="button" class="p1-sm" onClick=${function () { find(true); }}>전 매장에서 더보기</button>` : ''}<button type="button" class="p1-sm" onClick=${function () { L.openSheet(L.regSheet && L.regSheet('p3-resv-new') ? 'p3-resv-new' : 'p1-resv', {}); }}>＋ 예약 받기 (비회원)</button><button type="button" class="p1-sm" onClick=${function () { L.openSheet('p1-join', { name: res.name || '', phone: res.d && res.d.length >= 10 ? res.d : '' }); }}>＋ 회원 가입</button></div></div>`;
+      else { var ids = res.mode === 'clue' ? res.hits.map(function (h) { return h.id; }) : res.ids; body = html`<div class="p1-card" id="p1-phfound"><b>${res.mode === 'clue' ? '단서로 찾기' : '후보'} ${ids.length}명</b>${ids.slice(0, 12).map(function (id) { var cc = custOf(id); if (!cc) return ''; var oo = ciOf(ix, id); var h = res.mode === 'clue' ? res.hits.find(function (x) { return x.id === id; }) : null; return html`<button type="button" class="lv-rowline btn p1-frow" onClick=${function () { setCid(id); setRes(null); }}><span class="av">${cc.name.slice(0, 1)}</span><span class="t"><b>${cc.name} 님 · 뒤 ${L.tail4(cc.phone)}</b><span>${won(oo.bal)}P · 방문 ${oo.visits}번${h ? ' · ' + h.why.join(' · ') : ''}</span></span></button>`; })}${!res.all ? html`<button type="button" class="p1-sm" onClick=${function () { find(true); }}>전 매장에서 더보기</button>` : ''}</div>`; }
+    } else body = html`<div class="lv-empty" style="flex:1"><b>전화 손님을 찾으세요</b><span>뒤 4자리 · 성함 · 단서(예: 망고 김)로 찾으면 구매 · AS · 예약 · 특이사항이 여기서 보여요</span><span>${busyCart ? '지금 장바구니(' + L.cart.lines.length + '줄)는 그대로 두고 응대해요' : ''}</span></div>`;
+    return html`<${Sheet} w=${760} h=${680} label="판매 · 전화 응대" title="📞 전화 응대" sub=${busyCart ? '계산 중인 장바구니는 그대로예요 — 주문을 받을 때만 보류하고 새 장바구니를 열어요' : '조회 · 이력 · 예약 · AS · 특이사항 — 주문을 받으면 [판매로 담기]'} onClose=${close} left=${html`<${Btn2} onClick=${close}>닫기</${Btn2}>`} right=${right || ''}>
+      <div class="p1-phone" id="p1-phone">${head}${body}</div>
+    </${Sheet}>`;
+  });
   L.sheet('p1-resv', function ResvNew(p) {
     L.useStore(); var a = p.arg || {}; var stock = L.stockMap();
     var fs = useState({ who: a.cust || L.cart.cust ? { cust: a.cust || L.cart.cust } : {}, items: [], cur: null, qty: '1', reason: '품절', memo: '', pre: false, preAmt: '', preM: 'cash' }), F = fs[0], setF = fs[1];
