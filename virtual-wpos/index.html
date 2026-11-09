@@ -450,6 +450,55 @@ button.lv-round{border:0; padding:0; cursor:pointer}
 .p1-line .p1-minus .p1-mini button.on{background:var(--k-red-d)}
 .p1-band.off{background:var(--k-fill); color:var(--k-ink2)}
 
+/* ── C안 (2026-11-09) — 오른쪽 칸: 손님 맞이 · 손님 이력 · 손님 한 줄 ── */
+.p1 .p1-greet, .p1 .p1-mside{gap:10px}
+.p1-gk{font-size:calc(12.5px*var(--fk)); font-weight:700; color:var(--k-ink2); flex:none}
+.p1-gq{font-size:calc(26px*var(--fk)); font-weight:800; letter-spacing:-.01em; flex:none}
+.p1-glook{display:flex; gap:8px; flex:none}
+.p1-glook .lv-input{flex:1; min-width:0; font-size:calc(20px*var(--fk))}
+.p1-glook .lv-btn1{width:92px; flex:none; height:auto}
+.p1-gfound{flex:none; max-height:280px; overflow-y:auto}
+.p1-ghint{font-size:calc(12.5px*var(--fk)); line-height:1.5; color:var(--k-ink2); background:var(--k-fill); border-radius:calc(12px*var(--rk)); padding:10px 12px; flex:none}
+.p1-mhead{display:flex; align-items:center; gap:10px; flex:none}
+.p1-mhead .av{width:42px; height:42px; flex:none; border-radius:calc(21px*var(--rk)); background:var(--k-inv); color:#ffd60a; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:calc(17px*var(--fk))}
+.p1-mhead .t{flex:1; min-width:0; display:flex; flex-direction:column}
+.p1-mhead .t b{font-size:calc(18px*var(--fk)); display:flex; align-items:center; gap:6px}
+.p1-mhead .t > span{font-size:calc(12px*var(--fk)); color:var(--k-ink2)}
+.p1-mhead .bal{display:flex; flex-direction:column; align-items:flex-end}
+.p1-mhead .bal small{font-size:calc(11px*var(--fk)); color:var(--k-ink2)}
+.p1-mhead .bal b{font-size:calc(18px*var(--fk))}
+.p1-mlast{display:flex; flex-direction:column; gap:6px; padding:10px 12px; border-radius:calc(14px*var(--rk)); background:var(--k-fill); flex:none}
+.p1-mnote{font-size:calc(12.5px*var(--fk)); color:var(--k-ink2); flex:none}
+.p1 .p1-crow{cursor:default}
+.p1 .p1-crow:hover{background:transparent}
+.p1-crow.p1-clook{gap:6px; padding:6px 6px 6px 10px; margin:0; background:var(--k-fill)}
+.p1-crow.p1-clook .p1-in{flex:1; min-width:0; height:32px; background:var(--k-card)}
+.p1-crow .p1-lk{font-size:calc(13px*var(--fk)); white-space:nowrap}
+.p1-frow .t span{white-space:normal}
+.p1-ptsline{font-size:calc(11.5px*var(--fk)); color:var(--k-ink2); flex:none}
+/* 결제 팝업 — 손님 단계 */
+.p1-gf{display:flex; flex-direction:column; gap:14px}
+.p1-gf-dots{list-style:none; margin:0; padding:0; display:flex; gap:6px}
+.p1-gf-dots li{flex:1; min-width:0; display:flex; flex-direction:column; gap:5px; font-size:calc(12px*var(--fk)); color:var(--k-ink2)}
+.p1-gf-dots li i{display:block; height:5px; border-radius:calc(3px*var(--rk)); background:var(--k-fill)}
+.p1-gf-dots li.done i{background:var(--k-ink3)}
+.p1-gf-dots li.now{color:inherit; font-weight:700}
+.p1-gf-dots li.now i{background:var(--k-inv)}
+.p1-gf-opts{display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px}
+.p1-gf-opts.one{grid-template-columns:1fr}
+.p1-gf-opt{min-height:66px; display:flex; align-items:center; gap:12px; padding:10px 16px; border-radius:calc(16px*var(--rk)); border:1px solid rgba(0,0,0,.14); background:var(--k-card); color:inherit; font:inherit; text-align:left; cursor:pointer}
+.p1-gf-opt .n{width:28px; height:28px; flex:none; border-radius:calc(14px*var(--rk)); background:var(--k-fill); display:flex; align-items:center; justify-content:center; font-size:calc(13px*var(--fk)); font-weight:800}
+.p1-gf-opt .tx{display:flex; flex-direction:column; gap:2px; min-width:0}
+.p1-gf-opt b{font-size:calc(17px*var(--fk)); font-weight:700}
+.p1-gf-opt .s{font-size:calc(12.5px*var(--fk)); opacity:.75}
+.p1-gf-opt.on{background:var(--k-inv); color:#fff; border-color:var(--k-ink)}
+.p1-gf-opt.on .n{background:#ffd60a; color:var(--k-ink)}
+.p1-gf-row{display:flex; gap:8px}
+.p1-gf-row .lv-input{flex:1; min-width:0}
+.p1-gf-row .lv-btn1{width:110px; flex:none}
+.p1-gf-found{display:flex; flex-direction:column; gap:4px; max-height:220px; overflow-y:auto}
+.p1-gf-auto{align-self:flex-start; font-size:calc(13px*var(--fk)); background:#eaf2ff; color:#1d4e89; border-radius:calc(8px*var(--rk)); padding:6px 10px}
+
 /* 묶음 p10-work */
 /* p10 할 일 · 인수인계 · 권한 · 자료실 · 설정 */
 #live .p10-main{position:absolute; top:108px; left:24px; right:24px; bottom:100px; display:flex; flex-direction:column; gap:10px; min-height:0}
@@ -10360,15 +10409,35 @@ try {
     var earned = ec.pts;
     return { sub: sub, ld: ld, whole: whole, rev: revW, disc: ld + whole + revW, goods: goods, ship: ship, total: total, bal: bal, pts: pts, preAvail: preAvail, pre: pre, due: due, n: n, base: ec.base, earned: earned };
   }
-  /* 비회원 결제 «꼭 고르기» — W포스 v2026.10.24-12(#519) 그대로: 회원을 안 붙이고 물건을 담으면 고객 구분 · 왜 비회원인가요? 둘 다 골라야 결제 단추가 켜진다
-     (회원 · 연습용 테스트 결제 · 직원 구매는 묻지 않음 · 외국인 → «관광객» 자동 · 따이공 → «따이공» 자동) */
-  function custWhyOk() {
-    var cart = L.cart; var c = custOf(cart.cust); var miss = [];
-    if (!cart.lines.length || cart.practice || cart.staffSale || c) return miss;
-    if (!cart.ctype) miss.push('고객 구분을 골라 주세요');
-    else if (!cart.why) miss.push('비회원 이유를 골라 주세요');
-    else if (cart.why === '직접 쓰기' && !String(cart.whyText || '').trim()) miss.push('비회원 이유를 적어 주세요');
-    return miss;
+  /* ══ 결제 팝업 — 손님 단계 (팀장 결정 2026-11-09 · C안) ══
+     결제 단추를 누르면 한 화면에 한 질문: 회원 확인 → 신분증 → 구분 → 가입 안 한 이유 → 결제 (사유는 손님 자료라 정확도 우선)
+     · 비회원은 매번 신분증부터 — 신분증 · 면허증 · 외국인등록증 = 내국인(구분 건너뜀) · 여권 = 나라만 고름 · 확인 못 함 = «미확인»(결제는 막지 않음, W포스 그대로)
+     · 외국인 → 이유 «관광객» 자동 · 따이공 → 이유 «따이공» 자동(이유 단계 건너뜀) — W포스 v2026.10.24-12(#519) 그대로
+     · 회원은 포인트만 묻고 결제(포인트 칸을 장바구니에서 여기로) · «신분증 확인 요망 · 미성년자 의심» 표시 회원은 신분증도 (W포스 #59)
+     · 연습용 테스트 결제 · 직원 구매는 묻지 않음 (W포스 그대로) */
+  var FOREIGN = ['일본인', '중국유커', '기타외국인'];
+  var GF_NAME = { ask: '회원 확인', id: '신분증', type: '구분', why: '가입 안 한 이유', pts: '포인트' };
+  function whyOk(cart) { return !!cart.why && (cart.why !== '직접 쓰기' || !!String(cart.whyText || '').trim()); }
+  function ptsAsk(c) { if (!c || !feat('pointsUse', true) || L.cart.practice || L.cart.staffSale) return false; var t = totals(); return t.bal > 0 && t.goods > 0 && t.due > 0; }
+  function gfSteps(c) {
+    var cart = L.cart, s = []; if (cart.practice || cart.staffSale) return s;
+    if (c) { if (showAdult(c)) s.push('id'); if (ptsAsk(c)) s.push('pts'); return s; }
+    if (!cart.guest) s.push('ask');
+    s.push('id'); if (cart.idType !== 'kr') s.push('type'); if (cart.ctype !== '따이공') s.push('why');
+    return s;
+  }
+  function gfNeed(c) {
+    var cart = L.cart, s = gfSteps(c); if (!s.length) return false;
+    if (c) return s.indexOf('pts') >= 0 || !cart.idType;
+    return !cart.guest || !cart.idType || !cart.ctype || (cart.ctype !== '따이공' && !whyOk(cart));
+  }
+  function guestOn() { L.cart.guest = true; UI.found = null; cartCh(); }
+  function guestOff() { ['guest', 'idType', 'ctype', 'why', 'whyText', 'whyAuto', 'adult'].forEach(function (k) { delete L.cart[k]; }); cartCh(); }
+  function guestSum() { var g = L.cart; if (!g.idType) return '결제 때 신분증부터 물어봐요'; return [g.idType === 'kr' ? '신분증 확인' : g.idType === 'pass' ? '여권 확인' : '신분증 미확인', g.ctype, g.ctype === '따이공' ? '' : g.why === '직접 쓰기' ? g.whyText : g.why].filter(Boolean).join(' · '); }
+  async function refuseSale() {
+    if (!L.cart.refuse) { toast('거절 사유를 골라 주세요'); return false; }
+    var t = totals(), m = me();
+    try { await setDoc('sale_refuse', L.uid('x'), { at: Date.now(), day: L.today(), store: L.store(), by: m.by, byName: m.byName, reason: L.cart.refuse, n: t.n, amount: t.total, items: L.cart.lines.map(function (l) { return { c: l.c, n: l.name, qty: l.qty }; }), cust: L.cart.cust || '', ctype: L.cart.ctype || '' }); clearCart(); toast('판매 거절을 기록했어요', '장바구니를 비웠어요 · ☎1382 안내'); return true; } catch (e) { return false; }
   }
   function saleNo(at) { var d = new Date(at); var p = function (x) { return String(x).padStart(2, '0'); }; return p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()); }
   /* 카드 단말기 설정 = p10 wk_settings/nvcat_<매장> {use:'on'|'off', mode:'test'|'live', catid} */
@@ -10412,7 +10481,7 @@ try {
   /* 재고 부족 판매 사유 — W포스 #337(__neg1) 다섯 가지 그대로 · «모름»이면 한 줄 메모 꼭 · 사유 없이는 결제 못 함 (W포스는 담을 때 묻는 창 — 여기선 그 줄 안 칩 + 결제 때 확인) */
   var MINUS_WHY = ['입고 등록 안 됨', '다른 매장에서 가져옴', '전에 다른 상품으로 찍힘', '재고 숫자가 원래 틀림', '모름'], MINUS_IC = { '입고 등록 안 됨': '📦', '다른 매장에서 가져옴': '🚚', '전에 다른 상품으로 찍힘': '🔀', '재고 숫자가 원래 틀림': '🔢', '모름': '❓' };
   function minusMiss() { var stock = L.stockMap(); return L.cart.lines.filter(function (l) { return minusOf(l, stock) > 0 && (!l.minusWhy || (l.minusWhy === '모름' && !String(l.minusMemo || '').trim())); }); }
-  function pushLine(p, qty) { var l = L.cart.lines.find(function (x) { return x.c === p.c && !x.svc && (!x.disc || x.promo); }); if (l) l.qty += qty; else L.cart.lines.push({ c: p.c, name: p.n, price: p.p || 0, qty: qty, disc: 0 }); cartCh(); }
+  function pushLine(p, qty) { var l = L.cart.lines.find(function (x) { return x.c === p.c && !x.svc && (!x.disc || x.promo); }); if (l) l.qty += qty; else L.cart.lines.push({ c: p.c, name: p.n, price: p.p || 0, qty: qty, disc: 0 }); UI.hist = false; cartCh(); }
   /* 재고를 넘어도 담는다 (마이너스 판매 허용) — 막는 창 대신 그 줄에 «재고가 모자랍니다» + 사유(minusWhy) 칩 */
   function addProd(p, qty, quiet) {
     qty = qty || 1; if (L.cart.practice) { toast('테스트 결제 중이에요', '테스트 결제를 끝내거나 비운 뒤 담아 주세요'); return false; }
@@ -10589,7 +10658,8 @@ try {
     var sale = { at: at, day: L.dayOf(at), no: saleNo(at), by: m.by, byName: m.byName, cust: cart.cust || '', custName: c ? c.name : '', lines: cleanLines(), sub: t.sub, disc: t.disc, total: t.total, pay: pay, refunds: [] };
     if (c) sale.pts = { used: t.pts, earned: t.earned, rate: L.ptRate() };
     sale.ctype = c ? ctypeOfCust(c) : (cart.ctype || ''); if (!c) sale.guestWhy = cart.why === '직접 쓰기' ? '직접: ' + String(cart.whyText || '').trim() : (cart.why || '');
-    if (cart.adult) sale.adult = cart.adult; sale.age = c || cart.adult ? '확인됨' : '미확인';   /* W포스: 회원 = 확인됨 · 비회원 = 체크했으면 확인됨, 아니면 미확인 */
+    if (cart.adult) sale.adult = cart.adult; sale.age = c || cart.adult ? '확인됨' : '미확인';
+    if (cart.idType) sale.idType = cart.idType;   /* 결제 팝업 신분증 단계: kr(신분증 · 면허증 · 외국인등록증) · pass(여권) · none(확인 못 함) */   /* W포스: 회원 = 확인됨 · 비회원 = 체크했으면 확인됨, 아니면 미확인 */
     if (t.whole) sale.discWhole = t.whole;
     if ((cart.reviews || []).length) sale.reviews = cart.reviews.map(function (r) { return { plat: r.plat, pts: 0, disc: r.disc || 0, mode: 'disc', at: r.at || at, byName: r.byName || m.byName }; });
     if (shipOn()) sale.ship = shipRec(t);
@@ -10613,14 +10683,14 @@ try {
       var toA = cart.ship && cart.ship.to; if (c && toA && toA.addr && !cart.ship.once && toA.addr !== (c.addr || '')) await upd('customers', c.id, { addr: toA.addr });
     } catch (e) {}
     var paid = { cust: sale.cust, name: sale.custName, amount: t.due, at: at, sale: id };
-    clearCart(); ui({ tail: sale.cust ? paid : null, more: false, left: 'prod', q: '', t4: '', found: null });
+    clearCart(); ui({ tail: sale.cust ? paid : null, more: false, left: 'prod', q: '', t4: '', look: '', found: null, hist: false });
     return id;
   }
   async function payDone(pay, extra) { try { var id = await finishSale(pay, extra); L.openSheet('p1-done', id); return id; } catch (e) { return null; } }
 
   /* ── 결제 시작 ── */
   /* 오늘의 질문은 결제 창 위에 붙어서 묻는다 (결제를 막지 않음) · 카드는 창 하나(할부 · 승인 대기)에서 끝남 */
-  /* 결제 단추를 누르면 W포스와 같은 순서로 확인한다 — ① 비회원 구분 · 이유 ② 액상 현금 할인인데 현금 · 계좌이체가 아님 ③ 판매 금지 · 블랙리스트 표시 손님
+  /* 결제 단추를 누르면 W포스와 같은 순서로 확인한다 — ① 비회원 구분 · 이유 (결제 팝업 손님 단계 · 2026-11-09) ② 액상 현금 할인인데 현금 · 계좌이체가 아님 ③ 판매 금지 · 블랙리스트 표시 손님
      ④ 맡아둔 돈(선결제)을 안 쓰고 전액 결제 ⑤ 퀵인데 기사님께 드릴 돈이 빔(막음) ⑥ 신분증 확인 필수 매장의 비회원. ②③④⑥ 은 «그래도 진행»을 누르면 이어 간다 */
   function askThen(o, go) { L.openSheet('p1-ask', Object.assign({}, o, { act: function () { setTimeout(go, 0); } })); }
   function startPay(kind, ok) {
@@ -10628,14 +10698,16 @@ try {
     if (!L.cart.lines.length) { toast('담은 상품이 없어요'); return; }
     var G0 = window.VW_P9 && VW_P9.payGuard ? VW_P9.payGuard(L.store()) : { ok: true };
     if (G0 && G0.ok === false) { toast('결제할 수 없어요', G0.why || ''); if (G0.back && L.storeIds().indexOf(G0.back) >= 0) L.setStore(G0.back); return; }
-    normShip(); promoFit(); var miss = custWhyOk(); if (miss.length) { ui({ shake: Date.now() }); toast(miss[0], '고르면 결제 단추가 켜집니다'); return; }
+    normShip(); promoFit();
     var mm = minusMiss(); if (mm.length && !L.cart.practice) { toast('⚠️ 재고가 모자랍니다 — 사유를 골라 주세요', mm[0].name + (mm[0].minusWhy === '모름' ? ' · ❓ 모름이면 한 줄 메모를 꼭 적어 주세요' : ' · 그 줄의 사유 칩을 눌러 주세요')); return; }
+    if (!ok.gf && !custOf(L.cart.cust) && gfNeed(null)) { L.openSheet('p1-gflow', { kind: kind, ok: ok }); return; }   /* 결제 팝업 — 비회원은 맨 앞 (W포스 ① 비회원 구분 · 이유) */
     var t = totals(), c = custOf(L.cart.cust); var again = function (k) { return function () { var o2 = Object.assign({}, ok); o2[k] = 1; startPay(kind, o2); }; };
     if (!ok.cash && liqInfo().on && !CASH_OK[kind]) { askThen({ title: '현금 할인이 들어가 있는데 «' + (PM[kind] || kind) + '» 결제입니다', sub: '액상 현금 할인 −' + won(liqInfo().amt) + '원', yes: '현금 할인을 빼고 결제', no: '결제 멈춤', note: '«결제 멈춤»을 누르면 아무것도 바뀌지 않아요.' }, function () { liqOff(); cartCh(); again('cash')(); }); return; }
     if (!ok.ban && c && banned(c)) { var fk = flagsOf(c).ban ? '판매 금지' : '블랙리스트'; askThen({ title: '이 손님에게 «' + fk + '» 표시가 달려 있습니다', sub: (c.flagWhy || c.warnWhy) ? '사유: ' + (c.flagWhy || c.warnWhy) : '주의 표시를 확인하세요', yes: '그래도 결제할게요', red: true }, again('ban')); return; }
     if (!ok.pre && c && t.preAvail > 0 && !L.cart.preOn) { askThen({ title: '이 손님이 맡겨두신 돈 ' + won(t.preAvail) + '원이 있습니다', sub: '지금 누르신 결제는 그 돈을 «안 쓰고» 전액을 받는 결제입니다 — 그대로 진행할까요?', yes: '그대로 진행', note: '맡아둔 돈을 쓰시려면 [아니요] → 노란 칸의 [' + won(Math.min(t.preAvail, t.total)) + '원 빼기]를 눌러 주세요' }, again('pre')); return; }
     if (shipOn() && shipKind() === '퀵' && !L.cart.practice && !practiceOn() && driverOf(t.ship) <= 0) { toast('퀵으로 보내시는데 «기사님께 드릴 돈»이 비어 있습니다', '금액을 넣어주셔야 서랍에서 그만큼 빠집니다 · 천원 단위로 넣어주세요'); setTimeout(function () { var d = document.getElementById('p1-driver'); if (d) d.focus(); }, 30); return; }
     if (!ok.id && needAdult(c) && !L.cart.adult) { var m = me(); askThen({ title: '이 매장은 신분증 확인이 필수로 설정돼 있습니다. 확인하셨나요?', yes: '확인했어요', note: '[확인했어요]를 누르면 확인한 것으로 기록됩니다.' }, function () { L.cart.adult = { at: Date.now(), by: m.by, byName: m.byName }; cartCh(); again('id')(); }); return; }
+    if (!ok.gf && c && gfNeed(c)) { L.openSheet('p1-gflow', { kind: kind, ok: ok }); return; }   /* 회원은 판매 금지 · 선결제 확인 뒤 «포인트 쓰실래요?» */
     goPay(kind);
   }
   function goPay(kind) {
@@ -10652,10 +10724,10 @@ try {
   function openOther(k, arg, who) { L.openSheet(k, arg); setTimeout(function () { if (L.sheetState.kind === k && !document.querySelector('#live .lv-sheetlayer .lv-sheet')) { L.closeSheet(); toast(who + ' 창이 이 빌드에 없어요', k); } }, 80); }
   function pickCust(id) {
     var c = custOf(id); if (!c) return;
-    L.cart.cust = id; L.cart.ctype = ctypeOfCust(c); delete L.cart.why; delete L.cart.whyText; L.cart.pts = 0; L.cart.preOn = false; L.cart.preSkip = false; if (!showAdult(c)) delete L.cart.adult; cartCh();
+    L.cart.cust = id; L.cart.ctype = ctypeOfCust(c); ['why', 'whyText', 'whyAuto', 'guest', 'idType', 'adult'].forEach(function (k) { delete L.cart[k]; }); L.cart.pts = 0; L.cart.preOn = false; L.cart.preSkip = false; UI.found = null; UI.look = ''; cartCh();
     var pp = prepaysOf(id); toast(c.name + ' 님을 붙였어요', banned(c) ? '주의 손님 — 판매 금지 표시가 있어요' : pp.length ? '이 손님 선결제가 있습니다 · ' + won(pp.reduce(function (a, r) { return a + r.prepay.amount; }, 0)) + '원' : '');
   }
-  function dropCust() { L.cart.cust = ''; delete L.cart.ctype; L.cart.pts = 0; L.cart.preOn = false; delete L.cart.adult; cartCh(); }
+  function dropCust() { L.cart.cust = ''; delete L.cart.ctype; delete L.cart.idType; L.cart.pts = 0; L.cart.preOn = false; delete L.cart.adult; UI.hist = false; cartCh(); }
   function suggestFor() {
     var codes = Array.from(new Set(L.cart.lines.map(function (l) { return l.c; }))); if (!codes.length || codes.length > 2 || L.cart.cust || L.cart.noSug) return [];
     var st = L.store(), h = new Date().getHours(), sc = {};
@@ -10669,16 +10741,19 @@ try {
     if (normShip()) setTimeout(cartCh, 0);
     promoFit();   /* 다른 묶음 · 수량 바꾸기로 장바구니가 바뀌어도 켜진 행사 할인은 다시 맞춤 (W포스 renderCart 때 맞추기) */
     useEffect(function () { setTimeout(function () { var i = document.getElementById('lv-sale-q'); if (i && !L.sheetState.kind) i.focus(); }, 60); }, []);
-    var t = totals(ix); var c = custOf(L.cart.cust);
-    var step = !L.cart.lines.length ? 0 : (c || !custWhyOk().length) ? 2 : 1;
-    var steps = [['상품 찍기', t.n ? t.n + '개' : '바코드 · 상품'], ['손님', c ? c.name + ' 님' : L.cart.ctype ? '비회원 · ' + L.cart.ctype : '없이 · 찾기'], ['결제', t.n ? won(t.due) + '원' : '—'], ['영수증', '출력 · 안 줌']];
-    function stepClick(i) { if (i === 0) { ui({ left: 'prod' }); setTimeout(function () { var x = document.getElementById('lv-sale-q'); if (x) x.focus(); }, 30); } if (i === 1) ui({ left: 'cust' }); if (i === 2 && t.n) startPay('card'); if (i === 3) toast('결제를 마치면 영수증 출력 · 안 줌을 고릅니다', '지난 영수증은 구매내역에서 다시 출력'); }
+    var t = totals(ix); var c = custOf(L.cart.cust); var empty = !L.cart.lines.length;
+    /* 순서 막대 — 손님 · 상품은 어느 쪽 먼저든 (C안) · 손님은 «결제 때 물어봐요»로 비워 둘 수 있음 */
+    var steps = [['손님', c ? c.name + ' 님' : L.cart.guest ? '비회원' : '결제 때 물어봐요'], ['상품', t.n ? t.n + '개' : '바코드 · 상품'], ['결제', t.n ? won(t.due) + '원' : '—'], ['영수증', '출력 · 안 줌']];
+    var done = [!!c || !!L.cart.guest, t.n > 0, false, false]; var now = t.n ? 2 : (c || L.cart.guest ? 1 : 0);
+    function focusId(id) { setTimeout(function () { var x = document.getElementById(id); if (x) x.focus(); }, 40); }
+    function stepClick(i) { if (i === 0) { if (c) ui({ left: 'cust' }); else { ui({ left: 'prod' }); focusId('p1-look'); } } if (i === 1) { ui({ left: 'prod', hist: false }); focusId('lv-sale-q'); } if (i === 2 && t.n) startPay('card'); if (i === 3) toast('결제를 마치면 영수증 출력 · 안 줌을 고릅니다', '지난 영수증은 구매내역에서 다시 출력'); }
+    var right = c && (empty || UI.hist) && UI.left !== 'cust' ? html`<${MemberSide} c=${c} ix=${ix} key=${'m' + c.id} />` : !c && empty && !L.cart.guest ? html`<${GreetSide} ix=${ix} />` : html`<${CartCol} ix=${ix} t=${t} />`;
     return html`<div class="lv-screen p1">
       <${L.Header} g=${0} s=${0} more="#m-S1-sale" />
-      <nav class="lv-order p1-order" aria-label="순서">${steps.map(function (s, i) { var done = i < step, now = i === step; return html`<button type="button" class=${now ? 'now' : ''} data-step=${i} onClick=${function () { stepClick(i); }}><span class=${'n' + (done ? ' done' : '')}>${done ? html`<${Ic} n="check" s=${15} c="#fff" w=${2.6} />` : i + 1}</span><span class="tx"><b>${s[0]}</b><span>${s[1]}</span></span></button>`; })}</nav>
+      <nav class="lv-order p1-order" aria-label="순서 — 손님 · 상품은 어느 쪽 먼저든">${steps.map(function (s, i) { return html`<button type="button" class=${now === i ? 'now' : ''} data-step=${i} onClick=${function () { stepClick(i); }}><span class=${'n' + (done[i] ? ' done' : '')}>${done[i] ? html`<${Ic} n="check" s=${15} c="#fff" w=${2.6} />` : i + 1}</span><span class="tx"><b>${s[0]}</b><span>${s[1]}</span></span></button>`; })}</nav>
       <main class="lv-main p1-main">
-        <section class="lv-left">${UI.left === 'cust' ? html`<${CustPanel} ix=${ix} />` : html`<${ProdPanel} />`}</section>
-        <${CartCol} ix=${ix} t=${t} />
+        <section class="lv-left">${UI.left === 'cust' && c ? html`<${CustPanel} ix=${ix} />` : html`<${ProdPanel} />`}</section>
+        ${right}
       </main>
       <${AlertBar} />
       <button type="button" id="p1-scanbtn" tabindex="-1" aria-hidden="true">스캔</button>
@@ -10762,20 +10837,65 @@ try {
   }
 
   /* ── 비회원 칸 (구분 · 이유 · 성인 확인) ── */
-  function GuestBits(p) {
-    var c = custOf(L.cart.cust); var full = p.full; var m = me();
-    function set(o) { Object.assign(L.cart, o); cartCh(); }
-    var fl0 = flagsOf(c); var adult = !showAdult(c) ? html`<span class="lv-small" id="p1-adultok">등록된 회원 — 성인 확인 완료된 손님입니다</span>` : html`${c ? html`<span class="lv-small lv-red" id="p1-adultflag">${fl0.minor ? '🔞 미성년자 의심으로 표시된 손님입니다 — 꼭 신분증을 확인해 주세요' : '🆔 신분증 확인 요망으로 표시된 손님입니다 — 올 때마다 확인'}</span>` : ''}<div class="p1-mini"><label class="lv-check"><input type="checkbox" id=${full ? 'p1-adult2' : 'p1-adult'} checked=${!!L.cart.adult} onChange=${function (e) { set({ adult: e.target.checked ? { at: Date.now(), by: m.by, byName: m.byName } : null }); }} />신분증으로 성인 확인했어요 (미성년자 아님)</label>${L.cart.adult ? html`<span class="lv-small">${L.hm(L.cart.adult.at)} 확인 · 결제 기록에 같이 남음</span>` : ''}<button type="button" class=${'p1-sm' + (UI.tips ? ' on' : '')} onClick=${function () { ui({ left: 'cust', tips: !UI.tips }); }}>이상해요</button></div>`;
-    if (c) return full || showAdult(c) ? adult : '';
-    var whys = L.cart.ctype === '따이공' ? ['따이공'] : WHYS;   /* W포스: 따이공은 이유 «따이공» 하나뿐 */
-    var done = L.cart.ctype && L.cart.why && (L.cart.why !== '직접 쓰기' || String(L.cart.whyText || '').trim()) && L.cart.adult;
-    if (!full && done && !UI.gOpen) return html`<div class="p1-mini" style="flex:none"><span>비회원</span><span class="lv-small">${L.cart.ctype} · ${L.cart.why === '직접 쓰기' ? L.cart.whyText : L.cart.why}${L.cart.adult ? ' · 성인 확인 ' + L.hm(L.cart.adult.at) : ''}</span><button type="button" class="p1-sm" onClick=${function () { ui({ gOpen: true }); }}>바꾸기</button></div>`;
-    return html`<div class=${'p1-guest' + (UI.shake && Date.now() - UI.shake < 700 ? ' shake' : '')} id=${full ? 'p1-guest2' : 'p1-guest'}>
-      <div class="p1-mini" role="radiogroup" aria-label="고객 구분"><span>구분</span>${CTYPES.map(function (x) { return html`<button type="button" role="radio" aria-checked=${L.cart.ctype === x} class=${L.cart.ctype === x ? 'on' : ''} onClick=${function () { var o = { ctype: x }; var fr = ['일본인', '중국유커', '기타외국인'].indexOf(x) >= 0; if (x === '따이공') { o.why = '따이공'; o.whyAuto = true; } else if (fr) { if (!L.cart.why || L.cart.whyAuto) { o.why = '관광객'; o.whyAuto = true; } } else if (L.cart.whyAuto) { o.why = ''; o.whyAuto = false; } set(o); }}>${x}</button>`; })}</div>
-      <div class="p1-mini"><span>${full ? '왜 비회원인가요?' : '이유'}</span>${whys.map(function (x) { return html`<button type="button" class=${L.cart.why === x ? 'on' : ''} onClick=${function () { if (x === '따이공') return; set({ why: L.cart.why === x ? '' : x, whyAuto: false }); }}>${x}</button>`; })}${L.cart.whyAuto ? html`<span class="lv-small" style="color:var(--k-grn)">자동 — 바꿀 수 있음</span>` : ''}${L.cart.why === '직접 쓰기' ? html`<input class="p1-in" id=${full ? 'p1-whyt2' : 'p1-whyt'} style="width:130px" value=${L.cart.whyText || ''} onInput=${function (e) { set({ whyText: e.target.value }); }} placeholder="이유를 짧게 적어 주세요" />` : ''}</div>
-      ${adult}
-      ${!full && done ? html`<div class="p1-mini"><span style="flex:1"></span><button type="button" class="p1-sm" onClick=${function () { ui({ gOpen: false }); }}>접기</button></div>` : ''}
-    </div>`;
+  /* ── 오른쪽 칸 (C안 · 2026-11-09 팀장 결정) ──
+     장바구니가 비었고 손님이 없으면 «손님 맞이», 손님이 붙었고 비었으면(또는 [이력]) «손님 이력», 담으면 장바구니 + 손님 한 줄.
+     손님 먼저든 상품 먼저든 — 조회를 깜빡해도 결제 팝업이 «회원이세요?»부터 묻는다 */
+  function drawerOpen() { var m = me(); setDoc('sale_drawer', L.uid('d'), { at: Date.now(), store: L.store(), day: L.today(), kind: 'open', by: m.by, byName: m.byName }).then(function () { toast('돈통 열기 기록을 남겼어요 (체험판)', '실제 돈통은 매장 PC 돈통 도우미가 엽니다 — 교체 때 연결'); }, function () {}); }
+  function parkUrl() { return (S.d.stores && S.d.stores[L.store()] && S.d.stores[L.store()].parkUrl) || stSet().parkUrl || ''; }
+  function goPark(c) { var car = c && c.car; if (car) copy(car); try { window.open(parkUrl(), '_blank', 'noopener'); } catch (e) {} toast('주차 사이트를 새 창으로 열었어요', car ? '차량번호 ' + car + ' 복사함' : '이 손님 차량번호가 없어요'); }
+  function AppCode() {
+    var c = custOf(L.cart.cust); var wait = c && c.appWait && !c.appWait.done;
+    function go() { if ((UI.app || '').length !== 6) { toast('6자리를 넣어 주세요'); return; } L.openSheet('p1-app', { code: UI.app, cust: L.cart.cust }); ui({ appOn: false }); }
+    if (wait) return html`<button type="button" class="lv-btn2 small" style="align-self:flex-start" onClick=${function () { L.openSheet('p1-app', { cust: c.id, code: c.appWait.code }); }}>${c.name} 님 폰 앱 연결 — 대기 중</button>`;
+    if (UI.appOn) return html`<div class="p1-mini"><input class="p1-in" id="p1-appcode" style="width:130px" inputmode="numeric" maxlength="6" value=${UI.app || ''} onInput=${function (e) { UI.app = L.digits(e.target.value).slice(0, 6); L.emit(); }} onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } if (e.key === 'Escape') { e.stopPropagation(); ui({ appOn: false, app: '' }); } }} placeholder="손님 폰의 6자리" autofocus /><button type="button" class="p1-sm" onClick=${go}>확인</button><button type="button" class="p1-sm" onClick=${function () { ui({ appOn: false, app: '' }); }}>닫기</button></div>`;
+    return html`<button type="button" class="p1-sm" id="p1-appbtn" style="align-self:flex-start" onClick=${function () { ui({ appOn: true, app: '' }); }}>손님 폰 앱 확인 번호 입력</button>`;
+  }
+  function HoldTools(p) {
+    var hl = holdList(); var park = parkUrl();
+    return html`<div class="p1-tools">${hl.length ? html`<button type="button" class=${'p1-sm' + (UI.holds ? ' on' : '')} id="p1-holdchip" onClick=${function () { ui({ holds: !UI.holds }); }}>보류 ${hl.length}</button>` : ''}<button type="button" class="p1-sm" onClick=${drawerOpen}>돈통</button>${park ? html`<button type="button" class="p1-sm" id="p1-park" onClick=${function () { goPark(custOf(L.cart.cust)); }}>주차 등록</button>` : ''}</div>
+      ${UI.holds && hl.length ? html`<div class="p1-drop" style="bottom:56px">${hl.map(function (h) { return html`<${HoldRow} h=${h} key=${h.id} />`; })}</div>` : ''}`;
+  }
+  function GreetSide(p) {
+    return html`<aside class="lv-cart p1-cart p1-greet" id="p1-greet">
+      <span class="p1-gk">손님 맞이</span>
+      <b class="p1-gq">회원이세요?</b>
+      <span class="lv-small">뒤 4자리 · 성함 · 단서(예: 망고 김)로 찾으면 지난 구매가 바로 펼쳐져요</span>
+      <div class="p1-glook"><input class="lv-input big" id="p1-look" value=${UI.look || ''} onInput=${function (e) { UI.look = e.target.value; }} onKeyDown=${lookKey} placeholder="뒤 4자리 · 성함" aria-label="회원 찾기" autocomplete="off" /><button type="button" class="lv-btn1" id="p1-lookgo" onClick=${function () { runLookup(false); }}>찾기</button></div>
+      ${UI.found ? html`<div class="p1-gfound" data-scroll><${Found} ix=${p.ix} /></div>` : ''}
+      <div class="lv-2col"><${Btn2} onClick=${function () { L.openSheet('p1-join', { name: UI.q || '', phone: '' }); }}>＋ 회원 가입</${Btn2}><${Btn2} onClick=${guestOn}>비회원 손님</${Btn2}></div>
+      <${AppCode} />
+      <span style="flex:1"></span>
+      <div class="p1-ghint">상품부터 찍어도 돼요 — 담으면 이 칸이 장바구니로 바뀌고, <b>결제 단추를 누를 때 «회원이세요?»를 다시 물어봐요.</b></div>
+      <${HoldTools} />
+    </aside>`;
+  }
+  function MemberSide(p) {
+    var c = p.c, ix = p.ix; var o = ciOf(ix, c.id); var g = gradeOfC(c, o); var f = flagsOf(c); var cyc = cycleOf(o);
+    var last = o.sales[0]; var lastLines = last ? (last.lines || []).filter(function (l) { return !l.svc && l.c !== TEST_C; }).slice(0, 4) : [];
+    var asOpen = arr(S.d.as).filter(function (r) { return r.cust === c.id && r.status !== '완료' && r.status !== '취소'; }), rvOpen = arr(S.d.resv).filter(function (r) { return r.cust === c.id && r.status !== '구매완료' && r.status !== '구매취소'; });
+    var notes = arr(col('sale_notes')).filter(function (n) { return n.cust === c.id && !n.hidden; }).sort(function (a, b) { return b.at - a.at; }).slice(0, 2).map(function (n) { return n.text; });
+    var memo = [c.memo].concat(notes).filter(Boolean).slice(0, 2); var pp = prepaysOf(c.id); var n = L.cart.lines.reduce(function (a, l) { return a + (l.qty || 0); }, 0);
+    return html`<aside class="lv-cart p1-cart p1-mside" id="p1-mside">
+      <div class="p1-mhead"><span class="av">${c.name.slice(0, 1)}</span><span class="t"><b>${c.name} 님 <span class=${'lv-grade ' + GCLS[g.name]}>${g.name}</span></b><span>뒤 ${L.tail4(c.phone)} · 방문 ${o.visits}번 · ${L.storeName(c.store || 's1')}</span></span><span class="bal"><small>사용 가능</small><b id="p1-mbal2">${won(o.bal)}P</b></span></div>
+      ${FLAGS.some(function (x) { return f[x[0]]; }) ? html`<div class="p1-mini">${FLAGS.filter(function (x) { return f[x[0]]; }).map(function (x) { return html`<span class="p1-tag red">⚠ ${x[1]}</span>`; })}</div>` : ''}
+      <div class="p1-mlast">${last ? html`<div class="p1-hd"><b>지난번 ${md(last.at)} · ${L.daysSince(last.at)}일 전</b><span style="flex:1"></span><button type="button" class="p1-sm y" id="p1-lastall" onClick=${function () { putSale(last); }}>그대로 담기</button></div>
+        ${lastLines.map(function (l) { var pr = L.products()[l.c]; return html`<div class="p1-kl"><span class="grow">${l.name}</span><span class="lv-small">×${l.qty}</span>${pr ? html`<button type="button" class="p1-sm" onClick=${function () { addProd(pr, l.qty); }}>담기</button>` : html`<span class="lv-small">상품표에 없음</span>`}</div>`; })}` : html`<span class="lv-small">아직 W포스 구매가 없어요</span>`}</div>
+      ${cyc && cyc.gap ? html`<span class="lv-small" id="p1-mcyc">자주 사는 것 — ${cyc.name} · 보통 ${cyc.gap}일마다${cyc.next ? (cyc.next <= Date.now() ? ' → 지금쯤 떨어질 때예요' : ' → ' + md(cyc.next) + '쯤') : ''}</span>` : ''}
+      <div class="p1-kl"><span class="grow lv-small">${asOpen.length || rvOpen.length ? [asOpen.length ? 'AS ' + asOpen.map(function (r) { return (r.prod ? r.prod.n : '') + ' ' + (L.AS_LABEL[r.status] || r.status); }).join(', ') : '', rvOpen.length ? '예약 ' + rvOpen.map(function (r) { return (r.item ? r.item.n : '') + ' ' + r.status; }).join(', ') : ''].filter(Boolean).join(' · ') : 'AS · 예약 접수 없음'}</span><button type="button" class="p1-sm" onClick=${function () { L.openSheet(L.REG_HAS && L.REG_HAS('p3-as-new') ? 'p3-as-new' : (window.VWP3 ? 'p3-as-new' : 'p1-as'), { cust: c.id }); }}>+ AS 접수</button><button type="button" class="p1-sm" onClick=${function () { L.openSheet('p1-resv', { cust: c.id }); }}>+ 예약</button></div>
+      ${pp.length ? html`<span class="p1-tag grn" style="align-self:flex-start">💰 선결제 ${won(pp.reduce(function (a, r) { return a + (r.prepay.amount || 0); }, 0))}원 — 담으면 장바구니에서 뺄 수 있어요</span>` : ''}
+      ${memo.length ? html`<span class="p1-mnote">📝 ${memo.join(' · ')}</span>` : ''}
+      <${AppCode} />
+      <span style="flex:1"></span>
+      <div style="display:flex; gap:8px; flex:none"><button type="button" class="lv-btn2" style="flex:1" id="p1-fullbtn" onClick=${function () { ui({ left: 'cust' }); }}>이력 전체 (구매 · AS · 예약 · 포인트) ›</button><button type="button" class="lv-btn2" onClick=${function () { dropCust(); ui({ left: 'prod' }); }}>다른 손님</button></div>
+      ${n ? html`<button type="button" class="lv-btn1" id="p1-tocart" onClick=${function () { ui({ hist: false }); }}>장바구니로 돌아가기 · ${n}개</button>` : html`<span class="lv-small">상품을 담으면 이 칸은 장바구니가 되고, 손님은 맨 위 한 줄로 접혀요</span>`}
+      ${!n ? html`<${HoldTools} />` : ''}
+    </aside>`;
+  }
+  function CustChip(p) {
+    var c = custOf(L.cart.cust), t = p.t;
+    if (c) { var o = ciOf(p.ix, c.id), g = gradeOfC(c, o); return html`<div class="p1-crow lv-custrow" id="p1-crow"><span class="av">${c.name.slice(0, 1)}</span><span class="t"><b>${c.name} 님${banned(c) ? html`<em class="lv-warn">판매 금지</em>` : flagsOf(c).care ? html`<em class="lv-warn">응대 주의</em>` : ''}</b><span>${g.name} · ${won(o.bal)}P · 뒤 ${L.tail4(c.phone)}${t.earned ? ' · 적립 +' + won(t.earned) + 'P' : ''}</span></span><button type="button" class="p1-sm" id="p1-histbtn" onClick=${function () { ui({ hist: true }); }}>이력</button><button type="button" class="lv-link" onClick=${dropCust}>빼기</button></div>`; }
+    if (L.cart.guest) return html`<div class="p1-crow lv-custrow" id="p1-crow"><span class="av">비</span><span class="t"><b>비회원 손님</b><span id="p1-gsum">${guestSum()}</span></span><button type="button" class="p1-sm" id="p1-gedit" onClick=${function () { L.openSheet('p1-gflow', { edit: true, start: 'id' }); }}>${L.cart.idType ? '바꾸기' : '신분증 확인'}</button><button type="button" class="lv-link" onClick=${guestOff}>빼기</button></div>`;
+    return html`<div class="p1-crow lv-custrow p1-clook" id="p1-crow"><${Ic} n="search" s=${16} c="var(--k-ink2)" w=${2} /><b class="p1-lk">회원 조회</b><input class="p1-in" id="p1-look" value=${UI.look || ''} onInput=${function (e) { UI.look = e.target.value; }} onKeyDown=${lookKey} placeholder="뒤 4자리 · 성함" aria-label="회원 찾기" autocomplete="off" /><button type="button" class="p1-sm y" id="p1-lookgo" onClick=${function () { runLookup(false); }}>찾기</button><button type="button" class="p1-sm" id="p1-guestbtn" onClick=${guestOn}>비회원</button></div>`;
   }
   function HoldRow(p) {
     var h = p.h; var ms = useState(null), memo = ms[0], setMemo = ms[1];
@@ -10819,24 +10939,15 @@ try {
   function CartCol(p) {
     var ix = p.ix, t = p.t; var c = custOf(L.cart.cust); var o = c ? ciOf(ix, c.id) : null; var g = c ? gradeOfC(c, o) : null;
     var stock = useMemo(function () { return L.stockMap(); }, [S.d.moves, S.d.sales, L.store()]);
-    var miss = custWhyOk(); var hl = holdList(); var sug = suggestFor(); var ts = termState();
-    useEffect(function () { if (UI.shake) { var tm = setTimeout(function () { ui({ shake: 0 }); }, 750); return function () { clearTimeout(tm); }; } });
+    var hl = holdList(); var sug = suggestFor(); var ts = termState();
     var liq = liqInfo(), g4 = g41Info(), st4 = setInfo(), kits = kitFind();
     function short(n) { return String(n || '').replace(/^\s*\([^)]*\)\s*/, ''); }
     var liqPrev = liq.lines.slice(0, 3).map(function (l) { return short(l.name) + ' −' + won(LIQ_TABLE[l.price]) + (l.qty > 1 ? ' ×' + l.qty : ''); }).join(', ') + (liq.lines.length > 3 ? ' 외 ' + (liq.lines.length - 3) + '줄' : '');
     var g4prev = g4.plan.map(function (x) { var l0 = L.cart.lines[x.i]; return short(l0.name) + ' ' + won(x.price) + (x.cnt > 1 ? ' ×' + x.cnt : ''); }).join(', ');
-    var park = (S.d.stores && S.d.stores[L.store()] && S.d.stores[L.store()].parkUrl) || stSet().parkUrl || '';
-    var m = me();
-    async function drawer() { try { await setDoc('sale_drawer', L.uid('d'), { at: Date.now(), store: L.store(), day: L.today(), kind: 'open', by: m.by, byName: m.byName }); toast('돈통 열기 기록을 남겼어요 (체험판)', '실제 돈통은 매장 PC 돈통 도우미가 엽니다 — 교체 때 연결'); } catch (e) {} }
-    function goPark() { var car = c && c.car; if (car) copy(car); try { window.open(park, '_blank', 'noopener'); } catch (e) {} toast('주차 사이트를 새 창으로 열었어요', car ? '차량번호 ' + car + ' 복사함' : '이 손님 차량번호가 없어요'); }
+    var park = parkUrl(); var drawer = drawerOpen; function goParkHere() { goPark(c); }
     return html`<aside class="lv-cart p1-cart">
-      <div class="p1-crow lv-custrow" id="p1-crow" onClick=${function () { L.openSheet('p1-cpick'); }}>
-        <span class="av">${c ? c.name.slice(0, 1) : '손'}</span>
-        <span class="t"><b>${c ? c.name + ' 님' : '손님 없이 판매'}${c && banned(c) ? html`<em class="lv-warn">판매 금지</em>` : c && flagsOf(c).care ? html`<em class="lv-warn">응대 주의</em>` : ''}</b><span>${c ? g.name + ' · ' + won(o.bal) + 'P · 뒤 ' + L.tail4(c.phone) : '눌러서 손님 찾기 · 새로 등록'}</span></span>
-        <span class="p1-store">${L.storeName()}<br />${L.today()}</span>
-        ${c ? html`<button type="button" class="lv-link" onClick=${function (e) { e.stopPropagation(); dropCust(); }}>빼기</button>` : html`<button type="button" class="lv-link" onClick=${function (e) { e.stopPropagation(); ui({ left: 'cust' }); }}>찾기</button>`}
-      </div>
-      ${L.cart.lines.length && !L.cart.practice ? html`<${GuestBits} />` : ''}
+      <${CustChip} ix=${ix} t=${t} />
+      ${UI.found && !c ? html`<div class="p1-drop" style="top:58px" id="p1-fdrop"><${Found} ix=${ix} /></div>` : ''}
       <div class="p1-mrow"><${Seg} items=${[['방문', '매장방문'], ['택배', '택배'], ['퀵', '퀵']]} value=${shipKind() === '대리택배' ? '택배' : shipKind()} onChange=${setShip} />${hl.length ? html`<button type="button" class=${'p1-sm' + (UI.holds ? ' on' : '')} id="p1-holdchip" onClick=${function () { ui({ holds: !UI.holds }); }}>보류 ${hl.length}</button>` : ''}<span style="flex:1"></span><span class="lv-small" id="p1-n">${t.n}개</span><button type="button" class="p1-sm" onClick=${function () { if (!L.cart.lines.length) { toast('장바구니가 비어 있어요', '상품을 담으면 크게 볼 수 있어요'); return; } L.openSheet('p1-cartbig'); }}>확대 보기</button></div>
       ${UI.holds && hl.length ? html`<div class="p1-drop" style="top:100px">${hl.map(function (h) { return html`<${HoldRow} h=${h} key=${h.id} />`; })}</div>` : ''}
       ${shipOn() ? html`<${ShipRow} t=${t} />` : ''}
@@ -10851,20 +10962,18 @@ try {
       </div>
       <div class="p1-sumx" id="p1-sumx"><span>상품 합계 <b>${won(t.sub)}</b></span>${t.ship ? html`<span>배송비 <b>${won(t.ship)}</b></span>` : shipOn() ? html`<span>배송비 <b>0</b></span>` : ''}${t.disc ? html`<span>할인 <b style="color:var(--k-red)">−${won(t.disc)}</b></span>` : ''}${t.pts ? html`<span>포인트 사용 <b>−${won(t.pts)}</b></span>` : ''}${t.pre ? html`<span>선결제 <b>−${won(t.pre)}</b></span>` : ''}</div>
       <div class="p1-big"><span>결제 금액</span><b id="p1-due">${won(t.due)}원</b></div>
-      ${c && feat('pointsUse', true) ? html`<div class="p1-pts"><div class="p1-mini"><b style="font-size:12px;white-space:nowrap">보유 ${won(t.bal)}P</b><input class="p1-in" id="p1-ptsuse" inputmode="numeric" value=${L.cart.pts ? won(L.cart.pts) : ''} placeholder="쓸 포인트" onInput=${function (e) { L.cart.pts = Math.min(num(e.target.value), Math.max(0, t.bal), t.goods); cartCh(); }} /><button type="button" onClick=${function () { L.cart.pts = Math.min((L.cart.pts || 0) + 1000, Math.max(0, t.bal), t.goods); cartCh(); }}>+1천</button><button type="button" onClick=${function () { L.cart.pts = Math.min((L.cart.pts || 0) + 5000, Math.max(0, t.bal), t.goods); cartCh(); }}>+5천</button><button type="button" onClick=${function () { L.cart.pts = Math.max(0, Math.min(t.bal, t.goods)); cartCh(); }}>전액</button><button type="button" onClick=${function () { L.cart.pts = 0; cartCh(); }}>지움</button></div>
-        <small id="p1-ptsinfo" title="적립은 기성 · 일회용만 (상품 예외 적립률 반영 · 포인트로 낸 몫 빼고)">사용 후 ${won(t.bal - t.pts)}P · 이번 적립 +${won(t.earned)}P → ${won(t.bal - t.pts + t.earned)}P · 대상 ${won(t.base)}원</small></div>` : ''}
+      ${c && feat('pointsUse', true) ? html`<small class="p1-ptsline" id="p1-ptsinfo" title="적립은 기성 · 일회용만 (상품 예외 적립률 반영 · 포인트로 낸 몫 빼고)">보유 ${won(t.bal)}P · 이번 적립 +${won(t.earned)}P · 대상 ${won(t.base)}원${t.pts ? ' · 포인트 −' + won(t.pts) + 'P 씀' : ' · 쓸 포인트는 결제 때 물어봐요'}</small>` : ''}
       ${c && t.preAvail > 0 ? html`<div class="p1-pre" id="p1-pre">${L.cart.preSkip ? html`<div class="p1-mini"><span>💰 맡아둔 돈 <b>${won(t.preAvail)}원</b> — 이번엔 안 씁니다</span><button type="button" onClick=${function () { L.cart.preSkip = false; L.cart.preOn = true; cartCh(); }}>다시 입력</button></div>` : html`<b>💰 이 손님 선결제가 있습니다 · ${prepaysOf(c.id).map(function (r) { return (r.item && r.item.n ? r.item.n + ' ' : '') + won(r.prepay.amount) + '원 (' + (PM[r.prepay.method] || '현금') + ')'; }).join(' · ')}</b>${L.cart.preOn ? html`<div class="p1-mini"><span class="p1-tag grn">✓ ${won(t.pre)}원 빼기로 했습니다</span><button type="button" onClick=${function () { L.cart.preOn = false; L.cart.preSkip = true; cartCh(); }}>되돌리기</button></div><span class="lv-small">상품 합계 ${won(t.total)}원 · 선결제로 받은 돈 −${won(t.pre)}원 · 더 받을 돈 <b>${won(t.due)}원</b>${t.preAvail - t.pre > 0 ? html` · <b class="lv-red">맡아둔 돈이 ${won(t.preAvail - t.pre)}원 남습니다 — 손님께 돌려드리세요</b>` : ''}</span><button type="button" class="lv-btn2" id="p1-prego" onClick=${function () { if (t.due) { startPay('split'); return; } var back = t.preAvail - t.pre; askThen({ title: '💰 맡아둔 돈 ' + won(t.pre) + '원으로 결제합니다', sub: back > 0 ? '남는 ' + won(back) + '원은 손님께 돌려드리세요' : '', yes: '진행' }, function () { startPay('prepay'); }); }}>${t.due ? '나머지 ' + won(t.due) + '원 결제하기' : '선결제로 결제 완료'}</button>` : html`<div class="p1-mini"><button type="button" class="on" onClick=${function () { if (!L.cart.lines.length) { toast('상품을 먼저 담아 주세요'); return; } L.cart.preOn = true; L.cart.preSkip = false; cartCh(); }}>${won(Math.min(t.preAvail, Math.max(0, t.total - t.pts)))}원 빼기</button><button type="button" onClick=${function () { L.cart.preSkip = true; L.cart.preOn = false; cartCh(); }}>이번엔 안 씀</button></div>`}`}</div>` : ''}
       <div class="p1-tools">
         <button type="button" class="p1-sm" onClick=${function () { if (!L.cart.lines.length && !L.cart.cust) return; clearCart(); toast('장바구니를 비웠어요', '손님도 뺐어요'); }}>비우기</button>
         <button type="button" class="p1-sm" onClick=${function () { holdCart(); }}>보류하기</button>
         <button type="button" class="p1-sm" onClick=${drawer}>돈통</button>
-        ${park ? html`<button type="button" class="p1-sm" id="p1-park" onClick=${goPark}>주차 등록</button>` : ''}
+        ${park ? html`<button type="button" class="p1-sm" id="p1-park" onClick=${goParkHere}>주차 등록</button>` : ''}
         ${!c && L.cart.lines.length && !L.cart.practice ? html`<button type="button" class="p1-sm" id="p1-rev0btn" onClick=${function () { L.openSheet('p1-rev0'); }}>리뷰 −2,000${(L.cart.reviews || []).length ? ' · ' + L.cart.reviews.length + '곳' : ''}</button>` : ''}
         <button type="button" class=${'p1-sm' + (UI.more ? ' on' : '')} aria-expanded=${UI.more} onClick=${function () { ui({ more: !UI.more }); }}>더보기 ⋯</button>
       </div>
       ${UI.more ? html`<div class="p1-tools" id="p1-more">${[['cheque', '수표'], ['alipay', '알리페이'], ['etc', '⋯ 기타']].concat(feat('splitPay', true) ? [['split', '나눠서 결제']] : []).concat([['legacy', '구포스에서 받은 결제 기록']]).map(function (x) { return html`<button type="button" class="p1-sm" disabled=${!L.cart.lines.length} onClick=${function () { startPay(x[0]); }}>${x[1]}</button>`; })}<button type="button" class=${'p1-sm' + (L.cart.staffSale ? ' on' : '')} id="p1-staffsale" aria-pressed=${!!L.cart.staffSale} onClick=${function () { L.cart.staffSale = !L.cart.staffSale; cartCh(); toast(L.cart.staffSale ? '직원 구매로 표시해요' : '직원 구매 표시를 뺐어요', L.cart.staffSale ? '손님 매출 · 직원 실적 집계에서 빠져요' : ''); }}>직원 구매${L.cart.staffSale ? ' ✓' : ''}</button></div>` : ''}
-      ${L.cart.lines.length && miss.length ? html`<button type="button" class="p1-block" id="p1-block" onClick=${function () { ui({ shake: Date.now(), left: UI.left }); toast(miss[0]); }}>${miss[0]}</button>` :
-        L.cart.lines.length && t.due === 0 ? html`<${Btn1} onClick=${function () { startPay(t.pre ? 'prepay' : 'points'); }}>${t.pre ? '선결제로 결제 완료' : '포인트로 결제 완료'}</${Btn1}>` :
+      ${L.cart.lines.length && t.due === 0 ? html`<${Btn1} onClick=${function () { startPay(t.pre ? 'prepay' : 'points'); }}>${t.pre ? '선결제로 결제 완료' : '포인트로 결제 완료'}</${Btn1}>` :
         html`<div class="p1-pay2 lv-2col"><${Btn2} disabled=${!t.n} onClick=${function () { startPay('cash'); }}>현금</${Btn2}><${Btn2} disabled=${!t.n} onClick=${function () { startPay('transfer'); }}>계좌이체</${Btn2}></div>
           <${Btn1} disabled=${!t.n || ts.mode === 'block'} onClick=${function () { startPay('card'); }}>${ts.mode === 'block' ? '카드 (설정 문제 · 팀장님께)' : t.n ? '카드 결제 · ' + won(t.due) + '원' : '카드 결제'}</${Btn1}>`}
       ${ts.msg && L.cart.lines.length ? html`<span class=${'p1-note' + (ts.mode === 'block' ? ' red' : '')} id="p1-termnote">${ts.mode === 'off' ? '카드단말기 연동이 꺼져 있습니다 · 카드는 기록만' : ts.msg}</span>` : ''}
@@ -10873,9 +10982,10 @@ try {
 
   /* ══ 왼쪽: 손님 칸 ══ */
   function inStore(c, st) { return (c.store || 's1') === st; }
-  function runLookup(all) {
-    var name = String(UI.q || '').trim(), d = L.digits(UI.t4); var st = L.store();
-    if (!name && !d) { toast('성함이나 뒤 4자리를 넣어 주세요'); return; }
+  /* 손님 찾기 — 칸 하나(뒤 4자리 · 성함 · 단서)로: 숫자는 번호, 글자는 성함 · 단서 (W포스 searchCustomer 이름 + 뒤 4자리 그대로) */
+  function lookList(text, all) {
+    var s = String(text || '').trim(), d = (s.match(/\d+/g) || []).join(''), name = s.replace(/[\d-]+/g, ' ').replace(/\s+/g, ' ').trim(); var st = L.store();
+    if (!name && !d) return { mode: 'empty' };
     var list = L.custList().filter(function (c) { return all || inStore(c, st); });
     var words = name.split(/\s+/).filter(Boolean);
     var exact = list.filter(function (c) { var ph = L.digits(c.phone); return (!name || (c.name || '').indexOf(name) >= 0) && (!d || ph.slice(-d.length) === d || (d.length > 4 && ph.indexOf(d) >= 0)); });
@@ -10891,52 +11001,34 @@ try {
         });
         return why.length ? { id: c.id, why: why } : null;
       }).filter(Boolean).sort(function (a, b) { return b.why.length - a.why.length; }).slice(0, 10);
-      if (hits.length) { ui({ found: { mode: 'clue', hits: hits, all: !!all } }); return; }
+      if (hits.length) return { mode: 'clue', hits: hits, name: name, d: d };
     }
-    if (exact.length === 1) { pickCust(exact[0].id); ui({ found: null }); return; }
-    if (!exact.length) { ui({ found: { mode: 'none', all: !!all } }); return; }
-    ui({ found: { mode: 'list', ids: exact.map(function (c) { return c.id; }), all: !!all } });
+    if (exact.length === 1) return { mode: 'one', id: exact[0].id, name: name, d: d };
+    if (!exact.length) return { mode: 'none', name: name, d: d };
+    return { mode: 'list', ids: exact.map(function (c) { return c.id; }), name: name, d: d };
   }
+  function runLookup(all) {
+    var r = lookList(UI.look, all); UI.q = r.name || ''; UI.t4 = r.d || '';
+    if (r.mode === 'empty') { toast('뒤 4자리나 성함을 넣어 주세요'); return; }
+    if (r.mode === 'one') { pickCust(r.id); ui({ found: null }); return; }
+    ui({ found: Object.assign({}, r, { all: !!all }) });
+  }
+  function lookKey(e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); runLookup(false); } }
+  /* 왼쪽 «이력 전체» — 손님이 붙어 있을 때만 (조회칸은 오른쪽 하나로 — 2026-11-09 C안) */
   function CustPanel(p) {
-    var ix = p.ix; var c = custOf(L.cart.cust);
-    function key(e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); runLookup(UI.allStores); } }
-    var wait = c && c.appWait && !c.appWait.done;
+    var ix = p.ix; var c = custOf(L.cart.cust); if (!c) return '';
     return html`<div class="p1-cpanel" id="p1-cpanel">
-      <div class="p1-look">
-        <input class="p1-in" id="p1-cname" style="width:170px" value=${UI.q} onInput=${function (e) { UI.q = e.target.value; }} onKeyDown=${key} placeholder="회원 이름 · 단서 (망고 김)" aria-label="회원 이름" autocomplete="off" />
-        <input class="p1-in" id="p1-ct4" style="width:96px" inputmode="numeric" value=${UI.t4} onInput=${function (e) { UI.t4 = e.target.value; }} onKeyDown=${key} placeholder="뒤 4자리" aria-label="뒤 4자리" autocomplete="off" />
-        <button type="button" class="lv-btn2 small" onClick=${function () { runLookup(false); }}>조회</button>
-        <button type="button" class="lv-btn2 small" onClick=${function () { L.openSheet('p1-join', { name: UI.q, phone: '' }); }}>회원 가입</button>
-        <button type="button" class="lv-btn2 small" onClick=${function () { dropCust(); ui({ found: null }); toast('비회원으로 진행해요', '구분 · 이유를 골라 주세요'); }}>비회원으로 진행</button>
-        ${wait ? html`<button type="button" class="lv-btn2 small" onClick=${function () { L.openSheet('p1-app', { cust: c.id, code: c.appWait.code }); }}>${c.name} 님 폰 앱 연결 — 대기 중</button>` : UI.appOn ? html`<input class="p1-in" id="p1-appcode" style="width:110px" inputmode="numeric" maxlength="6" value=${UI.app || ''} onInput=${function (e) { UI.app = L.digits(e.target.value).slice(0, 6); L.emit(); }} onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); if ((UI.app || '').length !== 6) { toast('6자리를 넣어 주세요'); return; } L.openSheet('p1-app', { code: UI.app, cust: L.cart.cust }); ui({ appOn: false }); } if (e.key === 'Escape') { e.stopPropagation(); ui({ appOn: false, app: '' }); } }} placeholder="손님 폰의 6자리" autofocus /><button type="button" class="p1-sm" onClick=${function () { if ((UI.app || '').length !== 6) { toast('6자리를 넣어 주세요'); return; } L.openSheet('p1-app', { code: UI.app, cust: L.cart.cust }); ui({ appOn: false }); }}>확인</button>` : html`<button type="button" class="lv-btn2 small" onClick=${function () { ui({ appOn: true, app: '' }); }}>앱 확인 번호 입력</button>`}
-        <span style="flex:1"></span><button type="button" class="p1-sm" onClick=${function () { ui({ left: 'prod' }); }}>‹ 상품으로</button>
-      </div>
-      <div class="p1-cbody" data-scroll>
-        ${c ? html`<${GuestBits} full=${true} />` : html`<span class="lv-small">비회원이면 구분 · 이유는 오른쪽 장바구니에서 골라요</span>`}
-        ${UI.tips ? html`<${Tips} />` : ''}
-        ${UI.found ? html`<${Found} ix=${ix} />` : ''}
-        ${c ? html`<${MemberCard} c=${c} o=${ciOf(ix, c.id)} ix=${ix} key=${c.id} />` : !UI.found ? html`<div class="lv-empty"><b>손님을 조회하면 여기에 구매 기록이 펼쳐집니다</b><span>성함 · 뒤 4자리 · 단서(예: 망고 김)로 찾고 Enter</span></div>` : ''}
-      </div></div>`;
-  }
-  function Tips() {
-    var m = me();
-    async function refuse() {
-      if (!L.cart.refuse) { toast('거절 사유를 골라 주세요'); return; }
-      var t = totals();
-      try { await setDoc('sale_refuse', L.uid('x'), { at: Date.now(), day: L.today(), store: L.store(), by: m.by, byName: m.byName, reason: L.cart.refuse, n: t.n, amount: t.total, items: L.cart.lines.map(function (l) { return { c: l.c, n: l.name, qty: l.qty }; }), cust: L.cart.cust || '', ctype: L.cart.ctype || '' }); clearCart(); ui({ tips: false }); toast('판매 거절을 기록했어요', '장바구니를 비웠어요 · ☎1382 안내'); } catch (e) {}
-    }
-    return html`<div class="p1-tip" id="p1-tips"><b>신분증이 이상할 때 — 요령</b><span>1 사진과 얼굴을 대조해요 · 2 띠 · 생년월일을 물어봐요 · 3 맞지 않으면 판매 거절 · 청소년 보호 상담 ☎1382 안내</span>
-      <div class="p1-mini"><span>거절 사유</span>${REFUSE.map(function (x) { return html`<button type="button" class=${L.cart.refuse === x ? 'on' : ''} onClick=${function () { L.cart.refuse = x; cartCh(); }}>${x}</button>`; })}</div>
-      <div class="p1-mini"><button type="button" class="p1-sm red" onClick=${refuse}>판매 거절 기록 · 장바구니 비우기</button><button type="button" class="p1-sm" onClick=${function () { ui({ tips: false }); }}>닫기</button></div></div>`;
+      <div class="p1-look"><b style="font-size:15px">${c.name} 님 — 이력 전체</b><span class="lv-small">구매 · 서비스 · 리뷰 · AS · 예약 · 포인트 · 정보 수정</span><span style="flex:1"></span><${AppCode} /><button type="button" class="p1-sm" onClick=${function () { ui({ left: 'prod' }); }}>‹ 상품으로</button></div>
+      <div class="p1-cbody" data-scroll><${MemberCard} c=${c} o=${ciOf(ix, c.id)} ix=${ix} key=${c.id} /></div></div>`;
   }
   function Found(p) {
     var ix = p.ix, f = UI.found; var st = L.store();
-    if (f.mode === 'none') return html`<div class="p1-card" id="p1-found"><b>찾는 회원이 없어요 — 신규 등록하시겠습니까?</b><div class="p1-mini">${!f.all ? html`<button type="button" class="p1-sm" onClick=${function () { ui({ allStores: true }); runLookup(true); }}>전 매장에서 더보기</button>` : ''}<button type="button" class="p1-sm y" onClick=${function () { L.openSheet('p1-join', { name: UI.q, phone: '' }); ui({ found: null }); }}>예 · 회원 가입</button><button type="button" class="p1-sm" onClick=${function () { ui({ found: null }); }}>아니요</button></div></div>`;
+    if (f.mode === 'none') return html`<div class="p1-card" id="p1-found"><b>찾는 회원이 없어요 — 신규 등록하시겠습니까?</b><div class="p1-mini">${!f.all ? html`<button type="button" class="p1-sm" onClick=${function () { ui({ allStores: true }); runLookup(true); }}>전 매장에서 더보기</button>` : ''}<button type="button" class="p1-sm y" onClick=${function () { L.openSheet('p1-join', { name: UI.q, phone: (UI.t4 || '').length >= 10 ? UI.t4 : '' }); ui({ found: null }); }}>예 · 회원 가입</button><button type="button" class="p1-sm" onClick=${function () { ui({ found: null }); }}>아니요</button></div></div>`;
     if (f.mode === 'clue') return html`<div class="p1-card" id="p1-found"><b>단서로 찾기 — ${f.hits.length}명</b>${f.hits.map(function (h) { var c = custOf(h.id); if (!c) return ''; return html`<button type="button" class="lv-rowline btn" onClick=${function () { pickCust(h.id); ui({ found: null }); }}><span class="av">${c.name.slice(0, 1)}</span><span class="t"><b>${c.name} 님 · ${L.tail4(c.phone)}</b><span>${h.why.join(' · ')}</span></span></button>`; })}<div class="p1-mini">${!f.all ? html`<button type="button" class="p1-sm" onClick=${function () { ui({ allStores: true }); runLookup(true); }}>전 매장에서 더보기</button>` : ''}<button type="button" class="p1-sm" onClick=${function () { ui({ found: null }); }}>닫기</button></div></div>`;
     var rows = f.ids.map(custOf).filter(Boolean).slice(0, 20);
     var dupPair = null; rows.forEach(function (a) { if (dupPair) return; var d = dupsOf(a).filter(function (x) { return f.ids.indexOf(x.id) >= 0; }); if (d.length) dupPair = a.id; });
     return html`<div class="p1-card" id="p1-found"><div class="p1-hd"><b>후보 ${f.ids.length}명${f.ids.length > 20 ? ' (위 20명)' : ''}</b><span style="flex:1"></span>${dupPair && L.canMgr() ? html`<button type="button" class="p1-sm red" onClick=${function () { L.openSheet('p1-merge', { id: dupPair }); }}>같은 분이 나뉘어 있습니다 — 기록 통합</button>` : ''}</div>
-      <table class="p1-tbl"><thead><tr><th>이름</th><th>지점</th><th>연락처</th><th>사용가능</th><th>누적</th><th>등급</th><th></th></tr></thead><tbody>${rows.map(function (c) { var o = ciOf(ix, c.id); return html`<tr class="ck" onClick=${function () { pickCust(c.id); ui({ found: null }); }}><td><b>${c.name}</b></td><td>${L.storeName(c.store || 's1')}</td><td>${L.mask(c.phone)}</td><td>${won(o.bal)}P</td><td>${won(spendOf(c, o))}</td><td>${gradeOfC(c, o).name}</td><td>${inStore(c, st) ? html`<span class="p1-tag grn">우리 매장</span>` : ''}</td></tr>`; })}</tbody></table>
+      ${rows.map(function (c) { var o = ciOf(ix, c.id); return html`<button type="button" class="lv-rowline btn p1-frow" onClick=${function () { pickCust(c.id); ui({ found: null }); }}><span class="av">${c.name.slice(0, 1)}</span><span class="t"><b>${c.name} 님 · ${L.mask(c.phone)}</b><span>${L.storeName(c.store || 's1')} · ${gradeOfC(c, o).name} · ${won(o.bal)}P · 누적 ${won(spendOf(c, o))}</span></span>${inStore(c, st) ? html`<span class="p1-tag grn">우리 매장</span>` : ''}</button>`; })}
       <div class="p1-mini">${!f.all ? html`<button type="button" class="p1-sm" onClick=${function () { ui({ allStores: true }); runLookup(true); }}>전 매장에서 더보기</button>` : ''}<button type="button" class="p1-sm" onClick=${function () { L.openSheet('p1-join', { name: UI.q, phone: '' }); }}>＋ 다른 분 신규 등록</button><button type="button" class="p1-sm" onClick=${function () { ui({ found: null }); }}>닫기</button></div></div>`;
   }
   function putSale(s) { var lines = (s.lines || []).filter(function (l) { return l.c !== TEST_C && !l.svc; }); if (!lines.length) return; var prods = L.products(); var n = 0; lines.forEach(function (l) { var p = prods[l.c]; if (p) { pushLine(p, l.qty); n++; } }); toast(n ? '이전 구매를 담았어요 · ' + n + '줄' : '그 상품들이 지금 상품표에 없어요'); }
@@ -11006,10 +11098,12 @@ try {
     }
     async function adj(sign) { var n = num(P.n); if (!n) { toast('포인트 수를 넣어 주세요'); return; } if (!P.why.trim()) { toast('사유를 꼭 적어 주세요'); return; } if (sign < 0 && n > o.bal) { toast('잔액보다 많이 뺄 수 없어요', '지금 ' + won(o.bal) + 'P'); return; } try { await ptsAdj(c.id, sign * n, P.why.trim()); setP({ on: true, n: '', why: '' }); toast((sign > 0 ? '포인트 지급 +' : '포인트 차감 −') + won(n) + 'P', P.why.trim()); } catch (e) {} }
     function key(e) { if (e.key === 'Enter') { e.preventDefault(); save(); } }
+    async function unlink(i) { var d = (c.devices || []).slice(); d.splice(i, 1); try { await upd('customers', c.id, { devices: d }); toast('폰 연결을 끊었어요'); } catch (e) {} }
     return html`<div class="p1-card" style="background:var(--k-card)" id="p1-info">
+      <div class="p1-mini" id="p1-devs"><span class="lv-small">회원 코드 ${custCode(c.id)} · 소속 ${L.storeName(c.store || 's1')}</span>${(c.devices || []).length ? (c.devices || []).map(function (d, i) { return html`<span class="p1-tag blue">폰 ${i + 1} · ${md(d.at)} 연결</span><button type="button" onClick=${function () { unlink(i); }}>끊기</button>`; }) : html`<span class="lv-small">연결된 폰 0대</span>`}</div>
       <div class="p1-mini"><input class="p1-in" id="p1-i-name" style="width:130px" value=${F.name} onInput=${function (e) { set('name', e.target.value); }} onKeyDown=${key} placeholder="성함" /><input class="p1-in" id="p1-i-phone" style="width:140px" value=${F.phone} onInput=${function (e) { set('phone', e.target.value); }} onKeyDown=${key} placeholder="전화번호(전체)" /><input class="p1-in" id="p1-i-car" style="width:110px" value=${F.car} onInput=${function (e) { set('car', e.target.value); }} onKeyDown=${key} placeholder="차량번호" /><button type="button" class="p1-sm y" disabled=${busy} onClick=${save}>저장 (Enter)</button></div>
       <div class="p1-mini"><input class="p1-in" id="p1-i-addr" style="flex:1;min-width:200px" value=${F.addr} onInput=${function (e) { set('addr', e.target.value); }} onKeyDown=${key} placeholder="집주소 (배송 · 택배)" /><input class="p1-in" id="p1-i-old" style="width:180px" value=${F.old} onInput=${function (e) { set('old', e.target.value); }} onKeyDown=${key} placeholder="예전 메모" /></div>
-      <div class="p1-mini"><button type="button" onClick=${function () { L.openSheet('p1-notes', { cust: c.id }); }}>손님 특이사항 보기 · 작성</button><button type="button" class=${P.on ? 'on' : ''} onClick=${function () { setP(Object.assign({}, P, { on: !P.on })); }}>포인트 조정 (지급 · 차감 · 이전 — 사유 필수)</button><button type="button" onClick=${function () { L.openSheet('p1-ptmove', { id: c.id }); }}>포인트 이전</button><button type="button" onClick=${function () { L.openSheet('p1-custinfo', { id: c.id }); }}>이력·수정 창</button></div>
+      <div class="p1-mini"><button type="button" onClick=${function () { L.openSheet('p1-notes', { cust: c.id }); }}>손님 특이사항 보기 · 작성</button><button type="button" class=${P.on ? 'on' : ''} onClick=${function () { setP(Object.assign({}, P, { on: !P.on })); }}>포인트 조정 (지급 · 차감 — 사유 필수)</button><button type="button" onClick=${function () { L.openSheet('p1-ptmove', { id: c.id }); }}>포인트 이전</button></div>
       ${P.on ? html`<div class="p1-mini"><input class="p1-in" id="p1-padj" inputmode="numeric" style="width:100px" value=${P.n ? won(num(P.n)) : ''} onInput=${function (e) { setP(Object.assign({}, P, { n: e.target.value })); }} placeholder="포인트 수" /><input class="p1-in" id="p1-pwhy" style="flex:1;min-width:150px" value=${P.why} onInput=${function (e) { setP(Object.assign({}, P, { why: e.target.value })); }} placeholder="사유 (꼭)" /><button type="button" onClick=${function () { adj(1); }}>포인트 지급</button><button type="button" style="color:var(--k-red)" onClick=${function () { adj(-1); }}>포인트 차감</button></div>` : ''}
       ${(c.edits || []).length ? html`<span class="lv-small">고친 기록: ${(c.edits || []).slice(-3).map(function (e) { return md(e.at) + ' ' + e.from + ' → ' + e.to + (e.byName ? ' (' + e.byName + ')' : ''); }).join(' · ')}</span>` : ''}
     </div>`;
@@ -11033,6 +11127,85 @@ try {
     var a = p.arg || {};
     function go() { close(); if (a.act) a.act(); }
     return html`<${Sheet} w=${560} h=${320} label="판매 · 확인" title=${a.title || '확인'} sub=${a.sub || ''} onClose=${close} left=${html`<${Btn2} onClick=${close}>${a.no || '아니요'}</${Btn2}>`} right=${a.red ? html`<button type="button" class="lv-btn1 red" data-primary onClick=${go}>${a.yes}</button>` : html`<${Btn1} onClick=${go}>${a.yes || '예'}</${Btn1}>`}><span class="lv-note">${a.note || '«아니요»를 누르면 아무것도 바뀌지 않아요.'}</span></${Sheet}>`;
+  });
+
+  /* 결제 팝업 — 손님 단계 (C안 · 2026-11-09). arg: { kind, ok } = 결제 이어 가기 · { edit: true, start } = 비회원 정보만 고치기 */
+  L.sheet('p1-gflow', function GFlow(p) {
+    L.useCart(); L.useStore(); var a = p.arg || {}; var c = custOf(L.cart.cust); var t = totals(); var m = me();
+    var steps = gfSteps(c);
+    var ss = useState(a.start || steps[0] || 'id'), step = ss[0], setStep = ss[1];
+    var qs = useState(''), q = qs[0], setQ = qs[1]; var fs = useState(null), fr = fs[0], setFr = fs[1];
+    var ws = useState(String(L.cart.whyText || '')), wt = ws[0], setWt = ws[1]; var bz = useState(false), busy = bz[0], setBusy = bz[1];
+    useEffect(function () {   /* 숫자 1~9 = 그 번호 단추 (입력칸에 있을 땐 안 함) */
+      function onKey(e) { if (e.ctrlKey || e.metaKey || e.altKey || !/^[1-9]$/.test(e.key)) return; if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return; var b = document.querySelectorAll('#p1-gf .p1-gf-opt')[+e.key - 1]; if (b) { e.preventDefault(); b.click(); } }
+      window.addEventListener('keydown', onKey); return function () { window.removeEventListener('keydown', onKey); };
+    }, []);
+    function set(o) { Object.assign(L.cart, o); cartCh(); }
+    function finish() { L.closeSheet(); if (a.edit) return; var k = a.kind, ok2 = Object.assign({}, a.ok || {}, { gf: 1 }); setTimeout(function () { startPay(k, ok2); }, 0); }
+    function next(from) { var s2 = gfSteps(custOf(L.cart.cust)); var i = s2.indexOf(from); var to = i >= 0 ? s2[i + 1] : s2[0]; if (to && !(a.edit && to === 'pts')) setStep(to); else finish(); }
+    var toAsk = step === 'id' && !c && !a.edit && L.cart.guest;   /* «비회원이에요»를 잘못 눌렀으면 회원 확인으로 되돌아감 */
+    function back() { if (step === 'refuse') { setStep('id'); return; } if (toAsk) { set({ guest: false }); setStep('ask'); return; } var i = steps.indexOf(step); if (i > 0) setStep(steps[i - 1]); }
+    var canBack = step === 'refuse' || toAsk || steps.indexOf(step) > 0;
+    function opt(o) { return html`<button type="button" class=${'p1-gf-opt' + (o.on ? ' on' : '')} role=${o.radio ? 'radio' : null} aria-checked=${o.radio ? (o.on ? 'true' : 'false') : null} id=${o.id || null} onClick=${o.go}><span class="n">${o.n}</span><span class="tx"><b>${o.label}</b>${o.sub ? html`<span class="s">${o.sub}</span>` : ''}</span></button>`; }
+    /* ① 회원 확인 */
+    function find(all) { var r = lookList(q, all); if (r.mode === 'empty') { toast('뒤 4자리나 성함을 넣어 주세요'); return; } if (r.mode === 'one') { pick(r.id); return; } setFr(Object.assign({}, r, { all: !!all })); }
+    function pick(id) { pickCust(id); setFr(null); next('ask'); }
+    function found(f) {
+      if (f.mode === 'none') return html`<div class="p1-card" id="p1-gf-found"><b>찾는 회원이 없어요</b><div class="p1-mini">${!f.all ? html`<button type="button" class="p1-sm" onClick=${function () { find(true); }}>전 매장에서 더보기</button>` : ''}<button type="button" class="p1-sm y" onClick=${function () { L.openSheet('p1-join', { name: f.name || '', phone: (f.d || '').length >= 10 ? f.d : '' }); }}>＋ 회원 가입</button></div><span class="lv-small">가입하면 이 손님이 붙어요 — 결제 단추를 한 번 더 눌러 주세요</span></div>`;
+      var rows = (f.mode === 'clue' ? f.hits.map(function (h) { return { c: custOf(h.id), why: h.why.join(' · ') }; }) : f.ids.map(function (id) { return { c: custOf(id) }; })).filter(function (r) { return r.c; }).slice(0, 8); var ix = L.custIndex();
+      return html`<div class="p1-gf-found" id="p1-gf-found">${rows.map(function (r) { var o = ciOf(ix, r.c.id); return html`<button type="button" class="lv-rowline btn p1-frow" onClick=${function () { pick(r.c.id); }}><span class="av">${r.c.name.slice(0, 1)}</span><span class="t"><b>${r.c.name} 님 · ${L.tail4(r.c.phone)}</b><span>${r.why || (L.storeName(r.c.store || 's1') + ' · ' + gradeOfC(r.c, o).name + ' · ' + won(o.bal) + 'P')}</span></span></button>`; })}${!f.all ? html`<button type="button" class="p1-sm" style="align-self:flex-start" onClick=${function () { find(true); }}>전 매장에서 더보기</button>` : ''}</div>`;
+    }
+    /* ② 신분증 */
+    function pickId(k) {
+      var o = { idType: k, adult: k === 'none' ? null : { at: Date.now(), by: m.by, byName: m.byName, how: k === 'kr' ? '신분증' : '여권' } };
+      if (!c) { if (k === 'kr') { o.ctype = '내국인'; if (L.cart.whyAuto) { o.why = ''; o.whyAuto = false; } } else if (L.cart.ctype === '내국인' && (k === 'pass' || L.cart.idType === 'kr')) o.ctype = ''; }
+      set(o); next('id');
+    }
+    /* ③ 구분 — W포스 v2026.10.24-12: 외국인 → «관광객» 자동 · 따이공 → «따이공» */
+    function pickType(x) { var o = { ctype: x }; if (x === '따이공') { o.why = '따이공'; o.whyAuto = true; } else if (FOREIGN.indexOf(x) >= 0) { if (!L.cart.why || L.cart.whyAuto) { o.why = '관광객'; o.whyAuto = true; } } else if (L.cart.whyAuto) { o.why = ''; o.whyAuto = false; } set(o); next('type'); }
+    /* ④ 가입 안 한 이유 */
+    function pickWhy(x) { if (x === '직접 쓰기') { set({ why: x, whyAuto: false }); setTimeout(function () { var i = document.getElementById('p1-gf-whyt'); if (i) i.focus(); }, 40); return; } set({ why: x, whyAuto: false, whyText: '' }); next('why'); }
+    function whyNext() { if (L.cart.why === '직접 쓰기') { if (!wt.trim()) { toast('이유를 짧게 적어 주세요'); return; } set({ whyText: wt.trim() }); } else if (!L.cart.why) { toast('이유를 골라 주세요'); return; } next('why'); }
+    /* ⑤ 포인트 (회원) — 장바구니에 있던 칸 그대로(+1천 · +5천 · 전액 · 지움 · 직접) */
+    var mx = Math.max(0, Math.min(t.bal, t.goods));
+    function setPts(v) { L.cart.pts = Math.max(0, Math.min(v, mx)); cartCh(); }
+    var fl = c ? flagsOf(c) : {};
+    var who = c ? c.name + ' 님' : L.cart.guest ? '비회원' : '손님 확인 전';
+    var label = (a.edit ? '비회원 정보 고치기' : (PM[a.kind] || '결제') + ' ' + won(t.due) + '원') + ' · ' + who;
+    var TT = {
+      ask: ['회원 손님이세요?', '찾으면 포인트가 쌓이고 이력이 남아요 — 회원인데 비회원으로 찍히면 그 손님 기록이 끊겨요'],
+      id: [c ? '신분증을 확인해 주세요' : '신분증부터 확인해 주세요', c ? (fl.minor ? '🔞 미성년자 의심으로 표시된 손님이에요 — 꼭 신분증을 확인해 주세요' : '🆔 신분증 확인 요망으로 표시된 손님이에요 — 올 때마다 확인') : '무엇으로 확인했는지 고르면 국적도 같이 정해져요 · 외국인등록증은 신분증과 같아요'],
+      type: [L.cart.idType === 'pass' ? '어느 나라 손님인가요?' : '어떤 손님인가요?', '누르면 바로 다음으로 넘어가요'],
+      why: ['회원 가입을 안 하신 이유는요?', '사유는 손님 자료라 정확하게 골라 주세요'],
+      pts: ['포인트 쓰실래요?', (c ? c.name + ' 님 · ' : '') + '보유 ' + won(t.bal) + 'P · 상품 ' + won(t.goods) + '원까지 쓸 수 있어요'],
+      refuse: ['신분증이 이상할 때', '1 사진과 얼굴을 대조해요 · 2 띠 · 생년월일을 물어봐요 · 3 맞지 않으면 판매 거절 · 청소년 보호 상담 ☎1382 안내']
+    }[step] || ['', ''];
+    var all = steps.concat(a.edit ? [] : ['pay']); var cur = step === 'refuse' ? 'id' : step; var ci = all.indexOf(cur);
+    var dots = html`<ol class="p1-gf-dots" aria-label="단계">${all.map(function (k, i) { var st = k === cur ? 'now' : i < ci ? 'done' : ''; return html`<li class=${st}><i></i><span>${st === 'done' ? '✓ ' : ''}${k === 'pay' ? '결제' : GF_NAME[k]}</span></li>`; })}</ol>`;
+    var body = '', right = '';
+    if (step === 'ask') body = html`<div class="p1-gf-row"><input class="lv-input big" id="p1-gf-look" value=${q} onInput=${function (e) { setQ(e.target.value); }} onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); find(false); } }} placeholder="뒤 4자리 · 성함" aria-label="회원 찾기" autocomplete="off" autofocus /><button type="button" class="lv-btn1" id="p1-gf-find" onClick=${function () { find(false); }}>찾기</button></div>
+      ${fr ? found(fr) : ''}
+      <div class="p1-gf-opts one">${opt({ n: 1, id: 'p1-gf-guest', label: '비회원이에요', sub: '신분증 확인으로 넘어가요', go: function () { set({ guest: true }); next('ask'); } })}</div>`;
+    if (step === 'id') body = html`<div class="p1-gf-opts one" role="radiogroup" aria-label="신분증">${[['kr', '신분증 · 면허증 · 외국인등록증으로 확인했어요', c ? '성인 확인으로 기록' : '국적은 내국인으로 자동 — 구분 단계 건너뜀'], ['pass', '여권으로 확인했어요', c ? '성인 확인으로 기록' : '외국인 — 다음 단계에서 나라만 골라요'], ['none', '확인 못 했어요', '결제는 막지 않고 «미확인»으로 기록해요 (지금 W포스 규칙)']].map(function (x, i) { return opt({ n: i + 1, id: 'p1-gf-id-' + x[0], label: x[1], sub: x[2], on: L.cart.idType === x[0], radio: true, go: function () { pickId(x[0]); } }); })}</div>
+      <button type="button" class="p1-sm" id="p1-gf-odd" style="align-self:flex-start" onClick=${function () { setStep('refuse'); }}>신분증이 이상해요 → 판매 거절</button>`;
+    if (step === 'type') body = html`<div class="p1-gf-opts" role="radiogroup" aria-label="고객 구분">${(L.cart.idType === 'pass' ? CTYPES.filter(function (x) { return x !== '내국인'; }) : CTYPES).map(function (x, i) { return opt({ n: i + 1, label: x, on: L.cart.ctype === x, radio: true, go: function () { pickType(x); } }); })}</div>`;
+    if (step === 'why') {
+      body = html`${L.cart.whyAuto && L.cart.why === '관광객' ? html`<span class="p1-gf-auto">외국인 손님은 «관광객»이 미리 골라져 있어요 — 다르면 바꿔 주세요 (W포스 규칙)</span>` : ''}
+        <div class="p1-gf-opts" role="radiogroup" aria-label="가입 안 한 이유">${WHYS.map(function (x, i) { return opt({ n: i + 1, label: x, on: L.cart.why === x, radio: true, go: function () { pickWhy(x); } }); })}</div>
+        ${L.cart.why === '직접 쓰기' ? html`<${Field} label="이유를 짧게 적어 주세요"><input class="lv-input" id="p1-gf-whyt" value=${wt} onInput=${function (e) { setWt(e.target.value); }} onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); whyNext(); } }} placeholder="예: 다음에 가입하신대요" /></${Field}>` : ''}`;
+      if (L.cart.why) right = html`<${Btn1} onClick=${whyNext}>다음</${Btn1}>`;
+    }
+    if (step === 'pts') {
+      body = html`<div class="lv-kv"><span>보유 포인트</span><b>${won(t.bal)}P</b></div>
+        <${Field} label="쓸 포인트 (안 쓰면 비워 두세요)"><input class="lv-input big" id="p1-gf-pts" inputmode="numeric" value=${L.cart.pts ? won(L.cart.pts) : ''} onInput=${function (e) { setPts(num(e.target.value)); }} onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); next('pts'); } }} placeholder="0" /></${Field}>
+        <div class="lv-pills"><button type="button" onClick=${function () { setPts((L.cart.pts || 0) + 1000); }}>+1천</button><button type="button" onClick=${function () { setPts((L.cart.pts || 0) + 5000); }}>+5천</button><button type="button" onClick=${function () { setPts(mx); }}>전액</button><button type="button" onClick=${function () { setPts(0); }}>지움</button></div>
+        <span class="lv-small" id="p1-gf-ptsinfo">사용 후 ${won(t.bal - t.pts)}P · 이번 적립 +${won(t.earned)}P → ${won(t.bal - t.pts + t.earned)}P · 대상 ${won(t.base)}원 · 결제 금액 ${won(t.due)}원</span>`;
+      right = html`<${Btn2} onClick=${function () { setPts(0); next('pts'); }}>안 써요</${Btn2}><${Btn1} onClick=${function () { next('pts'); }}>${t.pts ? won(t.pts) + 'P 쓰고 결제로' : '결제로'}</${Btn1}>`;
+    }
+    if (step === 'refuse') body = html`<div class="p1-tip" id="p1-tips"><div class="p1-mini"><span>거절 사유</span>${REFUSE.map(function (x) { return html`<button type="button" class=${L.cart.refuse === x ? 'on' : ''} onClick=${function () { L.cart.refuse = x; cartCh(); }}>${x}</button>`; })}</div>
+      <div class="p1-mini"><button type="button" class="p1-sm red" disabled=${busy} onClick=${async function () { setBusy(true); var ok3 = await refuseSale(); setBusy(false); if (ok3) L.closeSheet(); }}>판매 거절 기록 · 장바구니 비우기</button></div></div>`;
+    return html`<${Sheet} w=${660} h=${640} label=${label} title=${TT[0]} sub=${TT[1]} onClose=${close} left=${canBack ? html`<${Btn2} onClick=${back}>‹ 이전</${Btn2}>` : html`<${Btn2} onClick=${close}>닫기</${Btn2}>`} right=${right}>
+      <div class="p1-gf" id="p1-gf" data-step=${step}>${dots}${body}</div></${Sheet}>`;
   });
 
   L.sheet('p1-cats', function CatsSheet() {
@@ -11315,22 +11488,6 @@ try {
         <div class="lv-kv" id="p1-pmprev"><span>미리보기</span><span>${A ? A.name + ' ' + won(bA) + ' → ' + won(bA - k) + 'P' : ''} · ${B ? B.name + ' ' + won(bB) + ' → ' + won(bB + k) + 'P' : ''}</span></div>`}
     </${Sheet}>`;
   });
-  L.sheet('p1-custinfo', function CustInfo(p) {
-    L.useStore(); var ix = L.useCustIndex(); var c = custOf((p.arg || {}).id); var es = useState(false), ed = es[0], setEd = es[1]; var hs = useState(true), hb = hs[0], setHb = hs[1]; var ps = useState(false), hp = ps[0], setHp = ps[1];
-    if (!c) return ''; var o = ciOf(ix, c.id); var g = gradeOfC(c, o);
-    async function unlink(i) { var d = (c.devices || []).slice(); d.splice(i, 1); try { await upd('customers', c.id, { devices: d }); toast('폰 연결을 끊었어요'); } catch (e) {} }
-    return html`<${Sheet} w=${960} h=${700} label="판매 · 손님" title=${'고객 정보 — ' + c.name + ' 님'} sub=${'회원 코드 ' + custCode(c.id) + ' · 소속 ' + L.storeName(c.store || 's1')} onClose=${close}
-      left=${html`<${Btn2} onClick=${close}>닫기</${Btn2}><${Btn2} onClick=${function () { setEd(!ed); }}>이력·수정</${Btn2}>`} right=${html`<${Btn1} onClick=${function () { close(); pickCust(c.id); ui({ left: 'prod' }); }}>이 고객으로 판매</${Btn1}>`}>
-      <div class="p1-mini">${(c.devices || []).length ? (c.devices || []).map(function (d, i) { return html`<span class="p1-tag blue">폰 ${i + 1} · ${md(d.at)} 연결</span><button type="button" onClick=${function () { unlink(i); }}>끊기</button>`; }) : html`<span class="lv-small">연결된 폰 0대</span>`}</div>
-      <div class="lv-tiles"><div><span>성함 · 전화</span><b>${c.name}</b><span>${L.mask(c.phone)}</span></div><div><span>포인트</span><b>${won(o.bal)}P</b><span>누적 적립 ${won(earnedOf(c, o))}P</span></div><div><span>등급</span><b>${g.name}${g.fixed ? ' (고정)' : ''}</b><span>누적 ${won(spendOf(c, o))}원</span></div></div>
-      <div class="p1-mini"><button type="button" onClick=${function () { L.openSheet('p1-flags', { id: c.id }); }}>주의 표시</button><button type="button" onClick=${function () { L.openSheet('p1-grade', { id: c.id }); }}>수정</button></div>
-      ${ed ? html`<${InfoEdit} c=${c} o=${o} key=${'ci' + c.id} />` : ''}
-      <button type="button" class=${'p1-sm' + (hb ? ' on' : '')} onClick=${function () { setHb(!hb); }}>구매 이력 최근 ${Math.min(10, o.sales.length)}건</button>
-      ${hb ? o.sales.slice(0, 10).map(function (s) { return html`<div class="p1-kl"><span style="width:100px">${md(s.at)} ${L.hm(s.at)}</span><span class="grow">${s.lines[0] ? s.lines[0].name : ''}${s.lines.length > 1 ? ' 외 ' + (s.lines.length - 1) : ''}</span><b>${won(L.saleSums(s).net)}</b></div>`; }) : ''}
-      <button type="button" class=${'p1-sm' + (hp ? ' on' : '')} onClick=${function () { setHp(!hp); }}>포인트 이력</button>
-      ${hp ? html`<${PtsHist} o=${o} />` : ''}
-    </${Sheet}>`;
-  });
   function noteKind(t) { if (/주의|조심|욕|화내|클레임|싸움|위협/.test(t)) return '주의'; if (/불편|싫어|별로|느리|기다|불만/.test(t)) return '불편'; if (/도와|알려|부탁|도움/.test(t)) return '도움'; if (/좋아|감사|칭찬|맛있|만족|단골/.test(t)) return '좋은 기억'; return '기억 단서'; }
   L.sheet('p1-notes', function NotesSheet(p) {
     L.useStore(); var a = p.arg || {}; var c = custOf(a.cust); var m = me();
@@ -11384,19 +11541,6 @@ try {
     </${Sheet}>`;
   });
   /* 손님 칸을 누르면 뜨는 빠른 찾기 — 뒤 4자리 · 이름 · 전체 번호 (계산대에서 손을 떼지 않고 붙이기) */
-  L.sheet('p1-cpick', function CustPick() {
-    L.useStore(); var ix = L.useCustIndex(); var qs = useState(''), q = qs[0], setQ = qs[1]; var st = L.store();
-    var all = L.custList().filter(function (c) { return !c.gone && !c.mergedTo; });
-    var list = all.filter(function (c) { return L.custMatch(c, q); }).sort(function (a, b) { return ((b.store || 's1') === st) - ((a.store || 's1') === st) || ((ix[b.id] || {}).last || 0) - ((ix[a.id] || {}).last || 0); }).slice(0, 30);
-    function pick(id) { pickCust(id); L.closeSheet(); }
-    return html`<${Sheet} w=${900} h=${640} label="판매 · 손님" title="손님 찾기" sub="뒤 4자리 · 이름 · 전체 번호 — 이 매장 손님이 먼저" onClose=${L.closeSheet}
-      left=${html`<${Btn2} icon="guest" onClick=${function () { L.closeSheet(); setTimeout(function () { L.openSheet('p1-join', { phone: /^\d{4,}$/.test(q.replace(/\D/g, '')) ? q : '' }); }, 0); }}>새 손님 등록</${Btn2}>`}
-      right=${html`<${Btn2} onClick=${function () { ui({ left: 'cust' }); L.closeSheet(); }}>손님 칸 크게 보기</${Btn2}><${Btn2} onClick=${function () { dropCust(); L.closeSheet(); }}>손님 없이</${Btn2}>`}>
-      <label class="lv-search"><${Ic} n="search" s=${18} c="var(--k-ink2)" w=${2} /><input type="text" id="lv-cq" value=${q} onInput=${function (e) { setQ(e.target.value); }} placeholder="뒤 4자리 또는 이름" autofocus /></label>
-      ${!all.length ? html`<div class="lv-empty"><b>아직 손님이 없어요</b><span>«새 손님 등록»으로 첫 손님을 넣어 보세요</span></div>` : !list.length ? html`<div class="lv-empty"><b>찾는 손님이 없어요</b><span>번호를 다시 보거나 «새 손님 등록»</span></div>` : ''}
-      ${list.map(function (c) { var o = ix[c.id] || {}; var g = L.gradeOf(o.spend || 0, c.gradeFix); return html`<button type="button" class="lv-rowline btn" data-cid=${c.id} onClick=${function () { pick(c.id); }}><span class="av">${(c.name || '?').slice(0, 1)}</span><span class="t"><b>${c.name} 님 · ${L.tail4(c.phone)}${banned(c) ? html`<em class="lv-warn">판매 금지</em>` : ''}</b><span>${L.storeName(c.store || 's1')} · ${g.name} · ${won(o.bal || 0)}P${o.visits ? ' · 방문 ' + o.visits + '번' : ''}</span></span><${Ic} n="chev" s=${16} c="var(--k-ink2)" w=${2} /></button>`; })}
-    </${Sheet}>`;
-  });
 
   /* ══ 창들 ④ — 교환 · 환불 · 현금영수증 한꺼번에 · AS · 예약 ══ */
   function unitVal(s, i) { var l = s.lines[i]; var lineSum = (s.lines || []).reduce(function (a, x) { return a + x.price * x.qty - (x.disc || 0); }, 0); var goods = (s.total || 0) - ((s.ship && s.ship.fee) || 0); var f = lineSum > 0 ? goods / lineSum : 0; return l.qty ? (l.price * l.qty - (l.disc || 0)) / l.qty * f : 0; }
