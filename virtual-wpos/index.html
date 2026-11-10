@@ -9093,6 +9093,33 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
     var base = cfg.url.replace(/\/$/, '') + '/rest/v1/'; var space = cfg.space || 'main';
     var H = { apikey: cfg.key, 'Content-Type': 'application/json' };
     var data = {}; var ver = {}; var subs = []; var ready = false; var waiters = []; var last = ''; var fails = 0;
+    /* 2026-11-10 끊김 대기줄 — 인터넷이 끊긴 동안의 저장(현금 · 계좌이체 판매 등)을 이 PC에 담아 두고, 연결되면 순서대로 올린다.
+       set = 같은 경로 덮어쓰기(upsert) · update = 조각 합치기 · delete = 지움 표시 → 다시 보내도 두 번 생기지 않음 */
+    var QK = 'vw-oq-' + space; var Q = []; var pend = {}; var flushing = false;
+    try { Q = JSON.parse(localStorage.getItem(QK) || '[]') || []; } catch (e) { Q = []; }
+    Q.forEach(function (o) { pend[o.p] = (pend[o.p] || 0) + 1; });
+    function qSave() { try { localStorage.setItem(QK, JSON.stringify(Q)); } catch (e) {} S.queued = Q.length; emit(); }
+    function enq(o) { var first = !Q.length; Q.push(o); pend[o.p] = (pend[o.p] || 0) + 1; qSave(); if (first) { try { VW.toast('인터넷이 끊겨 이 PC에 담아 뒀어요', '연결되면 자동으로 올라갑니다 · 카드 결제는 연결된 뒤에 됩니다'); } catch (e) {} } }
+    function qLocal(o) { if (o.k === 'set') data[o.p] = o.v; else if (o.k === 'upd') { if (data[o.p] !== undefined) data[o.p] = merge(data[o.p], o.v); } else if (o.k === 'del') delete data[o.p]; }
+    function sendOp(o) {
+      if (o.k === 'set') return call('vw_docs?on_conflict=space,path', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=representation' }, body: JSON.stringify([{ space: space, path: o.p, col: colOf(o.p), data: o.v, deleted: false }]) }).then(function (r) { if (r && r[0]) ver[o.p] = r[0].updated_at; });
+      if (o.k === 'upd') return call('rpc/vw_update', { method: 'POST', body: JSON.stringify({ p_space: space, p_path: o.p, p_patch: o.v }) }).then(function (ok) { if (ok === false) throw err('not_found', 'no doc'); });
+      return call(q(o.p), { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ deleted: true, data: null }) });
+    }
+    async function flush() {
+      if (flushing || !Q.length || !ready) return; flushing = true; var n = 0, bad = 0;
+      try {
+        while (Q.length) {
+          var o = Q[0];
+          try { await sendOp(o); n++; }
+          catch (e) { if (e && e.code === 'unavailable') break; bad++; try { var dd = JSON.parse(localStorage.getItem(QK + '-dead') || '[]'); dd.push({ at: Date.now(), o: o, code: e && e.code || '' }); localStorage.setItem(QK + '-dead', JSON.stringify(dd.slice(-100))); } catch (x) {} }
+          Q.shift(); pend[o.p]--; if (!pend[o.p]) delete pend[o.p]; qSave();
+        }
+      } finally { flushing = false; S.queued = Q.length; emit(); }
+      if (n && !Q.length) { try { VW.toast('담아 둔 기록 ' + n + '건을 모두 올렸어요', bad ? '올리지 못한 기록 ' + bad + '건이 있습니다 — 팀장님께 알려 주세요' : ''); } catch (e) {} }
+      else if (bad) { try { VW.toast('올리지 못한 기록 ' + bad + '건이 있습니다', '팀장님께 알려 주세요'); } catch (e) {} }
+    }
+    try { window.addEventListener('online', function () { setTimeout(flush, 500); }); } catch (e) {}
     function err(code, msg) { return { code: code, message: msg || code }; }
     async function call(url, opt) {
       var r;
@@ -9119,6 +9146,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
       rows.forEach(function (r) {
         var k = tk(r.updated_at);
         if (k > tk(last)) last = r.updated_at;
+        if (pend[r.path]) return;   /* 이 PC에 아직 못 올린 변경이 있는 기록은 서버 것으로 덮지 않음 */
         if (ver[r.path] && tk(ver[r.path]) >= k) return;
         ver[r.path] = r.updated_at;
         if (r.deleted) { if (data[r.path] !== undefined) { delete data[r.path]; ch.push(r.path); } }
@@ -9130,7 +9158,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
     async function loadAll() {
       var rows = [], off = 0;
       for (;;) { var pg = await call('vw_docs?' + SEL + '&space=eq.' + encodeURIComponent(space) + '&order=updated_at.asc,path.asc&limit=1000&offset=' + off); rows = rows.concat(pg || []); if (!pg || pg.length < 1000) break; off += 1000; }
-      apply(rows); ready = true; fails = 0;
+      apply(rows); Q.forEach(qLocal); ready = true; fails = 0; S.queued = Q.length;
       subs.forEach(function (s) { s.fn(s.doc ? snapDoc(s.path) : snapCol(s.path)); });
       waiters.splice(0).forEach(function (w) { w(); });
       setTimeout(poll, 2500);
@@ -9142,6 +9170,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
         var since = last ? new Date(new Date(last).getTime() - 10000).toISOString() : '1970-01-01T00:00:00Z';
         var rows = await call('vw_docs?' + SEL + '&space=eq.' + encodeURIComponent(space) + '&updated_at=gt.' + encodeURIComponent(since) + '&order=updated_at.asc&limit=1000');
         var ch = apply(rows || []); if (ch.length) fireAll(ch);
+        if (Q.length) flush();
         if (fails) { fails = 0; S.offline = false; emit(); }
       } catch (e) { fails++; if (fails >= 2 && !S.offline) { S.offline = true; emit(); } }
       setTimeout(poll, document.hidden ? 8000 : 2500);
@@ -9153,21 +9182,22 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
         get: function () { return after(function () { return snapDoc(path); }); },
         set: function (v) {
           var val = JSON.parse(JSON.stringify(v)); var old = data[path]; data[path] = val; fireAll([path]);
-          return call('vw_docs?on_conflict=space,path', { method: 'POST', headers: { Prefer: 'resolution=merge-duplicates,return=representation' }, body: JSON.stringify([{ space: space, path: path, col: colOf(path), data: val, deleted: false }]) })
-            .then(function (r) { if (r && r[0]) ver[path] = r[0].updated_at; })
-            .catch(function (e) { if (old === undefined) delete data[path]; else data[path] = old; fireAll([path]); throw e; });
+          var o = { k: 'set', p: path, v: val };
+          if (Q.length) { enq(o); return Promise.resolve(); }
+          return sendOp(o).catch(function (e) { if (e && e.code === 'unavailable') { enq(o); return; } if (old === undefined) delete data[path]; else data[path] = old; fireAll([path]); throw e; });
         },
         update: function (v) {
           if (data[path] === undefined) return Promise.reject(err('not_found', 'no doc'));
           var patch = JSON.parse(JSON.stringify(v)); var old = data[path]; data[path] = merge(old, patch); fireAll([path]);
-          return call('rpc/vw_update', { method: 'POST', body: JSON.stringify({ p_space: space, p_path: path, p_patch: patch }) })
-            .then(function (ok) { if (ok === false) throw err('not_found', 'no doc'); })
-            .catch(function (e) { data[path] = old; fireAll([path]); throw e; });
+          var o = { k: 'upd', p: path, v: patch };
+          if (Q.length) { enq(o); return Promise.resolve(); }
+          return sendOp(o).catch(function (e) { if (e && e.code === 'unavailable') { enq(o); return; } data[path] = old; fireAll([path]); throw e; });
         },
         delete: function () {
           var old = data[path]; delete data[path]; fireAll([path]);
-          return call(q(path), { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ deleted: true, data: null }) })
-            .catch(function (e) { if (old !== undefined) { data[path] = old; fireAll([path]); } throw e; });
+          var o = { k: 'del', p: path };
+          if (Q.length) { enq(o); return Promise.resolve(); }
+          return sendOp(o).catch(function (e) { if (e && e.code === 'unavailable') { enq(o); return; } if (old !== undefined) { data[path] = old; fireAll([path]); } throw e; });
         },
         onSnapshot: function (fn, onErr) { var s = { doc: true, path: path, fn: fn, err: onErr }; subs.push(s); if (ready) setTimeout(function () { fn(snapDoc(path)); }); return function () { subs = subs.filter(function (x) { return x !== s; }); }; } };
     }
@@ -9184,7 +9214,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
     return { doc: doc, collection: col, _remote: true, space: space };
   }
 
-  var S = { db: null, local: false, canWrite: true, loaded: {}, slow: false, err: '', offline: false, space: '',
+  var S = { db: null, local: false, canWrite: true, loaded: {}, slow: false, err: '', offline: false, queued: 0, space: '',
     d: { app: null, staff: {}, catalog: {}, moves: {}, sales: {}, customers: {}, cash: {}, as: {}, resv: {}, points: {} } };
   var listeners = new Set();
   function emit() { listeners.forEach(function (f) { f(); }); }
@@ -10841,6 +10871,7 @@ try {
     if (!L.cart.lines.length) { toast('담은 상품이 없어요'); return; }
     var G0 = window.VW_P9 && VW_P9.payGuard ? VW_P9.payGuard(L.store()) : { ok: true };
     if (G0 && G0.ok === false) { toast('결제할 수 없어요', G0.why || ''); if (G0.back && L.storeIds().indexOf(G0.back) >= 0) L.setStore(G0.back); return; }
+    if (kind === 'card' && !S.local && (S.offline || S.queued || (typeof navigator !== 'undefined' && navigator.onLine === false))) { toast('인터넷이 끊겨 카드 결제는 안 됩니다', '현금 · 계좌이체로 받아 주세요 — 기록은 연결되면 자동으로 올라갑니다'); return; }
     normShip(); promoFit();
     var mm = minusMiss(); if (mm.length && !L.cart.practice) { toast('⚠️ 재고가 모자랍니다 — 사유를 골라 주세요', mm[0].name + (mm[0].minusWhy === '모름' ? ' · ❓ 모름이면 한 줄 메모를 꼭 적어 주세요' : ' · 그 줄의 사유 칩을 눌러 주세요')); return; }
     if (!ok.gf && !custOf(L.cart.cust) && gfNeed(null)) { L.openSheet('p1-gflow', { kind: kind, ok: ok }); return; }   /* 결제 팝업 — 비회원은 맨 앞 (W포스 ① 비회원 구분 · 이유) */
@@ -28034,7 +28065,8 @@ try {
     var ob = outbox(); var old = pendingOld();
     if (!S.loaded.app) return ['gray', '로그인 확인 중…'];
     if (ob.length || old) return ['red', '저장 안 된 것 ' + (ob.length + old) + '번 — 연결된 뒤 다시 눌러 주세요'];
-    if (S.offline) return ['red', '인터넷 끊김 — 지금은 저장이 안 됩니다'];
+    if (S.queued) return ['red', '인터넷 끊김 — 현금 · 계좌이체만 됩니다 · 담아 둔 기록 ' + S.queued + '건은 연결되면 자동으로 올라갑니다'];
+    if (S.offline) return ['red', '인터넷 끊김 — 현금 · 계좌이체만 됩니다 (카드는 연결된 뒤에)'];
     if (S.local) return ['gray', '이 PC에만 저장'];
     return ['green', '서버 연결됨(공유중)' + (S.space && S.space !== 'main' ? ' · ' + S.space : '')];
   }
