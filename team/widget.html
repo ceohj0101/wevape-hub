@@ -33,6 +33,11 @@ body.left #bubs{align-items:flex-start}
 .bub{max-width:220px;background:#1d1d1f;color:#fff;border-radius:12px;padding:6px 10px;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .bub b{display:block;font-size:11px;color:#ffd60a}
 body.open #bubs{display:none}
+.bub.talk{background:#fff;color:#1d1d1f;border:2px solid #1d1d1f}
+.bub.talk b{color:#48484a}
+.bub.talk.boss{background:#ffd60a}
+.bub.talk.boss b{color:#1d1d1f}
+.who.say .ch{outline:3px solid #fff}
 #now{max-width:300px;background:#ffd60a;color:#1d1d1f;font-weight:700;border-radius:12px;padding:6px 10px;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.35);overflow-wrap:anywhere}
 #pan{position:absolute;top:8px;left:8px;width:246px;bottom:56px;background:#1d1d1f;color:#fff;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.5);padding:12px;display:flex;flex-direction:column;gap:8px}
 body.left #pan{left:auto;right:8px}
@@ -71,7 +76,8 @@ function roster() {   /* 기록 파일의 명단이 기준 — 새 사람이 적
   if (!L.length) return TEAM.map(function (t) { return { id: t[0], name: t[1], color: t[2], icon: t[3], lens: t[4] }; });
   return L.map(function (m, i) { var d = TEAM.filter(function (t) { return t[0] === m.id; })[0] || []; return Object.assign({}, m, { name: m.name || d[1] || m.id, color: m.color || d[2] || PAL[i % PAL.length], icon: m.icon || d[3] || '🙂', lens: m.lens || d[4] || '' }); });
 }
-var HOVER = '';
+var HOVER = '', TI = 0, REFILL = null;
+setInterval(function () { TI++; if (REFILL && !SEL) REFILL(); }, 6000);
 function bubble(m, st) { var b = el('div', 'bub'); b.appendChild(el('b', '', m.name + ' · ' + LAB[st])); b.appendChild(document.createTextNode(m.task || '맡은 일 없음')); return b; }
 function draw(msg) {
   var R = roster(); var col = document.getElementById('col'); col.textContent = '';
@@ -80,12 +86,24 @@ function draw(msg) {
   R.forEach(function (m) {
     var st = stOf(m); var who = el('div', 'who ' + st + (SEL === m.id ? ' sel' : ''));
     var ch = el('button', 'ch'); ch.type = 'button'; ch.style.setProperty('--c', m.color); ch.appendChild(el('i', '', m.icon)); ch.setAttribute('aria-label', m.name + ' — 눌러서 의견 보기');
+    who.dataset.id = m.id;
     who.appendChild(ch); who.appendChild(el('span', 'age', ageText(m, st))); hot(who);
     ch.addEventListener('mouseenter', function () { HOVER = m.id; fill(); }); ch.addEventListener('mouseleave', function () { HOVER = ''; fill(); });
     ch.addEventListener('click', function () { SEL = SEL === m.id ? '' : m.id; panel(); draw(msg); });
     strip.appendChild(who);
   });
-  function fill() { bubs.textContent = ''; R.forEach(function (m) { var st = stOf(m); if (st === 'work' || HOVER === m.id) bubs.appendChild(bubble(m, st)); }); }
+  function nm(id) { if (id === 'boss') return '팀장'; if (!id || id === 'all') return '전체'; var x = R.filter(function (m) { return m.id === id; })[0]; return x ? x.name : id; }
+  function fill() {
+    bubs.textContent = ''; var T = (DATA && DATA.talk) || []; var cur = T.length ? T[TI % T.length] : null;
+    [].forEach.call(strip.children, function (w) { w.classList.toggle('say', !!cur && w.dataset.id === cur.from); });
+    if (cur && !HOVER) {   /* 주고받은 말 — 지시(팀장) · 의견(1팀). 6초마다 다음 말 */
+      var b = el('div', 'bub talk' + (cur.from === 'boss' ? ' boss' : ''));
+      b.appendChild(el('b', '', (cur.from === 'boss' ? '지시 · ' : '의견 · ') + nm(cur.from) + ' → ' + nm(cur.to) + ' · ' + dur(Date.now() - new Date(cur.at).getTime()) + (dur(Date.now() - new Date(cur.at).getTime()) === '방금' ? '' : ' 전')));
+      b.appendChild(document.createTextNode(cur.text || '')); bubs.appendChild(b);
+    }
+    R.forEach(function (m) { var st = stOf(m); if (st === 'work' || HOVER === m.id) bubs.appendChild(bubble(m, st)); });
+  }
+  REFILL = fill;
   fill(); rowz.appendChild(strip); rowz.appendChild(bubs); col.appendChild(rowz);
   var now = el('div', ''); now.id = 'now'; now.textContent = msg; hot(now); col.appendChild(now); LASTMSG = msg;
 }
