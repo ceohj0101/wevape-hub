@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'">
+<title>W포스 1팀 위젯</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:transparent;overflow:hidden;font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:12px;user-select:none}
+#col{position:absolute;bottom:8px;right:8px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;max-width:calc(100% - 16px)}
+body.left #col{right:auto;left:8px;align-items:flex-start}
+#rowz{display:flex;flex-direction:row-reverse;align-items:flex-end;gap:8px}
+body.left #rowz{flex-direction:row}
+#strip{display:grid;grid-auto-flow:column;grid-template-rows:repeat(8,auto);gap:4px 6px;direction:rtl}
+body.left #strip{direction:ltr}
+#bubs{display:flex;flex-direction:column;gap:6px;align-items:flex-end;direction:ltr}
+body.left #bubs{align-items:flex-start}
+.who{display:flex;flex-direction:column;align-items:center;gap:1px;width:84px;direction:ltr}
+.ch{width:44px;height:44px;border-radius:50% 50% 46% 46%;position:relative;background:var(--c);box-shadow:0 2px 6px rgba(0,0,0,.35);border:2px solid #1d1d1f;cursor:pointer;padding:0;font:inherit}
+.ch:focus-visible{outline:3px solid #fff}
+.ch::before,.ch::after{content:"";position:absolute;top:16px;width:6px;height:7px;border-radius:50%;background:#1d1d1f}
+.ch::before{left:10px}.ch::after{right:10px}
+.ch i{position:absolute;right:-7px;bottom:-5px;font-style:normal;font-size:16px}
+.who.work .ch{animation:bob .9s ease-in-out infinite}
+.who.idle .ch{filter:saturate(.55) brightness(.8)}
+.who.idle .ch::before,.who.idle .ch::after{height:2px;top:20px}
+.who.sel .ch{outline:3px solid #ffd60a}
+@keyframes bob{50%{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.who.work .ch{animation:none}}
+.age{font-size:10px;font-weight:700;color:#fff;background:rgba(29,29,31,.85);border-radius:8px;padding:0 5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.who.work .age{background:#ffd60a;color:#1d1d1f}
+.who.done .age{background:#173322;color:#6fd08a}
+.bub{max-width:220px;background:#1d1d1f;color:#fff;border-radius:12px;padding:6px 10px;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.bub b{display:block;font-size:11px;color:#ffd60a}
+body.open #bubs{display:none}
+#now{max-width:300px;background:#ffd60a;color:#1d1d1f;font-weight:700;border-radius:12px;padding:6px 10px;line-height:1.4;box-shadow:0 2px 8px rgba(0,0,0,.35);overflow-wrap:anywhere}
+#pan{position:absolute;top:8px;left:8px;width:246px;bottom:56px;background:#1d1d1f;color:#fff;border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.5);padding:12px;display:flex;flex-direction:column;gap:8px}
+body.left #pan{left:auto;right:8px}
+#pan[hidden]{display:none}
+#pan h2{margin:0;font-size:14px}
+#pan .sub{color:#c3c3cb;font-size:11px}
+#pan .x{position:absolute;top:8px;right:8px;border:0;background:#34343a;color:#fff;border-radius:8px;width:26px;height:26px;cursor:pointer;font-size:14px}
+#pan .x:focus-visible{outline:2px solid #ffd60a}
+#log{overflow-y:auto;display:flex;flex-direction:column;gap:8px;min-height:0}
+.it{background:#2a2a2f;border-radius:10px;padding:8px 9px;line-height:1.45}
+.it time{display:block;font-size:10px;color:#9a9aa4;font-variant-numeric:tabular-nums}
+.it b{display:block;color:#ffd60a;font-size:12px;margin:1px 0 3px}
+.note{font-size:10px;color:#9a9aa4;line-height:1.4}
+</style>
+</head>
+<body>
+<div id="pan" hidden><button type="button" class="x" id="pan-x" aria-label="닫기">✕</button><h2 id="pan-t"></h2><div class="sub" id="pan-s"></div><div id="log"></div><div class="note">실제 인물이 아니라 공개된 책 · 강연을 바탕으로 한 AI 관점입니다.</div></div>
+<div id="col"></div>
+<script>
+var TEAM = [
+  ['jobs', '총괄 · 점검', '#ffd60a', '✂️', '잡스 관점'], ['cagan', '제품 책임자', '#ff8a5b', '🧭', '케이건 관점'], ['gerber', '현장 운영 코치', '#7be08a', '📋', '거버 관점'], ['kleppmann', '수석 엔지니어', '#5bc8ff', '🧱', '클레프만 관점'],
+  ['mckelvey', '결제 · 하드웨어', '#c79bff', '💳', '매켈비 관점'], ['norman', '디자이너', '#ff7fb0', '✏️', '노먼 관점'], ['ng', '데이터 · AI', '#9fb4ff', '📊', '응 관점'], ['kim', '마케터', '#ffe9a8', '📣', '김봉진 관점']
+];
+var LAB = { work: '일하는 중', done: '방금 끝냄', idle: '쉬는 중' };
+var W = window.widget || { hit: function () {}, onSide: function () {} };
+var DATA = null, STALE = true, SEL = '';
+function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+function hot(e) { e.addEventListener('mouseenter', function () { W.hit(true); }); e.addEventListener('mouseleave', function () { W.hit(false); }); }
+function dur(ms) { var m = Math.max(0, Math.round(ms / 60000)); if (m < 1) return '방금'; if (m < 60) return m + '분'; var h = Math.floor(m / 60); if (h < 24) return h + '시간' + (m % 60 ? ' ' + (m % 60) + '분' : ''); return Math.floor(h / 24) + '일' + (h % 24 ? ' ' + (h % 24) + '시간' : ''); }
+function when(iso) { var d = new Date(iso); var p = function (n) { return (n < 10 ? '0' : '') + n; }; return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
+function stOf(m) { return STALE ? 'idle' : (LAB[m.state] ? m.state : 'idle'); }
+function ageText(m, st) { var t = m.at ? new Date(m.at).getTime() : 0; if (!t) return LAB[st]; var a = dur(Date.now() - t); return st === 'work' ? '일하는 중' : st === 'done' ? (a === '방금' ? '방금 끝냄' : a + ' 전 끝') : (a === '방금' ? '쉬는 중' : a + ' 쉼'); }
+var PAL = ['#ffd60a', '#ff8a5b', '#7be08a', '#5bc8ff', '#c79bff', '#ff7fb0', '#9fb4ff', '#ffe9a8', '#8fe3d0', '#f4a6ff', '#ffb36b', '#b6e36b'];
+function roster() {   /* 기록 파일의 명단이 기준 — 새 사람이 적히면 캐릭터가 자동으로 하나 더 생긴다. 못 읽었을 때만 기본 8명 */
+  var L = (DATA && DATA.team) || [];
+  if (!L.length) return TEAM.map(function (t) { return { id: t[0], name: t[1], color: t[2], icon: t[3], lens: t[4] }; });
+  return L.map(function (m, i) { var d = TEAM.filter(function (t) { return t[0] === m.id; })[0] || []; return Object.assign({}, m, { name: m.name || d[1] || m.id, color: m.color || d[2] || PAL[i % PAL.length], icon: m.icon || d[3] || '🙂', lens: m.lens || d[4] || '' }); });
+}
+var HOVER = '';
+function bubble(m, st) { var b = el('div', 'bub'); b.appendChild(el('b', '', m.name + ' · ' + LAB[st])); b.appendChild(document.createTextNode(m.task || '맡은 일 없음')); return b; }
+function draw(msg) {
+  var R = roster(); var col = document.getElementById('col'); col.textContent = '';
+  var rowz = el('div', ''); rowz.id = 'rowz'; var strip = el('div', ''); strip.id = 'strip'; var bubs = el('div', ''); bubs.id = 'bubs';
+  strip.style.gridTemplateRows = 'repeat(' + Math.min(8, Math.max(1, R.length)) + ',auto)';
+  R.forEach(function (m) {
+    var st = stOf(m); var who = el('div', 'who ' + st + (SEL === m.id ? ' sel' : ''));
+    var ch = el('button', 'ch'); ch.type = 'button'; ch.style.setProperty('--c', m.color); ch.appendChild(el('i', '', m.icon)); ch.setAttribute('aria-label', m.name + ' — 눌러서 의견 보기');
+    who.appendChild(ch); who.appendChild(el('span', 'age', ageText(m, st))); hot(who);
+    ch.addEventListener('mouseenter', function () { HOVER = m.id; fill(); }); ch.addEventListener('mouseleave', function () { HOVER = ''; fill(); });
+    ch.addEventListener('click', function () { SEL = SEL === m.id ? '' : m.id; panel(); draw(msg); });
+    strip.appendChild(who);
+  });
+  function fill() { bubs.textContent = ''; R.forEach(function (m) { var st = stOf(m); if (st === 'work' || HOVER === m.id) bubs.appendChild(bubble(m, st)); }); }
+  fill(); rowz.appendChild(strip); rowz.appendChild(bubs); col.appendChild(rowz);
+  var now = el('div', ''); now.id = 'now'; now.textContent = msg; hot(now); col.appendChild(now); LASTMSG = msg;
+}
+var LASTMSG = '';
+function panel() {
+  var p = document.getElementById('pan'); document.body.classList.toggle('open', !!SEL);
+  if (!SEL) { p.hidden = true; W.hit(false); return; }
+  var m = roster().filter(function (x) { return x.id === SEL; })[0]; if (!m) { SEL = ''; p.hidden = true; return; } var st = stOf(m);
+  document.getElementById('pan-t').textContent = m.name;
+  document.getElementById('pan-s').textContent = (m.lens ? m.lens + ' · AI — ' : 'AI — ') + ageText(m, st) + (m.task ? ' · ' + m.task : '');
+  var log = document.getElementById('log'); log.textContent = '';
+  var L = m.log || [];
+  if (!L.length) log.appendChild(el('div', 'it', '아직 낸 의견 기록이 없습니다.'));
+  L.forEach(function (x) { var it = el('div', 'it'); var tm = el('time', '', when(x.at) + ' · ' + dur(Date.now() - new Date(x.at).getTime()) + ' 전'); it.appendChild(tm); it.appendChild(el('b', '', x.topic || '')); it.appendChild(document.createTextNode(x.say || '')); log.appendChild(it); });
+  p.hidden = false;
+}
+hot(document.getElementById('pan'));
+document.getElementById('pan-x').addEventListener('click', function () { SEL = ''; panel(); draw(LASTMSG); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && SEL) { SEL = ''; panel(); draw(LASTMSG); } });
+function tick() {
+  fetch('status.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
+    DATA = d; var age = Date.now() - new Date(d.updated).getTime(); STALE = !(age < 600000);
+    draw(STALE ? '진행 중인 작업 없음 · 마지막 기록 ' + dur(age) + ' 전' : (d.now || '')); if (SEL) panel();
+  }).catch(function () { STALE = true; draw('기록을 읽지 못했습니다 — 인터넷 연결 확인'); });
+}
+W.onSide(function (s) { document.body.className = (s === 'left' ? 'left' : '') + (SEL ? ' open' : ''); });
+tick(); setInterval(tick, 30000);
+</script>
+</body>
+</html>
