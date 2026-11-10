@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W포스 1팀</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#101013">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{--bg:#101013;--card:#1b1b20;--line:#2e2e36;--ink:#f4f4f6;--ink2:#c3c3cb;--ink3:#9a9aa4;--mark:#ffd60a;--ok:#6fd08a;--f:-apple-system,'Malgun Gothic','Apple SD Gothic Neo',sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:14px}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;margin-bottom:12px}
+h1{font-size:18px;margin:0;font-weight:800}
+#now{flex:1;min-width:220px;color:var(--ink2)}
+#fresh{font-size:12px;color:var(--ink3);font-variant-numeric:tabular-nums}
+#fresh.live{color:var(--ok)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.m{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.m.work{border-color:var(--mark)}
+.top{display:flex;align-items:center;gap:10px}
+.ch{width:46px;height:46px;border-radius:50% 50% 46% 46%;position:relative;flex:none;background:var(--c)}
+.ch::before,.ch::after{content:"";position:absolute;top:18px;width:6px;height:7px;border-radius:50%;background:#1d1d1f}
+.ch::before{left:12px}.ch::after{right:12px}
+.ch i{position:absolute;right:-6px;bottom:-4px;font-style:normal;font-size:18px}
+.m.work .ch{animation:bob .9s ease-in-out infinite}
+.m.idle .ch{opacity:.55}
+.m.idle .ch::before,.m.idle .ch::after{height:2px;top:21px}
+@keyframes bob{50%{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.m.work .ch{animation:none}}
+.who b{display:block;font-size:14px}
+.who span{font-size:11px;color:var(--ink3)}
+.st{align-self:flex-start;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--line);color:var(--ink2)}
+.m.work .st{background:var(--mark);color:#1d1d1f}
+.m.done .st{background:#173322;color:var(--ok)}
+.task{color:var(--ink2);font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+footer{margin-top:14px;font-size:12px;color:var(--ink3);line-height:1.6}
+#inst{font:inherit;font-weight:800;border:0;border-radius:10px;padding:8px 14px;background:var(--mark);color:#1d1d1f;cursor:pointer}
+#inst:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@media (max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1>W포스 1팀</h1><span id="now">불러오는 중…</span><span id="fresh"></span><button type="button" id="inst" hidden>바탕화면에 설치</button></header>
+  <div class="grid" id="grid"></div>
+  <footer>이 팀은 실제 인물이 아니라, 공개된 책 · 강연을 바탕으로 한 AI 관점입니다. 캐릭터는 자리(역할)를 나타내는 그림이고 실제 인물의 모습이 아닙니다.<br>상태는 Claude가 작업할 때 적어 올리는 기록을 30초마다 다시 읽어 보여 줍니다. 10분 넘게 새 기록이 없으면 «쉬는 중»으로 표시합니다.</footer>
+</div>
+<script>
+var TEAM = [
+  ['jobs', '총괄 · 점검', '잡스 관점', '#ffd60a', '✂️'], ['cagan', '제품 책임자', '케이건 관점', '#ff8a5b', '🧭'],
+  ['gerber', '현장 운영 코치', '거버 관점', '#7be08a', '📋'], ['kleppmann', '수석 엔지니어', '클레프만 관점', '#5bc8ff', '🧱'],
+  ['mckelvey', '결제 · 하드웨어', '매켈비 관점', '#c79bff', '💳'], ['norman', '디자이너', '노먼 관점', '#ff7fb0', '✏️'],
+  ['ng', '데이터 · AI', '응 관점', '#9fb4ff', '📊'], ['kim', '마케터', '김봉진 관점', '#ffe9a8', '📣']
+];
+var LAB = { work: '일하는 중', done: '방금 끝냄', idle: '쉬는 중' };
+function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+function draw(d, stale) {
+  var by = {}; (d.team || []).forEach(function (m) { by[m.id] = m; });
+  var g = document.getElementById('grid'); g.textContent = '';
+  TEAM.forEach(function (t) {
+    var m = by[t[0]] || {}; var st = stale ? 'idle' : (LAB[m.state] ? m.state : 'idle');
+    var card = el('div', 'm ' + st); var top = el('div', 'top');
+    var ch = el('div', 'ch'); ch.style.setProperty('--c', t[3]); ch.appendChild(el('i', '', t[4])); top.appendChild(ch);
+    var who = el('div', 'who'); who.appendChild(el('b', '', t[1])); who.appendChild(el('span', '', t[2] + ' · AI')); top.appendChild(who);
+    card.appendChild(top); card.appendChild(el('span', 'st', LAB[st])); card.appendChild(el('div', 'task', m.task || '맡은 일 없음')); g.appendChild(card);
+  });
+  document.getElementById('now').textContent = stale ? '지금은 진행 중인 작업이 없습니다 (마지막: ' + (d.now || '—') + ')' : (d.now || '');
+}
+function tick() {
+  fetch('status.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
+    var age = (Date.now() - new Date(d.updated).getTime()) / 60000; var stale = !(age < 10);
+    draw(d, stale); var f = document.getElementById('fresh');
+    f.textContent = '마지막 기록 ' + (age < 1 ? '방금' : age < 60 ? Math.round(age) + '분 전' : Math.round(age / 60) + '시간 전'); f.className = stale ? '' : 'live';
+  }).catch(function () { document.getElementById('now').textContent = '기록을 읽지 못했습니다. 인터넷 연결을 확인해 주세요.'; });
+}
+tick(); setInterval(tick, 30000);
+var dp = null; var ib = document.getElementById('inst');
+window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); dp = e; ib.hidden = false; });
+ib.addEventListener('click', function () { if (dp) { dp.prompt(); dp = null; ib.hidden = true; } });
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function () {});
+</script>
+</body>
+</html>

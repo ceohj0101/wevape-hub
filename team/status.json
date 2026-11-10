@@ -1,0 +1,9 @@
+{"updated":"2026-11-10T13:50:13+09:00","now":"손님 화면 중복 정리(A안) 시험 중 — 통과하면 가상 W포스에 올립니다","team":[
+{"id":"jobs","state":"done","task":"«무엇을 뺄까» 점검 — 손님 화면 메뉴 13개 → 8개"},
+{"id":"cagan","state":"idle","task":"다음: 한 매장 30일 숫자 설계"},
+{"id":"gerber","state":"work","task":"직원 하루 동선에서 중복 4곳 찾음 — 정리 순서 잡는 중"},
+{"id":"kleppmann","state":"done","task":"구월길병원점 기록 884건 옮김 · 지문값 3묶음 일치 확인"},
+{"id":"mckelvey","state":"idle","task":"다음: 단말기 멈췄을 때 직원 혼자 푸는 길"},
+{"id":"norman","state":"work","task":"손님 화면 A안 적용 · 시험 4묶음 도는 중"},
+{"id":"ng","state":"done","task":"흐린 글자 392곳 → 3곳 · 화면 81개 자동 점검"},
+{"id":"kim","state":"idle","task":"다음: «나를 기억하네» 장면 다듬기"}]}
