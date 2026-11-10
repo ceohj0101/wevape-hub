@@ -293,6 +293,10 @@ button.lv-round{border:0; padding:0; cursor:pointer}
 .lv-skin .sk-now{height:20px; padding:0 7px; border-radius:calc(6px*var(--rk)); background:var(--k-acc); color:var(--k-on-acc); font-size:calc(11px*var(--fk)); font-weight:700; display:inline-flex; align-items:center}
 .lv-skin .sk-desc{font-size:calc(12px*var(--fk)); color:var(--k-ink2); line-height:1.4; padding:0 2px 2px}
 
+/* 2026-11-10 작은 단추 키우기 — 누르는 곳 높이 24px 이상 (전 화면 점검: 24px 미만 196곳) */
+button.lv-link, button.p5-rowbtn, button.p6-fold, button.p3-inhead, button.p4-name, button.p7-nm{min-height:24px}
+a.lv-link, a.p10-link{display:inline-block; line-height:24px}
+
 /* 묶음 p1-sale */
 /* p1 판매 화면 (S1-sale) + 위 알림 칸 (g67) */
 .p1 .p1-abar{position:absolute; top:61px; left:24px; right:24px; height:28px; display:flex; align-items:center; gap:6px; overflow:hidden}
@@ -2547,6 +2551,11 @@ a.p9-segrow{display:flex}.p9-segrow.on{background:var(--k-acc-s)}
 /* 띠 공지 · 알약은 화면 내용 위에 떠 있지 않게 — 띠가 있으면 내용 칸 아래를 띠 높이만큼 올림 (p6 3차 요청) */
 #live .lv-screen:has(> .p9-bandbar) > .lv-main{bottom:140px !important}
 .p9-bandbar{bottom:100px !important}
+
+/* 2026-11-10 머리줄 매장 이름 · 카드 상태 — 모양은 그대로 두고 누르는 곳만 위아래로 넓힘(24px) */
+.p9-storebtn, .p9-cardst{position:relative}
+.p9-storebtn::after{content:""; position:absolute; left:0; right:0; top:-1px; bottom:-1px}
+.p9-cardst::after{content:""; position:absolute; left:0; right:0; top:-3px; bottom:-3px}
 
 /* 스킨 8개 — 이름표 값 */
 :root, [data-skin="wevape"]{--k-bg0:#e3e3e8; --k-bg1:#f2f2f7; --k-bg2:#efeff4; --k-card:#ffffff; --k-fill:#e5e5ea; --k-fill2:#d1d1d6; --k-inv:#1d1d1f; --k-inv2:#48484a; --k-ink:#1d1d1f; --k-ink2:#48484a; --k-ink3:#6e6e73; --k-ink4:#c7c7cc; --k-line:#e5e5ea; --k-line2:#c7c7cc; --k-acc:#ffd400; --k-acc-d:#c9a800; --k-acc-s:#fffbe0; --k-on-acc:#1d1d1f; --k-on-acc2:rgba(0,0,0,.68); --k-blue:#1550b0; --k-blue-s:#eef4ff; --k-red:#d70015; --k-red-s:#fff4f2; --k-red-d:#8a1c12; --k-org:#7a2e00; --k-org-s:#fff1e0; --k-grn:#217d37; --k-grn-s:#e3f3e7; --k-grn-d:#145a26; --k-ring:0,0,0; --k-ringx:1; --k-mk-bg:#1d1d1f; --k-mk-fg:#ffd400; --rk:1; --fk:1; --ui:-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif}
@@ -9703,7 +9712,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
     var n = useState(''), name = n[0], setName = n[1]; var r = useState('staff'), role = r[0], setRole = r[1]; var bz = useState(false), busy = bz[0], setBusy = bz[1];
     var canAdd = viewRole() !== 'staff' || !list.length;
     function pick(id) { try { localStorage.setItem('vw-op', id); localStorage.setItem('vw-op-at', String(Date.now())); } catch (e) {} emit(); VW.toast('이 PC 근무자: ' + S.d.staff[id].name); closeSheet(); }
-    async function add() { if (!name.trim()) { VW.toast('이름을 넣어 주세요'); return; } setBusy(true); var id = uid('p'); try { await write(function (db) { return db.collection('staff').doc(id).set({ name: name.trim(), role: role, at: Date.now() }); }); setName(''); setBusy(false); if (!o) pick(id); } catch (e) { setBusy(false); } }
+    async function add() { if (!name.trim()) { VW.toast('이름을 넣어 주세요'); return; } setBusy(true); var id = uid('p'); try { await write(function (db) { return db.collection('staff').doc(id).set({ name: name.trim(), role: role, at: Date.now(), stores: role === 'super' ? ['*'] : [curStore()] }); }); setName(''); setBusy(false); if (!o) pick(id); } catch (e) { setBusy(false); } }
     return html`<${Sheet} w=${900} h=${640} label="회사 · 직원" title="직원 · 이 PC 근무자" sub="근무자를 고르면 판매 · 환불 기록에 이름이 남아요 (비밀번호 없음 — 체험판)" onClose=${closeSheet}>
       ${!list.length ? html`<div class="lv-empty"><b>직원이 없어요</b><span>아래에서 첫 직원을 등록하세요</span></div>` : ''}
       ${list.map(function (x) { return html`<div class=${'lv-rowline' + (o && o.id === x.id ? ' sel' : '')}><span class="av">${x.name.slice(0, 1)}</span><span class="t"><b>${x.name}</b><span>${ROLE[x.role] || ''}</span></span>${o && o.id === x.id ? html`<span class="lv-tag green">이 PC 근무 중</span>` : html`<${Btn2} small onClick=${function () { pick(x.id); }}>출근 · 이 PC</${Btn2}>`}${canAdd && viewRole() === 'super' ? html`<${Btn2} small red onClick=${async function () { try { await write(function (db) { return db.collection('staff').doc(x.id).update({ gone: true }); }); } catch (e) {} }}>퇴사 처리</${Btn2}>` : ''}</div>`; })}
@@ -27319,7 +27328,7 @@ try {
     if (SEEN_SALES === null) { SEEN_SALES = {}; ids.forEach(function (k) { SEEN_SALES[k] = 1; }); return; }
     ids.forEach(function (k) { if (SEEN_SALES[k]) return; SEEN_SALES[k] = 1; var s = S.d.sales[k] || {}; if (s.practice || s.test || practicePc()) return; if ((s.at || 0) < LOAD_AT) return; if (s.by && myId() && s.by !== myId()) return; if (L.storeOf(s) !== L.store()) return; if ((s.day || L.dayOf(s.at)) !== today()) return; markSold(L.storeOf(s)); });
   }
-  function myStores() { var o = me(); var s = (o && o.stores) || []; if (s.indexOf('*') >= 0) return L.storeIds(); return s.length ? s : (o && o.store ? [o.store] : []); }
+  function myStores() { var o = me(); var s = (o && o.stores) || []; if (s.indexOf('*') >= 0) return L.storeIds(); if (s.length) return s; if (o && o.store) return [o.store]; var all = L.storeIds(); return all.length === 1 ? all : []; }   /* 2026-11-10: 매장이 한 곳뿐이면 지정이 없어도 그 매장 — 한 곳짜리 가게에서 새 직원 · «직원으로 보기»가 «매장이 지정돼 있지 않습니다»로 결제가 막히던 것. 두 곳 이상이면 예전처럼 지정이 있어야 함 */
   /* 이 기기에서 고를 수 있는 매장 = 기기 잠금 ∩ 직원 허용 (W포스 고를수있는매장) — 잠긴 기기는 최고관리자도 그 매장만 */
   function pickable() {
     var all = storeAll().map(function (s) { return s.id; }); var mine = role() === 'super' ? all : myStores().filter(function (x) { return all.indexOf(x) >= 0; });
