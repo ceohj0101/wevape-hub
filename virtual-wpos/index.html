@@ -16681,6 +16681,8 @@ try {
   var SUBS = [['창구', 'customers/창구', 'all'], ['AS 접수', 'customers/AS 접수', 'all'], ['예약 접수', 'customers/예약 접수', 'all'], ['손님 찾기', 'customers/손님 찾기', 'all'], ['컴플레인', 'customers/컴플레인', 'all'], ['|관리', '', 'mgr'], ['연락 목록', 'customers/연락 목록', 'mgr'], ['통계', 'customers/통계', 'mgr'], ['의견', 'customers/의견', 'mgr'], ['등급', 'customers/등급', 'mgr'], ['앱 공지', 'customers/앱 공지', 'mgr'], ['예약 통계', 'resvstat', 'mgronly'], ['불량률·통계', 'asstat', 'mgronly']];
   function SubNav(p) {
     var r = role();
+    /* 2026-11-10 중복 정리(A안): 직원은 이 줄의 다섯 칸(창구 · AS 접수 · 예약 접수 · 손님 찾기 · 컴플레인)이 맨 위 메뉴와 똑같아서 안 그린다. 관리 칸이 있는 중간관리자 · 최고관리자만 그대로 */
+    if (r === 'staff') return html`<nav class="p3-sub" aria-label="고객 하위 칸" hidden></nav>`;
     return html`<nav class="p3-sub" aria-label="고객 하위 칸"><b class="p3-subg">고객</b>${SUBS.map(function (s) {
       if (s[2] === 'mgr' && r === 'staff') return ''; if (s[2] === 'mgronly' && r !== 'mgr') return '';
       if (s[0][0] === '|') return html`<b class="p3-subg" data-r="mgr">${s[0].slice(1)}</b>`;
@@ -16834,10 +16836,11 @@ try {
     return html`<div class="lv-screen p3"><${L.Header} g=${1} s=${headIdx('g4')} more=${'#m-g4'} />
       <main class="lv-main" style="flex-direction:column;gap:10px">
         <div class="lv-row" style="flex:none"><${SubNav} on="customers/창구" /><span style="flex:1"></span><${ConsentLine} store=${L.store()} /></div>
+        <label class="lv-search gray" style="flex:none"><${Ic} n="search" s=${18} c="var(--k-ink2)" w=${2} /><input type="text" id="p3-desk-q" placeholder="손님 찾기 — 이름 또는 전화번호 뒷4자리 · Enter" autocomplete="off" onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); window.__p3q = e.target.value.trim(); window.__p3focus = 1; L.go('S4-guest'); } }} /></label>
         <div class="lv-big3" style="flex:none">
           <button type="button" id="p3-desk-as" onClick=${function () { openSheet('p3-as-new', {}); }}><${Ic} n="tool" s=${26} /><b>고장 났어요</b><span>AS 접수 · 바꿔 드림 · 맡아 두기</span></button>
           <button type="button" id="p3-desk-rv" onClick=${function () { openSheet('p3-resv-new', {}); }}><${Ic} n="cal" s=${26} /><b>없는 상품 찾아요</b><span>예약 접수 · 입고되면 연락</span></button>
-          <button type="button" id="p3-desk-find" onClick=${function () { window.__p3focus = 1; L.go('S4-guest'); }}><${Ic} n="guest" s=${26} /><b>손님 찾기</b><span>이력 · 포인트 · 맡긴 것 · 메모</span></button>
+          <button type="button" id="p3-desk-cp" onClick=${function () { openSheet('p4-cmp-new'); }}><${Ic} n="guest" s=${26} /><b>불만 있어요</b><span>컴플레인 접수 · 바로 알림</span></button>
         </div>
         <div style="flex:1;min-height:0;display:flex;gap:16px">
           <section class="lv-card" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:10px">
@@ -17778,7 +17781,7 @@ try {
     L.useStore(); var ix = L.useCustIndex();
     var qs = useState(''), q = qs[0], setQ = qs[1]; var ss = useState(''), sel = ss[0], setSel = ss[1]; var nw = useState(false), adding = nw[0], setAdding = nw[1];
     var qref = useRef(null);
-    useEffect(function () { if (window.__vwCust) { var x = window.__vwCust; window.__vwCust = ''; setSel(x); setAdding(false); } if (window.__p3focus) { window.__p3focus = 0; setTimeout(function () { var i = document.getElementById('p3-gq'); if (i) i.focus(); }, 60); } });
+    useEffect(function () { if (window.__vwCust) { var x = window.__vwCust; window.__vwCust = ''; setSel(x); setAdding(false); } if (window.__p3q != null) { var q0 = window.__p3q; window.__p3q = null; if (q0) setQ(q0); } if (window.__p3focus) { window.__p3focus = 0; setTimeout(function () { var i = document.getElementById('p3-gq'); if (i) i.focus(); }, 60); } });
     var MAX = 150;
     var all = custList().filter(function (c) { return stOf(c) === L.store(); }).sort(function (a, b) { return (b.at || 0) - (a.at || 0); }); var list = all.filter(function (c) { return custMatch(c, q); });
     var c = sel && S.d.customers[sel] && !S.d.customers[sel].gone ? Object.assign({ id: sel }, S.d.customers[sel]) : null;
