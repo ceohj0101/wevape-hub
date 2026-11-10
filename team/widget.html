@@ -125,7 +125,7 @@ document.getElementById('pan-x').addEventListener('click', function () { SEL = '
 document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && SEL) { SEL = ''; panel(); draw(LASTMSG); } });
 function tick() {
   fetch('status.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
-    DATA = d; var age = Date.now() - new Date(d.updated).getTime(); STALE = !(age < 600000);
+    DATA = d; var age = Date.now() - new Date(d.updated).getTime(); STALE = !(age < 1800000);   /* 30분 — 긴 시험이 도는 동안에도 «쉬는 중»으로 안 떨어지게 (일하는 동안엔 3분마다 기록이 자동으로 올라옴) */
     draw(STALE ? '진행 중인 작업 없음 · 마지막 기록 ' + dur(age) + ' 전' : (d.now || '')); if (SEL) panel();
   }).catch(function () { STALE = true; draw('기록을 읽지 못했습니다 — 인터넷 연결 확인'); });
 }

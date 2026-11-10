@@ -46,7 +46,7 @@ footer{margin-top:14px;font-size:12px;color:var(--ink3);line-height:1.6}
 <div class="wrap">
   <header><h1>W포스 1팀</h1><span id="now">불러오는 중…</span><span id="fresh"></span><button type="button" id="inst" hidden>바탕화면에 설치</button></header>
   <div class="grid" id="grid"></div>
-  <footer>이 팀은 실제 인물이 아니라, 공개된 책 · 강연을 바탕으로 한 AI 관점입니다. 캐릭터는 자리(역할)를 나타내는 그림이고 실제 인물의 모습이 아닙니다.<br>상태는 Claude가 작업할 때 적어 올리는 기록을 30초마다 다시 읽어 보여 줍니다. 10분 넘게 새 기록이 없으면 «쉬는 중»으로 표시합니다.</footer>
+  <footer>이 팀은 실제 인물이 아니라, 공개된 책 · 강연을 바탕으로 한 AI 관점입니다. 캐릭터는 자리(역할)를 나타내는 그림이고 실제 인물의 모습이 아닙니다.<br>상태는 Claude가 작업할 때 적어 올리는 기록을 30초마다 다시 읽어 보여 줍니다. 30분 넘게 새 기록이 없으면 «쉬는 중»으로 표시합니다.</footer>
 </div>
 <script>
 var TEAM = [
@@ -71,7 +71,7 @@ function draw(d, stale) {
 }
 function tick() {
   fetch('status.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
-    var age = (Date.now() - new Date(d.updated).getTime()) / 60000; var stale = !(age < 10);
+    var age = (Date.now() - new Date(d.updated).getTime()) / 60000; var stale = !(age < 30);
     draw(d, stale); var f = document.getElementById('fresh');
     f.textContent = '마지막 기록 ' + (age < 1 ? '방금' : age < 60 ? Math.round(age) + '분 전' : Math.round(age / 60) + '시간 전'); f.className = stale ? '' : 'live';
   }).catch(function () { document.getElementById('now').textContent = '기록을 읽지 못했습니다. 인터넷 연결을 확인해 주세요.'; });
