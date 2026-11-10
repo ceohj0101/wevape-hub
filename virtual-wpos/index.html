@@ -9240,7 +9240,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
     try { var r0 = await fn(sdb); tell(true); return r0; }
     catch (e) {
       var c = e && e.code;
-      if (c === 'unavailable') { await new Promise(function (r) { setTimeout(r, 600 + Math.random() * 600); }); try { var r1 = await fn(sdb); tell(true); return r1; } catch (e2) { tell(false, e2); throw e2; } }
+      if (c === 'unavailable') { await new Promise(function (r) { setTimeout(r, 600 + Math.random() * 600); }); try { var r1 = await fn(sdb); tell(true); return r1; } catch (e2) { tell(false, e2); if (e2 && e2.code === 'unavailable') VW.toast('인터넷이 끊겨 저장하지 못했어요', '연결된 뒤 같은 단추를 한 번 더 눌러 주세요'); throw e2; } }
       tell(false, e);
       if (c === 'not_found') VW.toast('고칠 기록이 없어요', '다른 PC에서 지웠을 수 있어요 · 화면을 새로 보고 다시 해 주세요');
       else if (c === 'quota_exceeded') VW.toast('저장 공간이 다 찼어요', '오래된 기록을 지워야 새로 저장됩니다');
@@ -10794,7 +10794,7 @@ try {
     if (!pay.parts) pay.parts = pay.method === 'points' || pay.method === 'prepay' ? [] : [{ m: pay.method, n: pay.amount != null ? pay.amount : t.due }];
     if (pay.amount == null) pay.amount = pay.parts.reduce(function (a, x) { return a + (x.m === 'exchange' ? 0 : x.n); }, 0);
     if (t.pre) pay.parts = pay.parts.concat([{ m: 'prepay', n: t.pre }]);
-    var sale = { at: at, day: L.dayOf(at), no: saleNo(at), by: m.by, byName: m.byName, cust: cart.cust || '', custName: c ? c.name : '', lines: cleanLines(), sub: t.sub, disc: t.disc, total: t.total, pay: pay, refunds: [] };
+    var sale = { at: at, day: L.dayOf(at), no: saleNo(at) + '-' + String(id).slice(-2), by: m.by, byName: m.byName, cust: cart.cust || '', custName: c ? c.name : '', lines: cleanLines(), sub: t.sub, disc: t.disc, total: t.total, pay: pay, refunds: [] };
     if (c) sale.pts = { used: t.pts, earned: t.earned, rate: L.ptRate() };
     sale.ctype = c ? ctypeOfCust(c) : (cart.ctype || ''); if (!c) sale.guestWhy = cart.why === '직접 쓰기' ? '직접: ' + String(cart.whyText || '').trim() : (cart.why || '');
     if (cart.adult) sale.adult = cart.adult; sale.age = c || cart.adult ? '확인됨' : '미확인';
@@ -27728,6 +27728,8 @@ try {
     if ((cfg().resyncAt || 0) > (lsGet('vw-p9-synced', 0) || 0)) add({ id: 'sys-resync', kind: 'resync', title: '서버 자료가 정리되었습니다', sub: '지금 동기화를 누르면 이 PC를 새로 받습니다', act: [['지금 동기화', function () { P9.resync(); }]] });
     if (cfg().latest && cmpVer(cfg().latest, VER) > 0) { var busy = !(L.cart && L.cart.lines || []).length ? false : true; add({ id: 'sys-ver', kind: 'ver', title: '🔄 새 버전이 준비돼 있어요', sub: (busy ? '지금은 계산 중이라 바꾸지 않습니다. 손님 가시고 나서 눌러주세요.' : '손님 없을 때 오른쪽 버튼을 눌러주세요. 5초면 끝납니다. 안 누르셔도 내일 개점할 때 저절로 바뀝니다.') + ' · 지금 v' + VER + ' → 새 버전 v' + cfg().latest, act: [['🔄 지금 업데이트', function () { P9.updateNow(); }]] }); }
     var fl = flow(); var ck = null;
+    /* 2026-11-10 개점 시재를 건너뛴 채 팔고 있으면 빨간 알림 — 아침 창은 한 번만 뜨고 닫으면 다시 안 떠서, 시재 없이 하루가 지나갔음 */
+    if (S.loaded.cash && S.d.app && S.d.app.ready && me() && !practice() && !L.cashOf(today(), st)) add({ id: 'sys-open', kind: 'check', lvl: 'red', title: '개점 시재를 아직 안 넣었어요', sub: '서랍 돈을 세어 넣어야 마감 때 맞출 수 있습니다', act: [['개점 시재 넣기', function () { L.openSheet('p6-open', { store: L.store(), day: today() }); }]] });
     if (L.cashOf(today(), st)) { ck = checkBandOn(st); if (ck) add({ id: 'sys-check', kind: 'check', lvl: ck.bad ? 'red' : 'org', title: '오늘 개점 점검 — 확인 ' + ck.shown.length + '개', sub: ck.shown.slice(0, 2).map(function (x) { return x.t; }).join(' · '), direct: 'p9-check', act: [['개점 점검 창', function () { L.openSheet('p9-check'); }]] }); }
     var au = ck ? null : stockAudit(st); var negN = ck ? ck.all.filter(function (x) { return /^neg:/.test(x.key); }).length : au.neg.length;
     if (negN) add({ id: 'sys-neg', kind: 'stockwarn', title: '재고 대조 경고 — 마이너스 ' + negN + '개', sub: '0 밑으로 떨어진 품목이 있어요', act: [['개점 점검에서 근거 보기', function () { L.openSheet('p9-check'); }], ['입출고 · 이동', function () { go('g18'); }]] });
@@ -28031,8 +28033,8 @@ try {
   function syncState() {
     var ob = outbox(); var old = pendingOld();
     if (!S.loaded.app) return ['gray', '로그인 확인 중…'];
-    if (ob.length || old) return ['red', '못 올린 판매·시재 ' + (ob.length + old) + '건 — 이 기기를 끄지 마세요'];
-    if (S.offline) return ['red', '오프라인(이 기기에만 저장됨)'];
+    if (ob.length || old) return ['red', '저장 안 된 것 ' + (ob.length + old) + '번 — 연결된 뒤 다시 눌러 주세요'];
+    if (S.offline) return ['red', '인터넷 끊김 — 지금은 저장이 안 됩니다'];
     if (S.local) return ['gray', '이 PC에만 저장'];
     return ['green', '서버 연결됨(공유중)' + (S.space && S.space !== 'main' ? ' · ' + S.space : '')];
   }
@@ -28597,7 +28599,7 @@ try {
   /* 못 올린 기록 — core 가 저장마다 window 'vw:write' {ok, code} 를 쏴 줌 → 실패만 모아 보여 줌 */
   sheet('p9-outbox', function OutboxSheet() {
     L.useStore(); var ob = outbox();
-    return html`<${Sheet} w=${760} h=${560} label="화면 아래 띠" title=${'서버에 못 올린 저장 ' + ob.length + '번'} sub="이 기기를 끄지 마세요 — 연결이 돌아오면 다시 저장해 주세요" onClose=${close}
+    return html`<${Sheet} w=${760} h=${560} label="화면 아래 띠" title=${'서버에 못 올린 저장 ' + ob.length + '번'} sub="아래 저장은 서버에 올라가지 않았습니다 — 연결이 돌아오면 그 화면에서 다시 저장해 주세요" onClose=${close}
       left=${ob.length ? html`<${Btn2} red onClick=${function () { ask('목록을 비울까요?', '이 기기에 남은 실패 ' + ob.length + '건 표시를 지워요', '비우기', function () { setOutbox([]); L.emit(); toast('비웠어요'); }); }}>목록 비우기</${Btn2}>` : ''} right=${html`<${Btn1} disabled=${!ob.length} onClick=${function () { retryOutbox(); }}>연결 다시 확인</${Btn1}>`}>
       ${!ob.length ? html`<${Empty} t="못 올린 저장이 없어요" s="모두 서버에 올라갔어요" />` : ob.slice().reverse().map(function (x, i) { return html`<div class="lv-rowline" key=${i}><span class="t"><b>${(x.sid ? stitle(x.sid) || x.sid : '화면') + ' 에서 저장 실패'}</b><span>${L.dayOf(x.at)} ${hm(x.at)} · ${x.code || '연결 끊김'}${x.rej ? ' · 서버가 받아주지 않음 (권한 · 용량)' : ''}</span></span></div>`; })}
     </${Sheet}>`;
