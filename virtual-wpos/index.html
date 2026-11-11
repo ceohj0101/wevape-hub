@@ -2557,6 +2557,12 @@ a.p9-segrow{display:flex}.p9-segrow.on{background:var(--k-acc-s)}
 .p9-storebtn::after{content:""; position:absolute; left:0; right:0; top:-1px; bottom:-1px}
 .p9-cardst::after{content:""; position:absolute; left:0; right:0; top:-3px; bottom:-3px}
 
+/* 2026-11-11 바뀐 점 — 한 번에 하나씩 */
+.p9-step{display:flex;flex-direction:column;gap:12px}.p9-step .tt{font-size:calc(22px*var(--fk));line-height:1.3}.p9-step p{margin:0;font-size:calc(16px*var(--fk));line-height:1.6;white-space:pre-line}
+.p9-step img{max-width:100%;max-height:230px;border-radius:calc(14px*var(--rk));align-self:flex-start;border:1px solid var(--k-line)}
+.p9-stepn{display:flex;align-items:baseline;gap:6px}.p9-stepn b{font-size:calc(34px*var(--fk));line-height:1;color:var(--k-ink)}.p9-stepn span{font-size:calc(15px*var(--fk));color:var(--k-ink2)}
+.p9-dots2{display:inline-flex;gap:5px;margin-left:10px;align-self:center}.p9-dots2 i{width:8px;height:8px;border-radius:50%;background:var(--k-line)}.p9-dots2 i.on{background:var(--k-ink);width:20px;border-radius:calc(4px*var(--rk))}.p9-dots2 i.done{background:var(--k-ink3)}
+
 /* 스킨 8개 — 이름표 값 */
 :root, [data-skin="wevape"]{--k-bg0:#e3e3e8; --k-bg1:#f2f2f7; --k-bg2:#efeff4; --k-card:#ffffff; --k-fill:#e5e5ea; --k-fill2:#d1d1d6; --k-inv:#1d1d1f; --k-inv2:#48484a; --k-ink:#1d1d1f; --k-ink2:#48484a; --k-ink3:#6e6e73; --k-ink4:#c7c7cc; --k-line:#e5e5ea; --k-line2:#c7c7cc; --k-acc:#ffd400; --k-acc-d:#c9a800; --k-acc-s:#fffbe0; --k-on-acc:#1d1d1f; --k-on-acc2:rgba(0,0,0,.68); --k-blue:#1550b0; --k-blue-s:#eef4ff; --k-red:#d70015; --k-red-s:#fff4f2; --k-red-d:#8a1c12; --k-org:#7a2e00; --k-org-s:#fff1e0; --k-grn:#217d37; --k-grn-s:#e3f3e7; --k-grn-d:#145a26; --k-ring:0,0,0; --k-ringx:1; --k-mk-bg:#1d1d1f; --k-mk-fg:#ffd400; --rk:1; --fk:1; --ui:-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif}
 [data-skin="apple"]{--k-bg0:#e8e8ed; --k-bg1:#f5f5f7; --k-bg2:#efeff4; --k-card:#ffffff; --k-fill:#e5e5ea; --k-fill2:#d1d1d6; --k-inv:#1d1d1f; --k-inv2:#48484a; --k-ink:#1d1d1f; --k-ink2:#48484a; --k-ink3:#6e6e73; --k-ink4:#c7c7cc; --k-line:#e5e5ea; --k-line2:#c7c7cc; --k-acc:#0071e3; --k-acc-d:#0058b9; --k-acc-s:#e8f1fc; --k-on-acc:#ffffff; --k-on-acc2:rgba(255,255,255,.86); --k-blue:#0066cc; --k-blue-s:#eef4ff; --k-red:#d70015; --k-red-s:#fff4f2; --k-red-d:#8a1c12; --k-org:#7a2e00; --k-org-s:#fff1e0; --k-grn:#217d37; --k-grn-s:#e3f3e7; --k-grn-d:#145a26; --k-ring:0,0,0; --k-ringx:1; --k-mk-bg:#1d1d1f; --k-mk-fg:#ffffff; --rk:1.15; --fk:1; --ui:-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif}
@@ -27745,7 +27751,7 @@ try {
     return true;
   }
   function dbAlerts() { var sn = seen().a || {}; return vals(L.col('sh_alerts')).filter(function (a) { return alertVisible(a) && !sn[a.id]; }).sort(function (a, b) { return (b.at || 0) - (a.at || 0); }); }
-  function changelog() { return vals(L.col('sh_changelog')).filter(function (c) { return !c.superOnly || role() === 'super'; }).sort(function (a, b) { return (b.at || 0) - (a.at || 0); }); }
+  function changelog() { return vals(L.col('sh_changelog')).filter(function (c) { return (!c.superOnly || role() === 'super') && (!c.forRole || c.forRole === role()); }).sort(function (a, b) { return (b.at || 0) - (a.at || 0); }); }
   function changesUnseen() { var sn = seen().cl || {}; return changelog().filter(function (c) { return !sn[c.id]; }); }
   function cmpVer(a, b) { return String(a || '') > String(b || '') ? 1 : String(a || '') < String(b || '') ? -1 : 0; }
   function inPrep(st) { var n = nowMins(), p = minsOf(prepAt(st)), c = minsOf(closeAt(st)); return n >= p && n < c + 120; }
@@ -28108,6 +28114,13 @@ try {
     L.useStore(); useTick();
     var sp = useState(false), pop = sp[0], setPop = sp[1];
     var o = me(); var t = L.opTime(); var st = L.store();
+    /* 2026-11-11 안 본 «바뀐 점»이 있으면 그 근무자에게 한 번 저절로 띄운다 — 계산대에서 · 개점 시재를 넣은 뒤 · 다른 창이 없을 때 · 이 탭에서 한 번만 */
+    useEffect(function () {
+      if (!o || curSid() !== 'S1-sale' || !S.loaded.cash || !L.cashOf(today(), st) || practice()) return;
+      var k = 'vw-p9-clshown-' + myId(); if (ssGet(k, 0)) return; if (!changesUnseen().length) return;
+      var tm0 = setTimeout(function () { if (L.sheetState && L.sheetState.kind) return; if (ssGet(k, 0) || !changesUnseen().length) return; ssSet(k, 1); L.openSheet('p9-changes'); }, 900);
+      return function () { clearTimeout(tm0); };
+    });
     var g = L.DOCK[p.g] || ['', '', []]; var segs0 = g[2] || []; var segs, act, moreArg;
     if (admSide()) { var agi = admGroupOf(curSid()); segs = admSegs(agi); act = segs.findIndex(function (x) { return x[1][0] === curSid(); }); moreArg = { adm: agi }; }
     else { segs = segs0.filter(function (x) { return !hideInField(x); }); act = segs.indexOf(segs0[p.s]); moreArg = p.g; }
@@ -28668,8 +28681,27 @@ try {
   sheet('p9-changes', function ChangesSheet(p) {
     L.useStore(); var all = (p.arg && p.arg.all); var list = all ? changelog() : changesUnseen(); var ex = useState(list[0] ? list[0].id : ''), X = ex[0], setX = ex[1];
     async function ok() { var id = myId(); var o = Object.assign({}, seen().cl || {}); list.forEach(function (c) { o[c.id] = Date.now(); }); if (id) { try { await upsert('sh_seen', id, { cl: o }); } catch (e) {} } else { var s = lsGet('vw-p9-seen', {}); s.cl = o; lsSet('vw-p9-seen', s); L.emit(); } close(); toast('확인했어요', '내 화면에서만 사라져요 — 다른 직원 화면엔 남아요'); }
+    /* 2026-11-11 안 본 업데이트는 한 번에 하나씩 차례로 (팀장 «스텝 바이 스텝으로 · 직원이 혼동되지 않게») — 오래된 것부터 · 맨 끝에서만 [확인했어요]
+       «업데이트 이력 전체»(all)는 예전처럼 접는 목록 */
+    var st = useState(0), stepI = st[0], setStepI = st[1];
+    function linkOf(c) { return c.link || (c.linkKey ? (/^p9-/.test(c.linkKey) ? c.linkKey : (window.VW_SID || {})[c.linkKey] || '') : ''); }
+    function tryIt(c) { var l = linkOf(c); close(); if (/^p9-/.test(l)) open(l); else if (l) go(l); }
+    if (!all && list.length) {
+      var steps = list.slice().sort(function (x, y) { return (x.ord || 0) - (y.ord || 0) || (x.at || 0) - (y.at || 0); }); var i = Math.min(stepI, steps.length - 1); var c = steps[i]; var last = i === steps.length - 1;
+      return html`<${Sheet} w=${760} h=${640} label="바뀐 점 칩 · 새 버전 뒤 처음" title="포스가 새로 바뀌었어요" sub=${'바뀐 곳 ' + steps.length + '가지 — 하나씩 차례로 보여 드려요'} onClose=${close}
+        left=${i > 0 ? html`<${Btn2} onClick=${function () { setStepI(i - 1); }}>이전</${Btn2}>` : html`<${Btn2} onClick=${close}>나중에 볼게요</${Btn2}>`}
+        right=${last ? html`<${Btn1} onClick=${ok}>확인했어요</${Btn1}>` : html`<${Btn1} onClick=${function () { setStepI(i + 1); }}>다음 (${i + 2} / ${steps.length})</${Btn1}>`}>
+        <div class="p9-step" id="p9-step" data-i=${i}>
+          <div class="p9-stepn"><b>${i + 1}</b><span>/ ${steps.length}</span><span class="p9-dots2">${steps.map(function (_, j) { return html`<i class=${j === i ? 'on' : j < i ? 'done' : ''}></i>`; })}</span></div>
+          <b class="tt">${c.title}</b>
+          ${c.img ? html`<img src=${c.img} alt="바뀐 화면 — 전과 후" />` : ''}
+          <p>${c.body}</p>
+          ${linkOf(c) ? html`<div class="lv-row"><${Btn2} onClick=${function () { tryIt(c); }}>${c.linkLabel || '여기서 해보기'}</${Btn2}><span class="lv-small">눌러 보고 와도 이 안내는 다시 뜹니다</span></div>` : ''}
+        </div>
+      </${Sheet}>`;
+    }
     return html`<${Sheet} w=${860} h=${620} label="바뀐 점 칩 · 새 버전 뒤 처음" title="포스가 새로 바뀌었어요" sub=${(all ? '업데이트 이력 ' : '안 본 업데이트 ') + list.length + '개 · 지금 쓰는 버전 ' + VER} onClose=${close} right=${list.length && !all ? html`<${Btn1} onClick=${ok}>확인했어요</${Btn1}>` : html`<${Btn2} onClick=${close}>닫기</${Btn2}>`}>
-      ${!list.length ? html`<${Empty} t="새로 바뀐 점이 없어요" />` : list.map(function (c) { var o = X === c.id; return html`<div class="p9-cl"><button type="button" class="h" onClick=${function () { setX(o ? '' : c.id); }}><b>${c.title}</b><span>v${c.ver || ''} · ${L.dayOf(c.at || 0)}</span><em>${o ? '접기' : '펼치기'}</em></button>${o ? html`<div class="b">${c.img ? html`<img src=${c.img} alt="바뀐 화면" />` : ''}<p>${c.body}</p>${c.link ? html`<${Btn2} small onClick=${function () { close(); go(c.link); }}>여기서 해보기</${Btn2}>` : ''}</div>` : ''}</div>`; })}
+      ${!list.length ? html`<${Empty} t="새로 바뀐 점이 없어요" />` : list.map(function (c) { var o = X === c.id; return html`<div class="p9-cl"><button type="button" class="h" onClick=${function () { setX(o ? '' : c.id); }}><b>${c.title}</b><span>v${c.ver || ''} · ${L.dayOf(c.at || 0)}</span><em>${o ? '접기' : '펼치기'}</em></button>${o ? html`<div class="b">${c.img ? html`<img src=${c.img} alt="바뀐 화면" />` : ''}<p>${c.body}</p>${linkOf(c) ? html`<${Btn2} small onClick=${function () { tryIt(c); }}>${c.linkLabel || '여기서 해보기'}</${Btn2}>` : ''}</div>` : ''}</div>`; })}
     </${Sheet}>`;
   });
 
