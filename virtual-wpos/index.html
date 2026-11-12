@@ -8813,7 +8813,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
   function fit(){
     if (!covEl.hidden) return;
     var top = document.querySelector('.top').offsetHeight, foot = document.getElementById('foot').offsetHeight;
-    var W = wrap.clientWidth, Hh = window.innerHeight - top - foot - 52;
+    var W = wrap.clientWidth, Hh = window.innerHeight - top - foot - (window.VW_EMBED ? 0 : 52);   /* 본 포스 안(VW_EMBED)에서는 머리 · 꼬리가 없어 화면을 꽉 채운다 */
     var s = Math.min(W / 1366, Math.max(Hh, 180) / 768);
     if (window.innerWidth < 760) s = W / 1366;
     s = Math.max(0.2, Math.min(s, 1.6)); S = s;
@@ -9280,6 +9280,7 @@ var GNAME = {"sale": "판매 화면", "history": "구매내역 · 따이공", "g
       tell(false, e);
       if (c === 'not_found') VW.toast('고칠 기록이 없어요', '다른 PC에서 지웠을 수 있어요 · 화면을 새로 보고 다시 해 주세요');
       else if (c === 'quota_exceeded') VW.toast('저장 공간이 다 찼어요', '오래된 기록을 지워야 새로 저장됩니다');
+      else if (c === 'bridge_blocked') VW.toast('아직 새 화면에서 저장할 수 없는 일이에요', '위 «본 포스로 돌아가기»에서 해 주세요 — 지금 누른 것은 저장되지 않았습니다');
       else if (c === 'invalid_argument') { S.canWrite = false; VW.toast('저장이 막혔어요', '이 화면을 보기 전용으로 바꿉니다'); emit(); }
       else VW.toast('저장하지 못했어요', '잠시 뒤 다시 눌러 주세요');
       throw e;
@@ -10417,7 +10418,7 @@ try {
   var SVC_WHY = ['불량 교환', '단골 서비스', '신규가입 선물', '사은품 증정', '리뷰 감사', '불편 사과', '배터리 서비스', '시연·테스트', '기타'];
   var RET_WHY = ['불량', '단순 변심', '맛·니코틴이 안 맞음', '잘못 찍음', '결제수단 바꿈', '직접 쓰기'];
   var REV_QR = ['네이버', '당근', '카카오맵', '티맵'], REV_NOQR = ['샤오홍슈', '따종디엔핑', '구글'];
-  var ETC_PAY = ['제로페이', '위챗페이', '상품권', '외상', '포인트몰'];
+  var ETC_PAY = ['제로페이', '상품권', '외상', '포인트몰'];   /* 위챗페이는 «다른 방법» 창으로 올림(2026-11-12) */
   var OLD_PAY = ['구포스 카드', '구포스 현금', '구포스 계좌이체', '알리페이', '위챗페이', '상품권'];
   var BANKS = ['국민', '신한', '우리', '하나', 'NH농협', 'IBK기업', '새마을금고', '신협', '우체국', '수협', '부산', 'iM뱅크', '경남', '광주', '전북', '제주', 'SC제일', '한국씨티', '기타'];
   var COURIERS = ['로젠택배', 'CJ대한통운', '우체국택배', '한진택배', '롯데택배', '경동택배', '기타'];
@@ -10615,7 +10616,8 @@ try {
   function saleNo(at) { var d = new Date(at); var p = function (x) { return String(x).padStart(2, '0'); }; return p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds()); }
   /* 카드 단말기 설정 = p10 wk_settings/nvcat_<매장> {use:'on'|'off', mode:'test'|'live', catid} */
   function termOf(st) { var t = wset('nvcat_' + (st || L.store())); return { linked: !!(t && t.use === 'on'), catid: (t && t.catid) || '', test: !(t && t.mode === 'live'), set: !!t }; }
-  function termState() { var t = termOf(); if (!t.linked) return { mode: 'off', msg: '카드단말기 연동이 꺼져 있습니다 — 카드는 기록만 남아요 (단말기에서 따로 승인)' }; if (!t.catid) return { mode: 'block', msg: '카드 결제 막힘 — 단말기 번호(CATID)가 비어 있어요 · 팀장님께' }; return { mode: 'on', msg: t.test ? '카드 단말기가 테스트 모드예요 — 실제 돈이 안 나가요' : '' }; }
+  function termState() { if (window.VW_BRIDGE && VW_BRIDGE.sale) return { mode: 'on', msg: '' };   /* 본 포스 안: 단말기는 본 포스 설정 · 승인 창을 그대로 쓴다 */
+    var t = termOf(); if (!t.linked) return { mode: 'off', msg: '카드단말기 연동이 꺼져 있습니다 — 카드는 기록만 남아요 (단말기에서 따로 승인)' }; if (!t.catid) return { mode: 'block', msg: '카드 결제 막힘 — 단말기 번호(CATID)가 비어 있어요 · 팀장님께' }; return { mode: 'on', msg: t.test ? '카드 단말기가 테스트 모드예요 — 실제 돈이 안 나가요' : '' }; }
   function simAppr() { return { appr: 'SIM' + String(Math.floor(Math.random() * 1e8)).padStart(8, '0'), co: '체험판 카드', at: Date.now(), sim: true }; }
 
   /* ── 배송비 ── */
@@ -10845,6 +10847,25 @@ try {
     if (cart.staffBuy) sale.staffBuy = cart.staffBuy;   /* p5 st_staffbuy 승인 요청 → 이 판매 (p5 sbSale 이 찾음) */
     if (cart.qa) sale.qa = cart.qa;
     Object.assign(sale, extra || {});
+    /* ── 본 포스 안(다리 · VW_BRIDGE.sale)에서는 여기서 저장하지 않는다 — 본 포스 결제 기능(checkout)이 카드 승인 · 재고 · 포인트 · 저장을 한다.
+          아직 안 이은 결제(할인 · 서비스 · 배송 · 나눠 받기 · 현금영수증 · 연습 · 직원 구매 등)는 막고 «본 포스로 돌아가기»로 안내한다 (2026-11-12 «가» 2단계-1) */
+    if (window.VW_BRIDGE && VW_BRIDGE.sale) {
+      var bw = '';
+      if (sale.lines.some(function (l) { return l.practice || l.minusWhy; })) bw = '재고가 모자란 채로 파는 결제';
+      else if (t.whole) bw = '전체 할인(본 포스에서는 없앤 기능 — 줄마다 할인으로 넣어 주세요)';
+      else if ((cart.reviews || []).length || t.rev) bw = '리뷰 할인이 들어간 결제';
+      else if (sale.ship && sale.ship.kind === '대리택배') bw = '다른 매장에서 대신 보내는 택배(대리택배)';
+      else if (t.pre || sale.prepay) bw = '맡아둔 돈(선결제)을 쓰는 결제';
+      else if (sale.practice || sale.staffSale || sale.staffBuy) bw = '연습 · 직원 구매';
+      else if (['cash', 'card', 'transfer', 'split', 'alipay', 'etc', 'legacy'].indexOf(pay.method) < 0 && !(pay.method === 'points' && t.due === 0)) bw = '수표 결제';
+      else if ((pay.method === 'split' && (pay.parts || []).some(function (x) { return ['cash', 'card', 'transfer'].indexOf(x.m) < 0; })) || (pay.parts || []).filter(function (x) { return x.m === 'card'; }).length > 1) bw = '카드 두 장 · 기타 수단이 섞인 나눠 받기';
+      if (bw) { toast('이 결제는 아직 새 화면에서 못 해요', bw + ' — 위 «본 포스로 돌아가기»에서 결제해 주세요'); throw new Error('bridge-unsupported'); }
+      var br = await VW_BRIDGE.sale({ lines: sale.lines.map(function (l) { return { c: l.c, qty: l.qty, price: l.price, name: l.name, disc: l.svc ? 0 : (l.disc || 0), why: l.discWhy || '', promo: l.promo || '', svc: l.svc || '' }; }), whole: t.whole || 0, wholeWhy: cart.discWhy || '', cust: sale.cust || '', ptsUse: t.pts || 0, due: t.due, total: t.total, method: pay.method, parts: pay.method === 'split' ? (pay.parts || []).map(function (x) { return { m: x.m, n: x.n, inst: x.inst || '' }; }) : [], etcName: pay.name || pay.where || '', etcMemo: pay.memo || '', cr: pay.cr ? { type: pay.cr.type, num: pay.cr.num || '' } : null, ship: sale.ship ? { kind: sale.ship.kind, fee: sale.ship.fee || 0, driver: sale.ship.driver || 0, to: sale.ship.to, once: !!(cart.ship && cart.ship.once), courier: sale.ship.courier || '', invoice: sale.ship.invoice || '' } : null, inst: pay.inst || '', adult: !!cart.adult, ctype: c ? '' : (sale.ctype || ''), why: c ? '' : (cart.why || ''), whyText: c ? '' : String(cart.whyText || '').trim() });
+      if (!br || !br.ok) { toast('결제가 끝나지 않았어요', (br && br.why) || '장바구니 · 손님은 그대로예요'); throw new Error('bridge'); }
+      id = br.id; LASTPAID = { id: id, cust: sale.cust, at: at, practice: false, bridge: true };
+      clearCart(); ui({ tail: null, more: false, left: 'prod', q: '', t4: '', look: '', found: null, hist: false });
+      return id;
+    }
     await L.write(function (db) { return db.collection('sales').doc(id).set(sale); });
     var codes = sale.lines.map(function (l) { return l.c; });
     try {
@@ -10865,7 +10886,7 @@ try {
   /* 결제 뒤 — 오랜만 손님이면 단계별 질문 창 먼저(어디서 → 왜 → 다시 온 계기), 끝나면 결제 완료 창 */
   function backAsk(lp) { var c = lp && custOf(lp.cust); if (!c || lp.practice) return null; var b = backInfo(c.id, lp.at); if (!b || b.other || backAnswered(c.id, lp.at)) return null; return { sale: lp.id, cust: c.id, gap: b.gap, state: b.state, cyc: b.cyc || 0, at: lp.at }; }
   function openDone(id) { var s = S.d.sales[id]; var lp = s ? { id: id, cust: s.cust, at: s.at, practice: s.practice } : LASTPAID && LASTPAID.id === id ? LASTPAID : null; var bq = backAsk(lp); if (bq) L.openSheet('p1-back', bq); else L.openSheet('p1-done', id); }
-  async function payDone(pay, extra) { try { var id = await finishSale(pay, extra); openDone(id); return id; } catch (e) { return null; } }
+  async function payDone(pay, extra) { try { var id = await finishSale(pay, extra); if (window.VW_BRIDGE && VW_BRIDGE.sale) { L.closeSheet(); return id; } openDone(id); return id; } catch (e) { return null; } }   /* 다리: «결제 완료 · 영수증» 창은 본 포스 것이 위에 뜬다(2단계-2에서 새 화면 창으로 바꿈) */
 
   /* ── 결제 시작 ── */
   /* 오늘의 질문은 결제 창 위에 붙어서 묻는다 (결제를 막지 않음) · 카드는 창 하나(할부 · 승인 대기)에서 끝남 */
@@ -10897,6 +10918,7 @@ try {
     else if (kind === 'transfer') L.openSheet(shipOn() ? 'p1-ship3' : 'p1-transfer');
     else if (kind === 'card') { if (practiceOn() && !L.cart.practice) { toast('연습 모드에서는 카드 결제를 할 수 없습니다', '연습은 현금 · 계좌이체 · 알리페이 · 기타 · 포인트로 해주세요'); return; } var ts = termState(); if (ts.mode === 'block') { toast(ts.msg); return; } L.openSheet('p1-cardwait', { amount: t.due }); }
     else if (kind === 'alipay') payDone({ method: 'alipay', amount: t.due });
+    else if (kind === 'wechat') payDone({ method: 'etc', name: '위챗페이', amount: t.due });   /* 본 포스 기록은 «기타 · 위챗페이» 그대로 */
     else if (kind === 'split' && !feat('splitPay', true)) toast('나눠서 결제가 꺼져 있어요', '회사 설정에서 켤 수 있어요');
     else L.openSheet('p1-' + kind);
   }
@@ -11150,17 +11172,18 @@ try {
       <div class="p1-big"><span>결제 금액</span><b id="p1-due">${won(t.due)}원</b></div>
       ${c && feat('pointsUse', true) ? html`<small class="p1-ptsline" id="p1-ptsinfo" title="적립은 기성 · 일회용만 (상품 예외 적립률 반영 · 포인트로 낸 몫 빼고)">보유 ${won(t.bal)}P · 이번 적립 +${won(t.earned)}P · 대상 ${won(t.base)}원${t.pts ? ' · 포인트 −' + won(t.pts) + 'P 씀' : ' · 쓸 포인트는 결제 때 물어봐요'}</small>` : ''}
       ${c && t.preAvail > 0 ? html`<div class="p1-pre" id="p1-pre">${L.cart.preSkip ? html`<div class="p1-mini"><span>💰 맡아둔 돈 <b>${won(t.preAvail)}원</b> — 이번엔 안 씁니다</span><button type="button" onClick=${function () { L.cart.preSkip = false; L.cart.preOn = true; cartCh(); }}>다시 입력</button></div>` : html`<b>💰 이 손님 선결제가 있습니다 · ${prepaysOf(c.id).map(function (r) { return (r.item && r.item.n ? r.item.n + ' ' : '') + won(r.prepay.amount) + '원 (' + (PM[r.prepay.method] || '현금') + ')'; }).join(' · ')}</b>${L.cart.preOn ? html`<div class="p1-mini"><span class="p1-tag grn">✓ ${won(t.pre)}원 빼기로 했습니다</span><button type="button" onClick=${function () { L.cart.preOn = false; L.cart.preSkip = true; cartCh(); }}>되돌리기</button></div><span class="lv-small">상품 합계 ${won(t.total)}원 · 선결제로 받은 돈 −${won(t.pre)}원 · 더 받을 돈 <b>${won(t.due)}원</b>${t.preAvail - t.pre > 0 ? html` · <b class="lv-red">맡아둔 돈이 ${won(t.preAvail - t.pre)}원 남습니다 — 손님께 돌려드리세요</b>` : ''}</span><button type="button" class="lv-btn2" id="p1-prego" onClick=${function () { if (t.due) { startPay('split'); return; } var back = t.preAvail - t.pre; askThen({ title: '💰 맡아둔 돈 ' + won(t.pre) + '원으로 결제합니다', sub: back > 0 ? '남는 ' + won(back) + '원은 손님께 돌려드리세요' : '', yes: '진행' }, function () { startPay('prepay'); }); }}>${t.due ? '나머지 ' + won(t.due) + '원 결제하기' : '선결제로 결제 완료'}</button>` : html`<div class="p1-mini"><button type="button" class="on" onClick=${function () { if (!L.cart.lines.length) { toast('상품을 먼저 담아 주세요'); return; } L.cart.preOn = true; L.cart.preSkip = false; cartCh(); }}>${won(Math.min(t.preAvail, Math.max(0, t.total - t.pts)))}원 빼기</button><button type="button" onClick=${function () { L.cart.preSkip = true; L.cart.preOn = false; cartCh(); }}>이번엔 안 씀</button></div>`}`}</div>` : ''}
-      <div class="p1-tools">
-        <button type="button" class="p1-sm" onClick=${function () { if (!L.cart.lines.length && !L.cart.cust) return; clearCart(); toast('장바구니를 비웠어요', '손님도 뺐어요'); }}>비우기</button>
-        <button type="button" class="p1-sm" onClick=${function () { holdCart(); }}>보류하기</button>
-        <button type="button" class="p1-sm" onClick=${drawer}>돈통</button>
-        ${park ? html`<button type="button" class="p1-sm" id="p1-park" onClick=${goParkHere}>주차 등록</button>` : ''}
-        ${!c && L.cart.lines.length && !L.cart.practice ? html`<button type="button" class="p1-sm" id="p1-rev0btn" onClick=${function () { L.openSheet('p1-rev0'); }}>리뷰 −2,000${(L.cart.reviews || []).length ? ' · ' + L.cart.reviews.length + '곳' : ''}</button>` : ''}
-        <button type="button" class=${'p1-sm' + (UI.more ? ' on' : '')} aria-expanded=${UI.more} onClick=${function () { ui({ more: !UI.more }); }}>더보기 ⋯</button>
+      <div class="p1-tools p1-quiet" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:2px 2px 6px">
+        <button type="button" class="p1-q" style="background:none;border:0;padding:6px 2px;font:inherit;font-size:14px;font-weight:600;color:inherit;opacity:.62;cursor:pointer" onClick=${function () { holdCart(); }}>보류하기</button>
+        <button type="button" class="p1-q" style="background:none;border:0;padding:6px 2px;font:inherit;font-size:14px;font-weight:600;color:inherit;opacity:.62;cursor:pointer" onClick=${drawer}>돈통</button>
+        ${park ? html`<button type="button" class="p1-q" style="background:none;border:0;padding:6px 2px;font:inherit;font-size:14px;font-weight:600;color:inherit;opacity:.62;cursor:pointer" id="p1-park" onClick=${goParkHere}>주차 등록</button>` : ''}
+        ${!c && L.cart.lines.length && !L.cart.practice ? html`<button type="button" class="p1-q" style="background:none;border:0;padding:6px 2px;font:inherit;font-size:14px;font-weight:600;color:inherit;opacity:.62;cursor:pointer" id="p1-rev0btn" onClick=${function () { L.openSheet('p1-rev0'); }}>리뷰 할인${(L.cart.reviews || []).length ? ' · ' + L.cart.reviews.length + '곳' : ''}</button>` : ''}
+        ${L.cart.staffSale ? html`<span class="p1-tag" id="p1-stafftag">직원 구매</span>` : ''}
+        <span style="flex:1"></span>
+        <button type="button" class="p1-q" style="background:none;border:0;padding:6px 2px;font:inherit;font-size:14px;font-weight:600;color:inherit;opacity:.62;cursor:pointer" onClick=${function () { if (!L.cart.lines.length && !L.cart.cust) return; clearCart(); toast('장바구니를 비웠어요', '손님도 뺐어요'); }}>비우기</button>
       </div>
-      ${UI.more ? html`<div class="p1-tools" id="p1-more">${[['cheque', '수표'], ['alipay', '알리페이'], ['etc', '⋯ 기타']].concat(feat('splitPay', true) ? [['split', '나눠서 결제']] : []).concat([['legacy', '구포스에서 받은 결제 기록']]).map(function (x) { return html`<button type="button" class="p1-sm" disabled=${!L.cart.lines.length} onClick=${function () { startPay(x[0]); }}>${x[1]}</button>`; })}<button type="button" class=${'p1-sm' + (L.cart.staffSale ? ' on' : '')} id="p1-staffsale" aria-pressed=${!!L.cart.staffSale} onClick=${function () { L.cart.staffSale = !L.cart.staffSale; cartCh(); toast(L.cart.staffSale ? '직원 구매로 표시해요' : '직원 구매 표시를 뺐어요', L.cart.staffSale ? '손님 매출 · 직원 실적 집계에서 빠져요' : ''); }}>직원 구매${L.cart.staffSale ? ' ✓' : ''}</button></div>` : ''}
       ${L.cart.lines.length && t.due === 0 ? html`<${Btn1} onClick=${function () { startPay(t.pre ? 'prepay' : 'points'); }}>${t.pre ? '선결제로 결제 완료' : '포인트로 결제 완료'}</${Btn1}>` :
         html`<div class="p1-pay2 lv-2col"><${Btn2} disabled=${!t.n} onClick=${function () { startPay('cash'); }}>현금</${Btn2}><${Btn2} disabled=${!t.n} onClick=${function () { startPay('transfer'); }}>계좌이체</${Btn2}></div>
+          <button type="button" class="lv-btn2" id="p1-other" disabled=${!t.n} style="display:flex;justify-content:space-between;align-items:center;width:100%;padding-left:18px;padding-right:16px" onClick=${function () { L.openSheet('p1-other'); }}><span>다른 방법</span><span style="font-size:13px;font-weight:500;opacity:.6">알리페이 · 위챗페이 · 나눠서 · 수표 ›</span></button>
           <${Btn1} disabled=${!t.n || ts.mode === 'block'} onClick=${function () { startPay('card'); }}>${ts.mode === 'block' ? '카드 (설정 문제 · 팀장님께)' : t.n ? '카드 결제 · ' + won(t.due) + '원' : '카드 결제'}</${Btn1}>`}
       ${ts.msg && L.cart.lines.length ? html`<span class=${'p1-note' + (ts.mode === 'block' ? ' red' : '')} id="p1-termnote">${ts.mode === 'off' ? '카드단말기 연동이 꺼져 있습니다 · 카드는 기록만' : ts.msg}</span>` : ''}
     </aside>`;
@@ -11973,7 +11996,7 @@ try {
     var from = s0.from && s0.from !== L.store() ? s0.from : '';
     async function pay() { if (!conf) { toast('통장에 입금된 것을 확인하고 체크해 주세요'); return; } if (crBad(cr)) { toast(crErr(cr)); return; } setBusy(true); L.cart.ship.to = { name: F.name.trim(), phone: L.digits(F.phone), addr: F.addr.trim() }; L.cart.ship.once = F.once; var m = me(); var items = L.cart.lines.map(function (l) { return l.name + ' × ' + l.qty; }).join(', '); var mode = shipKind() === '퀵' ? '퀵' : '택배';
       try { var id = await finishSale({ method: 'transfer', amount: t.due, cr: crOf(cr), confirmed: { at: Date.now(), by: m.by, byName: m.byName } }); setDone({ id: id, items: items, mode: mode, from: from || L.store() }); setStep(3); } catch (e) {} setBusy(false); }
-    async function finish() { if (done) { try { await upd('sales', done.id, { ship: { courier: done.mode === '택배' ? cour : '', invoice: inv.trim() } }); } catch (e) {} close(); openDone(done.id); } }
+    async function finish() { if (done) { if (window.VW_BRIDGE && VW_BRIDGE.sale) { try { if (inv.trim() && VW_BRIDGE.shipInfo) await VW_BRIDGE.shipInfo(done.id, { courier: done.mode === '택배' ? cour : '', invoice: inv.trim() }); } catch (e) {} close(); return; } try { await upd('sales', done.id, { ship: { courier: done.mode === '택배' ? cour : '', invoice: inv.trim() } }); } catch (e) {} close(); openDone(done.id); } }
     var info = done ? [['받는 분', F.name], ['연락처', F.phone], ['주소', F.addr], ['물품', done.items], ['출발지', L.storeName(done.from)]] : [];
     var msg = done ? (done.mode === '택배' ? fillTpl('ship', { '매장': L.storeName(), '이름': F.name, '택배사': cour, '송장': inv || '(나오면 알려드릴게요)' }) : fillTpl('quick', { '매장': L.storeName(), '이름': F.name })) : '';
     var under = html`<div style="padding:10px 28px 0"><nav class="lv-order inside" style="grid-template-columns:repeat(3,minmax(0,1fr))">${['받는 곳', '입금 확인', '접수 정보'].map(function (x, i) { return html`<span class=${step === i + 1 ? 'now' : ''}><span class=${'n' + (i + 1 < step ? ' done' : '')}>${i + 1}</span><span class="tx"><b>${x}</b></span></span>`; })}</nav></div>`;
@@ -12010,8 +12033,8 @@ try {
     L.useStore(); var a = p.arg || {}; var amount = a.amount != null ? a.amount : totals().due; var is = useState(a.inst || '일시불'), inst = is[0], setInst = is[1]; var bz = useState(false), busy = bz[0], setBusy = bz[1];
     var ts = termState(); var off = ts.mode === 'off'; var big = amount >= 50000; var note = appS().instNote || {}; var ym = L.today().slice(0, 7);
     var opts = ['일시불'].concat([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(function (n) { return n + '개월'; }));
-    async function ok(ap) { if (busy) return; setBusy(true); var pay = off ? { method: 'card', amount: amount, inst: inst, recOnly: true } : { method: 'card', amount: amount, inst: inst, appr: ap.appr, co: ap.co, sim: true }; var id = await payDone(pay); if (!id) setBusy(false); }
-    var label = off ? '카드 기록만 남기기' : big ? (inst === '일시불' ? '일시불로 결제' : inst + ' 할부로 결제') + ' (체험판 승인)' : '승인됨으로 처리 (체험판)';
+    async function ok(ap) { if (busy) return; setBusy(true); var BR = !!(window.VW_BRIDGE && VW_BRIDGE.sale); var pay = BR ? { method: 'card', amount: amount, inst: inst } : off ? { method: 'card', amount: amount, inst: inst, recOnly: true } : { method: 'card', amount: amount, inst: inst, appr: ap.appr, co: ap.co, sim: true }; var id = await payDone(pay); if (!id) setBusy(false); }
+    var label = (window.VW_BRIDGE && VW_BRIDGE.sale) ? (inst === '일시불' ? '카드 결제 (일시불)' : inst + ' 할부로 카드 결제') : off ? '카드 기록만 남기기' : big ? (inst === '일시불' ? '일시불로 결제' : inst + ' 할부로 결제') + ' (체험판 승인)' : '승인됨으로 처리 (체험판)';
     return html`<${Sheet} w=${720} h=${big ? 680 : 560} label="판매 · 카드 승인 대기 (NICE 단말기)" title=${'카드 ' + won(amount) + '원'} sub=${big ? '할부 선택 · ' + inst : '일시불'} onClose=${function () { toast('결제를 취소했어요', '장바구니 · 손님은 그대로예요'); close(); }}
       left=${html`<${Btn2} red onClick=${function () { toast('결제를 취소했어요 — 단말기 요청 멈춤', '장바구니 · 손님은 그대로예요'); close(); }}>결제 취소</${Btn2}>`} right=${html`<${Btn1} disabled=${busy} onClick=${function () { ok(simAppr()); }}>${label}</${Btn1}>`}>
       <${QInline} />
@@ -12026,10 +12049,19 @@ try {
     function done(next) { close(); if (next) next(); }
     async function tell() { var m = me(); try { await setDoc('sh_alerts', L.uid('al'), { at: Date.now(), store: L.store(), kind: 'card', title: '카드 결제 실패 · ' + L.storeName(), sub: f.reason + ' (응답 ' + f.code + ') · ' + won(f.amount) + '원' + (m.byName ? ' · ' + m.byName : ''), to: 'super', link: 'S1-sale', done: false, by: m.by }); toast('팀장에게 알렸어요', '알림 칸 · 머리줄 알림에 떠요'); } catch (e) {} }
     return html`<${Sheet} w=${720} h=${600} label="판매 · 카드 결제 실패" title=${'카드 결제가 안 됐어요 · ' + won(f.amount) + '원'} sub="장바구니 · 손님은 그대로예요 — 아래 단추를 눌러야 닫혀요" onClose=${function () { toast('아래 단추를 눌러 닫아 주세요'); }}
-      left=${html`<${Btn2} onClick=${tell}>팀장에게 알리기</${Btn2}><${Btn2} onClick=${function () { done(function () { ui({ more: true }); toast('현금 · 계좌이체 또는 «결제수단 더보기»로 받아 주세요'); }); }}>다른 방법으로 결제</${Btn2}>`}
+      left=${html`<${Btn2} onClick=${tell}>팀장에게 알리기</${Btn2}><${Btn2} onClick=${function () { done(function () { L.openSheet('p1-other'); }); }}>다른 방법으로 결제</${Btn2}>`}
       right=${html`<${Btn2} onClick=${function () { done(); }}>확인했어요 · 닫기</${Btn2}><${Btn1} onClick=${function () { done(function () { L.openSheet('p1-cardwait', { amount: totals().due, inst: f.inst }); }); }}>다시 시도</${Btn1}>`}>
       <div class="p1-fail" id="p1-fail" data-noesc="1"><b>${f.reason}</b><span>응답코드 ${f.code}${f.sim ? ' · 체험판 흉내' : ''}</span></div>
       ${STEPS.map(function (s, i) { return html`<div class="p1-kl"><b style="width:28px">${i + 1}</b><span class="grow">${s}</span></div>`; })}
+    </${Sheet}>`;
+  });
+  /* 다른 방법으로 받기 (2026-11-12 팀장 A안) — 알약 두 줄 대신 창 하나. 매일 쓰는 카드 · 현금 · 계좌이체만 화면에 남긴다 */
+  L.sheet('p1-other', function OtherPay() {
+    L.useCart(); var t = totals();
+    var rows = [['alipay', '알리페이', ''], ['wechat', '위챗페이', '']].concat(feat('splitPay', true) ? [['split', '나눠서 결제', '현금 · 카드 · 계좌이체를 섞어서']] : []).concat([['cheque', '수표', '은행 조회 확인 뒤'], ['etc', '그 밖에', '제로페이 · 상품권 · 외상 …'], ['legacy', '구포스에서 받은 결제', '이미 받은 돈을 장부에만']]);
+    return html`<${Sheet} w=${520} h=${620} label="판매 · 결제" title="다른 방법으로 받기" sub=${'결제 · ' + won(t.due) + '원'} onClose=${close} left=${html`<${Btn2} onClick=${close}>취소</${Btn2}>`}>
+      <div id="p1-otherlist" style="display:flex;flex-direction:column">${rows.map(function (r, i) { return html`<button type="button" data-pay=${r[0]} disabled=${!L.cart.lines.length} onClick=${function () { close(); setTimeout(function () { startPay(r[0]); }, 0); }} style=${'display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;background:none;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer;padding:15px 2px;' + (i ? 'border-top:1px solid var(--lv-line,rgba(127,127,127,.22))' : '')}><b style="font-size:17px">${r[1]}</b><span style="font-size:13px;opacity:.6">${r[2]} ›</span></button>`; })}</div>
+      <label class="lv-check" style="margin-top:10px"><input type="checkbox" id="p1-staffsale" checked=${!!L.cart.staffSale} onChange=${function (e) { L.cart.staffSale = e.target.checked; cartCh(); toast(L.cart.staffSale ? '직원 구매로 표시해요' : '직원 구매 표시를 뺐어요', L.cart.staffSale ? '손님 매출 · 직원 실적 집계에서 빠져요' : ''); }} />직원 구매로 표시 (손님 매출 · 직원 실적 집계에서 빠져요)</label>
     </${Sheet}>`;
   });
   function PickPay(p) {
@@ -12072,7 +12104,7 @@ try {
       var parts = []; if (cashN) parts.push({ m: 'cash', n: cashN, received: cashR, change: change }); cards.concat(extraCard ? [extraCard] : []).forEach(function (x) { parts.push(x); }); if (trN) parts.push({ m: 'transfer', n: trN });
       var id = await payDone({ method: 'split', amount: parts.reduce(function (a, x) { return a + x.n; }, 0), parts: parts }); if (!id) setBusy(false);
     }
-    function cardStep(final) { if (!cardN) { if (final) finalize(); else toast('카드 금액을 넣어 주세요'); return; } if (ts.mode === 'block') { toast(ts.msg); return; } var rec = { m: 'card', n: cardN, inst: cardN >= 50000 ? F.inst : '일시불' }; if (ts.mode === 'off') { rec.recOnly = true; if (final) finalize(rec); else { setCards(cards.concat([rec])); set({ card: '' }); } return; } setWait({ n: cardN, inst: rec.inst, final: final }); }
+    function cardStep(final) { if (!cardN) { if (final) finalize(); else toast('카드 금액을 넣어 주세요'); return; } if (window.VW_BRIDGE && VW_BRIDGE.sale) { if (!final) { toast('카드를 먼저 받아 두는 것은 아직 새 화면에서 못 해요', '«확정»을 누르면 본 포스 단말기 승인 창이 뜹니다'); return; } finalize({ m: 'card', n: cardN, inst: cardN >= 50000 ? F.inst : '일시불' }); return; } if (ts.mode === 'block') { toast(ts.msg); return; } var rec = { m: 'card', n: cardN, inst: cardN >= 50000 ? F.inst : '일시불' }; if (ts.mode === 'off') { rec.recOnly = true; if (final) finalize(rec); else { setCards(cards.concat([rec])); set({ card: '' }); } return; } setWait({ n: cardN, inst: rec.inst, final: final }); }
     function approved(ap) { var rec = { m: 'card', n: wait.n, inst: wait.inst, appr: ap.appr, co: ap.co, sim: true }; var fin = wait.final; setWait(null); if (fin) finalize(rec); else { setCards(cards.concat([rec])); set({ card: '' }); toast('카드 ' + won(rec.n) + '원 먼저 받았어요', '남은 돈을 이어서 받으세요'); } }
     function row(label, k, extra) { return html`<div class="p1-kl"><span style="width:150px"><b>${label}</b></span><input class="p1-in" id=${'p1-sp-' + k} inputmode="numeric" style="width:120px" value=${F[k] ? won(num(F[k])) : ''} onInput=${function (e) { var o = {}; o[k] = e.target.value; set(o); }} /><span class="p1-mini">${extra}</span></div>`; }
     return html`<${Sheet} w=${900} h=${720} label="판매 · 결제" title="나눠서 결제" sub=${(c ? c.name + ' 님 · ' : '비회원 · ') + '받을 돈 ' + won(t0.total) + '원 · 남은 돈 ' + won(Math.max(0, remain)) + '원'} onClose=${function () { if (cards.length) { toast('먼저 받은 카드가 있어요', '«취소»로 카드를 돌린 뒤 닫아 주세요'); return; } close(); }}
