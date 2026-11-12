@@ -28144,7 +28144,7 @@ try {
       <span class="lv-head-r">
         <button type="button" class=${'p9-closebtn' + (evening ? ' on' : '')} title="마감하기 — 오늘 영업 마감" onClick=${function () { P9.pressClose(); }}>${T('마감하기')}</button>
         <button type="button" class="lv-round p9-rb" aria-label=${T('인수인계')} title=${'인수인계 — 안 읽은 ' + hu} onClick=${function () { tryOpen('p10-handover', null, function () { go('g37'); }); }}><${Ic} n="note" s=${17} c="var(--k-ink2)" w=${2} />${hu ? html`<b class="p9-badge">${hu}</b>` : ''}</button>
-        <button type="button" class="lv-round p9-rb" aria-label=${T('찾기')} title="찾기 — 손님 · 환불 · 시재 · 단말기" onClick=${function () { L.openSheet('p9-find'); }}><${Ic} n="search" s=${17} c="var(--k-ink2)" w=${2} /></button>
+        <button type="button" class="lv-round p9-rb" aria-label=${T('찾기')} title="기능 찾기 — 환불 · 시재 · 단말기" onClick=${function () { L.openSheet('p9-find'); }}><${Ic} n="search" s=${17} c="var(--k-ink2)" w=${2} /></button>
         <button type="button" class="lv-round p9-rb" aria-label=${T('알림')} title=${'알림함 ' + ibN} onClick=${function () { L.openSheet('p9-inbox'); }}><${Ic} n="bell" s=${17} c="var(--k-ink2)" w=${2} />${ibN ? html`<b class="p9-badge">${ibN}</b>` : ''}</button>
         <button type="button" class="lv-round p9-rb" aria-label=${T('더보기')} title="⋯ 더보기" onClick=${function () { L.openSheet('p9-more', p.more || ''); }}><span class="p9-dots"><i></i><i></i><i></i></span></button>
         <button type="button" class="lv-staffbtn" onClick=${function () { L.openSheet(o ? 'p9-me' : 'p9-loginsheet'); }}>${o ? o.name + ' · ' + (t ? hm(t) + ' ' + T('출근') : L.ROLE[o.role]) : T('근무자 고르기')}</button>
@@ -28445,20 +28445,17 @@ try {
     var res = useMemo(function () {
       var t = q.trim().toLowerCase(); if (!t) return [];
       var out = []; var T0 = titles();
-      /* 2026-11-11 손님도 여기서 찾는다 («손님 찾기» 칸을 메뉴에서 뺀 자리) — 이름 일부 · 전화번호 숫자 2자리 이상 */
-      var dg = t.replace(/\D/g, ''); var cs = S.d.customers || {}; var nc = 0;
-      Object.keys(cs).forEach(function (id) { var c = cs[id]; if (!c || c.gone || nc >= 12) return; var ph = String(c.phone || '').replace(/\D/g, '');
-        if (String(c.name || '').toLowerCase().indexOf(t) >= 0 || (dg.length >= 2 && dg === t.replace(/[\s-]/g, '') && ph.indexOf(dg) >= 0)) { nc++; out.push({ k: 'c', t: (c.name || '손님') + ' 님 · ' + (L.tail4 ? L.tail4(c.phone) : ph.slice(-4)), where: '손님 · ' + (L.storeName ? L.storeName(c.store || 's1') : ''), go: id }); } });
+      /* 2026-11-12 팀장 결정 «여기는 기능 찾기» — 손님은 판매 화면 «회원이세요?» 칸에서만 찾는다 (11-11 에 넣었던 손님 줄 · 새 손님 등록 줄은 뺌) */
       WINS.forEach(function (w) { if ((!w[2] || can(w[2])) && w[0].toLowerCase().indexOf(t) >= 0) out.push({ k: 'w', t: w[0], where: '창', go: w[1] }); });
       Object.keys(T0).forEach(function (sid) { if (/^M\d/.test(sid) || !canSid(sid)) return; var x = T0[sid]; if ((x.full + ' ' + x.g).toLowerCase().indexOf(t) >= 0) out.push({ k: 's', t: x.full, where: '화면 · ' + x.g, go: sid }); });
       (window.COV || []).forEach(function (c) { if (out.length > 60) return; var sid = String(c.href || '').replace('#m-', ''); if (!sid || !canSid(sid) || !can(c.r)) return; if (String(c.label || '').toLowerCase().indexOf(t) >= 0) out.push({ k: 'f', t: c.label, where: c.place || stitle(sid), go: sid }); });
-      out = out.slice(0, 60); if (L.regSheet && L.regSheet('p3-newcust')) out.push({ k: 'n', t: '＋ 새 손님 등록', where: dg.length >= 10 ? dg + ' 번호로 등록' : '찾는 손님이 없으면 여기서 등록', go: dg.length >= 10 ? dg : '' });
+      out = out.slice(0, 60);
       return out;
-    }, [q, S.d.customers]);
-    function pick(x) { close(); if (x.k === 'c') { L.openSheet('p4-cust', { id: x.go, label: '머리줄 «찾기»', tab: 'buy' }); return; } if (x.k === 'n') { L.openSheet('p3-newcust', { phone: x.go }); return; } if (x.go === 'close') P9.pressClose(); else if (/^p9-|^skin$/.test(x.go)) open(x.go, x.go === 'p9-help' ? curSid() : undefined); else go(x.go); }
-    return html`<${Sheet} w=${720} h=${600} label="머리줄 «찾기»" title="찾기" sub="손님 이름 · 전화번호 뒷4자리, 또는 화면 · 창 · 단추 이름 — 권한 없는 화면은 안 나와요" onClose=${close}
-      under=${html`<div style="padding:0 28px 8px"><label class="lv-search"><${Ic} n="search" s=${18} c="var(--k-ink2)" w=${2} /><input ref=${r} id="p9-findq" type="text" value=${q} onInput=${function (e) { setQ(e.target.value); }} onKeyDown=${function (e) { if (e.key === 'Enter' && res[0]) pick(res[0]); }} placeholder="손님 이름 · 전화 뒷4자리 · 기능 (환불 · 시재 · 단말기)" aria-label="손님 · 기능 찾기" autocomplete="off" /></label></div>`}>
-      ${!q.trim() ? html`<${Empty} t="찾을 말을 넣어 주세요" s="손님: 이름 · 전화 뒷4자리 / 기능: 환불 · 시재 · 단말기 · 마감 · 청소" />` : !res.length ? html`<${Empty} t=${'«' + q + '»에 맞는 손님 · 기능이 없어요'} />` : res.map(function (x, i) { return html`<button type="button" class="lv-rowline p9-fr" key=${i} onClick=${function () { pick(x); }}><span class=${'p9-tag ' + (x.k === 'c' || x.k === 'n' ? 'acc' : x.k === 'w' ? 'blue' : x.k === 's' ? 'grn' : 'gray')} data-k=${x.k}>${x.k === 'c' ? '손님' : x.k === 'n' ? '등록' : x.k === 'w' ? '창' : x.k === 's' ? '화면' : '기능'}</span><span class="t"><b>${x.t}</b><span>${x.where}</span></span></button>`; })}
+    }, [q]);
+    function pick(x) { close(); if (x.go === 'close') P9.pressClose(); else if (/^p9-|^skin$/.test(x.go)) open(x.go, x.go === 'p9-help' ? curSid() : undefined); else go(x.go); }
+    return html`<${Sheet} w=${720} h=${600} label="머리줄 «기능 찾기»" title="기능 찾기" sub="화면 · 창 · 단추 이름으로 찾아요 — 권한 없는 화면은 안 나와요 · 손님은 판매 화면 «회원이세요?»에서" onClose=${close}
+      under=${html`<div style="padding:0 28px 8px"><label class="lv-search"><${Ic} n="search" s=${18} c="var(--k-ink2)" w=${2} /><input ref=${r} id="p9-findq" type="text" value=${q} onInput=${function (e) { setQ(e.target.value); }} onKeyDown=${function (e) { if (e.key === 'Enter' && res[0]) pick(res[0]); }} placeholder="기능 이름 — 환불 · 시재 · 단말기 · 마감" aria-label="기능 찾기" autocomplete="off" /></label></div>`}>
+      ${!q.trim() ? html`<${Empty} t="찾을 말을 넣어 주세요" s="환불 · 시재 · 단말기 · 마감 · 청소처럼 하려는 일을 넣어 보세요" />` : !res.length ? html`<${Empty} t=${'«' + q + '»에 맞는 기능이 없어요'} />` : res.map(function (x, i) { return html`<button type="button" class="lv-rowline p9-fr" key=${i} onClick=${function () { pick(x); }}><span class=${'p9-tag ' + (x.k === 'c' || x.k === 'n' ? 'acc' : x.k === 'w' ? 'blue' : x.k === 's' ? 'grn' : 'gray')} data-k=${x.k}>${x.k === 'c' ? '손님' : x.k === 'n' ? '등록' : x.k === 'w' ? '창' : x.k === 's' ? '화면' : '기능'}</span><span class="t"><b>${x.t}</b><span>${x.where}</span></span></button>`; })}
     </${Sheet}>`;
   });
 
