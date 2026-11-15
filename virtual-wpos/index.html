@@ -1123,6 +1123,7 @@ a.lv-link, a.p10-link{display:inline-block; line-height:24px}
 
 /* 묶음 p3-guest */
 /* p3 손님 — 창구 · AS 접수 · 예약 접수 · 손님 찾기 */
+.lv-screen.p3-hasnav > .lv-main{top:108px}
 .p3-sub{display:flex;align-items:center;gap:2px;flex-wrap:nowrap;overflow-x:auto;min-width:0;height:30px}
 .p3-sub a{height:28px;padding:0 10px;border-radius:calc(8px*var(--rk));display:inline-flex;align-items:center;font-size:calc(13px*var(--fk));font-weight:500;color:var(--k-ink2);white-space:nowrap}
 .p3-sub a.on{background:var(--k-inv);color:#ffffff !important;font-weight:600}
@@ -16808,16 +16809,14 @@ try {
   /* ── 공통 부품 ─────────────────────────────────────── */
   /* 두 번째 줄 — 고객 하위 칸 */
   var SUBS = [['연락 목록', 'customers/연락 목록', 'all'], ['AS 접수', 'customers/AS 접수', 'all'], ['예약 접수', 'customers/예약 접수', 'all'], ['컴플레인', 'customers/컴플레인', 'all'], ['|관리', '', 'mgr'], ['통계', 'customers/통계', 'mgr'], ['의견', 'customers/의견', 'mgr'], ['등급', 'customers/등급', 'mgr'], ['앱 공지', 'customers/앱 공지', 'mgr'], ['예약 통계', 'resvstat', 'mgronly'], ['불량률·통계', 'asstat', 'mgronly']];
-  function SubNav(p) {
-    var r = role();
-    /* 2026-11-10 중복 정리(A안): 직원은 이 줄의 다섯 칸(창구 · AS 접수 · 예약 접수 · 손님 찾기 · 컴플레인)이 맨 위 메뉴와 똑같아서 안 그린다. 관리 칸이 있는 중간관리자 · 최고관리자만 그대로 */
-    if (r === 'staff') return html`<nav class="p3-sub" aria-label="고객 하위 칸" hidden></nav>`;
-    return html`<nav class="p3-sub" aria-label="고객 하위 칸"><b class="p3-subg">고객</b>${SUBS.map(function (s) {
-      if (s[2] === 'mgr' && r === 'staff') return ''; if (s[2] === 'mgronly' && r !== 'mgr') return '';
-      if (s[0][0] === '|') return html`<b class="p3-subg" data-r="mgr">${s[0].slice(1)}</b>`;
-      var sid = sidOf(s[1]); return html`<a href=${'#' + sid} data-sid=${sid} class=${p.on === s[1] ? 'on' : ''}>${s[0]}</a>`;
-    })}</nav>`;
+  /* 손님 묶음 메뉴 줄 — 연락 목록 · 통계 같은 화면(p4)과 같은 자리 · 같은 모양 · 같은 칸으로 하나만 그린다.
+     (2026-11-15 팀장 «메뉴 전환하면 메뉴가 사라지고 바뀌고» — 화면마다 따로 그려 AS · 예약에서는 직원에게 숨고, 자리 · 모양도 달랐다) */
+  var TOPNAV = [['고객', 0, [['customers/연락 목록', '연락 목록'], ['customers/AS 접수', 'AS 접수'], ['customers/예약 접수', '예약 접수'], ['customers/컴플레인', '컴플레인']]], ['관리', 1, [['customers/통계', '통계'], ['customers/의견', '의견'], ['customers/등급', '등급'], ['customers/앱 공지', '앱 공지'], ['resvstat', '예약 통계'], ['asstat', '불량률·통계']]]];
+  function TopNav(p) {
+    var rr = { staff: 0, mgr: 1, super: 2 }[role()]; if (rr == null) rr = 2; var on = sidOf(p.on);
+    return html`<nav class="p4-nav" aria-label="이 묶음 세부 칸">${TOPNAV.filter(function (g) { return rr >= g[1]; }).map(function (g) { return html`<span class="p4-ng"><b>${g[0]}</b>${g[2].map(function (x) { var sid = sidOf(x[0]); return html`<a href=${'#' + sid} data-sid=${sid} class=${sid === on ? 'on' : ''}>${x[1]}</a>`; })}</span>`; })}</nav>`;
   }
+  function SubNav(p) { return ''; }
   function headIdx(sid) { var g = L.DOCK[1]; if (!g) return 0; var i = g[2].findIndex(function (s) { return s[1].indexOf(sid) >= 0; }); return i < 0 ? 0 : i; }
   /* 동의 현황 줄 */
   function consentStat(store) {
@@ -16962,7 +16961,7 @@ try {
     var more = Math.max(0, waitAs.length - 4) + Math.max(0, waitRv.length - 4);
     function goAs(id) { window.__vwAsSel = id; L.go(sidOf('customers/AS 접수')); }
     function goRv(id) { window.__vwRvSel = id; L.go(sidOf('customers/예약 접수')); }
-    return html`<div class="lv-screen p3"><${L.Header} g=${1} s=${headIdx('g4')} more=${'#m-g4'} />
+    return html`<div class="lv-screen p3 p3-hasnav"><${L.Header} g=${1} s=${headIdx('g4')} more=${'#m-g4'} /><${TopNav} on="customers/창구" />
       <main class="lv-main" style="flex-direction:column;gap:10px">
         <div class="lv-row" style="flex:none"><${SubNav} on="customers/창구" /><span style="flex:1"></span><${ConsentLine} store=${L.store()} /></div>
         <label class="lv-search gray" style="flex:none"><${Ic} n="search" s=${18} c="var(--k-ink2)" w=${2} /><input type="text" id="p3-desk-q" placeholder="손님 찾기 — 이름 또는 전화번호 뒷4자리 · Enter" autocomplete="off" onKeyDown=${function (e) { if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); window.__p3q = e.target.value.trim(); window.__p3focus = 1; L.go('S4-guest'); } }} /></label>
@@ -17146,7 +17145,7 @@ try {
     }, []);
     function Num(p) { return html`<button type="button" id=${'p3-n-' + p.k} class=${'lv-numchip p3-nc' + (chip === p.k ? ' on' : '')} title=${p.tip || ''} onClick=${function () { setChip(chip === p.k ? '' : p.k); resetF(); }}><b>${p.n}</b>${p.t}</button>`; }
     function fchip(id, on, label, f) { return html`<button type="button" id=${id} class=${'p3-fc' + (on ? ' on' : '')} onClick=${function () { f(); resetF(); }}>${label}</button>`; }
-    return html`<div class="lv-screen p3"><${L.Header} g=${1} s=${headIdx('g5')} more=${'#m-g5'} />
+    return html`<div class="lv-screen p3 p3-hasnav"><${L.Header} g=${1} s=${headIdx('g5')} more=${'#m-g5'} /><${TopNav} on="customers/AS 접수" />
       <main class="lv-main" style="flex-direction:column;gap:7px">
         <div class="lv-row" style="flex:none"><${SubNav} on="customers/AS 접수" /><span style="flex:1"></span><${ConsentLine} store=${vstore} /></div>
         <div class="lv-row" style="flex:none;flex-wrap:nowrap"><b style="font-size:21px;white-space:nowrap">AS 접수</b><${StoreSel} id="p3-as-store" value=${vstore} onChange=${function (v) { setVstore(v); setSel(''); resetF(); }} /><${MonthNav} id="p3-as-m" value=${mon} onChange=${function (v) { setMon(v); setPer('month'); setChip(''); resetF(); }} />
@@ -17752,7 +17751,7 @@ try {
       else acts = html`<${Btn2} small onClick=${function () { if (cartFrom((x.items || []).map(function (l) { return { c: l.c, n: l.n, qty: l.qty || 1 }; }), x.cust)) { L.go('S1-sale'); toast('계산대에 담았어요'); } }}>담기</${Btn2}><${Btn2} small onClick=${function () { inUpd(x, { done: Date.now(), status: '구매완료' }, '구매완료로 닫았어요'); }}>구매완료</${Btn2}><${Btn2} small onClick=${function () { inUpd(x, { done: Date.now(), status: '재진열' }, '다시 진열했어요'); }}>재진열</${Btn2}><${Btn2} small onClick=${function () { setGrp(grp === x.group ? '' : x.group); }}>묶음 보기</${Btn2}>`;
       return html`<div class="lv-trow p3-inrow" data-id=${x.id} style=${grp && x.group !== grp ? 'opacity:.35' : ''}><span style="width:52px" class="lv-small">${dayOf(x.at).slice(5)}</span><span style="width:84px">${x.custName}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600">${x.item ? x.item.n : x.body} × ${x.qty || 1}${x.visit ? html` <span class="lv-small">방문 ${x.visit.slice(5)}</span>` : ''}</span><span class="p3-tag blue">${IN_KIND[x.kind]}</span><span style="display:flex;gap:4px">${acts}</span></div>`;
     }
-    return html`<div class="lv-screen p3"><${L.Header} g=${1} s=${headIdx('g7')} more=${'#m-g7'} />
+    return html`<div class="lv-screen p3 p3-hasnav"><${L.Header} g=${1} s=${headIdx('g7')} more=${'#m-g7'} /><${TopNav} on="customers/예약 접수" />
       <main class="lv-main" style="flex-direction:column;gap:7px">
         <div class="lv-row" style="flex:none"><${SubNav} on="customers/예약 접수" /><span style="flex:1"></span><${ConsentLine} store=${vstore} /></div>
         <${InboxBox} store=${vstore} />
@@ -17918,7 +17917,7 @@ try {
     var MAX = 150;
     var all = custList().filter(function (c) { return stOf(c) === L.store(); }).sort(function (a, b) { return (b.at || 0) - (a.at || 0); }); var list = all.filter(function (c) { return custMatch(c, q); });
     var c = sel && S.d.customers[sel] && !S.d.customers[sel].gone ? Object.assign({ id: sel }, S.d.customers[sel]) : null;
-    return html`<div class="lv-screen p3"><${L.Header} g=${1} s=${headIdx('S4-guest')} more="#m-S4-guest" />
+    return html`<div class="lv-screen p3 p3-hasnav"><${L.Header} g=${1} s=${headIdx('S4-guest')} more="#m-S4-guest" /><${TopNav} on="customers/손님 찾기" />
       <main class="lv-main" style="flex-direction:column;gap:8px">
         <div class="lv-row" style="flex:none"><${SubNav} on="customers/손님 찾기" /><span style="flex:1"></span><${ConsentLine} store=${L.store()} /></div>
         <div style="flex:1;min-height:0;display:flex;gap:14px">
@@ -18420,7 +18419,7 @@ try {
   /* ── 공통 틀 ── */
   var NAV_GUEST = [['고객', 'all', [['customers/연락 목록', '연락 목록'], ['customers/AS 접수', 'AS 접수'], ['customers/예약 접수', '예약 접수'], ['customers/컴플레인', '컴플레인']]],
     ['관리', 'mgr', [['customers/통계', '통계'], ['customers/의견', '의견'], ['customers/등급', '등급'], ['customers/앱 공지', '앱 공지'], ['resvstat', '예약 통계'], ['asstat', '불량률·통계']]]];
-  var NAV_PROMO = [['손님 · 홍보', 'mgr', [['resvstat', '예약 통계'], ['asstat', '불량률·통계']]], ['홍보', 'all', [['promo', '한 장', 'all'], ['promoplan', '편성표', 'perm:tab:promoplan'], ['rank', '검색 순위', 'perm:tab:rank']]]];
+  var NAV_PROMO = [['홍보', 'all', [['promo', '한 장', 'all'], ['promoplan', '편성표', 'perm:tab:promoplan'], ['rank', '검색 순위', 'perm:tab:rank']]]];   /* 예약 통계 · 불량률은 손님 › 관리 줄에만 둔다 — 두 줄에 다 있으면 누를 때 메뉴가 통째로 바뀐다 (2026-11-15) */
   function Nav(p) {
     var groups = p.kind === 'promo' ? NAV_PROMO : NAV_GUEST;
     return html`<nav class="p4-nav" aria-label="이 묶음 세부 칸">${groups.filter(function (g) { return can(g[1]); }).map(function (g) {
@@ -19530,13 +19529,13 @@ try {
   function notCarried(r) { return r.reason === '미취급' || !(r.item && r.item.c); }
   function ResvStatView() {
     L.useStore(); var pp = usePref('rvst-range', 90), per = pp[0], setPer = pp[1];
-    if (!can('mgr')) return html`<${Shell} sid=${L.sidOf('resvstat')} nav="promo"><${Gate} need="mgr" what="예약 통계" /></${Shell}>`;
+    if (!can('mgr')) return html`<${Shell} sid=${L.sidOf('resvstat')}><${Gate} need="mgr" what="예약 통계" /></${Shell}>`;
     var from = rangeFrom(per); var rows = rvList().filter(function (r) { return (r.day || D(r.at)) >= from; });
     function group(list) { var m = {}; list.forEach(function (a) { var k = (a.item && a.item.c) || ('_' + (a.item ? a.item.n : '')); if (!m[k]) m[k] = { name: a.item ? a.item.n : '', n: 0, q: 0, bought: 0 }; m[k].n++; m[k].q += +a.qty || 0; if (a.status === '구매완료') m[k].bought++; }); return Object.keys(m).map(function (k) { return m[k]; }).sort(function (a, c) { return (c.q - a.q) || (c.n - a.n); }); }
     var nc = group(rows.filter(notCarried)), so = group(rows.filter(function (a) { return !notCarried(a); }));
     var reach = rows.filter(function (r) { return ['입고완료', '연락완료', '구매완료', '구매취소'].indexOf(r.status) >= 0; }).length, bought = rows.filter(function (r) { return r.status === '구매완료'; }).length;
     function T(title, note, list, id) { return !list.length ? '' : html`<${Card} id=${id}><b>${title}</b><span class="lv-small">${note}</span><div class="lv-trow head"><span style="flex:1">상품</span><span style="width:80px;text-align:right">접수</span><span style="width:90px;text-align:right">요청 수량</span><span style="width:80px;text-align:right">사 가심</span></div>${list.slice(0, 25).map(function (r) { return html`<div class="lv-trow"><span style="flex:1">${r.name}</span><span style="width:80px;text-align:right">${r.n}</span><span style="width:90px;text-align:right"><b>${r.q}</b></span><span style="width:80px;text-align:right">${r.bought}</span></div>`; })}</${Card}>`; }
-    return html`<${Shell} sid=${L.sidOf('resvstat')} nav="promo">
+    return html`<${Shell} sid=${L.sidOf('resvstat')}>
       <${Title} t="📊 예약 통계" s="어떤 상품이 없어서 놓치고 있는지를 봅니다. 미취급이 계속 쌓이면 새로 들여올 후보입니다."><${Sel} id="p4-rs-per" label="기간" items=${RV_RANGE} value=${per} onChange=${function (v) { setPer(v === 'all' ? 'all' : +v); }} /></${Title}>
       ${!rows.length ? html`<div class="lv-empty"><b>이 기간에 예약 접수가 없습니다</b></div>` : html`
       <div class="p4-tiles4" id="p4-rs-tiles"><${Tile} k="n" l="이 기간 접수" v=${rows.length} s=${'미취급 ' + rows.filter(notCarried).length + ' · 품절 ' + rows.filter(function (a) { return !notCarried(a); }).length} /><${Tile} k="q" l="요청 수량 합계" v=${rows.reduce(function (s, a) { return s + (+a.qty || 0); }, 0) + '개'} s="이만큼을 못 팔았거나 늦게 팔았습니다" /><${Tile} k="conv" cls="hero" l="입고 후 구매전환" v=${reach ? Math.round(bought / reach * 100) + '%' : '—'} s=${reach ? bought + ' / ' + reach + '건' : '아직 판단할 건이 없습니다'} /></div>
@@ -19568,7 +19567,7 @@ try {
   function AsStatView() {
     L.useStore(); var pp = usePref('asst-range', 180), per = pp[0], setPer = pp[1]; var ym0 = ymOf(Date.now()); var my = useState(ym0), mYm = my[0], setMYm = my[1]; var ma = useState(true), mAll = ma[0], setMAll = ma[1];
     var dr = useState({ from: ym0 + '-01', to: L.today() }), R = dr[0], setR = dr[1]; var ra = useState(false), rAll = ra[0], setRAll = ra[1];
-    if (!can('mgr')) return html`<${Shell} sid=${L.sidOf('asstat')} nav="promo"><${Gate} need="mgr" what="AS 불량률 · 통계" /></${Shell}>`;
+    if (!can('mgr')) return html`<${Shell} sid=${L.sidOf('asstat')}><${Gate} need="mgr" what="AS 불량률 · 통계" /></${Shell}>`;
     var sup = can('super'); var from = rangeFrom(per); var rows = defectRows(from); var syms = countBy(asList().filter(function (r) { return asDay(r) >= from && r.symptom; }), function (r) { return r.symptom; }).slice(0, 10);
     var back = asList().filter(function (r) { return asDay(r) >= from && r.method === '현장교체' && r.status !== '취소'; }).reduce(function (s, r) { return s + (+r.qty || 1); }, 0);
     var totAs = rows.reduce(function (s, r) { return s + r.as; }, 0), totInit = rows.reduce(function (s, r) { return s + r.init; }, 0);
@@ -19587,7 +19586,7 @@ try {
     function setRange(k, v) { if (!v) return; var o = Object.assign({}, R); o[k] = v; if (o.from > o.to) { if (k === 'from') o.to = o.from; else o.from = o.to; } setR(o); }
     function excel() { if (!rows.length) { toast('내보낼 자료가 없습니다'); return; } csvDown('AS불량률', ['제품', 'AS 건수', '그중 초도', '판매 수량', '불량률(%)', '전달 대비(%p · ' + ml(ymS) + ' vs ' + ml(g.pym) + ')'], rows.map(function (r) { return [r.name, r.as, r.init, r.sold, r.rate == null ? '' : Math.round(r.rate * 100) / 100, momNum(r)]; })); }
     function chips(list, cls) { return list.length ? list.map(function (x) { return html`<span class=${'p4-tag ' + cls}>${x[0]} <b>${x[1]}</b></span>`; }) : html`<span class="lv-small">없음</span>`; }
-    return html`<${Shell} sid=${L.sidOf('asstat')} nav="promo">
+    return html`<${Shell} sid=${L.sidOf('asstat')}>
       <${Title} t="📊 AS 통계 · 불량률" s="불량률 = AS 건수 ÷ 같은 기간 판매 수량 · 건수만 보면 많이 판 제품이 위로 올라와서 정말 문제가 있는 제품이 안 보입니다"><${Sel} id="p4-as-per" label="기간" items=${AS_RANGE} value=${per} onChange=${function (v) { setPer(v === 'all' ? 'all' : +v); }} /><${L.Btn2} small onClick=${excel}>📥 엑셀</${L.Btn2}></${Title}>
       <${Card} id="p4-as-month"><div class="p4-h"><b class="t">📅 월별 비교</b><button type="button" class="lv-round p4-ib" aria-label="전달" disabled=${ymS <= minYm} onClick=${function () { setMYm(ymAdd(ymS, -1)); }}>◀</button><b id="p4-as-mlab">${ymS.slice(0, 4)}년 ${ml(ymS)}${g.now ? ' · 1~' + g.d + '일' : ''}</b><button type="button" class="lv-round p4-ib" aria-label="다음 달" disabled=${ymS >= ym0} onClick=${function () { setMYm(ymAdd(ymS, 1)); }}>▶</button><span class="lv-small">vs ${ml(g.pym)}${g.now ? ' 같은 기간(' + mdS(g.b[0]) + '~' + mdS(g.b[1]) + ')' : ' 한 달'}</span>${ymS < ym0 ? html`<${L.Btn2} small onClick=${function () { setMYm(ym0); }}>이번 달로</${L.Btn2}>` : ''}<span style="flex:1"></span>${sup ? html`<${Sel} id="p4-as-mscope" label="월별 비교 매장" items=${[['1', '전 매장'], ['0', '내 매장']]} value=${mAll ? '1' : '0'} onChange=${function (v) { setMAll(v === '1'); }} />` : html`<span class="lv-small">${L.storeName()}</span>`}</div>
         <div class="p4-tiles4" id="p4-as-mom"><${Tile} k="mas" l="AS 접수" v=${A.as + '건'} s=${ml(g.pym) + (g.now ? ' 같은 기간 ' : ' ') + B.as + '건' + (A.init ? ' · 그중 초도 ' + A.init + '건' : '')} /><div>${chipMom(A.as, B.as, '건')}</div><${Tile} k="msold" l="판매 수량" v=${As.tot + '개'} s=${ml(g.pym) + (g.now ? ' 같은 기간 ' : ' ') + Bs.tot + '개'} /><div>${chipMom(As.tot, Bs.tot, '개', true)}</div><${Tile} k="mrate" l="불량률" v=${Ar == null ? '—' : Ar.toFixed(1) + '%'} s=${ml(g.pym) + (g.now ? ' 같은 기간 ' : ' ') + (Br == null ? '—' : Br.toFixed(1) + '%')} /><div>${chipMom(Ar, Br, '%p')}</div></div>
