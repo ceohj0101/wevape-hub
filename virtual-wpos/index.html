@@ -323,6 +323,32 @@ a.lv-link, a.p10-link{display:inline-block; line-height:24px}
 .p1-tog.on{background:var(--k-inv); color:#fff !important; box-shadow:none}
 .p1-tog.warn{color:var(--k-red) !important}
 .p1-ser{display:flex; align-items:center; gap:6px; flex:none; overflow-x:auto; scrollbar-width:none}
+.p1-view{position:relative; flex:none}
+.p1-viewpop{display:none; position:absolute; right:0; top:calc(100% + 6px); z-index:20; min-width:190px; padding:6px; border-radius:14px; background:var(--k-card); box-shadow:0 12px 34px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06); flex-direction:column; gap:3px}
+.p1-view.open .p1-viewpop{display:flex}
+.p1-viewpop .p1-tog{width:100%; height:36px; justify-content:flex-start; box-shadow:none; background:none}
+.p1-viewpop .p1-tog.on{background:#1d1d1f}
+.p1-tiles{flex:1; min-height:0; overflow-y:auto; display:grid; grid-template-columns:repeat(auto-fill,minmax(168px,1fr)); gap:10px; align-content:start; padding:2px}
+.p1-tile{display:flex; flex-direction:column; justify-content:space-between; gap:12px; min-height:98px; padding:14px 15px; border:0; border-radius:18px; background:var(--k-card); box-shadow:inset 0 0 0 1px var(--k-line); color:var(--k-ink); text-align:left; cursor:pointer}
+.p1-tile .sw{width:9px; height:9px; border-radius:50%; flex:none}
+.p1-tile b{font-size:16px; font-weight:700; line-height:1.3; word-break:keep-all}
+.p1-tile span{font-size:12.5px; font-weight:600; color:var(--k-ink2)}
+.p1-tile.all{background:#1d1d1f; box-shadow:none; color:#fff !important; justify-content:flex-start; gap:8px}
+.p1-tile.all span{color:rgba(255,255,255,.7) !important}
+.p1-tile.rest{background:var(--k-card); box-shadow:inset 0 0 0 1px var(--k-line); justify-content:flex-start; gap:8px}
+.p1-tilecfg{align-self:end; justify-self:end; box-shadow:none; background:none; color:var(--k-ink2)}
+.p1-shead{display:flex; align-items:center; gap:8px; flex:none; flex-wrap:wrap}
+.p1-shead b{font-size:17px; font-weight:700}
+.p1-shead .n{font-size:13px; font-weight:600; color:var(--k-ink2)}
+.p1-shead .sp{flex:1}
+.p1-nic{display:flex; gap:3px; padding:3px; border-radius:13px; background:rgba(120,120,128,.14); margin-left:4px}
+.p1-nic button{height:34px; padding:0 13px; border:0; border-radius:10px; background:none; font-size:13.5px; font-weight:600; color:var(--k-ink2); white-space:nowrap}
+.p1-nic button.on{background:var(--k-card); color:var(--k-ink); box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.p1-nic em{font-style:normal; font-weight:500; opacity:.6; margin-left:4px; font-size:12px}
+.p1-shead .only{font-size:13px; font-weight:600; color:var(--k-ink2); background:var(--k-bg1,#f2f2f7); padding:6px 11px; border-radius:10px; margin-left:4px}
+.p1-back{height:34px; padding:0 15px; border:0; border-radius:17px; background:var(--k-card); box-shadow:inset 0 0 0 1px var(--k-line); font-size:13.5px; font-weight:600; white-space:nowrap}
+.p1-hide{display:none !important}
+.p1-ntag{display:inline-block; margin-left:6px; padding:1px 7px; border-radius:7px; background:var(--k-bg1,#f2f2f7); font-size:11.5px; font-weight:700; color:var(--k-ink2); vertical-align:1px}
 .p1-ser::-webkit-scrollbar{display:none}
 .p1-ser > span{font-size:calc(12px*var(--fk)); font-weight:700; color:var(--k-ink2); flex:none}
 .p1-ser .lv-chip{flex:none; height:28px; padding:0 10px; font-size:calc(12.5px*var(--fk))}
@@ -10531,8 +10557,27 @@ try {
 
   /* ── 상품 · 재고 계산 ── */
   var NIC = /^(\d+(?:\.\d+)?(?:mg|MG|㎎|%)|무니코틴|저니코틴|고농도|입호흡|폐호흡|MTL|DTL)$/;
-  function seriesKey(p) { var w = String(p.n || '').trim().split(/\s+/).filter(function (t) { return !NIC.test(t); }); return w.length >= 2 ? w.slice(0, -1).join(' ') : ''; }
-  function nicOf(p) { var w = String(p.n || '').split(/\s+/).filter(function (t) { return NIC.test(t); }); return w[0] || ''; }
+  /* 시리즈 · 농도 — 본 포스와 같은 규칙 (2026-11-15 팀장 시안 B-1): 이름 앞 (분류) · [3NIC] · 제조사를 떼고, 앞 1~3 낱말을 3개 이상이 같이 쓰면 시리즈.
+     [nNIC] 표시가 있는 시리즈에서 표시 없는 맛은 1% · 배터리 같은 기기는 농도와 따로 */
+  var DEVW = /배터리|미러에디션|디바이스|본체|거치대|충전/, SWATCH = ['#5b4bd6', '#1287b5', '#c9541a', '#1c8a4e', '#b5127a', '#8a2bd6', '#0f8a7a', '#a66a00'];
+  function serParse(p) { var s = String(p.n || '').trim().replace(/^\([^)]*\)\s*/, ''), tag = ''; s = s.replace(/\[([^\]]+)\]/g, function (m, x) { var t = x.replace(/\s+/g, '').toUpperCase(); if (/^\d+NIC$/.test(t)) { tag = t; return ' '; } return ' [' + x + '] '; }); s = s.replace(/(^|\s)(버블몬|NEW)(?=\s|$)/g, ' ').replace(/\s+/g, ' ').trim(); return { tag: tag, rest: s }; }
+  var SERC = { at: 0, map: null };
+  function serBuild() {
+    if (SERC.map && Date.now() - SERC.at < 1500) return SERC.map;
+    var prods = L.products(), byCat = {}, map = {};
+    Object.keys(prods).forEach(function (k) { var p = prods[k]; if (!p || p.hide) return; (byCat[p.k] = byCat[p.k] || []).push({ p: p, w: serParse(p).rest.split(' ') }); });
+    Object.keys(byCat).forEach(function (cat) { var cnt = {};
+      byCat[cat].forEach(function (r) { for (var n = 1; n <= 3 && n < r.w.length; n++) { var c = r.w.slice(0, n).join(' '); cnt[c] = (cnt[c] || 0) + 1; } });
+      byCat[cat].forEach(function (r) { var best = ''; for (var n = Math.min(3, r.w.length - 1); n >= 1; n--) { var c = r.w.slice(0, n).join(' '); if (cnt[c] >= 3) { best = c; break; } }
+        var cut = best.replace(/\s*(배터리|미러에디션|디바이스|본체|거치대|충전기?)\s*$/, ''); map[r.p.c] = cut || best; }); });
+    SERC = { at: Date.now(), map: map }; return map;
+  }
+  function seriesKey(p) { return serBuild()[p.c] || ''; }
+  function nicOf(p) { var t = serParse(p).tag; if (t) return t; var w = String(p.n || '').split(/\s+/).filter(function (t) { return NIC.test(t); }); return w[0] || ''; }
+  function nicCell(p, list) { var t = nicOf(p); if (t) return t; if (DEVW.test(p.n)) return '기기'; return list && list.some(function (x) { return /^\d+NIC$/.test(nicOf(x)); }) ? '1NIC' : ''; }
+  function nicCells(list) { var n = {}; (list || []).forEach(function (p) { var k = nicCell(p, list); if (k) n[k] = (n[k] || 0) + 1; }); var ks = Object.keys(n).filter(function (k) { return k !== '기기'; }).sort(function (a, b) { var x = /^(\d+)NIC$/.exec(a), y = /^(\d+)NIC$/.exec(b); return x && y ? y[1] - x[1] : x ? -1 : y ? 1 : a.localeCompare(b, 'ko'); }); return { n: n, order: ks.length ? ks.concat(n['기기'] ? ['기기'] : []) : [] }; }
+  function nicName(n) { return n === '3NIC' ? '3% 고농도' : n === '기기' ? '배터리 · 기기' : /^\d+NIC$/.test(n) ? n.replace('NIC', '%') : n; }
+  function serShort(p, key) { var r = serParse(p).rest; return key && r.indexOf(key + ' ') === 0 ? r.slice(key.length + 1) : r; }
   function catName(k) { var s = setting('cats'); return (s.names && s.names[k]) || k; }
   function catList(prods) { var s = setting('cats'); var base = L.catsOf(prods); var ord = (s.order || []).slice(); base.forEach(function (k) { if (ord.indexOf(k) < 0) ord.push(k); }); return ord; }
   function soldMap(st, days, ym) {
@@ -10971,7 +11016,7 @@ try {
   }
 
   /* ── 왼쪽: 상품 칸 ── */
-  if (UI.cat == null) Object.assign(UI, { cat: '전체', ser: '', nic: '', pq: '', edit: false, lim: 60 });
+  if (UI.cat == null) Object.assign(UI, { cat: '전체', ser: '', nic: '', view: '', vopen: false, pq: '', edit: false, lim: 60 });
   function ProdPanel() {
     var prods = L.products(); var st = L.store();
     var stock = useMemo(function () { return L.stockMap(); }, [S.d.moves, S.d.sales, st]);
@@ -10991,11 +11036,13 @@ try {
     function ordered(list) { var pos = {}; ordCfg.forEach(function (c, i) { pos[c] = i; }); var base = {}; keys.forEach(function (k, i) { base[k] = i; }); return list.slice().sort(function (a, b) { var pa = pos[a.c] == null ? 1e6 + base[a.c] : pos[a.c], pb = pos[b.c] == null ? 1e6 + base[b.c] : pos[b.c]; return pa - pb; }); }
     var list;
     if (q) list = all.filter(function (p) { return (p.n + ' ' + (p.s || '') + ' ' + p.c + ' ' + (p.b || []).join(' ')).toLowerCase().indexOf(q) >= 0; }).sort(function (a, b) { var sa = seriesKey(a) || a.n, sb = seriesKey(b) || b.n; return sa.localeCompare(sb, 'ko') || /배터리/.test(b.n) - /배터리/.test(a.n) || nicOf(a).localeCompare(nicOf(b), 'ko') || a.n.localeCompare(b.n, 'ko'); });
-    else { list = inCat; if (UI.ser) { list = list.filter(function (p) { return seriesKey(p) === UI.ser; }); if (UI.nic) list = list.filter(function (p) { return nicOf(p) === UI.nic; }); } list = byQty && !UI.edit ? list.slice().sort(function (a, b) { return (month[b.c] || 0) - (month[a.c] || 0); }) : ordered(list); }
+    else { list = inCat; if (UI.ser) { list = list.filter(function (p) { return seriesKey(p) === UI.ser; }); if (UI.nic) list = list.filter(function (p) { return nicCell(p, serMap[UI.ser]) === UI.nic; }); } else if (UI.view === 'rest') list = list.filter(function (p) { return series.indexOf(seriesKey(p)) < 0; }); list = byQty && !UI.edit ? list.slice().sort(function (a, b) { return (month[b.c] || 0) - (month[a.c] || 0); }) : ordered(list); }
     var outN = list.filter(function (p) { return (stock[p.c] || 0) <= 0; }).length;
     var shown = (!q && !showOut && !UI.edit) ? list.filter(function (p) { return (stock[p.c] || 0) > 0; }) : list;
-    var nics = UI.ser ? Array.from(new Set(serMap[UI.ser].map(nicOf).filter(Boolean))) : [];
-    function setP(o) { ui(Object.assign({ lim: 60 }, o)); }
+    var nicInfo = UI.ser ? nicCells(serMap[UI.ser]) : { n: {}, order: [] }; var nics = nicInfo.order;
+    var tilesOn = !q && !UI.edit && UI.cat !== '전체' && series.length > 0 && !UI.ser && !UI.view;
+    var restN = UI.cat !== '전체' ? inCat.filter(function (p) { return series.indexOf(seriesKey(p)) < 0; }).length : 0;
+    function setP(o) { ui(Object.assign({ lim: 60, vopen: false }, o)); }
     function onKey(e) {
       if (e.key === 'Escape') { setP({ pq: '' }); return; }
       if (e.key !== 'Enter') return; e.preventDefault(); e.stopPropagation(); var v = UI.pq.trim(); if (!v) return;
@@ -11014,15 +11061,19 @@ try {
         <span class="p1-stat" id="p1-pstat">${shown.length}개 · 품절 ${outN}개 ${q || showOut || UI.edit ? '포함' : '숨김'}</span>
         <button type="button" class="p1-ai p1-phonebtn" id="p1-phonebtn" title="전화 응대 — 장바구니는 그대로 (F8)" onClick=${function () { L.openSheet('p1-phone', {}); }}>📞 전화 응대</button>
         <button type="button" class="p1-ai" id="p1-aibtn" onClick=${function () { L.openSheet('p1-ai'); }}><${Ic} n="spark" s=${16} />발주 추천(AI발주)${aiN.hot ? html`<em>${aiN.hot}</em>` : ''}${aiN.mid ? html`<em class="org">${aiN.mid}</em>` : ''}</button></div>
-      <div class="p1-catrow"><div class="p1-tabs" role="tablist">${['전체'].concat(cats).map(function (k) { return html`<button type="button" role="tab" class=${'lv-chip' + (UI.cat === k ? ' on' : '')} onClick=${function () { setP({ cat: k, ser: '', nic: '' }); }}>${k === '전체' ? '전체' : catName(k)}</button>`; })}</div>
-        <button type="button" class=${'p1-tog' + (showOut ? ' on' : '')} aria-pressed=${showOut} onClick=${function () { lsSet('p1-showOut', showOut ? '0' : '1'); L.emit(); }}>품절 상품 표시</button>
+      <div class="p1-catrow"><div class="p1-tabs" role="tablist">${['전체'].concat(cats).map(function (k) { return html`<button type="button" role="tab" class=${'lv-chip' + (UI.cat === k ? ' on' : '')} onClick=${function () { setP({ cat: k, ser: '', nic: '', view: '' }); }}>${k === '전체' ? '전체' : catName(k)}</button>`; })}</div>
+        ${UI.edit ? html`<button type="button" class=${'p1-tog' + (showOut ? ' on' : '')} aria-pressed=${showOut} onClick=${function () { lsSet('p1-showOut', showOut ? '0' : '1'); L.emit(); }}>품절 상품 표시</button>
         ${!UI.edit ? html`<button type="button" class=${'p1-tog' + (byQty ? ' on' : '')} aria-pressed=${byQty} onClick=${function () { lsSet('p1-byQty', byQty ? '0' : '1'); L.emit(); }}>판매량순</button>` : ''}
         <button type="button" class=${'p1-tog' + (UI.edit ? ' on' : '')} onClick=${function () { setP({ edit: !UI.edit }); }}>${UI.edit ? '순서편집 끝내기' : '순서 편집'}</button>
         ${UI.edit ? html`<button type="button" class="p1-tog" onClick=${abc}>가나다순</button><button type="button" class="p1-tog warn" onClick=${resetOrd}>순서 초기화</button>` : ''}
-        ${L.canMgr() ? html`<button type="button" class="p1-tog" onClick=${function () { L.openSheet('p1-cats'); }}>카테고리 편집</button><button type="button" class="p1-tog" onClick=${testPay}>테스트 결제</button>` : ''}</div>
-      ${!q && series.length ? html`<div class="p1-ser"><span>①</span><button type="button" class=${'lv-chip' + (!UI.ser ? ' on' : '')} onClick=${function () { setP({ ser: '', nic: '' }); }}>시리즈 — 전체 ${series.length}종</button>${series.map(function (k) { var cf = serCfg[k] || {}; return html`<button type="button" class=${'lv-chip' + (UI.ser === k ? ' on' : '')} onClick=${function () { setP({ ser: UI.ser === k ? '' : k, nic: '' }); }}>${cf.color ? html`<i class="sw" style=${'background:' + cf.color}></i>` : ''}${cf.name || k} ${serMap[k].length}</button>`; })}${L.canMgr() ? html`<button type="button" class="p1-tog" onClick=${function () { L.openSheet('p1-series', { cat: UI.cat }); }}>시리즈 편집</button>` : ''}</div>` : ''}
-      ${!q && UI.ser ? html`<div class="p1-ser"><span>②</span><button type="button" class=${'lv-chip' + (!UI.nic ? ' on' : '')} onClick=${function () { setP({ nic: '' }); }}>니코틴 · 종류 — 전체</button>${nics.map(function (n) { return html`<button type="button" class=${'lv-chip' + (UI.nic === n ? ' on' : '')} onClick=${function () { setP({ nic: UI.nic === n ? '' : n }); }}>${n}</button>`; })}</div>` : ''}
-      <div class="lv-grid p1-grid" data-scroll>
+        ${L.canMgr() ? html`<button type="button" class="p1-tog" onClick=${function () { L.openSheet('p1-cats'); }}>카테고리 편집</button><button type="button" class="p1-tog" onClick=${testPay}>테스트 결제</button>` : ''}` : html`<div class=${'p1-view' + (UI.vopen ? ' open' : '')}><button type="button" class=${'p1-tog p1-viewbtn' + (showOut || byQty ? ' on' : '')} aria-haspopup="true" aria-expanded=${!!UI.vopen} onClick=${function () { ui({ vopen: !UI.vopen }); }}>보기${showOut || byQty ? ' · ' + ((showOut ? 1 : 0) + (byQty ? 1 : 0)) : ''} ⌄</button><div class="p1-viewpop"><button type="button" class=${'p1-tog' + (showOut ? ' on' : '')} aria-pressed=${showOut} onClick=${function () { lsSet('p1-showOut', showOut ? '0' : '1'); L.emit(); }}>품절 상품 표시</button>
+        ${!UI.edit ? html`<button type="button" class=${'p1-tog' + (byQty ? ' on' : '')} aria-pressed=${byQty} onClick=${function () { lsSet('p1-byQty', byQty ? '0' : '1'); L.emit(); }}>판매량순</button>` : ''}
+        <button type="button" class=${'p1-tog' + (UI.edit ? ' on' : '')} onClick=${function () { setP({ edit: !UI.edit }); }}>${UI.edit ? '순서편집 끝내기' : '순서 편집'}</button>
+        ${UI.edit ? html`<button type="button" class="p1-tog" onClick=${abc}>가나다순</button><button type="button" class="p1-tog warn" onClick=${resetOrd}>순서 초기화</button>` : ''}
+        ${L.canMgr() ? html`<button type="button" class="p1-tog" onClick=${function () { L.openSheet('p1-cats'); }}>카테고리 편집</button><button type="button" class="p1-tog" onClick=${testPay}>테스트 결제</button>` : ''}</div></div>`}</div>
+      ${tilesOn ? html`<div class="p1-tiles" data-scroll><button type="button" class="p1-tile all" onClick=${function () { setP({ view: 'all' }); }}><b>${catName(UI.cat)} 전체</b><span>${inCat.length}종</span></button>${series.map(function (k, i) { var cf = serCfg[k] || {}; var ni = nicCells(serMap[k]).order.filter(function (n) { return n !== '기기'; }); return html`<button type="button" class="p1-tile" data-ser=${k} onClick=${function () { setP({ ser: k, nic: '' }); }}><i class="sw" style=${'background:' + (cf.color || SWATCH[i % SWATCH.length])}></i><b>${cf.name || k}</b><span>${serMap[k].length}종${ni.length === 1 ? ' · ' + nicName(ni[0]) : ''}</span></button>`; })}${restN ? html`<button type="button" class="p1-tile rest" onClick=${function () { setP({ view: 'rest' }); }}><b>그 밖의 시리즈</b><span>${restN}종</span></button>` : ''}${L.canMgr() ? html`<button type="button" class="p1-tog p1-tilecfg" onClick=${function () { L.openSheet('p1-series', { cat: UI.cat }); }}>시리즈 편집</button>` : ''}</div>` : ''}
+      ${!q && !tilesOn && !UI.edit && UI.cat !== '전체' && series.length ? html`<div class="p1-shead"><b>${UI.ser ? ((serCfg[UI.ser] || {}).name || UI.ser) : UI.view === 'rest' ? '그 밖의 시리즈' : catName(UI.cat) + ' 전체'}</b><span class="n">${UI.ser ? serMap[UI.ser].length : UI.view === 'rest' ? restN : inCat.length}종</span>${nics.length > 1 ? html`<div class="p1-nic" role="group" aria-label="니코틴 농도"><button type="button" class=${!UI.nic ? 'on' : ''} onClick=${function () { setP({ nic: '' }); }}>전체<em>${serMap[UI.ser].length}</em></button>${nics.map(function (n) { return html`<button type="button" class=${UI.nic === n ? 'on' : ''} data-nic=${n} onClick=${function () { setP({ nic: n }); }}>${nicName(n)}<em>${nicInfo.n[n]}</em></button>`; })}</div>` : nics.length === 1 && nics[0] !== '기기' ? html`<span class="only">니코틴 ${nicName(nics[0])}</span>` : ''}<span class="sp"></span><button type="button" class="p1-back" onClick=${function () { setP({ ser: '', nic: '', view: '' }); }}>시리즈 바꾸기</button></div>` : ''}
+      <div class=${'lv-grid p1-grid' + (tilesOn ? ' p1-hide' : '')} data-scroll>
         ${!keys.length ? html`<div class="lv-empty"><b>상품이 아직 없어요</b><span>재고 › 상품 · 원가 에서 등록하거나 상품표를 불러오세요</span><a class="lv-btn2 small" href=${'#' + (L.SID.products || '')}>상품 · 원가로</a></div>` :
           !shown.length ? html`<div class="lv-empty"><b>${q ? '검색 결과가 없습니다' : '이 카테고리에 지금 판매 가능한 상품이 없습니다'}</b><span>${!q && outN ? '품절 ' + outN + '개를 숨겼어요 — «품절 상품 표시»를 켜면 보여요' : q ? '이름 일부 · 품목코드 · 바코드로 찾아 보세요' : ''}</span></div>` : ''}
         ${shown.slice(0, UI.lim).map(function (p) {
@@ -11031,7 +11082,7 @@ try {
           var extra = inc[p.c] ? inc[p.c].t : aud[p.c] ? '실사 반영 ' + L.hm(aud[p.c]) : '';
           return html`${heads[p.c] ? html`<div class="p1-gh">${heads[p.c]}</div>` : ''}<div role="button" tabindex="0" class=${'p1-prod lv-prod' + (s0 <= 0 ? ' out' : '') + (UI.edit ? ' edit' : '')} data-code=${p.c} onClick=${function () { if (UI.edit) { toast('순서 편집 중이라 담지 않아요', '«순서편집 끝내기»를 누르세요'); return; } addProd(p); }} onKeyDown=${function (e) { if (e.key === 'Enter' && e.target === e.currentTarget) { e.preventDefault(); e.stopPropagation(); if (!UI.edit) addProd(p); } }}>
             <span class="k"><span>${p.c}</span><span>이달 ${month[p.c] || 0}개</span></span>
-            <span class="n" title=${p.n}>${p.s || p.n}</span>
+            <span class="n" title=${p.n}>${UI.ser && !q ? serShort(p, UI.ser) : (p.s || p.n)}${UI.ser && !q && !UI.nic && nics.length > 1 && /NIC$/.test(nicCell(p, serMap[UI.ser])) ? html`<small class="p1-ntag">${nicName(nicCell(p, serMap[UI.ser])).replace(' 고농도', '')}</small>` : ''}</span>
             ${extra ? html`<span class="x">${extra}</span>` : ''}
             <span class="b"><b>${won(p.p)}</b><button type="button" class=${'p1-pill' + cls} title="전 매장 재고" onClick=${function (e) { e.stopPropagation(); L.openSheet('p1-stores', { c: p.c }); }}><i></i>${pill}<${Ic} n="search" s=${11} w=${2.4} /></button></span>
             ${UI.edit ? html`<span class="p1-ord"><button type="button" title="맨 앞으로" onClick=${function (e) { e.stopPropagation(); move(p.c, 'top'); }}>★</button><button type="button" title="앞으로" onClick=${function (e) { e.stopPropagation(); move(p.c, 'up'); }}>‹</button><button type="button" title="뒤로" onClick=${function (e) { e.stopPropagation(); move(p.c, 'down'); }}>›</button></span>` : ''}
