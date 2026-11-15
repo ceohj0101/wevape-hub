@@ -28125,7 +28125,8 @@ try {
   function stitle(sid) { var t = titles()[sid]; return t ? t.t : sid; }
   function sidRole(sid) { var e = document.getElementById('v-' + sid); return (e && e.dataset && e.dataset.sr) || 'all'; }
   function canSid(sid) { return can(sidRole(sid)); }
-  function side() { return role() === 'super' ? lsGet('vw-p9-side', 'f') : 'f'; }
+  /* 2026-11-15 팀장 «가상 포스 틀 전체를 본 포스와 같게» — 본 포스 새 화면에는 [현장 | 관리] 단추가 없다. 아래 메뉴는 늘 5칸, 관리 화면은 권한이 있으면 같은 묶음 안 머리줄 칸에 보인다 */
+  function side() { return 'f'; }
   function setSide(s) {
     lsSet('vw-p9-side', s); var last = lsGet('vw-p9-last-' + (myId() || 'pc'), {});
     go(s === 'a' ? (last.a && ADMIN_SIDS[last.a] ? last.a : 'g25') : (last.f && !ADMIN_SIDS[last.f] || last.f && FIELD_SIDS[last.f] ? last.f : 'S1-sale')); L.emit();
@@ -28135,7 +28136,7 @@ try {
   var FIELD_SIDS = {}; FIELD.forEach(function (f) { (f[3] || []).forEach(function (x) { FIELD_SIDS[x] = 1; }); });
   function admOnly(sid) { return !!ADMIN_SIDS[sid] && !FIELD_SIDS[sid]; }
   function admSide() { return role() === 'super' && side() === 'a'; }
-  function hideInField(seg) { if (seg[3]) return true;   /* 메뉴에서만 뺀 칸 (mapping2 SEG_HIDE) */ return role() === 'super' && side() !== 'a' && (seg[1] || []).every(admOnly); }
+  function hideInField(seg) { if (seg[3]) return true;   /* 메뉴에서만 뺀 칸 (mapping2 SEG_HIDE) */ return false; }
   function admGroupOf(sid) { for (var i = 0; i < ADMIN.length; i++) if (ADMIN[i][2].indexOf(sid) >= 0) return i; return -1; }
   function admSegs(gi) { return gi < 0 ? [] : ADMIN[gi][2].filter(function (s) { return s[0] !== '|'; }).map(function (s) { return [stitle(s), [s], sidRole(s)]; }); }
   P9.side = function () { return side(); }; P9.admOnly = admOnly; P9.admSide = admSide;
@@ -28278,7 +28279,7 @@ try {
     var cf = closeFlowPill(); var cl = cleanPill(); var ob = outbox(); var bubble = p.act === '판매' && !scfg().bubbleOff;
     var sid = curSid(); var bands = bandsNow();
     return html`<div class="lv-dockwrap p9-dockwrap">
-      ${sup ? html`<div class="p9-side" role="group" aria-label="현장 · 관리"><button type="button" class=${!adm ? 'on' : ''} onClick=${function () { setSide('f'); }}>${T('현장')}</button><button type="button" class=${adm ? 'on' : ''} onClick=${function () { setSide('a'); }}>${T('관리')}${adminWaiting() ? html`<b class="p9-badge">${adminWaiting()}</b>` : ''}</button></div>` : ''}
+      
       <nav aria-label="메뉴" class=${'lv-dock' + (adm ? ' p9-adm' : '')}>${adm ? ADMIN.map(function (a) {
         var on = a[2].indexOf(sid) >= 0; var segs = a[2].map(function (s) { return s[0] === '|' ? s : [stitle(s), [s], sidRole(s)]; });
         var bd = a[0] === '시스템' ? waitSignups().length + nDev() : a[0] === '재고·상품' ? shipReqs().filter(function (r) { return r.stage === 'req'; }).length : a[0] === '오늘 점검' ? fieldCheck().n : 0;
@@ -29420,7 +29421,7 @@ try {
     var badge = { '고객': contacts(st), '재고': incoming(st).length, '시재': L.cashOf(today(), st) ? 0 : '!', '자료실': notices, '회사': nHand(), '설정': role() === 'mgr' || role() === 'super' ? waitSignups().length : 0 };
     var g = L.DOCK[gi] || ['', '', []];
     return html`<${Screen} sid="g68" style="gap:14px">
-      <div class="p9-col" data-scroll style="flex:1"><${Card} t="현장 메뉴" sub="예전 왼쪽 세로 메뉴 → 아래 메뉴 · 두 번째 줄" right=${role() === 'super' ? html`<div class="p9-side in"><button type="button" class=${!adm ? 'on' : ''} onClick=${function () { lsSet('vw-p9-side', 'f'); L.emit(); }}>현장</button><button type="button" class=${adm ? 'on' : ''} onClick=${function () { lsSet('vw-p9-side', 'a'); L.emit(); }}>관리${adminWaiting() ? html`<b class="p9-badge">${adminWaiting()}</b>` : ''}</button></div>` : ''}>
+      <div class="p9-col" data-scroll style="flex:1"><${Card} t="현장 메뉴" sub="예전 왼쪽 세로 메뉴 → 아래 메뉴 · 두 번째 줄">
         <button type="button" class="lv-rowline" onClick=${function () { P9.safeReload(true); }}><span class="lv-w" style="width:28px;height:28px;font-size:14px">W</span><span class="t"><b>위베이프 로고 (새로고침)</b><span>결제 중엔 막고 · 못 올린 기록은 먼저 올림</span></span></button>
         ${FIELD.filter(function (f) { return f[4] !== 'mgrOnly' || role() === 'mgr'; }).map(function (f) { if (f[0][0] === '|') return html`<em class="p9-sep">${f[0].slice(1)}</em>`; var b = badge[f[0]]; return html`<a class="lv-rowline p9-rail" href=${'#' + f[2]}><span class="av"><${Ic} n=${f[1]} s=${18} /></span><span class="t"><b>${f[0]}${b ? html`<i class="p9-badge in">${b}</i>` : ''}</b><span>${f[3].filter(canSid).map(stitle).join(' · ')}</span></span></a>`; })}
         <div class="p9-legend"><span><i class="r-mgr"></i>중간관리자</span>${role() === 'super' ? html`<span><i class="r-super"></i>최고관리자</span>` : ''}</div></${Card}></div>
