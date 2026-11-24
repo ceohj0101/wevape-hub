@@ -116,7 +116,7 @@ function mount(A,opt){
   $('sheet').innerHTML='<span class="grab"></span><div class="sh"><div class="ttl"><span>'+(S.admin?'관리 · ':'현장 · ')+esc(ME())+(A.me().store?' ('+esc(A.me().store)+')':'')+'</span><b>업무</b></div><div class="tabs">'+tabs.map(function(t){return '<button class="chip'+(S.tab===t[0]?' on':'')+'" data-act="tab" data-v="'+t[0]+'">'+t[1]+'</button>';}).join('')+adminSw+'</div><button class="b1 s" data-act="send">업무 요청 보내기</button><button class="b2 s" data-act="proxy">받은 일 대신 등록</button>'+legacyBtn()+'<button class="b2 s" data-act="view" data-v="mini">작게</button><button class="b2 s" data-act="closeSheet">닫기</button></div>'
   +'<div class="sb">'+(S.tab==='my'?tabMy():S.tab==='team'?tabTeam():tabRec())+'</div>';}
  function place(){ var e=$('mini'); if(e.hidden) return; var w=e.offsetWidth,h=e.offsetHeight,x,y;
-  if(S.pos){x=S.pos.x;y=S.pos.y;} else {var an=(opt.anchor&&opt.anchor())||$('pill'), b=an?an.getBoundingClientRect():{right:innerWidth-12,top:innerHeight-12,bottom:60}; x=b.right-w; y=opt.below?b.bottom+8:b.top-h-10;}
+  if(S.pos){x=S.pos.x;y=S.pos.y;} else {var an=(opt.anchor&&opt.anchor())||$('pill'), b=an?an.getBoundingClientRect():{right:innerWidth-12,top:innerHeight-12,bottom:60}; var bl=typeof opt.below==='function'?opt.below(an):opt.below; x=b.right-w; y=bl?b.bottom+8:b.top-h-10;}
   x=Math.max(6,Math.min(x,innerWidth-w-6)); y=Math.max(6,Math.min(y,innerHeight-h-6)); e.style.left=x+'px'; e.style.top=y+'px'; }
  function needMonth(){ if((S.view==='full'&&S.tab!=='my')||!$('dlg').hidden){ loadMonth(false); } }
  function loadMonth(force){ if(Mbusy||!A.month) return; if(M&&!force) return; Mbusy=true; Merr='';
