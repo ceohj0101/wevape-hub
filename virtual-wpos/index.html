@@ -29596,6 +29596,18 @@ try {
 } catch (e) { console.error("묶음 p9-shell 실패", e); }
 
 </script>
+<script src="work/qwork.js"></script><script src="work/qwork-demo.js"></script>
+<script>/* (11/24) 업무 위젯 — 아래 «오늘 할 일» 알약이 새 업무 창을 연다. 자료는 체험용(2026년 11월 실제 기록에서 뽑은 숫자) · 이 브라우저 안에만 저장.
+   본포스에는 같은 work/qwork.js 가 실제 기록에 이어져 들어가 있다. 못 받으면 예전 할 일 시트 그대로. */
+(function(){ var n = 0; function go(){ var P9 = window.VW_P9;
+  if(!P9 || !P9.todoToggle || !window.QWORK || !window.QWORK_DEMO){ if(n++ < 60) setTimeout(go, 800); return; }
+  if(window.__qwork) return;
+  var old = P9.todoToggle, A = QWORK_DEMO(); A.legacy = function(){ try{ old(); }catch(e){} };
+  var QW = window.__qwork = QWORK.mount(A, { anchor:function(){ return document.querySelector('.p9-todo'); },
+    css:'#mini{z-index:9000}#ov{z-index:9001}#sheet{z-index:9002}#dlg{z-index:9010}#ghost{z-index:9020}#toast{z-index:9030}' });
+  P9.todoToggle = function(){ try{ QW.toggle(); }catch(e){ old(); } }; }
+  go(); })();
+</script>
 
 </body>
 </html>
