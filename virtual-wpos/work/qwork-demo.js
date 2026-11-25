@@ -35,7 +35,7 @@ function demo(){
   tasks:[{id:2,tag:'내 일',t:'시연대 점검',meta:'',pct:0},{id:3,tag:'내 일',t:'주문서 작성',meta:'',pct:0}],
   hold:[{id:4,tag:'내 일',t:'창고 선반 라벨 정리',days:9,pct:0}],
   done:[{id:5,tag:'내 일',t:'플레이스 작업',pct:100},{id:6,tag:'내 일',t:'입고물품 정리',pct:100},{id:7,tag:'자동',t:'매장 지원 택배 보냄 · 1건',auto:1,pct:100},{id:8,tag:'자동',t:'청소 사진 올림',auto:1,pct:100},{id:9,tag:'자동',t:'플레이스 작업 사진 올림',auto:1,pct:100}],
-  sent:[], reqs:{}};
+  sent:[{to:'박나래',t:'신상품 진열 사진 3장',due:'11월 22일',at:'11월 19일',st:'doing',pct:50,note:'2장 찍음, 1장 남음',noteAt:'11월 21일 16:20',late:true},{to:'최가람',t:'가격표 문구 확인',due:'11월 27일',at:'11월 23일',st:'doing',pct:25,note:'',noteAt:''},{to:'정다온',t:'창고 선반 재고 세기',due:'11월 26일',at:'11월 23일',st:'done',pct:100,note:'전부 셈',noteAt:'11월 24일 11:05'}], reqs:{}};
  try{var sv=JSON.parse(sessionStorage.getItem('qw_demo')||'null'); if(sv&&sv.tasks){S=sv; uid=sv.uid||200;}}catch(e){}
  function keep(){ S.uid=uid; try{sessionStorage.setItem('qw_demo',JSON.stringify(S));}catch(e){} subs.forEach(function(f){f();}); }
  function find(a,id){for(var i=0;i<a.length;i++) if(String(a[i].id)===String(id)) return i; return -1;}
@@ -52,7 +52,7 @@ function demo(){
   pct:function(id,v,note){var i=find(S.tasks,id); if(i<0) return false; S.tasks[i].pct=v; if(note!=null){S.tasks[i].note=note;S.tasks[i].noteAt=hm();} keep();},
   del:function(id){var i=find(S.hold,id); if(i<0) return false; S.hold.splice(i,1); keep();},
   nego:function(id,date){var i=find(S.incoming,id); if(i<0) return false; S.incoming[i].due=md(date)+'로 조율 요청함'; keep();},
-  send:function(to,t,due){S.sent.push({to:to,t:t,due:md(due)}); (S.reqs[to]=S.reqs[to]||[]).push({t:t,due:md(due),from:ME}); keep();},
+  send:function(to,t,due){S.sent.push({to:to,t:t,due:md(due),at:'11월 24일',st:'new'}); (S.reqs[to]=S.reqs[to]||[]).push({t:t,due:md(due),from:ME}); keep();},
   proxy:function(from,t,due){S.tasks.unshift({id:++uid,tag:'요청',t:t,from:from,due:md(due),meta:'요청 '+from+' · 기한 '+md(due)+' · 대신 등록',pct:0}); keep();},
   sent:function(){return S.sent;}, people:function(){return Object.keys(STORE);},
   month:function(){ var R={}; Object.keys(STORE).forEach(function(n){R[n]=(S.reqs[n]||[]).slice();});
